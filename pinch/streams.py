@@ -9,7 +9,7 @@ Conventions
   cold streams. With a single global minimum approach temperature, every
   stream would have dT_shift = dTmin / 2.
 * Heat loads ``Q`` are positive and expressed in the case's energy unit
-  (e.g. kWh/hl for the brewery, kW for the Kemp example). The unit is read
+  (e.g. kWh/hl for the brewery, MW for the four-stream example). The unit is read
   from the CSV column name and carried through every result.
 
 CSV format
@@ -17,7 +17,7 @@ CSV format
 Required columns: ``stream, type, T_in_C, T_out_C, dT_shift_K`` and exactly one
 of ``Q_<unit>`` (heat load) or ``CP_<unit>`` (heat capacity flow rate).
 Underscored units are converted for display, e.g. ``Q_kWh_per_hl`` -> "kWh/hl"
-and ``CP_kW_per_K`` -> heat loads in "kW". Extra columns (e.g. ``note``) are kept
+and ``CP_MW_per_K`` -> heat loads in "MW". Extra columns (e.g. ``note``) are kept
 out of the calculation.
 """
 

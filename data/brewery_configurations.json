@@ -1,0 +1,54 @@
+{
+  "_about": "Electrification configurations of Padullés et al. (2026), Sec. 4.3. Each value is tagged: 'published' = stated in the paper text or tables; 'figure' = read from a figure (uncertainty given); 'assumed' = our assumption, with the reason. Energy in kWh/hl, temperatures in °C.",
+  "eta_lorenz": {"value": 0.55, "tag": "published", "where": "Sec. 4.3.1, Eq. (1), citing Andersen et al. [41]"},
+  "cold_utility_T_C": {"value": -1.0, "tag": "published", "where": "Sec. 4.1 and 4.3.1 (minimum T* of the GCC)"},
+  "ambient_T_C": {"value": 15.0, "tag": "published", "where": "Sec. 4.3.1"},
+
+  "config_1_cchs": {
+    "description": "Central HTHP for simultaneous heating and cooling (CCHS) replacing the boiler and chiller.",
+    "Q_sink_with_HR": {"value": 11.3, "tag": "published", "where": "Sec. 4.3.2 and 7: external heat after Pfaduko and wort-cooling heat recovery"},
+    "Q_sink_no_HR": {"value": 21.4, "tag": "published", "where": "Table 2 total heat demand"},
+    "sink": {"tag": "assumed", "reason": "isothermal steam utility at the swept temperature (Fig. 11 x-axis)"},
+    "source_T_C": {"value": -1.0, "tag": "assumed", "reason": "cold utility temperature; the paper also uses ambient but does not split the source duty"},
+    "W_published_text": {"value": 5.0, "tag": "published", "where": "Sec. 4.3.1 and 7: 'reduce electricity consumption to 5 kWh/hl if steam is supplied at the minimum viable pressure'"},
+    "W_figure_with_HR": {"tag": "figure", "where": "Fig. 11, green solid line", "uncertainty": 0.3,
+                         "points": {"100": 5.5, "180": 8.6}},
+    "W_figure_no_HR": {"tag": "figure", "where": "Fig. 11, blue solid line", "uncertainty": 0.3,
+                       "points": {"100": 11.8, "180": 18.0}}
+  },
+
+  "config_2_two_hp": {
+    "description": "CO2 heat pump for the warm-water heat recovery tank plus HTHP for wort boiling; Pfaduko kept.",
+    "units": [
+      {"name": "CO2 HP", "Q_sink": 8.3, "T_sink_in_C": 18, "T_sink_out_C": 82, "T_source_in_C": -1, "T_source_out_C": -1,
+       "model": "lorenz", "W_published": 2.4, "COP_published": 3.5,
+       "tags": "Q_sink, sink temperatures, W: published (Fig. 14); COP 3.5: published (Sec. 4.3.2); source -1 °C: assumed (cold utility)"},
+      {"name": "HTHP", "Q_sink": 2.4, "T_sink_in_C": 103, "T_sink_out_C": 103, "T_source_in_C": -1, "T_source_out_C": -1,
+       "model": "lorenz", "W_published": 1.2, "COP_published": 2.0,
+       "tags": "Q_sink, W: published (Fig. 14); COP 2: published (Sec. 4.3.2); sink 103 °C: assumed (GCC maximum T*, needed for wort boiling); source -1 °C: assumed"}
+    ],
+    "W_total_published": {"value": 3.6, "tag": "published", "where": "Sec. 4.3.2"}
+  },
+
+  "config_3_fully_integrated": {
+    "description": "CO2 heat pump (warm water), MVR for wort boiling, booster for wort preheating and MVR start-up (electric boiler or HTHP).",
+    "units_common": [
+      {"name": "CO2 HP", "Q_sink": 9.7, "T_sink_in_C": 18, "T_sink_out_C": 82, "T_source_in_C": -1, "T_source_out_C": -1,
+       "model": "lorenz", "W_published": 2.8,
+       "tags": "Q_sink, sink temperatures, W: published (Fig. 17); source -1 °C: assumed"},
+      {"name": "MVR", "Q_sink": 2.6, "T_sink_in_C": 110, "T_sink_out_C": 110, "T_source_in_C": 100, "T_source_out_C": 100,
+       "model": "fixed", "COP": 15, "W_published": 0.2,
+       "tags": "Q_sink, temperatures, W: published (Fig. 17); COP 15: published (Sec. 4.2.3, 'conservative')"}
+    ],
+    "booster_options": {
+      "EB": {"name": "Electric boiler", "Q_sink": 1.4, "T_sink_in_C": 87, "T_sink_out_C": 98,
+             "model": "fixed", "COP": 1, "W_published": 1.4,
+             "tags": "Q_sink, temperatures: published (Fig. 17)"},
+      "HTHP": {"name": "HTHP booster", "Q_sink": 1.4, "T_sink_in_C": 87, "T_sink_out_C": 98, "T_source_in_C": -1, "T_source_out_C": -1,
+               "model": "lorenz",
+               "tags": "Q_sink, sink temperatures: published (Fig. 17); COP 2: published (Sec. 4.3.3); source -1 °C: assumed"}
+    },
+    "W_total_published": {"EB": 4.6, "HTHP": 3.6, "tag": "published", "where": "Sec. 4.3.3"},
+    "Q_sink_total_published": {"value": 13.6, "tag": "published", "where": "Sec. 4.3.3"}
+  }
+}

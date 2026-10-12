@@ -75,3 +75,44 @@ def plot_gcc(table: ProblemTable, path: str | Path, title: str = "") -> Path:
     fig.savefig(path, dpi=200)
     plt.close(fig)
     return path
+
+
+def plot_gcc_with_units(table: ProblemTable, units, path: str | Path, title: str = "") -> Path:
+    """GCC with heat pump sink and source profiles drawn as utility lines.
+
+    Sinks are stacked from H = 0 in order of increasing temperature; sources
+    likewise. Isothermal profiles are drawn as horizontal lines. Utility
+    temperatures are plotted on the T* axis (dT_shift = 0 for utilities).
+    """
+    H, T_star = grand_composite_curve(table)
+    unit_label = table.energy_unit
+    fig, ax = plt.subplots(figsize=(7, 5))
+    ax.plot(H, T_star, color=GCC_COLOUR, lw=2, label="GCC")
+
+    H0 = 0.0
+    for u in sorted(units, key=lambda u: u.T_sink_out_C):
+        ax.plot([H0, H0 + u.Q_sink], [u.T_sink_in_C, u.T_sink_out_C], color=HOT_COLOUR, lw=2.5)
+        ax.annotate(f"{u.name} sink ({u.Q_sink:.2f})", xy=(H0 + u.Q_sink, u.T_sink_out_C),
+                    xytext=(-4, 5), textcoords="offset points", ha="right", fontsize=8, color=HOT_COLOUR)
+        H0 += u.Q_sink
+
+    H0 = 0.0
+    for u in sorted([u for u in units if u.has_source], key=lambda u: u.T_source_out_C):
+        ax.plot([H0, H0 + u.Q_source], [u.T_source_in_C, u.T_source_out_C], color=COLD_COLOUR, lw=2.5)
+        ax.annotate(f"{u.name} source ({u.Q_source:.2f})", xy=(H0, u.T_source_out_C),
+                    xytext=(2, -11), textcoords="offset points", fontsize=8, color=COLD_COLOUR)
+        H0 += u.Q_source
+
+    for T in table.pinch_T_star_C:
+        ax.axhline(T, color="grey", ls=":", lw=1)
+    ax.axvline(0, color="grey", lw=0.8)
+    ax.set_xlabel(f"Net heat flow, H [{unit_label}]")
+    ax.set_ylabel("Shifted temperature, T* [°C]")
+    ax.set_title(title or "GCC with heat pump placement")
+    ax.grid(alpha=0.3)
+    fig.tight_layout()
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=200)
+    plt.close(fig)
+    return path

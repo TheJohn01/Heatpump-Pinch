@@ -1,16 +1,43 @@
 {
-  "kemp_4stream": {
-    "source": "Kemp (2007), Pinch Analysis and Process Integration, 2nd ed., Ch. 2, four-stream example, dTmin = 10 K. Values recalled; verify against the book.",
-    "data_file": "data/kemp_4stream.csv",
+  "fourstream_example": {
+    "source": "University of Oklahoma, ChE design course notes 'Minimum Utility', Example 1.1 (https://ou.edu/class/che-design/a-design/Minimum%20Utility.pdf). Classic example also in Kemp (2007), Ch. 2 (not consulted).",
+    "data_file": "data/fourstream_example.csv",
     "extra_shift_K": 0,
-    "energy_unit": "kW",
+    "energy_unit": "MW",
     "targets": {
-      "Qh_min": {"value": 750.0, "tolerance": 1e-6},
-      "Qc_min": {"value": 1000.0, "tolerance": 1e-6},
-      "pinch_T_star_C": {"value": 145.0, "tolerance": 1e-6}
+      "Qh_min": {
+        "value": 7.5,
+        "tolerance": 1e-09
+      },
+      "Qc_min": {
+        "value": 10.0,
+        "tolerance": 1e-09
+      },
+      "pinch_T_star_C": {
+        "value": 145.0,
+        "tolerance": 1e-09
+      }
     },
-    "cascade_feasible": [750, 900, 300, 400, 0, 1400, 1200, 1000],
-    "T_star_C": [245, 235, 195, 185, 145, 75, 35, 25]
+    "cascade_feasible": [
+      7.5,
+      9.0,
+      3.0,
+      4.0,
+      0.0,
+      14.0,
+      12.0,
+      10.0
+    ],
+    "T_star_C": [
+      245,
+      235,
+      195,
+      185,
+      145,
+      75,
+      35,
+      25
+    ]
   },
   "brewery_base": {
     "source": "Padullés et al. (2026), Energy Conversion and Management 357, 121292, Sec. 4.1 and Fig. 4. Published values are rounded in the paper.",
@@ -18,11 +45,27 @@
     "extra_shift_K": 0,
     "energy_unit": "kWh/hl",
     "targets": {
-      "Qh_min": {"value": 10.0, "tolerance": 0.1},
-      "Qc_min": {"value": 3.2, "tolerance": 0.3, "comment": "Known discrepancy: Table 2 implies Qc_min - Qh_min = -6.6, the paper reports -6.8."},
-      "T_star_max_C": {"value": 103.0, "tolerance": 1e-6},
-      "T_star_min_C": {"value": -1.0, "tolerance": 1e-6},
-      "heat_recovery": {"value": 11.4, "tolerance": 0.1}
+      "Qh_min": {
+        "value": 10.0,
+        "tolerance": 0.1
+      },
+      "Qc_min": {
+        "value": 3.2,
+        "tolerance": 0.3,
+        "comment": "Known discrepancy: Table 2 implies Qc_min - Qh_min = -6.6, the paper reports -6.8."
+      },
+      "T_star_max_C": {
+        "value": 103.0,
+        "tolerance": 1e-06
+      },
+      "T_star_min_C": {
+        "value": -1.0,
+        "tolerance": 1e-06
+      },
+      "heat_recovery": {
+        "value": 11.4,
+        "tolerance": 0.1
+      }
     }
   },
   "brewery_indirect": {
@@ -31,9 +74,18 @@
     "extra_shift_K": 2,
     "energy_unit": "kWh/hl",
     "targets": {
-      "Qh_min": {"value": 10.5, "tolerance": 0.1},
-      "Qc_min": {"value": 3.8, "tolerance": 0.15},
-      "heat_recovery": {"value": 10.9, "tolerance": 0.1}
+      "Qh_min": {
+        "value": 10.5,
+        "tolerance": 0.1
+      },
+      "Qc_min": {
+        "value": 3.8,
+        "tolerance": 0.15
+      },
+      "heat_recovery": {
+        "value": 10.9,
+        "tolerance": 0.1
+      }
     }
   }
 }

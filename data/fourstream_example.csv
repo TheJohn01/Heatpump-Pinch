@@ -1,0 +1,5 @@
+stream,type,T_in_C,T_out_C,CP_MW_per_K,dT_shift_K,note
+Reactor 1 feed,cold,20,180,0.20,5,Univ. of Oklahoma ChE design notes 'Minimum Utility' Example 1.1; dTmin = 10 K so dT_shift = 5 K
+Reactor 1 product,hot,250,40,0.15,5,
+Reactor 2 feed,cold,140,230,0.30,5,
+Reactor 2 product,hot,200,80,0.25,5,

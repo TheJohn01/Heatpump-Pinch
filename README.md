@@ -7,9 +7,9 @@ MSc dissertation, Project 1: electrification of process heat with high-temperatu
 | Workflow step | Status |
 |---|---|
 | 1. Stream data, checks, energy-balance closure | Done, tested |
-| 2. Problem table, composite curves, GCC | Done, validated (Kemp; Padullés et al. 2026) |
+| 2. Problem table, composite curves, GCC | Done, validated (four-stream example; Padullés et al. 2026) |
 | 3. ΔTmin / cost trade-off | Not started |
-| 4. Heat pump placement | Not started |
+| 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, comparison with the paper. 4b (working fluid, cycle COP with CoolProp) pending |
 | 5. HEN retrofit | Not started |
 | 6. Economics | Not started |
 
@@ -18,7 +18,8 @@ MSc dissertation, Project 1: electrification of process heat with high-temperatu
 ```
 data/
   brewery_streams.csv        Padullés et al. (2026), Table 2; ambient = 15 °C
-  kemp_4stream.csv           Kemp (2007), Ch. 2 four-stream example
+  fourstream_example.csv     Univ. Oklahoma ChE notes, Example 1.1 (classic four-stream example)
+  brewery_configurations.json  Paper's three electrification configurations, values tagged published/figure/assumed
   reference_targets.json     Published/textbook targets used by tests and report
 pinch/
   streams.py                 Load, validate, shift, energy balance
@@ -26,16 +27,20 @@ pinch/
   curves.py                  Composite curves and GCC data
   plotting.py                Figures saved to file
   validation.py              Reference vs computed comparison
-tests/test_problem_table.py  Kemp first, then brewery published targets
-run_targets.py               Runs all cases; writes outputs/
+  heat_pump.py               Lorenz COP, HeatPump units, integration and GCC sizing
+tests/test_problem_table.py  Four-stream example first, then brewery published targets
+tests/test_heat_pump.py      COP model, first/second law, placement rules, GCC sizing
+run_targets.py               Steps 1-2: targets, curves, validation report
+run_heat_pumps.py            Step 4: paper configurations, integration check, minimum-energy design
 ```
 
 ## Usage
 
 ```bash
-pip install pandas numpy matplotlib pytest
-python -m pytest           # 14 tests
+pip install pandas numpy matplotlib pytest CoolProp
+python -m pytest           # 29 tests
 python run_targets.py      # tables, figures and outputs/validation_report.csv
+python run_heat_pumps.py   # step 4 tables (outputs/step4_*.csv) and figures
 ```
 
 ## Conventions
@@ -48,7 +53,7 @@ python run_targets.py      # tables, figures and outputs/validation_report.csv
 
 | Case | Quantity | Reference | Computed | Deviation |
 |---|---|---|---|---|
-| Kemp | Qh,min / Qc,min / pinch T* | 750 kW / 1000 kW / 145 °C | 750 / 1000 / 145 | 0 |
+| Four-stream example | Qh,min / Qc,min / pinch T* | 7.5 MW / 10.0 MW / 145 °C | 7.5 / 10.0 / 145 | 0 |
 | Brewery | Qh,min | 10.0 kWh/hl | 10.04 | +0.4 % |
 | Brewery | Qc,min | 3.2 kWh/hl | 3.44 | +7.6 % (known Table 2 rounding gap) |
 | Brewery | T* range | 103 to −1 °C | 103 to −1 °C | 0 |

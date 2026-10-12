@@ -1,0 +1,3 @@
+unit,Q_sink,COP,W,Q_source,source_from_process,source_external,placement
+CO2 HP,7.282,3.547,2.053,5.229,3.442,1.787,across pinch
+HTHP,2.76,1.989,1.387,1.373,0.0,1.373,across pinch
