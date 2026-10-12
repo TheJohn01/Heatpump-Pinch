@@ -1,0 +1,39 @@
+{
+  "kemp_4stream": {
+    "source": "Kemp (2007), Pinch Analysis and Process Integration, 2nd ed., Ch. 2, four-stream example, dTmin = 10 K. Values recalled; verify against the book.",
+    "data_file": "data/kemp_4stream.csv",
+    "extra_shift_K": 0,
+    "energy_unit": "kW",
+    "targets": {
+      "Qh_min": {"value": 750.0, "tolerance": 1e-6},
+      "Qc_min": {"value": 1000.0, "tolerance": 1e-6},
+      "pinch_T_star_C": {"value": 145.0, "tolerance": 1e-6}
+    },
+    "cascade_feasible": [750, 900, 300, 400, 0, 1400, 1200, 1000],
+    "T_star_C": [245, 235, 195, 185, 145, 75, 35, 25]
+  },
+  "brewery_base": {
+    "source": "Padullés et al. (2026), Energy Conversion and Management 357, 121292, Sec. 4.1 and Fig. 4. Published values are rounded in the paper.",
+    "data_file": "data/brewery_streams.csv",
+    "extra_shift_K": 0,
+    "energy_unit": "kWh/hl",
+    "targets": {
+      "Qh_min": {"value": 10.0, "tolerance": 0.1},
+      "Qc_min": {"value": 3.2, "tolerance": 0.3, "comment": "Known discrepancy: Table 2 implies Qc_min - Qh_min = -6.6, the paper reports -6.8."},
+      "T_star_max_C": {"value": 103.0, "tolerance": 1e-6},
+      "T_star_min_C": {"value": -1.0, "tolerance": 1e-6},
+      "heat_recovery": {"value": 11.4, "tolerance": 0.1}
+    }
+  },
+  "brewery_indirect": {
+    "source": "Padullés et al. (2026), Sec. 4.1: additional 2 K shift for indirect transfer through an intermediate medium.",
+    "data_file": "data/brewery_streams.csv",
+    "extra_shift_K": 2,
+    "energy_unit": "kWh/hl",
+    "targets": {
+      "Qh_min": {"value": 10.5, "tolerance": 0.1},
+      "Qc_min": {"value": 3.8, "tolerance": 0.15},
+      "heat_recovery": {"value": 10.9, "tolerance": 0.1}
+    }
+  }
+}

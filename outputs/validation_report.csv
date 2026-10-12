@@ -1,0 +1,12 @@
+case,quantity,unit,reference,computed,deviation,deviation_%,within_tolerance
+kemp_4stream,Qh_min,kW,750.0,750.0,0.0,0.0,True
+kemp_4stream,Qc_min,kW,1000.0,1000.0,0.0,0.0,True
+kemp_4stream,pinch_T_star_C,°C,145.0,145.0,0.0,0.0,True
+brewery_base,Qh_min,kWh/hl,10.0,10.0424,0.0424,0.42,True
+brewery_base,Qc_min,kWh/hl,3.2,3.4424,0.2424,7.57,True
+brewery_base,T_star_max_C,°C,103.0,103.0,0.0,0.0,True
+brewery_base,T_star_min_C,°C,-1.0,-1.0,0.0,-0.0,True
+brewery_base,heat_recovery,kWh/hl,11.4,11.3576,-0.0424,-0.37,True
+brewery_indirect,Qh_min,kWh/hl,10.5,10.4847,-0.0153,-0.15,True
+brewery_indirect,Qc_min,kWh/hl,3.8,3.8847,0.0847,2.23,True
+brewery_indirect,heat_recovery,kWh/hl,10.9,10.9153,0.0153,0.14,True

@@ -1,0 +1,5 @@
+stream,type,T_in_C,T_out_C,CP_kW_per_K,dT_shift_K,note
+Reactor 1 feed,cold,20,180,20,5,Kemp (2007) Ch. 2 four-stream example; dT_shift = dTmin/2 with dTmin = 10 K
+Reactor 1 product,hot,250,40,15,5,
+Reactor 2 feed,cold,140,230,30,5,
+Reactor 2 product,hot,200,80,25,5,

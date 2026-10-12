@@ -1,0 +1,13 @@
+stream,type,T_in_C,T_out_C,Q_kWh_per_hl,dT_shift_K,note
+Pre-mashing,cold,15,55,4.4,2,T_in = ambient (15 C per paper Sec. 4.3.1)
+Mashing,cold,55,77,3.5,2,
+Lautering/Filtering,cold,15,75,6.0,2,T_in = ambient
+Wortboiling (preheating),cold,75,100,3.0,2,
+Wortboiling (boiling),cold,100,101,2.4,2,latent load modelled over 1 K
+Wortcooling,hot,100,15,8.5,2,
+Boiloff condensation,hot,101,100,2.4,2,latent load modelled over 1 K
+Condensate cooling,hot,100,15,0.9,2,T_out = ambient
+Fermentation,hot,15,14,1.5,1,
+Beer cooling,hot,14,3,1.1,2,
+Filtration/centrifugation,hot,3,1,0.4,2,
+CIP,cold,15,78,2.1,2,T_in = ambient
