@@ -63,5 +63,32 @@
     "basis": "published / assumed, with source",
     "ambient_T_C": "published / assumed, with source",
     "economics": "published / assumed, with source (see economics.sources)"
-  }
+  },
+  "area_targeting": {
+    "film_coefficients_kW_per_m2K": {
+      "<stream name>": 1.0
+    },
+    "film_coefficients_source": "cite the source",
+    "dTmin_grid_K": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      10,
+      15,
+      20
+    ],
+    "cost_law": {
+      "a": 0,
+      "b": 0,
+      "c": 1,
+      "source": "cite the cost law"
+    },
+    "specific_area_cost_sweep_EUR_per_m2": [],
+    "cold_utility_cost_EUR_per_kW_year": 0
+  },
+  "_area_targeting": "Optional (step 3). Film coefficient per stream in kW/(m2 K); exchanger cost per unit a + b (A/N)^c in EUR, with source. If no sourced cost law exists, set cost_law to null and give a sweep of installed area cost (a = 0, c = 1). Needs 'basis' and 'economics' (loads are converted to kW; hot-utility cost from gas price / boiler efficiency)."
 }

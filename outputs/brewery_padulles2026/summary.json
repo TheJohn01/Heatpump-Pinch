@@ -50,13 +50,14 @@
     "source_T_C": "published cold-utility temperature (Sec. 4.1); used for all sources, which bounds W from above",
     "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
     "basis": "assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)",
-    "ambient_T_C": "published: Sec. 4.3.1"
+    "ambient_T_C": "published: Sec. 4.3.1",
+    "area_targeting": "film coefficients: Stampfli et al. (2018) categories, mapping assumed; no sourced exchanger cost law: results given for a sweep of installed area cost"
   },
   "economics": {
     "parameters": {
       "gas_price_EUR_per_kWh": 0.055,
       "electricity_price_EUR_per_kWh": 0.132,
-      "boiler_efficiency": 1.0,
+      "boiler_efficiency": 0.817,
       "operating_hours_per_year": 8000.0,
       "discount_rate": 0.05,
       "horizon_years": 10,
@@ -76,7 +77,7 @@
     },
     "case_sources": {
       "prices": "Eurostat, first half of 2025, Portugal industrial: electricity 13.2 and gas 5.5 EUR/100 kWh (as reported by ECO, 29 May 2026); consumption band and tax basis not stated",
-      "boiler_efficiency": "bound (1.0): no sourced value found; sensitivity at 0.85-0.95 reported",
+      "boiler_efficiency": "US DOE Steam Tip Sheet #15 (2000), Table 2: 81.7 % natural gas combustion efficiency (economiser, air preheater, 3 % O2), HHV basis assumed; sensitivity at 0.90 and 1.0 (bound) reported",
       "operating_hours_per_year": "published: Padullés et al. (2026), Sec. 5.1",
       "discount_rate, horizon_years": "published: Padullés et al. (2026), Sec. 5.2",
       "payback_threshold_years": "research question 1 (5 years)",
@@ -85,94 +86,94 @@
       "heat_recovery_equipment": "tank 520.8 m3 = 375 m3 x (1.0e6 / 720,000 hl/year), scaled from Padullés et al. (2026), Sec. 5.1"
     },
     "RQ1": {
-      "max_fraction_with_payback_below_threshold": 0.0,
+      "max_fraction_with_payback_below_threshold": 0.725,
       "_definition": "fraction = heat pump heat / Q̇h,min of the site with heat recovery installed",
       "threshold_years": 5.0,
-      "fraction_with_max_NPV": 0.0,
-      "max_NPV_EUR": 0.0,
+      "fraction_with_max_NPV": 0.725,
+      "max_NPV_EUR": 626547.0,
       "site_without_HR: max gas reduction with payback below threshold": 1.0,
       "site_without_HR: heat pump share of Q̇h,min in that project": 1.0
     },
     "RQ3": {
-      "break_even_ratio_NPV": 1.692,
-      "break_even_ratio_payback": 1.024,
+      "break_even_ratio_NPV": 2.345,
+      "break_even_ratio_payback": 1.677,
       "ratio_used": 2.4,
-      "break_even_ratio_NPV_with_HR_investment": 4.696
+      "break_even_ratio_NPV_with_HR_investment": 6.089
     },
     "results": {
       "full design (heat recovery installed)": {
         "option": "100.0 %",
         "capex_EUR": 1793176.4713,
-        "opex_EUR": 454138.9572,
-        "savings_EUR": 98190.4546,
-        "payback_years": 18.2622,
-        "npv_EUR": -1034975.8087,
+        "opex_EUR": 454138.9571,
+        "savings_EUR": 221906.8345,
+        "payback_years": 8.0808,
+        "npv_EUR": -79670.716,
         "gas_fuel_MWh": -0.0,
         "electricity_MWh": 3440.4466,
         "co2_t": 403.2203,
-        "co2_avoided_t": 1796.0549,
+        "co2_avoided_t": 2288.6711,
         "primary_energy_MWh": 6536.8486,
-        "primary_energy_reduction": 0.3491,
+        "primary_energy_reduction": 0.4682,
         "gas_reduction": 1.0
       },
       "heat recovery only (vs no HR)": {
         "option": "heat recovery only",
         "capex_EUR": 434502.6273,
-        "opex_EUR": 552329.4118,
-        "savings_EUR": 624670.5882,
-        "payback_years": 0.6956,
-        "npv_EUR": 4389038.0731,
-        "gas_fuel_MWh": 10042.3529,
+        "opex_EUR": 676045.7916,
+        "savings_EUR": 764590.6833,
+        "payback_years": 0.5683,
+        "npv_EUR": 5469463.9582,
+        "gas_fuel_MWh": 12291.7417,
         "electricity_MWh": 0.0,
-        "co2_t": 2199.2753,
-        "co2_avoided_t": 2487.3247,
-        "primary_energy_MWh": 10042.3529,
+        "co2_t": 2691.8914,
+        "co2_avoided_t": 3044.4611,
+        "primary_energy_MWh": 12291.7417,
         "primary_energy_reduction": 0.5307,
         "gas_reduction": 0.5307
       },
       "heat recovery + heat pumps (vs no HR)": {
         "option": "heat recovery + heat pumps",
         "capex_EUR": 2227679.0987,
-        "opex_EUR": 454138.9572,
-        "savings_EUR": 722861.0428,
-        "payback_years": 3.0818,
-        "npv_EUR": 3354062.2644,
+        "opex_EUR": 454138.9571,
+        "savings_EUR": 986497.5178,
+        "payback_years": 2.2582,
+        "npv_EUR": 5389793.2423,
         "gas_fuel_MWh": -0.0,
         "electricity_MWh": 3440.4466,
         "co2_t": 403.2203,
-        "co2_avoided_t": 4283.3797,
+        "co2_avoided_t": 5333.1322,
         "primary_energy_MWh": 6536.8486,
-        "primary_energy_reduction": 0.6945,
+        "primary_energy_reduction": 0.7504,
         "gas_reduction": 1.0
       },
       "full design, CO2 price 82.4 EUR/t": {
         "option": "100.0 %",
         "capex_EUR": 1793176.4713,
-        "opex_EUR": 454138.957,
-        "savings_EUR": 279410.739,
-        "payback_years": 6.4177,
-        "npv_EUR": 364359.1914,
+        "opex_EUR": 454138.9569,
+        "savings_EUR": 443718.6882,
+        "payback_years": 4.0412,
+        "npv_EUR": 1633101.6219,
         "gas_fuel_MWh": -0.0,
         "electricity_MWh": 3440.4466,
         "co2_t": 403.2203,
-        "co2_avoided_t": 1796.0549,
+        "co2_avoided_t": 2288.6711,
         "primary_energy_MWh": 6536.8486,
-        "primary_energy_reduction": 0.3491,
+        "primary_energy_reduction": 0.4682,
         "gas_reduction": 1.0
       },
-      "full design, boiler efficiency 0.85": {
+      "full design, boiler efficiency 0.817": {
         "option": "100.0 %",
         "capex_EUR": 1793176.4713,
         "opex_EUR": 454138.9571,
-        "savings_EUR": 195660.3508,
-        "payback_years": 9.1647,
-        "npv_EUR": -282339.106,
+        "savings_EUR": 221906.8345,
+        "payback_years": 8.0808,
+        "npv_EUR": -79670.716,
         "gas_fuel_MWh": -0.0,
         "electricity_MWh": 3440.4466,
         "co2_t": 403.2203,
-        "co2_avoided_t": 2184.1624,
+        "co2_avoided_t": 2288.6711,
         "primary_energy_MWh": 6536.8486,
-        "primary_energy_reduction": 0.4467,
+        "primary_energy_reduction": 0.4682,
         "gas_reduction": 1.0
       },
       "full design, boiler efficiency 0.9": {
@@ -190,21 +191,84 @@
         "primary_energy_reduction": 0.4142,
         "gas_reduction": 1.0
       },
-      "full design, boiler efficiency 0.95": {
+      "full design, boiler efficiency 1.0": {
         "option": "100.0 %",
         "capex_EUR": 1793176.4713,
         "opex_EUR": 454138.9572,
-        "savings_EUR": 127260.4236,
-        "payback_years": 14.0906,
-        "npv_EUR": -810505.2131,
+        "savings_EUR": 98190.4546,
+        "payback_years": 18.2622,
+        "npv_EUR": -1034975.8087,
         "gas_fuel_MWh": -0.0,
         "electricity_MWh": 3440.4466,
         "co2_t": 403.2203,
-        "co2_avoided_t": 1911.8063,
+        "co2_avoided_t": 1796.0549,
         "primary_energy_MWh": 6536.8486,
-        "primary_energy_reduction": 0.3816,
+        "primary_energy_reduction": 0.3491,
         "gas_reduction": 1.0
       }
     }
+  },
+  "area_targeting": {
+    "hot_utility_cost_EUR_per_kW_year": 538.56,
+    "cold_utility_cost_EUR_per_kW_year": 0.0,
+    "crf_per_year": 0.1295,
+    "film_coefficients_source": "categories from Stampfli et al. (2018), CET 70, Table 1 (dairy): product 0.5, water 2.0, evaporation/condensation 5.0 kW/(m2 K) (values read via web transcription; to be checked against the PDF). Mapping to brewery streams is our assumption: water for brewing-water, CIP and condensate streams; product for mash, wort and beer; latent for boiling and boil-off condensation.",
+    "RQ2": [
+      {
+        "cost_law": "sweep: 100 EUR/m2 installed, linear (not a sourced estimate)",
+        "a": 0.0,
+        "b": 100.0,
+        "c": 1.0,
+        "dTmin_opt_K": 0.1,
+        "TAC_min_EUR": 651888.0,
+        "area_m2": 376.6,
+        "Qh_min_kW": 1201.4,
+        "at_grid_edge": false
+      },
+      {
+        "cost_law": "sweep: 250 EUR/m2 installed, linear (not a sourced estimate)",
+        "a": 0.0,
+        "b": 250.0,
+        "c": 1.0,
+        "dTmin_opt_K": 0.3,
+        "TAC_min_EUR": 658570.0,
+        "area_m2": 311.0,
+        "Qh_min_kW": 1204.1,
+        "at_grid_edge": false
+      },
+      {
+        "cost_law": "sweep: 500 EUR/m2 installed, linear (not a sourced estimate)",
+        "a": 0.0,
+        "b": 500.0,
+        "c": 1.0,
+        "dTmin_opt_K": 0.5,
+        "TAC_min_EUR": 668157.0,
+        "area_m2": 280.6,
+        "Qh_min_kW": 1206.9,
+        "at_grid_edge": false
+      },
+      {
+        "cost_law": "sweep: 1000 EUR/m2 installed, linear (not a sourced estimate)",
+        "a": 0.0,
+        "b": 1000.0,
+        "c": 1.0,
+        "dTmin_opt_K": 1.0,
+        "TAC_min_EUR": 684702.0,
+        "area_m2": 239.3,
+        "Qh_min_kW": 1213.8,
+        "at_grid_edge": false
+      },
+      {
+        "cost_law": "sweep: 2000 EUR/m2 installed, linear (not a sourced estimate)",
+        "a": 0.0,
+        "b": 2000.0,
+        "c": 1.0,
+        "dTmin_opt_K": 2.0,
+        "TAC_min_EUR": 712480.0,
+        "area_m2": 198.2,
+        "Qh_min_kW": 1227.6,
+        "at_grid_edge": false
+      }
+    ]
   }
 }

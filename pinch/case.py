@@ -70,6 +70,9 @@ class Case:
         only physically available at or below it; None disables the check.
     economics : dict or None
         Economic parameters (see ``pinch.economics.load_economics``).
+    area_targeting : dict or None
+        Film coefficients and cost law for ΔTmin supertargeting
+        (see ``pinch.area_analysis``).
     provenance : dict
         Free-form notes stating which values are published or assumed.
     """
@@ -86,6 +89,7 @@ class Case:
     screening: dict = field(default_factory=dict)
     ambient_T_C: float | None = None
     economics: dict | None = None
+    area_targeting: dict | None = None
     provenance: dict = field(default_factory=dict)
 
 
@@ -138,6 +142,7 @@ def load_case(path: str | Path) -> Case:
         screening=raw.get("screening", {}),
         ambient_T_C=None if raw.get("ambient_T_C") is None else float(raw["ambient_T_C"]),
         economics=raw.get("economics"),
+        area_targeting=raw.get("area_targeting"),
         provenance=raw.get("provenance", {}),
     )
 

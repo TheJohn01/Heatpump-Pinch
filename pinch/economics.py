@@ -42,7 +42,7 @@ DEFAULT_COST_FUNCTIONS = {
 DEFAULTS = {
     "gas_price_EUR_per_kWh": (0.06, "published: Padullés et al. (2026), Sec. 5.1 base price"),
     "electricity_to_gas_ratio": (2.0, "published: Padullés et al. (2026), Sec. 5.2, 'current European ratios of around 2'"),
-    "boiler_efficiency": (1.0, "bound: no sourced value found; 1.0 gives the smallest gas savings (conservative for electrification)"),
+    "boiler_efficiency": (0.817, "US DOE Steam Tip Sheet #15 (DOE/GO-102000-1115, 2000), Table 2: natural gas combustion efficiency 81.7 % with economiser and air preheater, 3 % O2; fuel sold on HHV, matching gas prices per kWh GCV. 1.0 is reported as the conservative bound"),
     "operating_hours_per_year": (8000.0, "published: Padullés et al. (2026), Sec. 5.1"),
     "discount_rate": (0.05, "published: Padullés et al. (2026), Sec. 5.2"),
     "horizon_years": (10, "published: Padullés et al. (2026), Sec. 5.2 (NPV10)"),

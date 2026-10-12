@@ -131,8 +131,8 @@ def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energ
         e = evaluate(full_option, baseline, replace(params, co2_price_EUR_per_t=float(co2_sens)))
         results[f"full design, CO2 price {co2_sens} EUR/t"] = e.as_dict()
 
-    # boiler-efficiency sensitivity (no sourced value; 1.0 is a bound)
-    for eta_b in (0.85, 0.90, 0.95):
+    # boiler-efficiency sensitivity: sourced value 0.817 (DOE), bound 1.0
+    for eta_b in (0.817, 0.90, 1.0):
         e = evaluate(full_option, baseline, replace(params, boiler_efficiency=eta_b))
         results[f"full design, boiler efficiency {eta_b}"] = e.as_dict()
 

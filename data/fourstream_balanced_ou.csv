@@ -1,0 +1,8 @@
+stream,type,T_in_C,T_out_C,Q_MW,dT_shift_K,note
+Reactor 1 feed,cold,20,180,32.0,5,Univ. Oklahoma 'Units and Area Targeting' notes: Example 1.1 with utilities; U = 0.001 MW/m2K
+Reactor 1 product,hot,250,40,31.5,5,
+Reactor 2 feed,cold,140,230,27.0,5,
+Reactor 2 product,hot,200,80,30.0,5,
+Hot utility,hot,300,250,7.5,5,interval VI of the notes' table (hot side 300 -> 250 C)
+Cooling water 1,cold,15,20,6.0,5,interval I of the notes' table (cold side 15 -> 20 C)
+Cooling water 2,cold,20,30,4.0,5,interval II of the notes' table (cold side 20 -> 30 C)

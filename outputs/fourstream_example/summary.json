@@ -48,5 +48,8 @@
   },
   "economics": {
     "skipped": "no annual basis in the case file"
+  },
+  "area_targeting": {
+    "skipped": "no area_targeting block"
   }
 }

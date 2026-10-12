@@ -90,7 +90,7 @@ def test_brewery_full_design_hand_check(tmp_path):
     Q_co2, Q_hthp, W = 7.2819, 2.7605, 3.4404             # kWh/hl, from the step-4 design
     kW = lambda q: q * 1e3 * 1000 / 8000                   # kWh/hl -> MWh/year -> kW at 8000 h
     capex = (520_000 + 600 * kW(Q_co2)) + (520_000 + 600 * kW(Q_hthp))
-    savings = 10.0424 * 1e3 * 55 - W * 1e3 * 132          # MWh/year x EUR/MWh
+    savings = 10.0424 * 1e3 / 0.817 * 55 - W * 1e3 * 132  # gas fuel = heat / 0.817; MWh/year x EUR/MWh
     assert full["capex_EUR"] == pytest.approx(capex, rel=1e-3)
     assert full["savings_EUR"] == pytest.approx(savings, rel=1e-3)
     assert s["economics"]["RQ3"]["ratio_used"] == pytest.approx(0.132 / 0.055, abs=1e-3)

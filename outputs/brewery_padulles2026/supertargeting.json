@@ -1,0 +1,63 @@
+{
+  "hot_utility_cost_EUR_per_kW_year": 538.56,
+  "cold_utility_cost_EUR_per_kW_year": 0.0,
+  "crf_per_year": 0.1295,
+  "film_coefficients_source": "categories from Stampfli et al. (2018), CET 70, Table 1 (dairy): product 0.5, water 2.0, evaporation/condensation 5.0 kW/(m2 K) (values read via web transcription; to be checked against the PDF). Mapping to brewery streams is our assumption: water for brewing-water, CIP and condensate streams; product for mash, wort and beer; latent for boiling and boil-off condensation.",
+  "RQ2": [
+    {
+      "cost_law": "sweep: 100 EUR/m2 installed, linear (not a sourced estimate)",
+      "a": 0.0,
+      "b": 100.0,
+      "c": 1.0,
+      "dTmin_opt_K": 0.1,
+      "TAC_min_EUR": 651888.0,
+      "area_m2": 376.6,
+      "Qh_min_kW": 1201.4,
+      "at_grid_edge": false
+    },
+    {
+      "cost_law": "sweep: 250 EUR/m2 installed, linear (not a sourced estimate)",
+      "a": 0.0,
+      "b": 250.0,
+      "c": 1.0,
+      "dTmin_opt_K": 0.3,
+      "TAC_min_EUR": 658570.0,
+      "area_m2": 311.0,
+      "Qh_min_kW": 1204.1,
+      "at_grid_edge": false
+    },
+    {
+      "cost_law": "sweep: 500 EUR/m2 installed, linear (not a sourced estimate)",
+      "a": 0.0,
+      "b": 500.0,
+      "c": 1.0,
+      "dTmin_opt_K": 0.5,
+      "TAC_min_EUR": 668157.0,
+      "area_m2": 280.6,
+      "Qh_min_kW": 1206.9,
+      "at_grid_edge": false
+    },
+    {
+      "cost_law": "sweep: 1000 EUR/m2 installed, linear (not a sourced estimate)",
+      "a": 0.0,
+      "b": 1000.0,
+      "c": 1.0,
+      "dTmin_opt_K": 1.0,
+      "TAC_min_EUR": 684702.0,
+      "area_m2": 239.3,
+      "Qh_min_kW": 1213.8,
+      "at_grid_edge": false
+    },
+    {
+      "cost_law": "sweep: 2000 EUR/m2 installed, linear (not a sourced estimate)",
+      "a": 0.0,
+      "b": 2000.0,
+      "c": 1.0,
+      "dTmin_opt_K": 2.0,
+      "TAC_min_EUR": 712480.0,
+      "area_m2": 198.2,
+      "Qh_min_kW": 1227.6,
+      "at_grid_edge": false
+    }
+  ]
+}

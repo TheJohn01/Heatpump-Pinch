@@ -11,7 +11,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install pandas numpy matplotlib pytest CoolProp
-python -m pytest                                  # 65 tests
+python -m pytest                                  # 75 tests
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 ```
@@ -38,7 +38,7 @@ and `price_ratio_sweep.*`.
 |---|---|
 | 1. Stream data, checks, energy-balance closure | Done, tested |
 | 2. Problem table, composite curves, GCC | Done, validated (four-stream example; Padullés et al. 2026) |
-| 3. ΔTmin / cost trade-off | Not started (needs film coefficients and exchanger costs) |
+| 3. ΔTmin / cost trade-off | Done: Bath area target, units target, supertargeting; validated on the OU area example (published error found and corrected). Brewery RQ2 as a sweep of area cost (no sourced cost law yet) |
 | 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b (working fluid, cycle COP with CoolProp) pending |
 | 5. HEN retrofit | Not started |
 | 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; RQ1 electrification curve; RQ3 break-even ratio; paper Sec. 5.2 statements reproduced |
@@ -56,6 +56,7 @@ cases/
 data/
   brewery_streams.csv        Padullés et al. (2026), Table 2; 'Amb.' = 15 °C (inferred)
   fourstream_example.csv     Univ. Oklahoma ChE notes, Example 1.1
+  fourstream_balanced_ou.csv Same example with the utilities of the OU area-targeting notes
   northwestern_4stream.csv   Northwestern Univ. design wiki example (second algorithm check)
   walmsley2024_*.csv         Walmsley et al. (2024), Tables 1 and 2
   reference_targets.json     Published/textbook targets used by the validation tests
@@ -71,7 +72,9 @@ pinch/
   validation.py              Reference vs computed comparison
   economics.py               Cost functions, evaluation, break-even ratio (defaults with sources)
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
-tests/                       65 tests (validation cases first, then general behaviour)
+  area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
+  area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
+tests/                       75 tests (validation cases first, then general behaviour)
 
 Paper-specific scripts (brewery):
 validate_targets.py                 Steps 1-2 validation report
@@ -127,7 +130,14 @@ verify_walmsley2024.py              Targets, COP, inconsistencies and inferred v
 
 ### Economic defaults
 
-Every default in `pinch/economics.py` (`DEFAULTS`) carries its source. Two are deliberate
-choices rather than sourced estimates: boiler efficiency 1.0 (a bound that minimises gas
-savings; sensitivity at 0.85–0.95 is always reported) and CO2 price 0 (the site may be
-outside the EU ETS; a sensitivity price can be set per case).
+Every default in `pinch/economics.py` (`DEFAULTS`) carries its source. Boiler efficiency
+defaults to 0.817 (US DOE Steam Tip Sheet #15); 0.90 and the bound 1.0 are always reported as
+sensitivities. CO2 price defaults to 0 (the site may be outside the EU ETS); a sensitivity price
+can be set per case.
+
+### Area-targeting validation
+
+The University of Oklahoma "Units and Area Targeting" notes give a total area of 2716.3 m² for the
+four-stream example with utilities (U = 0.001 MW/m²K). Intervals I–V are reproduced exactly. Interval
+VI's printed ΔT_LM (81.9 K) uses the cold temperatures of interval V; with its own temperatures it is
+56.6 K, and the corrected total (2757.3 m²) equals our composite-curve area (2757.0 m²).

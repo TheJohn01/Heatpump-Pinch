@@ -24,6 +24,7 @@ import pandas as pd
 
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
 from pinch.case import Case, load_case, to_MWh_per_year
+from pinch.area_analysis import run_area_targeting
 from pinch.economic_analysis import run_economics
 from pinch.design import HeatPumpDesign, design_from_gcc, plausibility_warnings, source_warnings
 from pinch.plotting import plot_composite_curves, plot_gcc, plot_gcc_with_units
@@ -111,6 +112,7 @@ def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
         "provenance": case.provenance,
     }
     summary["economics"] = run_economics(case, design, balance["Q_cold_total"], unit, out)
+    summary["area_targeting"] = run_area_targeting(case, streams, out)
     (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
     (out / "summary.md").write_text(_markdown(summary), encoding="utf-8")
     return summary
@@ -167,6 +169,15 @@ def _markdown(s: dict) -> str:
                   f"| RQ3: break-even ratio, payback = threshold | {r3['break_even_ratio_payback']} |"]
     elif ec:
         lines += ["", f"Economics skipped: {ec['skipped']}."]
+    at = s.get("area_targeting", {})
+    if at and "skipped" not in at:
+        lines += ["", "## ΔTmin supertargeting (step 3, RQ2)", "",
+                  f"Hot utility {at['hot_utility_cost_EUR_per_kW_year']} EUR/kW-year; cold utility "
+                  f"{at['cold_utility_cost_EUR_per_kW_year']} EUR/kW-year; CRF {at['crf_per_year']}/year. "
+                  f"Film coefficients: {at['film_coefficients_source']}", "",
+                  "| Cost law | ΔTmin,opt [K] | Area [m²] | Q̇h,min [kW] | TAC [EUR/year] |", "|---|---|---|---|---|"]
+        lines += [f"| {r['cost_law']} | {r['dTmin_opt_K']:g}{' (grid edge)' if r['at_grid_edge'] else ''} | "
+                  f"{r['area_m2']:,.0f} | {r['Qh_min_kW']:,.0f} | {r['TAC_min_EUR']:,.0f} |" for r in at["RQ2"]]
     if s["warnings"]:
         lines += ["", "## Plausibility warnings", ""] + [f"- **{k}**: {'; '.join(v)}" for k, v in s["warnings"].items()]
     if s["provenance"]:
