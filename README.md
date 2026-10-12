@@ -11,7 +11,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install pandas numpy matplotlib pytest CoolProp
-python -m pytest                                  # 75 tests
+python -m pytest                                  # 84 tests
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 ```
@@ -38,10 +38,10 @@ and `price_ratio_sweep.*`.
 |---|---|
 | 1. Stream data, checks, energy-balance closure | Done, tested |
 | 2. Problem table, composite curves, GCC | Done, validated (four-stream example; Padullés et al. 2026) |
-| 3. ΔTmin / cost trade-off | Done: Bath area target, units target, supertargeting; validated on the OU area example (published error found and corrected). Brewery RQ2 as a sweep of area cost (no sourced cost law yet) |
+| 3. ΔTmin / cost trade-off | Done: Bath area target, units target, supertargeting; validated on the OU area example (published error found and corrected). Brewery RQ2 with the Stampfli et al. (2018) plate-HEX cost law (bare and ×3.5 installed) plus a sweep |
 | 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b (working fluid, cycle COP with CoolProp) pending |
 | 5. HEN retrofit | Not started |
-| 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; RQ1 electrification curve; RQ3 break-even ratio; paper Sec. 5.2 statements reproduced |
+| 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; RQ1 electrification curve; RQ3 break-even ratio; named scenarios and Lorenz-efficiency sensitivity; paper Sec. 5.2 statements and Appendix B (Case DK1) NPV/payback reproduced |
 
 ## Layout
 
@@ -74,7 +74,7 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       75 tests (validation cases first, then general behaviour)
+tests/                       84 tests (validation cases first, then general behaviour)
 
 Paper-specific scripts (brewery):
 validate_targets.py                 Steps 1-2 validation report
@@ -121,6 +121,7 @@ verify_walmsley2024.py              Targets, COP, inconsistencies and inferred v
 | Brewery, config. 2 | Electricity | 3.6 kWh/hl | 3.55 | −1.5 % |
 | Brewery, config. 3 (HTHP) | Electricity | 3.6 kWh/hl | 3.56 | −1.1 % |
 | Brewery, config. 1 | Electricity vs Fig. 11 (digitised), 100–180 °C | curve | curve | −4.5 to +0.7 % |
+| Brewery, Appendix B Case DK1 | NPV10 and payback of 8 options (Table B.4) from their OPEX and CAPEX | Table B.4 | all within rounding | ≤ 0.08 M EUR |
 
 ### Known inconsistencies in the source papers (reported, not corrected)
 
@@ -130,10 +131,20 @@ verify_walmsley2024.py              Targets, COP, inconsistencies and inferred v
 
 ### Economic defaults
 
-Every default in `pinch/economics.py` (`DEFAULTS`) carries its source. Boiler efficiency
-defaults to 0.817 (US DOE Steam Tip Sheet #15); 0.90 and the bound 1.0 are always reported as
-sensitivities. CO2 price defaults to 0 (the site may be outside the EU ETS); a sensitivity price
-can be set per case.
+Every default in `pinch/economics.py` (`DEFAULTS`) carries its source:
+
+| Parameter | Default | Source |
+|---|---|---|
+| Boiler efficiency (GCV) | 0.845 | DEA Technology Data, Industrial Process Heat, sheet 6.1: 93.9 % net, × 0.90 (NCV/GCV) |
+| Gas emission factor | 0.182 kg/kWh (GCV) | IPCC 2006 Guidelines, Vol. 2, Table 2.2: 56,100 kg CO2/TJ NCV |
+| Grid emission factor | 0.107 kg/kWh | APA (2025), Portugal 2023, production-based |
+| Primary energy factor, electricity | 1.9 | Delegated Regulation (EU) 2023/807 |
+
+A case lists further values under `economics.scenarios` (each scenario overrides named
+parameters and reports the full design, RQ1 and RQ3 again) and further Lorenz efficiencies under
+`heat_pumps.eta_lorenz_sensitivity` (heat pumps re-sized and re-costed). `heat_pump_design.csv`
+also gives the Lorenz efficiency predicted by the Andersen et al. (2024) correlation for each unit,
+with its validity-range flags, as a check on the assumed value.
 
 ### Area-targeting validation
 

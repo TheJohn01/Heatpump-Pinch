@@ -3,7 +3,8 @@
 Reads the case's "area_targeting" block:
     film_coefficients_kW_per_m2K : {stream name: h}, with a source
     dTmin_grid_K                 : list of ΔTmin values to scan
-    cost_law                     : {"a", "b", "c", "source"} or null
+    cost_law                     : {"a", "b", "c", "source"}, a list of such
+                                   laws, or null
     specific_area_cost_sweep_EUR_per_m2 : list of b values (a = 0, c = 1),
                                    used when no sourced cost law is available
 
@@ -55,9 +56,9 @@ def run_area_targeting(case: Case, streams: StreamSet, out: Path) -> dict:
     crf = 1 / params.annuity_factor
 
     laws: list[CostLaw] = []
-    if block.get("cost_law"):
-        cl = block["cost_law"]
-        laws.append(CostLaw(cl["a"], cl["b"], cl["c"], cl["source"]))
+    given = block.get("cost_law") or []
+    for cl in ([given] if isinstance(given, dict) else given):
+        laws.append(CostLaw(float(cl["a"]), float(cl["b"]), float(cl["c"]), cl.get("label", cl["source"])))
     for b in block.get("specific_area_cost_sweep_EUR_per_m2", []):
         laws.append(CostLaw(0.0, float(b), 1.0, f"sweep: {b} EUR/m2 installed, linear (not a sourced estimate)"))
     if not laws:
@@ -78,7 +79,7 @@ def run_area_targeting(case: Case, streams: StreamSet, out: Path) -> dict:
 
     fig, ax = plt.subplots(figsize=(7, 4.5))
     for df, r in zip(frames, results):
-        ax.plot(df["dTmin_K"], df["TAC_EUR"] / 1e3, lw=1.8, label=f"b = {r['b']:g} EUR/m² (opt. {r['dTmin_opt_K']:g} K)")
+        ax.plot(df["dTmin_K"], df["TAC_EUR"] / 1e3, lw=1.8, label=f"b = {r['b']:.0f} EUR/m² (opt. {r['dTmin_opt_K']:g} K)")
         ax.plot(r["dTmin_opt_K"], r["TAC_min_EUR"] / 1e3, "o", color=ax.lines[-1].get_color())
     ax.set_xlabel("ΔTmin [K]")
     ax.set_ylabel("Total annual cost [k EUR/year]")

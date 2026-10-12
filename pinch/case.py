@@ -57,6 +57,9 @@ class Case:
         Extra shift added to every stream (e.g. indirect transfer), default 0.
     eta_lorenz : float
         Lorenz efficiency for heat pump COPs [-].
+    eta_lorenz_sensitivity : tuple of float
+        Optional further Lorenz efficiencies; the design is re-sized and
+        re-costed for each (``pinch.economic_analysis.eta_lorenz_sensitivity``).
     source_T_C : float
         Default heat pump source temperature, on the T* axis [°C].
     sink_levels : list of SinkLevelSpec
@@ -91,6 +94,7 @@ class Case:
     economics: dict | None = None
     area_targeting: dict | None = None
     provenance: dict = field(default_factory=dict)
+    eta_lorenz_sensitivity: tuple[float, ...] = ()
 
 
 def load_case(path: str | Path) -> Case:
@@ -107,6 +111,9 @@ def load_case(path: str | Path) -> Case:
     eta = float(hp["eta_lorenz"])
     if not 0 < eta <= 1:
         raise ValueError(f"{path.name}: eta_lorenz must be in (0, 1]")
+    eta_sens = tuple(float(x) for x in hp.get("eta_lorenz_sensitivity", []))
+    if any(not 0 < x <= 1 for x in eta_sens):
+        raise ValueError(f"{path.name}: eta_lorenz_sensitivity values must be in (0, 1]")
 
     levels = tuple(
         SinkLevelSpec(
@@ -144,6 +151,7 @@ def load_case(path: str | Path) -> Case:
         economics=raw.get("economics"),
         area_targeting=raw.get("area_targeting"),
         provenance=raw.get("provenance", {}),
+        eta_lorenz_sensitivity=eta_sens,
     )
 
 

@@ -41,7 +41,7 @@ def test_evaluate_hand_calculation():
     assert e.savings_EUR == pytest.approx(savings)
     assert e.payback_years == pytest.approx(capex / savings)
     assert e.npv_EUR == pytest.approx(-capex + savings * P.annuity_factor)
-    assert e.co2_avoided_t == pytest.approx(1000 * 0.219 - 400 * 0.1)
+    assert e.co2_avoided_t == pytest.approx(1000 * 0.182 - 400 * 0.1)  # default gas EF (IPCC, GCV)
     assert e.primary_energy_reduction == pytest.approx(1 - 400 * 1.9 / 1000)
 
 
@@ -81,16 +81,61 @@ def test_padulles_statements_reproduced():
 
 # --------------------------------------------------- general analysis (brewery)
 def test_brewery_full_design_hand_check(tmp_path):
-    """1 Mhl/year, Portugal H1 2025 prices: CAPEX and savings of the GCC design by hand."""
+    """1 Mhl/year, prices from the case file: CAPEX and savings of the GCC design by hand."""
+    import json
     from analyse import analyse
     from pinch.case import load_case
     from pinch.validation import ROOT
-    s = analyse(load_case(ROOT / "cases" / "brewery_padulles2026.json"), output_root=tmp_path)
+    path = ROOT / "cases" / "brewery_padulles2026.json"
+    ec = json.loads(path.read_text(encoding="utf-8"))["economics"]
+    p_gas, p_el, eta_b = ec["gas_price_EUR_per_kWh"], ec["electricity_price_EUR_per_kWh"], ec["boiler_efficiency"]
+    s = analyse(load_case(path), output_root=tmp_path)
     full = s["economics"]["results"]["full design (heat recovery installed)"]
     Q_co2, Q_hthp, W = 7.2819, 2.7605, 3.4404             # kWh/hl, from the step-4 design
     kW = lambda q: q * 1e3 * 1000 / 8000                   # kWh/hl -> MWh/year -> kW at 8000 h
     capex = (520_000 + 600 * kW(Q_co2)) + (520_000 + 600 * kW(Q_hthp))
-    savings = 10.0424 * 1e3 / 0.817 * 55 - W * 1e3 * 132  # gas fuel = heat / 0.817; MWh/year x EUR/MWh
+    savings = (10.0424 / eta_b * p_gas - W * p_el) * 1e6   # kWh/hl x 1e6 hl/year x EUR/kWh
     assert full["capex_EUR"] == pytest.approx(capex, rel=1e-3)
     assert full["savings_EUR"] == pytest.approx(savings, rel=1e-3)
-    assert s["economics"]["RQ3"]["ratio_used"] == pytest.approx(0.132 / 0.055, abs=1e-3)
+    assert s["economics"]["RQ3"]["ratio_used"] == pytest.approx(p_el / p_gas, abs=1e-3)
+    # every scenario changes only what it names: the base scenario values reappear when nothing is overridden
+    names = [r["scenario"] for r in s["economics"]["scenarios"]]
+    assert len(names) == len(ec["scenarios"])
+    eta_rows = s["eta_lorenz_sensitivity"]
+    cops = [r["COP_system"] for r in eta_rows]
+    assert cops == sorted(cops)                              # higher Lorenz efficiency, higher COP
+
+
+# ------------------------------------------- Padullés et al. (2026), Appendix B, Case DK1
+#: Table B.4 (supplementary material): annual OPEX [M EUR], total CAPEX [M EUR], NPV10 [M EUR], PBP [y]
+DK1_TABLE_B4 = {
+    "Natural gas boiler and HR": (0.83, 0.55, 5.01, 0.8),
+    "Centralized HTHP": (1.10, 2.32, 1.18, 5.1),
+    "Centralized EB and HR": (1.28, 0.98, 1.11, 3.6),
+    "Centralized HTHP and HR": (0.56, 1.99, 5.68, 2.0),
+    "HP into HR tank, Pfaduko and HTHP": (0.36, 2.74, 6.49, 2.3),
+    "HP into HR tank, Pfaduko and EB": (0.43, 2.19, 6.50, 1.9),
+    "HP into HR tank, MVR and EB boost": (0.44, 2.35, 6.22, 2.1),
+    "HP into HR tank, MVR and HTHP boost": (0.37, 2.93, 6.18, 2.5),
+}
+DK1_BASE_OPEX_MEUR = 1.55
+
+
+@pytest.mark.parametrize("name", list(DK1_TABLE_B4))
+def test_padulles2026_appendix_B_DK1_npv_and_payback(name):
+    """Our NPV10 (5 %, 10 y) and payback reproduce Table B.4 from its own OPEX and CAPEX.
+
+    Published OPEX and CAPEX are rounded to 0.01 M EUR, so savings carry up to
+    +/- 0.01 M EUR and NPV10 up to +/- 0.01 x 7.72 + 0.005 = 0.083 M EUR.
+    """
+    opex, capex_MEUR, npv_pub, pbp_pub = DK1_TABLE_B4[name]
+    p = load_economics({"gas_price_EUR_per_kWh": 1.0, "boiler_efficiency": 1.0, "electricity_to_gas_ratio": 1.0,
+                        "discount_rate": 0.05, "horizon_years": 10,
+                        "cost_functions": {"hr_tank": {"alpha": 1.0, "beta": 0.0, "gamma": 1.0}}})
+    # gas at 1 EUR/kWh: OPEX [EUR] = MWh x 1000, so OPEX in M EUR <-> 1000 MWh
+    baseline = Option("base", DK1_BASE_OPEX_MEUR * 1e3, 0.0)
+    option = Option(name, opex * 1e3, 0.0, (("hr_tank", capex_MEUR * 1e6),))
+    e = evaluate(option, baseline, p)
+    assert e.npv_EUR / 1e6 == pytest.approx(npv_pub, abs=0.083)
+    pbp_tol = 0.05 + pbp_pub * 0.01 / (DK1_BASE_OPEX_MEUR - opex) + 0.005 / (DK1_BASE_OPEX_MEUR - opex)
+    assert e.payback_years == pytest.approx(pbp_pub, abs=pbp_tol)

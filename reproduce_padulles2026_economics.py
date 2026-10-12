@@ -78,7 +78,7 @@ def best(production_hl, ratio, hr_installed, params, criterion):
 
 def main() -> None:
     OUT.mkdir(exist_ok=True)
-    params = load_economics({"gas_price_EUR_per_kWh": 0.06, "boiler_efficiency": 1.0,
+    params = load_economics({"gas_price_EUR_per_kWh": 0.06, "boiler_efficiency": 1.0, "gas_EF_kg_per_kWh": 0.219,
                              "operating_hours_per_year": 8000, "discount_rate": 0.05, "horizon_years": 10})
 
     rows = []

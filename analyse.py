@@ -25,8 +25,9 @@ import pandas as pd
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
 from pinch.case import Case, load_case, to_MWh_per_year
 from pinch.area_analysis import run_area_targeting
-from pinch.economic_analysis import run_economics
+from pinch.economic_analysis import eta_lorenz_sensitivity, run_economics
 from pinch.design import HeatPumpDesign, design_from_gcc, plausibility_warnings, source_warnings
+from pinch.heat_pump import andersen2024_eta_lorenz
 from pinch.plotting import plot_composite_curves, plot_gcc, plot_gcc_with_units
 
 ROOT = Path(__file__).resolve().parent
@@ -51,6 +52,8 @@ def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
     r = design.integration
     rows = []
     for u in design.units:
+        eta_A, eta_A_warn = andersen2024_eta_lorenz(u.T_source_in_C, u.T_sink_out_C,
+                                                    u.T_source_out_C - u.T_source_in_C, u.T_sink_out_C - u.T_sink_in_C)
         rows.append({
             "unit": u.name,
             "T_sink_in_C": u.T_sink_in_C, "T_sink_out_C": u.T_sink_out_C,
@@ -62,6 +65,8 @@ def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
             f"source_from_process_{unit}": round(r.Q_source_process.get(u.name, 0.0), 4),
             f"source_external_{unit}": round(r.Q_source_external.get(u.name, 0.0), 4),
             "placement": r.placement[u.name],
+            "eta_lorenz_Andersen2024_check": round(eta_A, 3),
+            "Andersen2024_validity": "; ".join(eta_A_warn) or "within fitted range",
             "warnings": "; ".join(plausibility_warnings(u, case.screening)
                                   + source_warnings(design, case.ambient_T_C).get(u.name, [])),
         })
@@ -112,6 +117,7 @@ def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
         "provenance": case.provenance,
     }
     summary["economics"] = run_economics(case, design, balance["Q_cold_total"], unit, out)
+    summary["eta_lorenz_sensitivity"] = eta_lorenz_sensitivity(case, streams, unit, out)
     summary["area_targeting"] = run_area_targeting(case, streams, out)
     (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
     (out / "summary.md").write_text(_markdown(summary), encoding="utf-8")
@@ -167,8 +173,21 @@ def _markdown(s: dict) -> str:
                   f"| RQ1: share with maximum NPV | {100 * r1['fraction_with_max_NPV']:.1f} % |",
                   f"| RQ3: break-even ratio, NPV = 0 | {r3['break_even_ratio_NPV']} |",
                   f"| RQ3: break-even ratio, payback = threshold | {r3['break_even_ratio_payback']} |"]
+        if ec.get("scenarios"):
+            lines += ["", "### Scenarios (parameter overrides)", "",
+                      "| Scenario | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | RQ1 | RQ3 (NPV = 0) |",
+                      "|---|---|---|---|---|---|---|"]
+            lines += [f"| {r['scenario']} | {r['price_ratio']} | {r['full_payback_years']} | {r['full_npv_EUR']:,.0f} | "
+                      f"{r['full_co2_avoided_t']:,.0f} | {100 * r['RQ1_max_fraction_payback_ok']:.1f} % | "
+                      f"{r['RQ3_break_even_ratio_NPV']} |" for r in ec["scenarios"]]
     elif ec:
         lines += ["", f"Economics skipped: {ec['skipped']}."]
+    if s.get("eta_lorenz_sensitivity"):
+        lines += ["", "### Lorenz-efficiency sensitivity (heat pumps re-sized)", "",
+                  "| η_L | System COP | Full-design payback [y] | NPV [EUR] | RQ1 | RQ3 (NPV = 0) |", "|---|---|---|---|---|---|"]
+        lines += [f"| {r['eta_lorenz']} | {r['COP_system']} | {r['full_payback_years']} | {r['full_npv_EUR']:,.0f} | "
+                  f"{100 * r['RQ1_max_fraction_payback_ok']:.1f} % | {r['RQ3_break_even_ratio_NPV']} |"
+                  for r in s["eta_lorenz_sensitivity"]]
     at = s.get("area_targeting", {})
     if at and "skipped" not in at:
         lines += ["", "## ΔTmin supertargeting (step 3, RQ2)", "",

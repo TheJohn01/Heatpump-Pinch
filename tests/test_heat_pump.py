@@ -149,3 +149,20 @@ def test_recirculated_source_equals_unused_sink_heat():
     r = integrate(BREWERY, [cchs])
     assert r.Q_source_recirculated == pytest.approx(r.Q_sink_excess)
     assert r.Q_cold_utility_replaced == pytest.approx(problem_table(BREWERY).Qc_min)
+
+
+# ------------------------------------------------- Andersen et al. (2024) correlation
+def test_andersen2024_polynomial_hand_values():
+    """Hand calculation of Eq. (Sec. 3.2) at three points; validity flags."""
+    from pinch.heat_pump import andersen2024_eta_lorenz
+    # paper's illustrative condition: T_so,in 80 °C, lift 70 K, source glide -10 K, sink glide 40 K
+    eta, warn = andersen2024_eta_lorenz(80.0, 150.0, -10.0, 40.0)
+    hand = 0.486 + 1e-4 * (27.1 * 70 - 0.0737 * 70 ** 2 - 2.0 * 353.15 + 130 - 5.15 * 40)
+    assert eta == pytest.approx(hand, abs=1e-12) and eta == pytest.approx(0.5614, abs=1e-4)
+    assert warn == []
+    # the paper reports eta_Lor = 0.52 for one specific fluid/cycle at this condition; the fit is an upper envelope
+    assert eta > 0.52
+    # brewery HTHP: source -1 °C isothermal, sink 103 °C isothermal -> extrapolated (two flags)
+    eta, warn = andersen2024_eta_lorenz(-1.0, 103.0, 0.0, 0.0)
+    assert eta == pytest.approx(0.486 + 1e-4 * (27.1 * 104 - 0.0737 * 104 ** 2 - 2.0 * 272.15), abs=1e-12)
+    assert len(warn) == 2

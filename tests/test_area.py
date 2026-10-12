@@ -116,7 +116,7 @@ def test_brewery_optimum_matches_marginal_analysis(tmp_path):
     from analyse import analyse
     from pinch.case import load_case
     s = analyse(load_case(ROOT / "cases" / "brewery_padulles2026.json"), output_root=tmp_path)
-    rq2 = s["area_targeting"]["RQ2"]
+    rq2 = sorted(s["area_targeting"]["RQ2"], key=lambda r: r["b"])
     opts = [r["dTmin_opt_K"] for r in rq2]
     assert opts == sorted(opts)                                   # dearer area -> larger ΔTmin
     assert not any(r["at_grid_edge"] for r in rq2)                # optimum resolved inside the grid

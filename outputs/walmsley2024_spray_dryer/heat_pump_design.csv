@@ -1,3 +1,3 @@
-unit,T_sink_in_C,T_sink_out_C,T_source_C,Q_sink_kW,COP,W_kW,Q_source_kW,source_from_process_kW,source_external_kW,placement,warnings
-HTHP 120 °C (fluid beds),120.0,120.0,15.0,1906.0902,1.872,1018.1329,887.9573,887.9573,0.0,across pinch,
-HTHP 200 °C (main air),200.0,200.0,15.0,1826.4131,1.279,1428.2423,398.1708,398.1708,0.0,across pinch,sink 200 °C above 160 °C: limited commercial availability; lift 185 K above 130 K: beyond reported COP data
+unit,T_sink_in_C,T_sink_out_C,T_source_C,Q_sink_kW,COP,W_kW,Q_source_kW,source_from_process_kW,source_external_kW,placement,eta_lorenz_Andersen2024_check,Andersen2024_validity,warnings
+HTHP 120 °C (fluid beds),120.0,120.0,15.0,1906.0902,1.872,1018.1329,887.9573,887.9573,0.0,across pinch,0.632,"source_glide_K = 0 outside fitted range (-50.0, -10.0)",
+HTHP 200 °C (main air),200.0,200.0,15.0,1826.4131,1.279,1428.2423,398.1708,398.1708,0.0,across pinch,0.677,"lift_K = 185 outside fitted range (20.0, 150.0); source_glide_K = 0 outside fitted range (-50.0, -10.0)",sink 200 °C above 160 °C: limited commercial availability; lift 185 K above 130 K: beyond reported COP data

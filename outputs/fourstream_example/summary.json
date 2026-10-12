@@ -49,6 +49,7 @@
   "economics": {
     "skipped": "no annual basis in the case file"
   },
+  "eta_lorenz_sensitivity": [],
   "area_targeting": {
     "skipped": "no area_targeting block"
   }

@@ -54,6 +54,38 @@ def thermodynamic_mean_temperature_K(T_a_C: float, T_b_C: float) -> float:
     return (T_a_K - T_b_K) / math.log(T_a_K / T_b_K)
 
 
+#: Validity of the Andersen et al. (2024) polynomial (their Sec. 2.5).
+ANDERSEN2024_RANGE = {"T_source_in_C": (0.0, 100.0), "lift_K": (20.0, 150.0),
+                      "source_glide_K": (-50.0, -10.0), "sink_glide_K": (0.0, 80.0)}
+
+
+def andersen2024_eta_lorenz(T_source_in_C: float, T_sink_out_C: float,
+                            source_glide_K: float, sink_glide_K: float) -> tuple[float, list[str]]:
+    """Lorenz efficiency of the best-performing cycle/fluid, Andersen et al. (2024).
+
+    Andersen, M.P. et al., Applied Energy 376 (2024) 124312, Sec. 3.2:
+        eta_Lor = 0.486 + 1e-4 (27.1 dT_lift - 0.0737 dT_lift^2 - 2.0 T_so,in
+                                - 13.0 dT_so - 5.15 dT_si)
+    with absolute temperatures, dT_lift = T_si,out - T_so,in, dT_so = source glide
+    (outlet - inlet, negative) and dT_si = sink glide (outlet - inlet). R² = 0.866.
+    It fits the best of 1056 cycle/fluid combinations (an upper envelope) with
+    3 K pinch, 70 % isentropic compressor efficiency and 5 % heat loss.
+
+    Returns
+    -------
+    (eta, warnings) : the Lorenz efficiency and a list of validity-range violations.
+    """
+    lift_K = T_sink_out_C - T_source_in_C
+    T_so_in_K = T_source_in_C + KELVIN
+    eta = 0.486 + 1e-4 * (27.1 * lift_K - 0.0737 * lift_K ** 2 - 2.0 * T_so_in_K
+                          - 13.0 * source_glide_K - 5.15 * sink_glide_K)
+    values = {"T_source_in_C": T_source_in_C, "lift_K": lift_K,
+              "source_glide_K": source_glide_K, "sink_glide_K": sink_glide_K}
+    warnings = [f"{k} = {v:g} outside fitted range {ANDERSEN2024_RANGE[k]}"
+                for k, v in values.items() if not ANDERSEN2024_RANGE[k][0] <= v <= ANDERSEN2024_RANGE[k][1]]
+    return eta, warnings
+
+
 def lorenz_cop(
     T_sink_in_C: float,
     T_sink_out_C: float,

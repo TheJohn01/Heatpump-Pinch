@@ -11,6 +11,14 @@ Answers, for one site:
 Baseline: the process with its heat recovery installed (gas supplies Q̇h,min).
 If the case gives heat-recovery equipment, a second baseline without heat
 recovery (gas supplies the total cold-stream load) is evaluated too.
+
+Sensitivities
+-------------
+* ``economics.scenarios``: {name: {parameter: value, ...}}. Each scenario
+  overrides economic parameters (prices, boiler efficiency, emission factors...)
+  and reports the full design, RQ1 and RQ3 again (``scenarios.csv``).
+* ``heat_pumps.eta_lorenz_sensitivity``: list of Lorenz efficiencies; the heat
+  pumps are re-sized and re-costed for each (``eta_lorenz_sensitivity.csv``).
 """
 
 from __future__ import annotations
@@ -72,40 +80,88 @@ def electrification_curve(design: HeatPumpDesign, Qh_base_MWh: float, to_MWh, pa
     return points
 
 
-def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str, out: Path) -> dict:
-    """Evaluate the design, write tables and figures, and return a summary."""
-    if case.basis is None:
-        return {"skipped": "no annual basis in the case file"}
+def _core(design: HeatPumpDesign, Qh_MWh: float, to_MWh, params: EconomicParameters) -> dict:
+    """Electrification curve, full design, RQ1 and RQ3 against the heat-recovery baseline."""
+    baseline = Option("baseline: gas boiler, heat recovery installed", Qh_MWh, 0.0)
+    curve = electrification_curve(design, Qh_MWh, to_MWh, params)
+    evals = [(pt.fraction, evaluate(pt.option, baseline, params)) for pt in curve]
+    threshold = params.payback_threshold_years
+    within = [f for f, e in evals if f > 0 and e.payback_years <= threshold]
+    best_npv_f, best_npv = max(evals, key=lambda fe: fe[1].npv_EUR)
+    full_option = curve[-1].option
+    return {
+        "baseline": baseline, "curve": curve, "evals": evals, "full": evals[-1][1], "full_option": full_option,
+        "rq1": {
+            "max_fraction_with_payback_below_threshold": round(max(within), 4) if within else 0.0,
+            "_definition": "fraction = heat pump heat / Q̇h,min of the site with heat recovery installed",
+            "threshold_years": threshold,
+            "fraction_with_max_NPV": round(best_npv_f, 4),
+            "max_NPV_EUR": round(best_npv.npv_EUR, 0),
+        },
+        "rq3": {
+            "break_even_ratio_NPV": round(break_even_ratio(full_option, baseline, params, "npv"), 3),
+            "break_even_ratio_payback": round(break_even_ratio(full_option, baseline, params, "payback"), 3),
+            "ratio_used": round(params.price_ratio, 3),
+        },
+    }
+
+
+def _headline(core: dict, params: EconomicParameters) -> dict:
+    """One row of key results for sensitivity tables."""
+    f = core["full"]
+    return {"price_ratio": round(params.price_ratio, 3), "boiler_efficiency": params.boiler_efficiency,
+            "gas_EF_kg_per_kWh": params.gas_EF_kg_per_kWh, "grid_EF_kg_per_kWh": params.grid_EF_kg_per_kWh,
+            "co2_price_EUR_per_t": params.co2_price_EUR_per_t,
+            "full_capex_EUR": round(f.capex_EUR, 0), "full_savings_EUR": round(f.savings_EUR, 0),
+            "full_payback_years": round(f.payback_years, 2), "full_npv_EUR": round(f.npv_EUR, 0),
+            "full_co2_avoided_t": round(f.co2_avoided_t, 0),
+            "full_primary_energy_reduction": round(f.primary_energy_reduction, 4),
+            "RQ1_max_fraction_payback_ok": core["rq1"]["max_fraction_with_payback_below_threshold"],
+            "RQ1_fraction_max_NPV": core["rq1"]["fraction_with_max_NPV"],
+            "RQ3_break_even_ratio_NPV": core["rq3"]["break_even_ratio_NPV"],
+            "RQ3_break_even_ratio_payback": core["rq3"]["break_even_ratio_payback"]}
+
+
+def _params_and_converter(case: Case, energy_unit: str):
     block = dict(case.economics or {})
     if case.basis["type"] == "power":  # one set of operating hours for the whole case
         block.setdefault("operating_hours_per_year", case.basis["operating_hours_per_year"])
         if block["operating_hours_per_year"] != case.basis["operating_hours_per_year"]:
             raise ValueError("economics.operating_hours_per_year must equal basis.operating_hours_per_year")
-    params = load_economics(block)
+    _strip = ("scenarios", "sources", "heat_recovery_equipment", "co2_price_sensitivity_EUR_per_t")
+    params = load_economics({k: v for k, v in block.items() if k not in _strip})
     to_MWh = lambda x: to_MWh_per_year(x, energy_unit, case.basis)  # noqa: E731
+    return block, params, to_MWh
+
+
+def eta_lorenz_sensitivity(case: Case, streams, energy_unit: str, out: Path) -> list[dict]:
+    """Re-size and re-cost the heat pumps for each Lorenz efficiency in the case file."""
+    from pinch.design import design_from_gcc
+    values = getattr(case, "eta_lorenz_sensitivity", ()) or ()
+    if not values or case.basis is None:
+        return []
+    _, params, to_MWh = _params_and_converter(case, energy_unit)
+    rows = []
+    for eta in values:
+        d = design_from_gcc(streams, case.sink_levels, float(eta), case.source_T_C)
+        c = _core(d, to_MWh(d.Qh_before), to_MWh, params)
+        rows.append({"eta_lorenz": float(eta), "COP_system": round(d.COP_system, 3),
+                     f"W_total_{energy_unit.replace('/', '_per_')}": round(d.W_total, 4), **_headline(c, params)})
+    pd.DataFrame(rows).to_csv(out / "eta_lorenz_sensitivity.csv", index=False)
+    return rows
+
+
+def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str, out: Path) -> dict:
+    """Evaluate the design, write tables and figures, and return a summary."""
+    if case.basis is None:
+        return {"skipped": "no annual basis in the case file"}
+    block, params, to_MWh = _params_and_converter(case, energy_unit)
 
     Qh_MWh = to_MWh(design.Qh_before)
-    baseline = Option("baseline: gas boiler, heat recovery installed", Qh_MWh, 0.0)
-    curve = electrification_curve(design, Qh_MWh, to_MWh, params)
-    evals = [(pt.fraction, evaluate(pt.option, baseline, params)) for pt in curve]
-    full = evals[-1][1]
-    full_option = curve[-1].option
-
+    c = _core(design, Qh_MWh, to_MWh, params)
+    baseline, evals, full, full_option = c["baseline"], c["evals"], c["full"], c["full_option"]
     threshold = params.payback_threshold_years
-    within = [f for f, e in evals if f > 0 and e.payback_years <= threshold]
-    best_npv_f, best_npv = max(evals, key=lambda fe: fe[1].npv_EUR)
-    rq1 = {
-        "max_fraction_with_payback_below_threshold": round(max(within), 4) if within else 0.0,
-        "_definition": "fraction = heat pump heat / Q̇h,min of the site with heat recovery installed",
-        "threshold_years": threshold,
-        "fraction_with_max_NPV": round(best_npv_f, 4),
-        "max_NPV_EUR": round(best_npv.npv_EUR, 0),
-    }
-    rq3 = {
-        "break_even_ratio_NPV": round(break_even_ratio(full_option, baseline, params, "npv"), 3),
-        "break_even_ratio_payback": round(break_even_ratio(full_option, baseline, params, "payback"), 3),
-        "ratio_used": round(params.price_ratio, 3),
-    }
+    rq1, rq3 = c["rq1"], c["rq3"]
 
     results = {"full design (heat recovery installed)": full.as_dict()}
     hr_equipment = tuple(tuple(x) for x in block.get("heat_recovery_equipment", []))
@@ -131,10 +187,20 @@ def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energ
         e = evaluate(full_option, baseline, replace(params, co2_price_EUR_per_t=float(co2_sens)))
         results[f"full design, CO2 price {co2_sens} EUR/t"] = e.as_dict()
 
-    # boiler-efficiency sensitivity: sourced value 0.817 (DOE), bound 1.0
-    for eta_b in (0.817, 0.90, 1.0):
-        e = evaluate(full_option, baseline, replace(params, boiler_efficiency=eta_b))
-        results[f"full design, boiler efficiency {eta_b}"] = e.as_dict()
+    # named scenarios: parameter overrides from the case file
+    scenario_rows = []
+    base_block = {k: v for k, v in block.items()
+                  if k not in ("scenarios", "sources", "heat_recovery_equipment", "co2_price_sensitivity_EUR_per_t")}
+    for name, overrides in (block.get("scenarios") or {}).items():
+        overrides = {k: v for k, v in overrides.items() if not k.startswith("_")}
+        merged = {**base_block, **overrides}
+        if "electricity_to_gas_ratio" in overrides:
+            merged.pop("electricity_price_EUR_per_kWh", None)
+        p_s = load_economics(merged)
+        c_s = _core(design, Qh_MWh, to_MWh, p_s)
+        scenario_rows.append({"scenario": name, **_headline(c_s, p_s)})
+    if scenario_rows:
+        pd.DataFrame(scenario_rows).to_csv(out / "scenarios.csv", index=False)
 
     # tables
     curve_df = pd.DataFrame([{"fraction_of_Qh_min": round(f, 4), **e.as_dict()} for f, e in evals])
@@ -192,6 +258,7 @@ def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energ
         "RQ1": rq1,
         "RQ3": rq3,
         "results": results,
+        "scenarios": scenario_rows,
     }
     (out / "economics.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
     return summary
