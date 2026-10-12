@@ -28,6 +28,8 @@ Source: University of Oklahoma, ChE design course notes 'Minimum Utility', Examp
 
 No annual basis given: results stay in the stream-data unit.
 
+Economics skipped: no annual basis in the case file.
+
 ## Plausibility warnings
 
 - **HTHP 200 °C**: sink 200 °C above 160 °C: limited commercial availability
@@ -39,3 +41,4 @@ No annual basis given: results stay in the stream-data unit.
 - **source_T_C**: assumed: 130 °C, below the pinch (T* 145 °C), where the process rejects heat
 - **sink levels**: assumed, illustrative: 160 °C (commercial range) and 200 °C (upper end of IEA HPT Annex 58 scope)
 - **basis**: none: the source gives no operating hours
+- **ambient_T_C**: assumed: not given by the source

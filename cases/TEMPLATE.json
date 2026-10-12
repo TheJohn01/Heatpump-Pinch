@@ -6,26 +6,62 @@
   "stream_file": "../data/my_site_streams.csv",
   "_stream_file_format": "CSV columns: stream, type (hot/cold), T_in_C, T_out_C, dT_shift_K, and ONE of Q_<unit> (e.g. Q_kW, Q_kWh_per_t) or CP_<unit> (e.g. CP_kW_per_K). Latent loads: use a 1 K temperature interval.",
   "extra_shift_K": 0,
+  "ambient_T_C": 15,
+  "_ambient_T_C": "Ambient temperature [°C]. External (non-process) heat pump sources must be at or below it.",
   "heat_pumps": {
     "eta_lorenz": 0.55,
     "_eta_lorenz": "Lorenz efficiency, 0 < eta <= 1. 0.55 is from Padullés et al. (2026); justify any other value.",
     "source_T_C": 10,
     "_source_T_C": "Default heat source temperature on the T* axis. Use the process cooling level below the pinch, or ambient.",
     "sink_levels": [
-      {"name": "Low-temperature HP", "T_sink_in_C": 40, "T_sink_out_C": 90},
-      {"name": "Steam HTHP", "T_sink_C": "gcc_max", "T_source_C": 30}
+      {
+        "name": "Low-temperature HP",
+        "T_sink_in_C": 40,
+        "T_sink_out_C": 90
+      },
+      {
+        "name": "Steam HTHP",
+        "T_sink_C": "gcc_max",
+        "T_source_C": 30
+      }
     ],
     "_sink_levels": "Candidate sinks, sized automatically from the GCC from lowest to highest. 'gcc_max' = isothermal sink at the highest GCC temperature. A level may set its own T_source_C."
   },
-  "basis": {"type": "power", "operating_hours_per_year": 8000},
+  "basis": {
+    "type": "power",
+    "operating_hours_per_year": 8000
+  },
   "_basis": "Optional. {'type': 'power', 'operating_hours_per_year': h} for loads in kW/MW, or {'type': 'per_product', 'production_per_year': x, 'production_unit': 'hl'} for loads such as kWh/hl. Use null if unknown: no annual figures are then reported.",
-  "screening": {"sink_warn_C": 120, "sink_max_C": 200, "lift_max_K": 130},
+  "economics": {
+    "gas_price_EUR_per_kWh": 0.055,
+    "electricity_price_EUR_per_kWh": 0.132,
+    "boiler_efficiency": 1.0,
+    "operating_hours_per_year": 8000,
+    "discount_rate": 0.05,
+    "horizon_years": 10,
+    "payback_threshold_years": 5,
+    "grid_EF_kg_per_kWh": 0.1172,
+    "co2_price_EUR_per_t": 0,
+    "co2_price_sensitivity_EUR_per_t": 82.4,
+    "heat_recovery_equipment": [],
+    "sources": {
+      "prices": "cite the price source, period, band and tax basis"
+    }
+  },
+  "_economics": "Optional; needs 'basis'. Any key left out takes the default in pinch/economics.py (DEFAULTS, each with its source). For a 'power' basis, operating_hours_per_year must match the basis. heat_recovery_equipment: list of [kind, size] (kinds: hr_tank [m3], heat_pump/mvr/electric_boiler [kW]) to evaluate a site without heat recovery.",
+  "screening": {
+    "sink_warn_C": 120,
+    "sink_max_C": 200,
+    "lift_max_K": 130
+  },
   "_screening": "Optional plausibility thresholds; defaults and their sources are in pinch/design.py.",
   "provenance": {
     "stream data": "published / assumed, with source",
     "eta_lorenz": "published / assumed, with source",
     "source_T_C": "published / assumed, with source",
     "sink levels": "published / assumed, with source",
-    "basis": "published / assumed, with source"
+    "basis": "published / assumed, with source",
+    "ambient_T_C": "published / assumed, with source",
+    "economics": "published / assumed, with source (see economics.sources)"
   }
 }

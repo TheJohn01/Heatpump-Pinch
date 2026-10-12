@@ -4,12 +4,19 @@
   "reference": "University of Oklahoma, ChE design course notes 'Minimum Utility', Example 1.1 (stream data and targets).",
   "stream_file": "../data/fourstream_example.csv",
   "extra_shift_K": 0,
+  "ambient_T_C": 15,
   "heat_pumps": {
     "eta_lorenz": 0.55,
     "source_T_C": 130,
     "sink_levels": [
-      {"name": "HTHP 160 °C", "T_sink_C": 160},
-      {"name": "HTHP 200 °C", "T_sink_C": 200}
+      {
+        "name": "HTHP 160 °C",
+        "T_sink_C": 160
+      },
+      {
+        "name": "HTHP 200 °C",
+        "T_sink_C": 200
+      }
     ]
   },
   "basis": null,
@@ -18,6 +25,7 @@
     "eta_lorenz": "assumed, same value as the brewery case (Padullés et al., 2026)",
     "source_T_C": "assumed: 130 °C, below the pinch (T* 145 °C), where the process rejects heat",
     "sink levels": "assumed, illustrative: 160 °C (commercial range) and 200 °C (upper end of IEA HPT Annex 58 scope)",
-    "basis": "none: the source gives no operating hours"
+    "basis": "none: the source gives no operating hours",
+    "ambient_T_C": "assumed: not given by the source"
   }
 }

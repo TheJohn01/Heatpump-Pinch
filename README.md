@@ -11,13 +11,15 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install pandas numpy matplotlib pytest CoolProp
-python -m pytest                                  # 56 tests
+python -m pytest                                  # 65 tests
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 ```
 
 Outputs go to `outputs/<case name>/`: `problem_table.csv`, `composite_curves.png`,
-`gcc.png`, `gcc_heat_pumps.png`, `heat_pump_design.csv`, `summary.json`, `summary.md`.
+`gcc.png`, `gcc_heat_pumps.png`, `heat_pump_design.csv`, `summary.json`, `summary.md`, and, when the
+case has an annual basis and an `economics` block, `economics.json`, `electrification_curve.*`
+and `price_ratio_sweep.*`.
 
 ## Analysing a new site
 
@@ -39,7 +41,7 @@ Outputs go to `outputs/<case name>/`: `problem_table.csv`, `composite_curves.png
 | 3. ΔTmin / cost trade-off | Not started (needs film coefficients and exchanger costs) |
 | 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b (working fluid, cycle COP with CoolProp) pending |
 | 5. HEN retrofit | Not started |
-| 6. Economics | Not started |
+| 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; RQ1 electrification curve; RQ3 break-even ratio; paper Sec. 5.2 statements reproduced |
 
 ## Layout
 
@@ -67,11 +69,14 @@ pinch/
   case.py                    Case files and annual (MWh/year) conversion
   plotting.py                Figures saved to file
   validation.py              Reference vs computed comparison
-tests/                       56 tests (validation cases first, then general behaviour)
+  economics.py               Cost functions, evaluation, break-even ratio (defaults with sources)
+  economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
+tests/                       65 tests (validation cases first, then general behaviour)
 
 Paper-specific scripts (brewery):
 validate_targets.py                 Steps 1-2 validation report
 reproduce_padulles2026.py           Reproduces the paper's three configurations (Sec. 4.3)
+reproduce_padulles2026_economics.py Reproduces the paper's economic statements (Sec. 5.2) and option maps
 verify_padulles2026_assumptions.py  Checks each modelling assumption against the paper
 
 Paper-specific script (dairy):
@@ -119,3 +124,10 @@ verify_walmsley2024.py              Targets, COP, inconsistencies and inferred v
 * Brewery (Padullés et al., 2026): Q̇c,min rounding gap (Table 2); MVR COP 15 vs stated η 0.55; config. 3 EB total 4.6 vs Fig. 17 sum 4.4; Fig. 11 'EB + Ref. with HR' 11.0 < 11.3 kWh/hl; Fig. 4 GCC about 0.4 kWh/hl below Table 2 at both ends (consistent with an ambient of about 11 °C, while Sec. 4.3.1 states 15 °C). Targets change by about 0.1 kWh/hl per K of ambient.
 * Spray dryer (Walmsley et al., 2024): published targets 4.98 / 3.99 MW violate the first law for Table 1 (net surplus +0.84 MW vs −0.99 MW). They are reproduced (4.978 / 3.986 MW) if Exhaust 2 ends at 23 °C and the fluidised bed starts at 25 °C, values inferred from Fig. 5, not published.
 * Milk evaporator (Walmsley et al., 2024): the text's pinch range (5.5–10.5 °C) needs a 2.5 K contribution for chiller water; Table 2 gives 0.5 K. Targets are unaffected.
+
+### Economic defaults
+
+Every default in `pinch/economics.py` (`DEFAULTS`) carries its source. Two are deliberate
+choices rather than sourced estimates: boiler efficiency 1.0 (a bound that minimises gas
+savings; sensitivity at 0.85–0.95 is always reported) and CO2 price 0 (the site may be
+outside the EU ETS; a sensitivity price can be set per case).

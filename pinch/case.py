@@ -65,6 +65,11 @@ class Case:
         Annual basis (see module docstring).
     screening : dict
         Overrides for the plausibility thresholds in ``pinch.design``.
+    ambient_T_C : float or None
+        Ambient temperature [°C]. External (non-process) heat pump sources are
+        only physically available at or below it; None disables the check.
+    economics : dict or None
+        Economic parameters (see ``pinch.economics.load_economics``).
     provenance : dict
         Free-form notes stating which values are published or assumed.
     """
@@ -79,6 +84,8 @@ class Case:
     extra_shift_K: float = 0.0
     basis: dict | None = None
     screening: dict = field(default_factory=dict)
+    ambient_T_C: float | None = None
+    economics: dict | None = None
     provenance: dict = field(default_factory=dict)
 
 
@@ -129,6 +136,8 @@ def load_case(path: str | Path) -> Case:
         extra_shift_K=float(raw.get("extra_shift_K", 0.0)),
         basis=basis,
         screening=raw.get("screening", {}),
+        ambient_T_C=None if raw.get("ambient_T_C") is None else float(raw["ambient_T_C"]),
+        economics=raw.get("economics"),
         provenance=raw.get("provenance", {}),
     )
 

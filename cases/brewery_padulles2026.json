@@ -4,20 +4,61 @@
   "reference": "Padullés et al. (2026), Energy Conversion and Management 357, 121292, Table 2.",
   "stream_file": "../data/brewery_streams.csv",
   "extra_shift_K": 0,
+  "ambient_T_C": 15,
   "heat_pumps": {
     "eta_lorenz": 0.55,
     "source_T_C": -1,
     "sink_levels": [
-      {"name": "CO2 HP (warm water)", "T_sink_in_C": 18, "T_sink_out_C": 82},
-      {"name": "HTHP (wort boiling)", "T_sink_C": "gcc_max"}
+      {
+        "name": "CO2 HP (warm water)",
+        "T_sink_in_C": 18,
+        "T_sink_out_C": 82
+      },
+      {
+        "name": "HTHP (wort boiling)",
+        "T_sink_C": "gcc_max"
+      }
     ]
   },
-  "basis": null,
+  "basis": {
+    "type": "per_product",
+    "production_per_year": 1000000.0,
+    "production_unit": "hl"
+  },
   "provenance": {
     "stream data": "published (Table 2); 'Amb.' taken as 15 °C (Sec. 4.3.1), an inference",
     "eta_lorenz": "published (Sec. 4.3.1, citing Andersen et al.)",
     "source_T_C": "published cold-utility temperature (Sec. 4.1); used for all sources, which bounds W from above",
     "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
-    "basis": "none: the paper gives no production volume for the reference brewery"
+    "basis": "assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)",
+    "ambient_T_C": "published: Sec. 4.3.1"
+  },
+  "economics": {
+    "gas_price_EUR_per_kWh": 0.055,
+    "electricity_price_EUR_per_kWh": 0.132,
+    "boiler_efficiency": 1.0,
+    "operating_hours_per_year": 8000,
+    "discount_rate": 0.05,
+    "horizon_years": 10,
+    "payback_threshold_years": 5,
+    "grid_EF_kg_per_kWh": 0.1172,
+    "co2_price_EUR_per_t": 0,
+    "co2_price_sensitivity_EUR_per_t": 82.4,
+    "heat_recovery_equipment": [
+      [
+        "hr_tank",
+        520.8
+      ]
+    ],
+    "sources": {
+      "prices": "Eurostat, first half of 2025, Portugal industrial: electricity 13.2 and gas 5.5 EUR/100 kWh (as reported by ECO, 29 May 2026); consumption band and tax basis not stated",
+      "boiler_efficiency": "bound (1.0): no sourced value found; sensitivity at 0.85-0.95 reported",
+      "operating_hours_per_year": "published: Padullés et al. (2026), Sec. 5.1",
+      "discount_rate, horizon_years": "published: Padullés et al. (2026), Sec. 5.2",
+      "payback_threshold_years": "research question 1 (5 years)",
+      "grid_EF_kg_per_kWh": "Electricity Maps, 'Grid in review 2025: Portugal', 117.2 g/kWh flow-traced",
+      "co2_price_sensitivity_EUR_per_t": "EUA Dec contract 82.40 EUR/t on 5 Oct 2026 (S&P Global Commodity Insights)",
+      "heat_recovery_equipment": "tank 520.8 m3 = 375 m3 x (1.0e6 / 720,000 hl/year), scaled from Padullés et al. (2026), Sec. 5.1"
+    }
   }
 }

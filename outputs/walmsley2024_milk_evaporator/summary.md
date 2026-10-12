@@ -28,6 +28,8 @@ Source: Walmsley, Lincoln, Padullés, Cleland (2024), Energies 17, 2838, Table 2
 
 No annual basis given: results stay in the stream-data unit.
 
+Economics skipped: no annual basis in the case file.
+
 ## Provenance
 
 - **stream data**: published (Table 2); Table 2 dT_cont used (chiller water 0.5 K; the text's pinch range implies 2.5 K, which leaves the targets unchanged)
@@ -35,3 +37,4 @@ No annual basis given: results stay in the stream-data unit.
 - **source_T_C**: published: ambient / dead state 15 °C (Sec. 2), the source of the paper's simple design
 - **sink levels**: 105 °C published (simple design, Sec. 4.2.3); the 15-55 °C level is assumed (illustrative, follows the low-temperature part of the GCC)
 - **basis**: none: operating hours not given
+- **ambient_T_C**: published: dead state 15 °C (Sec. 2)

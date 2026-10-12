@@ -28,6 +28,8 @@ Source: Walmsley, Lincoln, Padullés, Cleland (2024), Energies 17, 2838, Table 1
 
 No annual basis given: results stay in the stream-data unit.
 
+Economics skipped: no annual basis in the case file.
+
 ## Plausibility warnings
 
 - **HTHP 200 °C (main air)**: sink 200 °C above 160 °C: limited commercial availability; lift 185 K above 130 K: beyond reported COP data
@@ -39,3 +41,4 @@ No annual basis given: results stay in the stream-data unit.
 - **source_T_C**: assumed: 15 °C (dead state), where the cooled exhaust air ends
 - **sink levels**: assumed, illustrative: 120 °C (fluid beds) and 200 °C (upper end of IEA HPT Annex 58 scope); the main air chamber up to 236 °C stays on fired heating
 - **basis**: none: operating hours not given
+- **ambient_T_C**: published: dead state 15 °C (Sec. 2)

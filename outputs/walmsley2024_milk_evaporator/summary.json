@@ -40,6 +40,10 @@
     "eta_lorenz": "published: 50 % exergetic (Carnot) efficiency (Sec. 4.2); reproduces the paper's simple-design COP 2.1",
     "source_T_C": "published: ambient / dead state 15 °C (Sec. 2), the source of the paper's simple design",
     "sink levels": "105 °C published (simple design, Sec. 4.2.3); the 15-55 °C level is assumed (illustrative, follows the low-temperature part of the GCC)",
-    "basis": "none: operating hours not given"
+    "basis": "none: operating hours not given",
+    "ambient_T_C": "published: dead state 15 °C (Sec. 2)"
+  },
+  "economics": {
+    "skipped": "no annual basis in the case file"
   }
 }

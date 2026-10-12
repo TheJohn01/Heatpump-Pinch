@@ -24,7 +24,8 @@ import pandas as pd
 
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
 from pinch.case import Case, load_case, to_MWh_per_year
-from pinch.design import HeatPumpDesign, design_from_gcc, plausibility_warnings
+from pinch.economic_analysis import run_economics
+from pinch.design import HeatPumpDesign, design_from_gcc, plausibility_warnings, source_warnings
 from pinch.plotting import plot_composite_curves, plot_gcc, plot_gcc_with_units
 
 ROOT = Path(__file__).resolve().parent
@@ -60,7 +61,8 @@ def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
             f"source_from_process_{unit}": round(r.Q_source_process.get(u.name, 0.0), 4),
             f"source_external_{unit}": round(r.Q_source_external.get(u.name, 0.0), 4),
             "placement": r.placement[u.name],
-            "warnings": "; ".join(plausibility_warnings(u, case.screening)),
+            "warnings": "; ".join(plausibility_warnings(u, case.screening)
+                                  + source_warnings(design, case.ambient_T_C).get(u.name, [])),
         })
     pd.DataFrame(rows).to_csv(out / "heat_pump_design.csv", index=False)
     plot_gcc_with_units(table, list(design.units), out / "gcc_heat_pumps.png",
@@ -103,10 +105,12 @@ def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
             "heat_pump_electricity": annual(design.W_total),
             "residual_hot_utility": annual(design.Qh_residual),
         },
-        "warnings": {u.name: plausibility_warnings(u, case.screening) for u in design.units
-                     if plausibility_warnings(u, case.screening)},
+        "warnings": {u.name: w for u in design.units
+                     if (w := plausibility_warnings(u, case.screening)
+                         + source_warnings(design, case.ambient_T_C).get(u.name, []))},
         "provenance": case.provenance,
     }
+    summary["economics"] = run_economics(case, design, balance["Q_cold_total"], unit, out)
     (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
     (out / "summary.md").write_text(_markdown(summary), encoding="utf-8")
     return summary
@@ -142,6 +146,27 @@ def _markdown(s: dict) -> str:
                   f"residual hot utility {a['residual_hot_utility']}."]
     else:
         lines += ["", "No annual basis given: results stay in the stream-data unit."]
+    ec = s.get("economics", {})
+    if ec and "skipped" not in ec:
+        r1, r3, full = ec["RQ1"], ec["RQ3"], ec["results"]["full design (heat recovery installed)"]
+        lines += ["", "## Economics (step 6)", "",
+                  f"Price ratio {ec['price_ratio']} (electricity {ec['parameters']['electricity_price_EUR_per_kWh']} EUR/kWh, "
+                  f"gas {ec['parameters']['gas_price_EUR_per_kWh']} EUR/kWh); boiler efficiency "
+                  f"{ec['parameters']['boiler_efficiency']}; {ec['parameters']['operating_hours_per_year']:.0f} h/year.", "",
+                  "| Quantity | Value |", "|---|---|",
+                  f"| Full design: CAPEX [EUR] | {full['capex_EUR']:,.0f} |",
+                  f"| Full design: annual savings [EUR/year] | {full['savings_EUR']:,.0f} |",
+                  f"| Full design: simple payback [years] | {full['payback_years']} |",
+                  f"| Full design: NPV [EUR] | {full['npv_EUR']:,.0f} |",
+                  f"| Full design: CO2 avoided [t/year] | {full['co2_avoided_t']:,.0f} |",
+                  f"| Full design: primary-energy reduction | {100 * full['primary_energy_reduction']:.1f} % |",
+                  f"| RQ1: largest share of Q̇h,min with payback ≤ {r1['threshold_years']:g} y | "
+                  f"{100 * r1['max_fraction_with_payback_below_threshold']:.1f} % |",
+                  f"| RQ1: share with maximum NPV | {100 * r1['fraction_with_max_NPV']:.1f} % |",
+                  f"| RQ3: break-even ratio, NPV = 0 | {r3['break_even_ratio_NPV']} |",
+                  f"| RQ3: break-even ratio, payback = threshold | {r3['break_even_ratio_payback']} |"]
+    elif ec:
+        lines += ["", f"Economics skipped: {ec['skipped']}."]
     if s["warnings"]:
         lines += ["", "## Plausibility warnings", ""] + [f"- **{k}**: {'; '.join(v)}" for k, v in s["warnings"].items()]
     if s["provenance"]:

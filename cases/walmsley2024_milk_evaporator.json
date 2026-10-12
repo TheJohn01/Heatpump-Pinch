@@ -4,12 +4,20 @@
   "reference": "Walmsley, Lincoln, Padullés, Cleland (2024), Energies 17, 2838, Table 2.",
   "stream_file": "../data/walmsley2024_milk_evaporator.csv",
   "extra_shift_K": 0,
+  "ambient_T_C": 15,
   "heat_pumps": {
     "eta_lorenz": 0.5,
     "source_T_C": 15,
     "sink_levels": [
-      {"name": "HP warm (milk preheat)", "T_sink_in_C": 15, "T_sink_out_C": 55},
-      {"name": "HTHP 105 °C", "T_sink_C": 105}
+      {
+        "name": "HP warm (milk preheat)",
+        "T_sink_in_C": 15,
+        "T_sink_out_C": 55
+      },
+      {
+        "name": "HTHP 105 °C",
+        "T_sink_C": 105
+      }
     ]
   },
   "basis": null,
@@ -18,6 +26,7 @@
     "eta_lorenz": "published: 50 % exergetic (Carnot) efficiency (Sec. 4.2); reproduces the paper's simple-design COP 2.1",
     "source_T_C": "published: ambient / dead state 15 °C (Sec. 2), the source of the paper's simple design",
     "sink levels": "105 °C published (simple design, Sec. 4.2.3); the 15-55 °C level is assumed (illustrative, follows the low-temperature part of the GCC)",
-    "basis": "none: operating hours not given"
+    "basis": "none: operating hours not given",
+    "ambient_T_C": "published: dead state 15 °C (Sec. 2)"
   }
 }

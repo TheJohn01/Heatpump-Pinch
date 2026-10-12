@@ -12,7 +12,7 @@ import pytest
 from analyse import analyse
 from pinch import load_streams, problem_table
 from pinch.case import SinkLevelSpec, load_case, to_MWh_per_year
-from pinch.design import design_from_gcc, plausibility_warnings
+from pinch.design import design_from_gcc, plausibility_warnings, source_warnings
 from pinch.heat_pump import HeatPump
 from pinch.validation import ROOT
 
@@ -75,7 +75,7 @@ def test_screening_flags_and_passes():
     hot = HeatPump("hot", 1, 210, 210, 150, 150, eta_lorenz=0.55)
     lift = HeatPump("lift", 1, 150, 150, 0, 0, eta_lorenz=0.55)
     assert plausibility_warnings(ok) == []
-    assert any("outside reported" in w for w in plausibility_warnings(hot))
+    assert any("beyond near-term" in w for w in plausibility_warnings(hot))
     assert any("lift" in w for w in plausibility_warnings(lift))
 
 
@@ -130,3 +130,13 @@ def test_cli_writes_all_outputs(case_file, tmp_path: Path):
         assert (folder / name).exists(), name
     assert summary["targets"]["Qh_min"] == pytest.approx(problem_table(load_streams(
         load_case(ROOT / "cases" / case_file).stream_file)).Qh_min, abs=1e-4)
+
+
+def test_external_source_above_ambient_is_flagged():
+    """Spray dryer with a 35 °C source: the shortfall cannot come from 15 °C ambient air."""
+    case = load_case(ROOT / "cases" / "walmsley2024_spray_dryer.json")
+    streams = load_streams(case.stream_file)
+    hot_source = design_from_gcc(streams, case.sink_levels, case.eta_lorenz, 35.0)
+    assert source_warnings(hot_source, case.ambient_T_C)            # flagged
+    as_published = design_from_gcc(streams, case.sink_levels, case.eta_lorenz, case.source_T_C)
+    assert source_warnings(as_published, case.ambient_T_C) == {}    # 15 °C source: fine

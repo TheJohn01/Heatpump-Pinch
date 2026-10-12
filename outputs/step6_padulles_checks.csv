@@ -1,0 +1,5 @@
+check,statement,reproduced,detail
+S1,"Small breweries (< 0.5 Mhl/y) need a ratio close to 1 for PBP <= 4 y; with HR installed, electrification alone fails",True,"0.25 Mhl/y no HR: best PBP 3.85 y at r=1 (1: central HTHP), 6.03 y at r=2; HR installed, r=1: 8.68 y"
+S2,Medium breweries (0.5-1 Mhl/y) reach PBP < 4 y at ratio ~2 thanks to HR; with HR installed they fail,True,0.75 Mhl/y r=2: no HR 3.11 y (2: two HPs); HR installed 8.67 y (2: two HPs)
+S3,Large breweries (> 1 Mhl/y): lower PBPs at typical ratios; two-HP configurations can be preferred,True,1.5 Mhl/y r=2: best PBP 2.18 y (2: two HPs)
+S4,"NPV10 (5 %): small breweries positive with HR at common ratios; central HTHP for small, two HPs for larger",True,"0.25 Mhl/y r=2: 1: central HTHP, NPV 0.25 M EUR; 1.5 Mhl/y r=2: 2: two HPs"

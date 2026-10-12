@@ -43,6 +43,10 @@
     "eta_lorenz": "assumed, same value as the brewery case (Padullés et al., 2026)",
     "source_T_C": "assumed: 130 °C, below the pinch (T* 145 °C), where the process rejects heat",
     "sink levels": "assumed, illustrative: 160 °C (commercial range) and 200 °C (upper end of IEA HPT Annex 58 scope)",
-    "basis": "none: the source gives no operating hours"
+    "basis": "none: the source gives no operating hours",
+    "ambient_T_C": "assumed: not given by the source"
+  },
+  "economics": {
+    "skipped": "no annual basis in the case file"
   }
 }

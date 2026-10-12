@@ -44,6 +44,10 @@
     "eta_lorenz": "published: 50 % exergetic efficiency (Sec. 4.2)",
     "source_T_C": "assumed: 15 °C (dead state), where the cooled exhaust air ends",
     "sink levels": "assumed, illustrative: 120 °C (fluid beds) and 200 °C (upper end of IEA HPT Annex 58 scope); the main air chamber up to 236 °C stays on fired heating",
-    "basis": "none: operating hours not given"
+    "basis": "none: operating hours not given",
+    "ambient_T_C": "published: dead state 15 °C (Sec. 2)"
+  },
+  "economics": {
+    "skipped": "no annual basis in the case file"
   }
 }
