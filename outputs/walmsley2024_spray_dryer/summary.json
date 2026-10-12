@@ -1,0 +1,49 @@
+{
+  "case": "walmsley2024_spray_dryer",
+  "description": "Milk powder spray dryer (main air chamber, static and vibrating fluid beds, exhaust air with heat recovery). Loads in kW. Table 1 data as published.",
+  "reference": "Walmsley, Lincoln, Padullés, Cleland (2024), Energies 17, 2838, Table 1 (case first presented by Liang et al.).",
+  "energy_unit": "kW",
+  "targets": {
+    "Q_hot_total": 6869.0,
+    "Q_cold_total": 6031.0,
+    "Qh_min": 4638.2,
+    "Qc_min": 5476.2,
+    "heat_recovery": 1392.8,
+    "pinch_T_star_C": [
+      59.0
+    ],
+    "T_star_range_C": [
+      241.0,
+      7.0
+    ]
+  },
+  "heat_pump_design": {
+    "eta_lorenz": 0.5,
+    "units": [
+      "HTHP 120 °C (fluid beds)",
+      "HTHP 200 °C (main air)"
+    ],
+    "levels_skipped_no_useful_duty": [],
+    "Q_sink_total": 3732.5033,
+    "W_total": 2446.3752,
+    "COP_system": 1.526,
+    "Qh_residual": 905.6967,
+    "fraction_of_Qh_min_electrified": 0.8047,
+    "cold_utility_replaced": 1286.1281,
+    "source_external_total": 0.0
+  },
+  "annual_MWh_per_year": null,
+  "warnings": {
+    "HTHP 200 °C (main air)": [
+      "sink 200 °C above 160 °C: limited commercial availability",
+      "lift 185 K above 130 K: beyond reported COP data"
+    ]
+  },
+  "provenance": {
+    "stream data": "published (Table 1). WARNING: Table 1 is inconsistent with the paper's own targets (4.98 / 3.99 MW) by the first law; see verify_walmsley2024.py",
+    "eta_lorenz": "published: 50 % exergetic efficiency (Sec. 4.2)",
+    "source_T_C": "assumed: 15 °C (dead state), where the cooled exhaust air ends",
+    "sink levels": "assumed, illustrative: 120 °C (fluid beds) and 200 °C (upper end of IEA HPT Annex 58 scope); the main air chamber up to 236 °C stays on fired heating",
+    "basis": "none: operating hours not given"
+  }
+}

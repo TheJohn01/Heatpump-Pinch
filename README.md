@@ -11,7 +11,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install pandas numpy matplotlib pytest CoolProp
-python -m pytest                                  # 48 tests
+python -m pytest                                  # 56 tests
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 ```
@@ -49,9 +49,13 @@ cases/
   TEMPLATE.json              Documented template for a new site
   brewery_padulles2026.json  Main case (Padullés et al., 2026)
   fourstream_example.json    Four-stream chemical process (non-food demonstration)
+  walmsley2024_milk_evaporator.json  Dairy: MVR milk evaporator, kW (Walmsley et al., 2024)
+  walmsley2024_spray_dryer.json      Dairy: milk powder spray dryer, kW (Table 1 as published; see warning)
 data/
   brewery_streams.csv        Padullés et al. (2026), Table 2; 'Amb.' = 15 °C (inferred)
   fourstream_example.csv     Univ. Oklahoma ChE notes, Example 1.1
+  northwestern_4stream.csv   Northwestern Univ. design wiki example (second algorithm check)
+  walmsley2024_*.csv         Walmsley et al. (2024), Tables 1 and 2
   reference_targets.json     Published/textbook targets used by the validation tests
   brewery_configurations.json  Paper's three configurations; values tagged published/figure/assumed
 pinch/
@@ -63,12 +67,15 @@ pinch/
   case.py                    Case files and annual (MWh/year) conversion
   plotting.py                Figures saved to file
   validation.py              Reference vs computed comparison
-tests/                       48 tests (validation cases first, then general behaviour)
+tests/                       56 tests (validation cases first, then general behaviour)
 
 Paper-specific scripts (brewery):
 validate_targets.py                 Steps 1-2 validation report
 reproduce_padulles2026.py           Reproduces the paper's three configurations (Sec. 4.3)
 verify_padulles2026_assumptions.py  Checks each modelling assumption against the paper
+
+Paper-specific script (dairy):
+verify_walmsley2024.py              Targets, COP, inconsistencies and inferred variant (Walmsley et al., 2024)
 ```
 
 ## Conventions
@@ -86,9 +93,9 @@ verify_padulles2026_assumptions.py  Checks each modelling assumption against the
 
 | Check | Threshold | Source |
 |---|---|---|
-| Sink temperature, warning | > 120 °C | Arpagaus et al. (2018), Purdue Refrigeration Conf.: few commercial units above 120 °C |
-| Sink temperature, outside range | > 200 °C | IEA HPT Annex 58 scope (100–200 °C) |
-| Temperature lift | > 130 K | Arpagaus et al. (2018): commercial COP data up to 130 K lift |
+| Sink temperature, warning | > 160 °C | IEA HPT Annex 58 Task 1 report (Sept. 2023): commercial availability projected up to 160 °C by 2025–26 |
+| Sink temperature, outside range | > 200 °C | Annex 58 scope (100–200 °C); vendor claims up to 200 °C (e.g. ENERIN, 2024; not peer-reviewed) |
+| Temperature lift | > 130 K | Arpagaus et al. (2018): commercial COP data up to 130 K lift (dated; no newer verified source) |
 | COP | < 1 | Direct electric heating would use less electricity |
 
 ## Validation
@@ -96,6 +103,9 @@ verify_padulles2026_assumptions.py  Checks each modelling assumption against the
 | Case | Quantity | Reference | Computed | Deviation |
 |---|---|---|---|---|
 | Four-stream example | Qh,min / Qc,min / pinch T* | 7.5 MW / 10.0 MW / 145 °C | 7.5 / 10.0 / 145 | 0 |
+| Second four-stream example (Northwestern) | Qh,min / Qc,min / pinch T* | 2900 kW / 600 kW / 90 °C | 2900 / 600 / 90 | 0 |
+| Milk evaporator (Walmsley 2024) | Qh,min / Qc,min | 3.54 / 0.46 MW | 3.542 / 0.456 | within rounding |
+| Milk evaporator | Simple-design COP (15 → 105 °C, 50 % Carnot) | 2.1 | 2.101 | +0.05 % |
 | Brewery | Qh,min | 10.0 kWh/hl | 10.04 | +0.4 % |
 | Brewery | Qc,min | 3.2 kWh/hl | 3.44 | +7.6 % (known Table 2 rounding gap) |
 | Brewery | Heat recovery | 11.4 kWh/hl | 11.36 | −0.4 % |
@@ -103,3 +113,9 @@ verify_padulles2026_assumptions.py  Checks each modelling assumption against the
 | Brewery, config. 2 | Electricity | 3.6 kWh/hl | 3.55 | −1.5 % |
 | Brewery, config. 3 (HTHP) | Electricity | 3.6 kWh/hl | 3.56 | −1.1 % |
 | Brewery, config. 1 | Electricity vs Fig. 11 (digitised), 100–180 °C | curve | curve | −4.5 to +0.7 % |
+
+### Known inconsistencies in the source papers (reported, not corrected)
+
+* Brewery (Padullés et al., 2026): Q̇c,min rounding gap (Table 2); MVR COP 15 vs stated η 0.55; config. 3 EB total 4.6 vs Fig. 17 sum 4.4; Fig. 11 'EB + Ref. with HR' 11.0 < 11.3 kWh/hl; Fig. 4 GCC about 0.4 kWh/hl below Table 2 at both ends (consistent with an ambient of about 11 °C, while Sec. 4.3.1 states 15 °C). Targets change by about 0.1 kWh/hl per K of ambient.
+* Spray dryer (Walmsley et al., 2024): published targets 4.98 / 3.99 MW violate the first law for Table 1 (net surplus +0.84 MW vs −0.99 MW). They are reproduced (4.978 / 3.986 MW) if Exhaust 2 ends at 23 °C and the fluidised bed starts at 25 °C, values inferred from Fig. 5, not published.
+* Milk evaporator (Walmsley et al., 2024): the text's pinch range (5.5–10.5 °C) needs a 2.5 K contribution for chiller water; Table 2 gives 0.5 K. Targets are unaffected.

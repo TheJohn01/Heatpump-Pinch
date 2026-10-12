@@ -123,16 +123,18 @@ def design_from_gcc(
 
 # ------------------------------------------------------------ plausibility
 #: Screening thresholds, overridable per case ("screening" in the case file).
-#: Sources:
-#:  sink_warn_C 120: Arpagaus et al. (2018), "High Temperature Heat Pumps: Market
-#:      Overview, State of the Art, Research Status, Refrigerants, and Application
-#:      Potentials", 17th Int. Refrigeration and Air Conditioning Conf., Purdue,
-#:      July 2018 (EPFL Infoscience record 256729): only a few suppliers exceed 120 °C.
-#:  sink_max_C 200: IEA HPT Annex 58 (High-Temperature Heat Pumps) focuses on
-#:      100-200 °C supply; above 200 °C is outside its scope.
-#:  lift_max_K 130: Arpagaus et al. (2018): commercial COPs reported for lifts up
-#:      to 130 K (COP about 1.6).
-DEFAULT_SCREENING = {"sink_warn_C": 120.0, "sink_max_C": 200.0, "lift_max_K": 130.0}
+#: Verified 2026-10-12; sources:
+#:  sink_warn_C 160: IEA HPT Annex 58, Task 1 report (Sept. 2023) projects commercial
+#:      availability up to 120 °C around 2024-25 and 160 °C around 2025-26; above
+#:      160 °C, availability is limited. (Replaces the earlier 120 °C value from
+#:      Arpagaus et al., 2018, which is out of date.)
+#:  sink_max_C 200: upper end of the IEA HPT Annex 58 scope (100-200 °C); commercial
+#:      units up to 200 °C have been announced (e.g. ENERIN, Hannover Messe news,
+#:      20 April 2024; vendor claim, not peer-reviewed).
+#:  lift_max_K 130: Arpagaus et al. (2018), 17th Int. Refrigeration and Air
+#:      Conditioning Conf., Purdue (EPFL Infoscience record 256729): commercial COPs
+#:      reported for lifts up to 130 K (COP about 1.6). Dated; no newer verified source.
+DEFAULT_SCREENING = {"sink_warn_C": 160.0, "sink_max_C": 200.0, "lift_max_K": 130.0}
 
 
 def plausibility_warnings(unit: HeatPump, screening: dict | None = None) -> list[str]:
@@ -143,7 +145,7 @@ def plausibility_warnings(unit: HeatPump, screening: dict | None = None) -> list
     if T_sink > s["sink_max_C"]:
         warnings.append(f"sink {T_sink:.0f} °C above {s['sink_max_C']:.0f} °C: outside reported heat pump range")
     elif T_sink > s["sink_warn_C"]:
-        warnings.append(f"sink {T_sink:.0f} °C above {s['sink_warn_C']:.0f} °C: few commercial units")
+        warnings.append(f"sink {T_sink:.0f} °C above {s['sink_warn_C']:.0f} °C: limited commercial availability")
     if unit.has_source:
         lift = T_sink - min(unit.T_source_in_C, unit.T_source_out_C)
         if lift > s["lift_max_K"]:

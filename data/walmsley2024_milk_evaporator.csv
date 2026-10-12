@@ -1,0 +1,16 @@
+stream,type,T_in_C,T_out_C,Q_kW,dT_shift_K,note
+Chiller Water,hot,8.0,4.0,456.0,0.5,Walmsley et al. (2024) Table 2; dT_shift = dT_cont; latent loads over 0.05 K as in the paper
+CIP Water,cold,15.0,84.0,630.0,2.5,
+Cow Heat,hot,72.1,13.0,38.9,2.5,
+Direct Use,cold,15.0,55.0,525.0,2.5,
+E1 Vapour Bleed,hot,72.0,71.95,3920.5,0.5,
+E2 Condenser,hot,72.0,71.95,364.1,0.5,
+HT Flash,hot,87,86.95,2060.8,0.5,
+HT Flash 2,hot,79.3,79.25,1988.8,0.5,
+Milk Concentrate,cold,65.3,70.0,259.9,2.5,
+Preheat COW 1,hot,72.0,13.0,10697.8,2.5,
+Preheat COW 2,hot,86.9,13.0,279.8,2.5,
+Preheat COW 3,hot,72.0,13.0,412.1,2.5,
+Preheat COW 4,hot,71.9,13.0,704.4,2.5,
+Preheat COW 5,hot,79.2,13.0,240.3,2.5,
+Raw Milk,cold,8.0,95.0,22834.8,2.5,

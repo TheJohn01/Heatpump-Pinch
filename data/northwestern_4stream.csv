@@ -1,0 +1,5 @@
+stream,type,T_in_C,T_out_C,CP_kW_per_K,dT_shift_K,note
+Stream 1,hot,180,40,40,10,Northwestern Univ. PSE wiki 'Pinch analysis' example; dTmin = 20 K so dT_shift = 10 K
+Stream 2,hot,150,60,30,10,
+Stream 3,cold,30,180,60,10,
+Stream 4,cold,80,160,20,10,

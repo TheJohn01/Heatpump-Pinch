@@ -90,10 +90,14 @@ def plot_gcc_with_units(table: ProblemTable, units, path: str | Path, title: str
     ax.plot(H, T_star, color=GCC_COLOUR, lw=2, label="GCC")
 
     H0 = 0.0
+    H_span = max(float(max(H)), sum(u.Q_sink for u in units), 1e-12)
     for u in sorted(units, key=lambda u: u.T_sink_out_C):
         ax.plot([H0, H0 + u.Q_sink], [u.T_sink_in_C, u.T_sink_out_C], color=HOT_COLOUR, lw=2.5)
+        # Labels on short lines near the axis would run off the plot: anchor them left.
+        near_axis = H0 + u.Q_sink < 0.4 * H_span
         ax.annotate(f"{u.name} sink ({u.Q_sink:.2f})", xy=(H0 + u.Q_sink, u.T_sink_out_C),
-                    xytext=(-4, 5), textcoords="offset points", ha="right", fontsize=8, color=HOT_COLOUR)
+                    xytext=(4 if near_axis else -4, 5), textcoords="offset points",
+                    ha="left" if near_axis else "right", fontsize=8, color=HOT_COLOUR)
         H0 += u.Q_sink
 
     H0 = 0.0

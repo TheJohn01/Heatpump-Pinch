@@ -30,8 +30,7 @@ No annual basis given: results stay in the stream-data unit.
 
 ## Plausibility warnings
 
-- **HTHP 160 °C**: sink 160 °C above 120 °C: few commercial units
-- **HTHP 200 °C**: sink 200 °C above 120 °C: few commercial units
+- **HTHP 200 °C**: sink 200 °C above 160 °C: limited commercial availability
 
 ## Provenance
 

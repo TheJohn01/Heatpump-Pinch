@@ -30,6 +30,15 @@ def test_fourstream_full_cascade():
     np.testing.assert_allclose(table.cascade_feasible, case["cascade_feasible"])
 
 
+@pytest.mark.parametrize("case_name", ["northwestern_4stream", "walmsley2024_milk_evaporator"])
+def test_independent_published_targets(case_name):
+    """Second textbook example and an industrial dairy case (Walmsley et al., 2024)."""
+    case = REFS[case_name]
+    computed = computed_targets(run_case(case))
+    for quantity, ref in case["targets"].items():
+        assert computed[quantity] == pytest.approx(ref["value"], abs=ref["tolerance"]), quantity
+
+
 # ------------------------------------------------------------------------ Brewery
 @pytest.mark.parametrize("case_name", ["brewery_base", "brewery_indirect"])
 def test_brewery_published_targets(case_name):
@@ -46,7 +55,8 @@ def test_brewery_pinch_at_ambient():
 
 
 # ---------------------------------------------------------------- Consistency
-@pytest.mark.parametrize("case_name", ["fourstream_example", "brewery_base", "brewery_indirect"])
+@pytest.mark.parametrize("case_name", ["fourstream_example", "northwestern_4stream", "brewery_base",
+                                       "brewery_indirect", "walmsley2024_milk_evaporator"])
 def test_first_law_closure(case_name):
     """Qc_min - Qh_min must equal total hot load - total cold load."""
     case = REFS[case_name]

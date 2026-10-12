@@ -34,11 +34,8 @@
   },
   "annual_MWh_per_year": null,
   "warnings": {
-    "HTHP 160 °C": [
-      "sink 160 °C above 120 °C: few commercial units"
-    ],
     "HTHP 200 °C": [
-      "sink 200 °C above 120 °C: few commercial units"
+      "sink 200 °C above 160 °C: limited commercial availability"
     ]
   },
   "provenance": {

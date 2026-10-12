@@ -10,3 +10,8 @@ brewery_base,heat_recovery,kWh/hl,11.4,11.3576,-0.0424,-0.37,True
 brewery_indirect,Qh_min,kWh/hl,10.5,10.4847,-0.0153,-0.15,True
 brewery_indirect,Qc_min,kWh/hl,3.8,3.8847,0.0847,2.23,True
 brewery_indirect,heat_recovery,kWh/hl,10.9,10.9153,0.0153,0.14,True
+northwestern_4stream,Qh_min,kW,2900.0,2900.0,0.0,0.0,True
+northwestern_4stream,Qc_min,kW,600.0,600.0,0.0,0.0,True
+northwestern_4stream,pinch_T_star_C,°C,90.0,90.0,0.0,0.0,True
+walmsley2024_milk_evaporator,Qh_min,kW,3540.0,3542.2,2.2,0.06,True
+walmsley2024_milk_evaporator,Qc_min,kW,460.0,456.0,-4.0,-0.87,True

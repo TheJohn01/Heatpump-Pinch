@@ -87,5 +87,41 @@
         "tolerance": 0.1
       }
     }
+  },
+  "northwestern_4stream": {
+    "source": "Northwestern University Process Design Open Textbook, 'Pinch analysis' worked example (https://processdesign.mccormick.northwestern.edu/index.php/Pinch_analysis), dTmin = 20 K. Stream 2 load listed as 1800 kW is inconsistent with its CP x dT (2700 kW); CP data used.",
+    "data_file": "data/northwestern_4stream.csv",
+    "extra_shift_K": 0,
+    "energy_unit": "kW",
+    "targets": {
+      "Qh_min": {
+        "value": 2900.0,
+        "tolerance": 1e-06
+      },
+      "Qc_min": {
+        "value": 600.0,
+        "tolerance": 1e-06
+      },
+      "pinch_T_star_C": {
+        "value": 90.0,
+        "tolerance": 1e-06
+      }
+    }
+  },
+  "walmsley2024_milk_evaporator": {
+    "source": "Walmsley et al. (2024), Energies 17, 2838, Table 2 and Fig. 8 (Q_D = 3.54 MW, Q_S = 0.46 MW). Values published to 0.01 MW.",
+    "data_file": "data/walmsley2024_milk_evaporator.csv",
+    "extra_shift_K": 0,
+    "energy_unit": "kW",
+    "targets": {
+      "Qh_min": {
+        "value": 3540.0,
+        "tolerance": 5.0
+      },
+      "Qc_min": {
+        "value": 460.0,
+        "tolerance": 5.0
+      }
+    }
   }
 }

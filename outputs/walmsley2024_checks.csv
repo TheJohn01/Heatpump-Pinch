@@ -1,0 +1,9 @@
+check,quantity,value,reference,verdict
+W1,Qh_min / Qc_min [MW],3.542 / 0.456,3.54 / 0.46 (Fig. 8),reproduced
+W2,"pinch boundaries T* [°C], Table 2 shifts","(10.5, 7.5)","range (5.5, 10.5) (text)",lower bound differs
+W2,"pinch boundaries T* [°C], chiller dT_cont = 2.5 K","(10.5, 5.5)","(5.5, 10.5)",matches text; targets unchanged
+W3,simple-design COP,2.101,2.1 (text),reproduced
+W4,simple design W = Qh_min / COP [MW],1.686,"2.0 (Fig. 11, digitised)","-16 %: marker is a practical design (Lincoln et al.), not a target"
+W5,Qc - Qh from Table 1 (first law) [MW],0.838,-0.99 from published targets,INCONSISTENT: published targets cannot come from Table 1
+W5,Qh_min / Qc_min from Table 1 [MW],4.638 / 5.476,4.98 / 3.99,differs
+W6,"Qh_min / Qc_min, inferred variant [MW]",4.978 / 3.986,4.98 / 3.99,"matches to 3 s.f.; pinch T* (33.0,) (Fig. 5B about 32 °C). Inferred, not published"

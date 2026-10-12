@@ -235,6 +235,19 @@ def classify_placement(unit: HeatPump, pinch_T_star_C: float) -> str:
     return "straddles pinch"
 
 
+def _placement_label(unit: HeatPump, pinch_T_star_C: float, Q_source_process: float) -> str:
+    """Placement label that accounts for sources outside the process (e.g. ambient).
+
+    A unit whose whole source is external only interacts with the process
+    through its sink, so only the sink position relative to the pinch matters.
+    """
+    if unit.has_source and Q_source_process <= 0.0:
+        sink_lo = min(unit.T_sink_in_C, unit.T_sink_out_C)
+        side = "above" if sink_lo >= pinch_T_star_C else "below"
+        return f"sink {side} pinch; external source"
+    return classify_placement(unit, pinch_T_star_C)
+
+
 @dataclass(frozen=True)
 class IntegrationResult:
     """Effect of a set of units on the process energy targets.
@@ -295,7 +308,8 @@ def _max_process_source(base: StreamSet, sinks: StreamSet, unit: HeatPump, Q_cap
     for _ in range(60):
         mid = 0.5 * (lo + hi)
         lo, hi = (mid, hi) if feasible(mid) else (lo, mid)
-    return lo
+    # Duties within the solver tolerance are numerical noise, not process heat.
+    return lo if lo > MIN_DUTY_FRACTION * max(Q_cap, Qh_ref) else 0.0
 
 
 def integrate(stream_set: StreamSet, units: list[HeatPump]) -> IntegrationResult:
@@ -342,7 +356,7 @@ def integrate(stream_set: StreamSet, units: list[HeatPump]) -> IntegrationResult
         Q_sink_useful=before.Qh_min - after_sinks.Qh_min,
         Q_source_process=Q_proc,
         Q_source_external={u.name: u.Q_source - Q_proc.get(u.name, 0.0) for u in units if u.has_source},
-        placement={u.name: classify_placement(u, pinch) for u in units},
+        placement={u.name: _placement_label(u, pinch, Q_proc.get(u.name, 0.0)) for u in units},
         pinch_T_star_C=pinch,
     )
 

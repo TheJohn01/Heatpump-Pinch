@@ -56,6 +56,19 @@ def test_brewery_case_reproduces_step_by_step_design():
     assert d.fraction_electrified == pytest.approx(1.0, abs=1e-6)
 
 
+def test_external_source_is_labelled():
+    """Milk evaporator: sources at 15 °C sit above the pinch, so all source heat is ambient."""
+    case = load_case(ROOT / "cases" / "walmsley2024_milk_evaporator.json")
+    d = design_from_gcc(load_streams(case.stream_file), case.sink_levels, case.eta_lorenz, case.source_T_C)
+    assert all(v == "sink above pinch; external source" for v in d.integration.placement.values())
+    assert sum(d.integration.Q_source_process.values()) == 0.0
+
+
+def test_simple_design_cop_walmsley():
+    """Walmsley et al. (2024): ambient 15 °C -> 105 °C at 50 % Carnot efficiency gives COP 2.1."""
+    assert HeatPump("simple", 1, 105, 105, 15, 15, eta_lorenz=0.5).COP == pytest.approx(2.1, abs=0.01)
+
+
 # --------------------------------------------------------------- screening
 def test_screening_flags_and_passes():
     ok = HeatPump("ok", 1, 18, 82, -1, -1, eta_lorenz=0.55)
@@ -107,7 +120,8 @@ def test_template_loads():
     assert case.basis["type"] == "power" and len(case.sink_levels) == 2
 
 
-@pytest.mark.parametrize("case_file", ["brewery_padulles2026.json", "fourstream_example.json"])
+@pytest.mark.parametrize("case_file", ["brewery_padulles2026.json", "fourstream_example.json",
+                                       "walmsley2024_milk_evaporator.json", "walmsley2024_spray_dryer.json"])
 def test_cli_writes_all_outputs(case_file, tmp_path: Path):
     summary = analyse(load_case(ROOT / "cases" / case_file), output_root=tmp_path)
     folder = tmp_path / summary["case"]
