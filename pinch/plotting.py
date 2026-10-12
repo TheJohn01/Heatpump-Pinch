@@ -97,10 +97,12 @@ def plot_gcc_with_units(table: ProblemTable, units, path: str | Path, title: str
         H0 += u.Q_sink
 
     H0 = 0.0
-    for u in sorted([u for u in units if u.has_source], key=lambda u: u.T_source_out_C):
+    sources = sorted([u for u in units if u.has_source], key=lambda u: u.T_source_out_C)
+    for i, u in enumerate(sources):
         ax.plot([H0, H0 + u.Q_source], [u.T_source_in_C, u.T_source_out_C], color=COLD_COLOUR, lw=2.5)
+        # Stagger labels so sources at the same temperature stay readable.
         ax.annotate(f"{u.name} source ({u.Q_source:.2f})", xy=(H0, u.T_source_out_C),
-                    xytext=(2, -11), textcoords="offset points", fontsize=8, color=COLD_COLOUR)
+                    xytext=(2, -11 - 10 * i), textcoords="offset points", fontsize=8, color=COLD_COLOUR)
         H0 += u.Q_source
 
     for T in table.pinch_T_star_C:

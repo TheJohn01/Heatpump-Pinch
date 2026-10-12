@@ -21,11 +21,14 @@ Temperature convention
 ----------------------
 Heat pump sink and source temperatures are compared directly with the
 shifted temperatures T* of the Grand Composite Curve, i.e. utility streams get
-dT_shift = 0. This follows the paper, which evaluates COPs at GCC temperatures
-(e.g. cold utility at -1 °C = minimum T* of the GCC). An isothermal sink at T
-is modelled as a hot stream from T to T - 1 K, and an isothermal source at T as
-a cold stream from T to T + 1 K, consistent with the 1 K convention used for
-latent loads in the stream data.
+dT_shift = 0. This follows Padullés et al. (2026, Sec. 4.1), who read utility
+temperatures directly off the GCC ("the maximum temperature of the GCC, and
+therefore the minimum temperature of the heating utility, is 103 °C"). An
+isothermal sink at T is modelled as a hot stream from T to T - w, and an
+isothermal source at T as a cold stream from T to T + w, with
+w = ``isothermal_width_K`` (default 1 K, the convention used for latent loads
+in the stream data). Results are insensitive to w for w <= 1 K (see
+``tests/test_heat_pump.py``).
 """
 
 from __future__ import annotations
@@ -37,6 +40,8 @@ from pinch.problem_table import problem_table
 from pinch.streams import Stream, StreamSet
 
 KELVIN = 273.15
+#: Duties below this fraction of Qh,min are treated as zero (solver noise).
+MIN_DUTY_FRACTION = 1e-6
 
 
 def thermodynamic_mean_temperature_K(T_a_C: float, T_b_C: float) -> float:
@@ -104,6 +109,9 @@ class HeatPump:
         Lorenz efficiency [-].
     cop_fixed : float or None
         Fixed heating COP [-].
+    isothermal_width_K : float
+        Temperature interval used to represent an isothermal sink or source
+        in the cascade [K].
     """
 
     name: str
@@ -114,8 +122,11 @@ class HeatPump:
     T_source_out_C: float | None = None
     eta_lorenz: float | None = None
     cop_fixed: float | None = None
+    isothermal_width_K: float = 1.0
 
     def __post_init__(self) -> None:
+        if self.isothermal_width_K <= 0:
+            raise ValueError(f"{self.name}: isothermal_width_K must be positive")
         if self.Q_sink <= 0:
             raise ValueError(f"{self.name}: Q_sink must be positive")
         if self.T_sink_out_C < self.T_sink_in_C:
@@ -172,14 +183,14 @@ class HeatPump:
 def _sink_stream(unit: HeatPump) -> Stream:
     """Condenser / gas cooler as a hot stream (dT_shift = 0)."""
     T_hi = unit.T_sink_out_C
-    T_lo = unit.T_sink_in_C if unit.T_sink_in_C < T_hi else T_hi - 1.0
+    T_lo = unit.T_sink_in_C if unit.T_sink_in_C < T_hi else T_hi - unit.isothermal_width_K
     return Stream(f"{unit.name} sink", "hot", T_hi, T_lo, unit.Q_sink, 0.0)
 
 
 def _source_stream(unit: HeatPump, Q_from_process: float) -> Stream:
     """Evaporator as a cold stream (dT_shift = 0) taking Q_from_process."""
     T_lo = unit.T_source_out_C
-    T_hi = unit.T_source_in_C if unit.T_source_in_C > T_lo else T_lo + 1.0
+    T_hi = unit.T_source_in_C if unit.T_source_in_C > T_lo else T_lo + unit.isothermal_width_K
     return Stream(f"{unit.name} source", "cold", T_lo, T_hi, Q_from_process, 0.0)
 
 
@@ -245,8 +256,23 @@ class IntegrationResult:
 
     @property
     def Q_sink_excess(self) -> float:
-        """Sink heat the process cannot use (ends up in the cold utility)."""
+        """Sink heat the process cannot use at the sink temperatures."""
         return self.Q_sink_total - self.Q_sink_useful
+
+    @property
+    def Q_cold_utility_replaced(self) -> float:
+        """Process cooling taken over by heat pump sources (Qc_before - Qc_after)."""
+        return self.Qc_before - self.Qc_after
+
+    @property
+    def Q_source_recirculated(self) -> float:
+        """Source heat that is the units' own surplus sink heat, re-absorbed.
+
+        The evaporators take more heat from the cascade than the original
+        cooling demand only when unused sink heat has been rejected into it;
+        that part does no useful work for the process.
+        """
+        return sum(self.Q_source_process.values()) - self.Q_cold_utility_replaced
 
 
 def _max_process_source(base: StreamSet, sinks: StreamSet, unit: HeatPump, Q_cap: float) -> float:
@@ -343,4 +369,5 @@ def max_useful_sink_duty(stream_set: StreamSet, unit: HeatPump) -> float:
     for _ in range(60):
         mid = 0.5 * (lo + hi)
         lo, hi = (mid, hi) if fully_used(mid) else (lo, mid)
-    return lo
+    # Duties within the solver tolerance are numerical noise, not a design.
+    return lo if lo > MIN_DUTY_FRACTION * Qh_ref else 0.0

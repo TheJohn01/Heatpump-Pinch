@@ -128,3 +128,24 @@ def test_max_useful_sink_duty_matches_gcc():
 def test_max_useful_sink_duty_above_gcc_top_is_full_qh():
     hp = HeatPump("HP", 1.0, 103, 103, -1, -1, eta_lorenz=0.55)
     assert max_useful_sink_duty(BREWERY, hp) == pytest.approx(problem_table(BREWERY).Qh_min, abs=1e-6)
+
+
+# ------------------------------------------------- conventions and accounting
+@pytest.mark.parametrize("width_K", [0.25, 0.5, 1.0])
+def test_isothermal_width_does_not_change_results_up_to_1K(width_K):
+    """Minimum-energy brewery design is identical for isothermal widths <= 1 K."""
+    base = problem_table(BREWERY)
+    co2 = HeatPump("CO2 HP", 1.0, 18, 82, -1, -1, eta_lorenz=0.55, isothermal_width_K=width_K)
+    Q_co2 = max_useful_sink_duty(BREWERY, co2)
+    hthp = HeatPump("HTHP", base.Qh_min - Q_co2, 103, 103, -1, -1, eta_lorenz=0.55, isothermal_width_K=width_K)
+    r = integrate(BREWERY, [co2.with_sink_duty(Q_co2), hthp])
+    assert Q_co2 == pytest.approx(7.282, abs=1e-3)
+    assert r.Qh_after == pytest.approx(0.0, abs=1e-6)  # bisection tolerance is 1e-9 x Qh
+
+
+def test_recirculated_source_equals_unused_sink_heat():
+    """First law: surplus sink heat re-absorbed by the evaporator equals the unused sink heat."""
+    cchs = HeatPump("CCHS", 11.3, 103, 103, -1, -1, eta_lorenz=0.55)
+    r = integrate(BREWERY, [cchs])
+    assert r.Q_source_recirculated == pytest.approx(r.Q_sink_excess)
+    assert r.Q_cold_utility_replaced == pytest.approx(problem_table(BREWERY).Qc_min)

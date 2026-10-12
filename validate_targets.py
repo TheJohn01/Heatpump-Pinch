@@ -3,7 +3,7 @@
 Runs every case in data/reference_targets.json, writes the problem tables and
 a validation report to outputs/, and saves the figures.
 
-Usage:  python run_targets.py
+Usage:  python validate_targets.py
 """
 
 from __future__ import annotations

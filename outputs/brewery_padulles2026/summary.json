@@ -1,0 +1,44 @@
+{
+  "case": "brewery_padulles2026",
+  "description": "Generalized reference brewery: 12 process streams, loads per hectolitre of beer.",
+  "reference": "Padullés et al. (2026), Energy Conversion and Management 357, 121292, Table 2.",
+  "energy_unit": "kWh/hl",
+  "targets": {
+    "Q_hot_total": 14.8,
+    "Q_cold_total": 21.4,
+    "Qh_min": 10.0424,
+    "Qc_min": 3.4424,
+    "heat_recovery": 11.3576,
+    "pinch_T_star_C": [
+      17.0
+    ],
+    "T_star_range_C": [
+      103.0,
+      -1.0
+    ]
+  },
+  "heat_pump_design": {
+    "eta_lorenz": 0.55,
+    "units": [
+      "CO2 HP (warm water)",
+      "HTHP (wort boiling)"
+    ],
+    "levels_skipped_no_useful_duty": [],
+    "Q_sink_total": 10.0424,
+    "W_total": 3.4404,
+    "COP_system": 2.919,
+    "Qh_residual": 0.0,
+    "fraction_of_Qh_min_electrified": 1.0,
+    "cold_utility_replaced": 3.4424,
+    "source_external_total": 3.1596
+  },
+  "annual_MWh_per_year": null,
+  "warnings": {},
+  "provenance": {
+    "stream data": "published (Table 2); 'Amb.' taken as 15 °C (Sec. 4.3.1), an inference",
+    "eta_lorenz": "published (Sec. 4.3.1, citing Andersen et al.)",
+    "source_T_C": "published cold-utility temperature (Sec. 4.1); used for all sources, which bounds W from above",
+    "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
+    "basis": "none: the paper gives no production volume for the reference brewery"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "case": "fourstream_example",
+  "description": "Classic four-stream chemical process (two reactor feeds and products), loads in MW. Illustrates the tool on a non-food process with high-temperature demand.",
+  "reference": "University of Oklahoma, ChE design course notes 'Minimum Utility', Example 1.1 (stream data and targets).",
+  "energy_unit": "MW",
+  "targets": {
+    "Q_hot_total": 61.5,
+    "Q_cold_total": 59.0,
+    "Qh_min": 7.5,
+    "Qc_min": 10.0,
+    "heat_recovery": 51.5,
+    "pinch_T_star_C": [
+      145.0
+    ],
+    "T_star_range_C": [
+      245.0,
+      25.0
+    ]
+  },
+  "heat_pump_design": {
+    "eta_lorenz": 0.55,
+    "units": [
+      "HTHP 160 °C",
+      "HTHP 200 °C"
+    ],
+    "levels_skipped_no_useful_duty": [],
+    "Q_sink_total": 3.75,
+    "W_total": 0.7941,
+    "COP_system": 4.722,
+    "Qh_residual": 3.75,
+    "fraction_of_Qh_min_electrified": 0.5,
+    "cold_utility_replaced": 2.9559,
+    "source_external_total": 0.0
+  },
+  "annual_MWh_per_year": null,
+  "warnings": {
+    "HTHP 160 °C": [
+      "sink 160 °C above 120 °C: few commercial units"
+    ],
+    "HTHP 200 °C": [
+      "sink 200 °C above 120 °C: few commercial units"
+    ]
+  },
+  "provenance": {
+    "stream data": "published (lecture notes, Example 1.1)",
+    "eta_lorenz": "assumed, same value as the brewery case (Padullés et al., 2026)",
+    "source_T_C": "assumed: 130 °C, below the pinch (T* 145 °C), where the process rejects heat",
+    "sink levels": "assumed, illustrative: 160 °C (commercial range) and 200 °C (upper end of IEA HPT Annex 58 scope)",
+    "basis": "none: the source gives no operating hours"
+  }
+}

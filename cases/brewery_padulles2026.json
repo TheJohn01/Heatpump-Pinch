@@ -1,0 +1,23 @@
+{
+  "name": "brewery_padulles2026",
+  "description": "Generalized reference brewery: 12 process streams, loads per hectolitre of beer.",
+  "reference": "Padullés et al. (2026), Energy Conversion and Management 357, 121292, Table 2.",
+  "stream_file": "../data/brewery_streams.csv",
+  "extra_shift_K": 0,
+  "heat_pumps": {
+    "eta_lorenz": 0.55,
+    "source_T_C": -1,
+    "sink_levels": [
+      {"name": "CO2 HP (warm water)", "T_sink_in_C": 18, "T_sink_out_C": 82},
+      {"name": "HTHP (wort boiling)", "T_sink_C": "gcc_max"}
+    ]
+  },
+  "basis": null,
+  "provenance": {
+    "stream data": "published (Table 2); 'Amb.' taken as 15 °C (Sec. 4.3.1), an inference",
+    "eta_lorenz": "published (Sec. 4.3.1, citing Andersen et al.)",
+    "source_T_C": "published cold-utility temperature (Sec. 4.1); used for all sources, which bounds W from above",
+    "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
+    "basis": "none: the paper gives no production volume for the reference brewery"
+  }
+}

@@ -1,4 +1,7 @@
-"""Workflow step 4: heat pump placement, COP and electricity for the brewery.
+"""Reproduction of Padullés et al. (2026), Sec. 4.3 (brewery-specific; workflow step 4).
+
+For a general site use analyse.py with a case file. This script reproduces the
+paper's three configurations from its published heat flows.
 
 Part A  Reproduce the paper's electricity use from its published heat flows,
         using the Lorenz COP model (Padullés et al., 2026, Eq. 1).
@@ -7,7 +10,7 @@ Part B  Check each configuration against the minimum-energy cascade of the
         heat taken from the process vs. from ambient.
 Part C  Our own design sized from the GCC (minimum energy, two heat pumps).
 
-Usage:  python run_heat_pumps.py
+Usage:  python reproduce_padulles2026.py
 """
 
 from __future__ import annotations
@@ -160,7 +163,8 @@ def main(config: Config = Config()) -> None:
             "Q_sink_excess": round(r.Q_sink_excess, 3),
             "Qh_after": round(r.Qh_after, 3),
             "Qc_after": round(r.Qc_after, 3),
-            "source_from_process": round(sum(r.Q_source_process.values()), 3),
+            "cold_utility_replaced": round(r.Q_cold_utility_replaced, 3),
+            "source_recirculated": round(r.Q_source_recirculated, 3),
             "source_external": round(sum(r.Q_source_external.values()), 3),
             "W_total": round(r.W_total, 3),
             "placement": "; ".join(f"{k}: {v}" for k, v in r.placement.items()),
