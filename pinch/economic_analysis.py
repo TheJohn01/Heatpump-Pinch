@@ -24,6 +24,7 @@ Sensitivities
 from __future__ import annotations
 
 import json
+import math
 from dataclasses import dataclass, replace
 from pathlib import Path
 
@@ -41,6 +42,56 @@ from pinch.economics import (DEFAULTS, EconomicParameters, Option, break_even_ra
                              load_economics)
 
 
+def refrigeration_duty(streams, T_amb_C: float | None, heat_recovery: bool = True) -> float:
+    """Cooling that must be done below ambient (refrigeration), in the stream-data unit.
+
+    With heat recovery at target: Q̇c,min minus the GCC heat flow at T* = ambient
+    (heat released between the pinch and ambient can go to ambient) if ambient
+    lies below the pinch, else all of Q̇c,min.
+    Without heat recovery: the heat of every hot stream below T* = ambient.
+    Cooling above ambient is assumed to go to cooling water or air, at no energy cost.
+    """
+    from pinch import problem_table
+    if T_amb_C is None:
+        return 0.0
+    if not heat_recovery:
+        return sum(max(0.0, min(T_amb_C, max(s.T_star_in_C, s.T_star_out_C)) - min(s.T_star_in_C, s.T_star_out_C))
+                   * s.CP for s in streams.hot)
+    t = problem_table(streams)
+    pinch = min(t.pinch_T_star_C) if t.pinch_T_star_C else -math.inf
+    if T_amb_C >= pinch:
+        return t.Qc_min
+    # cascade heat flow at T* = ambient: surplus released between the pinch and ambient,
+    # which cooling water/air can take; the rest of Q̇c,min is released below ambient
+    T = t.T_star_C[::-1]
+    H = t.cascade_feasible[::-1]
+    return t.Qc_min - float(np.interp(T_amb_C, T, H))
+
+
+_REPLACED_CACHE: dict = {}
+
+
+def cold_utility_replaced_curve(design: HeatPumpDesign, streams, n_points: int = 201) -> list[float]:
+    """Process cooling taken over by the heat pump sources at each point of the electrification curve."""
+    from pinch.heat_pump import integrate
+    key = (id(design), id(streams), n_points)
+    if key not in _REPLACED_CACHE:
+        units = sorted(design.units, key=lambda u: -u.COP)
+        total = sum(u.Q_sink for u in units)
+        out = []
+        for target in np.linspace(0.0, total, n_points):
+            remaining, partial = target, []
+            for u in units:
+                q = min(u.Q_sink, remaining)
+                if q <= 0:
+                    break
+                remaining -= q
+                partial.append(u.with_sink_duty(q))
+            out.append(integrate(streams, partial).Q_cold_utility_replaced if partial else 0.0)
+        _REPLACED_CACHE[key] = out
+    return _REPLACED_CACHE[key]
+
+
 @dataclass(frozen=True)
 class CurvePoint:
     fraction: float
@@ -48,7 +99,8 @@ class CurvePoint:
 
 
 def electrification_curve(design: HeatPumpDesign, Qh_base_MWh: float, to_MWh, params: EconomicParameters,
-                          extra_equipment: tuple = (), n_points: int = 201) -> list[CurvePoint]:
+                          extra_equipment: tuple = (), n_points: int = 201,
+                          refrigeration: float = 0.0, replaced: list[float] | None = None) -> list[CurvePoint]:
     """Partial designs from 0 to the full design's share of Q̇h,min.
 
     Parameters
@@ -61,11 +113,15 @@ def electrification_curve(design: HeatPumpDesign, Qh_base_MWh: float, to_MWh, pa
         Converts a heat quantity in the stream-data unit to MWh/year.
     extra_equipment : tuple
         Equipment always included (e.g. a heat-recovery tank).
+    refrigeration, replaced : float, list of float
+        Refrigeration duty of the baseline and the part taken over by the heat
+        pump sources at each point [stream-data unit]; with params.chiller_cop the
+        remaining chiller electricity is added to each option.
     """
     units = sorted(design.units, key=lambda u: -u.COP)
     total = sum(u.Q_sink for u in units)
     points = []
-    for target in np.linspace(0.0, total, n_points):
+    for i, target in enumerate(np.linspace(0.0, total, n_points)):
         remaining, W, equipment = target, 0.0, list(extra_equipment)
         for u in units:
             q = min(u.Q_sink, remaining)
@@ -76,21 +132,37 @@ def electrification_curve(design: HeatPumpDesign, Qh_base_MWh: float, to_MWh, pa
             equipment.append(("heat_pump", capacity_kW(to_MWh(q), params)))
         delivered = to_MWh(target)
         fraction = target / design.Qh_before if design.Qh_before > 0 else 0.0
+        E = to_MWh(W)
+        if params.chiller_cop and refrigeration > 0:
+            taken = min(replaced[i] if replaced else 0.0, refrigeration)
+            E += to_MWh(refrigeration - taken) / params.chiller_cop
         points.append(CurvePoint(fraction, Option(f"{100 * fraction:.1f} %", Qh_base_MWh - delivered,
-                                                  to_MWh(W), tuple(equipment))))
+                                                  E, tuple(equipment))))
     return points
 
 
-def _core(design: HeatPumpDesign, Qh_MWh: float, to_MWh, params: EconomicParameters) -> dict:
-    """Electrification curve, full design, RQ1 and RQ3 against the heat-recovery baseline."""
-    baseline = Option("baseline: gas boiler, heat recovery installed", Qh_MWh, 0.0)
-    curve = electrification_curve(design, Qh_MWh, to_MWh, params)
+def _core(design: HeatPumpDesign, Qh_MWh: float, to_MWh, params: EconomicParameters,
+          streams=None, T_amb_C: float | None = None) -> dict:
+    """Electrification curve, full design, RQ1 and RQ3 against the heat-recovery baseline.
+
+    With params.chiller_cop, streams and T_amb_C, the baseline includes the
+    chiller electricity for the refrigeration duty and each option only the part
+    the heat pump sources do not take over.
+    """
+    refr, replaced = 0.0, None
+    if params.chiller_cop and streams is not None:
+        refr = refrigeration_duty(streams, T_amb_C)
+        replaced = cold_utility_replaced_curve(design, streams)
+    E_base = to_MWh(refr) / params.chiller_cop if refr > 0 else 0.0
+    baseline = Option("baseline: gas boiler and chiller, heat recovery installed", Qh_MWh, E_base)
+    curve = electrification_curve(design, Qh_MWh, to_MWh, params, refrigeration=refr, replaced=replaced)
     evals = [(pt.fraction, evaluate(pt.option, baseline, params)) for pt in curve]
     threshold = params.payback_threshold_years
     within = [f for f, e in evals if f > 0 and e.payback_years <= threshold]
     best_npv_f, best_npv = max(evals, key=lambda fe: fe[1].npv_EUR)
     full_option = curve[-1].option
     return {
+        "refrigeration": refr,
         "baseline": baseline, "curve": curve, "evals": evals, "full": evals[-1][1], "full_option": full_option,
         "rq1": {
             "max_fraction_with_payback_below_threshold": round(max(within), 4) if within else 0.0,
@@ -112,7 +184,7 @@ def _headline(core: dict, params: EconomicParameters) -> dict:
     f = core["full"]
     return {"price_ratio": round(params.price_ratio, 3), "boiler_efficiency": params.boiler_efficiency,
             "gas_EF_kg_per_kWh": params.gas_EF_kg_per_kWh, "grid_EF_kg_per_kWh": params.grid_EF_kg_per_kWh,
-            "co2_price_EUR_per_t": params.co2_price_EUR_per_t,
+            "co2_price_EUR_per_t": params.co2_price_EUR_per_t, "chiller_cop": params.chiller_cop,
             "full_capex_EUR": round(f.capex_EUR, 0), "full_savings_EUR": round(f.savings_EUR, 0),
             "full_payback_years": round(f.payback_years, 2), "full_npv_EUR": round(f.npv_EUR, 0),
             "full_co2_avoided_t": round(f.co2_avoided_t, 0),
@@ -145,7 +217,7 @@ def eta_lorenz_sensitivity(case: Case, streams, energy_unit: str, out: Path | No
     rows = []
     for eta in values:
         d = design_from_gcc(streams, case.sink_levels, float(eta), case.source_T_C)
-        c = _core(d, to_MWh(d.Qh_before), to_MWh, params)
+        c = _core(d, to_MWh(d.Qh_before), to_MWh, params, streams, case.ambient_T_C)
         rows.append({"eta_lorenz": float(eta), "COP_system": round(d.COP_system, 3),
                      f"W_total_{energy_unit.replace('/', '_per_')}": round(d.W_total, 4), **_headline(c, params)})
     if out is not None and rows:
@@ -172,27 +244,33 @@ def cycle_based_design(case: Case, streams, energy_unit: str, selected: dict | N
            "fraction_of_Qh_min_electrified": round(d.fraction_electrified, 4)}
     if case.basis is not None and case.economics:
         _, params, to_MWh = _params_and_converter(case, energy_unit)
-        out["economics"] = _headline(_core(d, to_MWh(d.Qh_before), to_MWh, params), params)
+        out["economics"] = _headline(_core(d, to_MWh(d.Qh_before), to_MWh, params, streams, case.ambient_T_C), params)
     return out
 
 
-def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str, out: Path) -> dict:
+def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str, out: Path,
+                  streams=None) -> dict:
     """Evaluate the design, write tables, figures and economics.json to ``out``; return the summary."""
-    res = economics_outputs(case, design, Q_cold_total, energy_unit)
+    res = economics_outputs(case, design, Q_cold_total, energy_unit, streams)
     if "skipped" not in res.summary:
         res.write(out, "economics.json")
     return res.summary
 
 
-def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str) -> Outputs:
-    """Evaluate the design in memory: summary, tables and figures (nothing written)."""
+def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str,
+                      streams=None) -> Outputs:
+    """Evaluate the design in memory: summary, tables and figures (nothing written).
+
+    ``streams`` (the process stream set) is needed for the refrigeration credit
+    when the economics block sets ``chiller_cop``.
+    """
     if case.basis is None:
         return Outputs({"skipped": "no annual basis in the case file"})
     tables, figures = {}, {}
     block, params, to_MWh = _params_and_converter(case, energy_unit)
 
     Qh_MWh = to_MWh(design.Qh_before)
-    c = _core(design, Qh_MWh, to_MWh, params)
+    c = _core(design, Qh_MWh, to_MWh, params, streams, case.ambient_T_C)
     baseline, evals, full, full_option = c["baseline"], c["evals"], c["full"], c["full_option"]
     threshold = params.payback_threshold_years
     rq1, rq3 = c["rq1"], c["rq3"]
@@ -200,14 +278,20 @@ def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, e
     results = {"full design (heat recovery installed)": full.as_dict()}
     hr_equipment = tuple(tuple(x) for x in block.get("heat_recovery_equipment", []))
     if hr_equipment:  # second baseline: no heat recovery yet
-        base_noHR = Option("baseline: gas boiler, no heat recovery", to_MWh(Q_cold_total), 0.0)
-        hr_only = Option("heat recovery only", Qh_MWh, 0.0, hr_equipment)
+        E_noHR = 0.0
+        if params.chiller_cop and streams is not None:
+            E_noHR = to_MWh(refrigeration_duty(streams, case.ambient_T_C, heat_recovery=False)) / params.chiller_cop
+        base_noHR = Option("baseline: gas boiler, no heat recovery", to_MWh(Q_cold_total), E_noHR)
+        hr_only = Option("heat recovery only", Qh_MWh, baseline.electricity_MWh, hr_equipment)
         hr_hp = replace(full_option, name="heat recovery + heat pumps", equipment=hr_equipment + full_option.equipment)
         results["heat recovery only (vs no HR)"] = evaluate(hr_only, base_noHR, params).as_dict()
         results["heat recovery + heat pumps (vs no HR)"] = evaluate(hr_hp, base_noHR, params).as_dict()
         rq3["break_even_ratio_NPV_with_HR_investment"] = round(break_even_ratio(hr_hp, base_noHR, params, "npv"), 3)
         # RQ1 for a site without heat recovery: one project = heat recovery + heat pumps
-        curve_hr = electrification_curve(design, Qh_MWh, to_MWh, params, extra_equipment=hr_equipment)
+        curve_hr = electrification_curve(design, Qh_MWh, to_MWh, params, extra_equipment=hr_equipment,
+                                         refrigeration=c["refrigeration"],
+                                         replaced=cold_utility_replaced_curve(design, streams)
+                                         if c["refrigeration"] > 0 else None)
         evals_hr = [(pt.fraction, evaluate(pt.option, base_noHR, params)) for pt in curve_hr]
         ok = [e for f, e in evals_hr if e.payback_years <= threshold]
         rq1["site_without_HR: max gas reduction with payback below threshold"] = \
@@ -231,7 +315,7 @@ def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, e
         if "electricity_to_gas_ratio" in overrides:
             merged.pop("electricity_price_EUR_per_kWh", None)
         p_s = load_economics(merged)
-        c_s = _core(design, Qh_MWh, to_MWh, p_s)
+        c_s = _core(design, Qh_MWh, to_MWh, p_s, streams, case.ambient_T_C)
         scenario_rows.append({"scenario": name, **_headline(c_s, p_s)})
     if scenario_rows:
         tables["scenarios"] = pd.DataFrame(scenario_rows)
@@ -283,8 +367,9 @@ def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, e
         "parameters": {k: getattr(params, k, None) for k in (
             "gas_price_EUR_per_kWh", "electricity_price_EUR_per_kWh", "boiler_efficiency", "operating_hours_per_year",
             "discount_rate", "horizon_years", "payback_threshold_years", "gas_EF_kg_per_kWh", "grid_EF_kg_per_kWh",
-            "co2_price_EUR_per_t", "pef_electricity", "pef_gas")},
+            "co2_price_EUR_per_t", "pef_electricity", "pef_gas", "chiller_cop")},
         "price_ratio": round(params.price_ratio, 3),
+        "refrigeration_duty": round(c["refrigeration"], 4),
         "default_sources": {k: v[1] for k, v in DEFAULTS.items() if k not in block},
         "case_sources": block.get("sources", {}),
         "RQ1": rq1,

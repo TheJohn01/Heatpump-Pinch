@@ -58,6 +58,8 @@ class Case:
         Extra shift added to every stream (e.g. indirect transfer), default 0.
     eta_lorenz : float
         Lorenz efficiency for heat pump COPs [-].
+    retrofit : dict or None
+        Existing network and retrofit options (``pinch.retrofit``).
     cycle_screening : dict or None
         Working fluids and layouts to screen (``pinch.cycle_analysis``).
     eta_lorenz_sensitivity : tuple of float
@@ -99,6 +101,7 @@ class Case:
     provenance: dict = field(default_factory=dict)
     eta_lorenz_sensitivity: tuple[float, ...] = ()
     cycle_screening: dict | None = None
+    retrofit: dict | None = None
 
 
 def load_case(path: str | Path) -> Case:
@@ -158,7 +161,16 @@ def load_case(path: str | Path) -> Case:
         provenance=raw.get("provenance", {}),
         eta_lorenz_sensitivity=eta_sens,
         cycle_screening=hp.get("cycle_screening"),
+        retrofit=_resolve_retrofit(raw.get("retrofit"), path),
     )
+
+
+def _resolve_retrofit(block: dict | None, case_path: Path) -> dict | None:
+    """Copy of the retrofit block with the network file resolved from the case file's folder."""
+    if not block:
+        return None
+    f = Path(block["network_file"])
+    return {**block, "network_file_resolved": str(f if f.is_absolute() else (case_path.parent / f).resolve())}
 
 
 def _check_basis(basis: dict, file_name: str) -> None:

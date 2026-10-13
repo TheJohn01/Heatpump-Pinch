@@ -112,7 +112,7 @@ def test_supertarget_trade_off():
 def test_brewery_optimum_matches_marginal_analysis(tmp_path):
     """RQ2: near the optimum the area grows logarithmically, dA/dΔTmin ≈ -62 m2 / ΔTmin,
     and each kelvin of ΔTmin adds 13.82 kW of hot utility. Equating marginal capital and
-    energy cost gives ΔTmin,opt ≈ 62 b CRF / (13.82 c_h), linear in the area cost b."""
+    energy cost gives ΔTmin,opt ≈ 62 b CRF / (13.82 (c_h + c_c)), linear in the area cost b."""
     from analyse import analyse
     from pinch.case import load_case
     s = analyse(load_case(ROOT / "cases" / "brewery_padulles2026.json"), output_root=tmp_path)
@@ -121,7 +121,10 @@ def test_brewery_optimum_matches_marginal_analysis(tmp_path):
     assert opts == sorted(opts)                                   # dearer area -> larger ΔTmin
     assert not any(r["at_grid_edge"] for r in rq2)                # optimum resolved inside the grid
     c_h = s["area_targeting"]["hot_utility_cost_EUR_per_kW_year"]
+    c_c = s["area_targeting"]["cold_utility_cost_EUR_per_kW_year"]   # each kelvin adds 13.82 kW to both utilities
     crf = s["area_targeting"]["crf_per_year"]
     for r in rq2:
-        approx = 62.0 * r["b"] * crf / (13.82 * c_h)
+        if r["c"] != 1.0:
+            continue   # the hand formula assumes a linear area cost
+        approx = 62.0 * r["b"] * crf / (13.82 * (c_h + c_c))
         assert r["dTmin_opt_K"] == pytest.approx(approx, rel=0.25, abs=0.05)  # grid resolution

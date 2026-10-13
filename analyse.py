@@ -138,11 +138,22 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
         "provenance": case.provenance,
     }
 
-    eco = economics_outputs(case, design, balance["Q_cold_total"], unit)
+    eco = economics_outputs(case, design, balance["Q_cold_total"], unit, streams)
     summary["economics"] = eco.summary
     eta_rows = eta_lorenz_sensitivity(case, streams, unit)
     summary["eta_lorenz_sensitivity"] = eta_rows
     summary["cycle_based_design"] = cycle_based_design(case, streams, unit, cycle_selected)
+    if case.retrofit and case.basis is not None:
+        from pinch.economic_analysis import _params_and_converter
+        from pinch.retrofit import run_retrofit
+        try:
+            retro = run_retrofit(case, streams, unit, _params_and_converter(case, unit)[1], cycle_selected)
+        except (ValueError, KeyError, StopIteration) as exc:   # e.g. edited streams no longer fit the network file
+            summary["retrofit"] = {"skipped": f"network file does not fit these streams: {exc}"}
+        else:
+            summary["retrofit"] = retro.summary
+            tables.update(retro.tables)
+            figures.update(retro.figures)
     area = area_targeting_outputs(case, streams)
     summary["area_targeting"] = area.summary
     for block in (eco, area):
@@ -233,6 +244,17 @@ def markdown(s: dict) -> str:
                       f"{r['RQ3_break_even_ratio_NPV']} |" for r in ec["scenarios"]]
     elif ec:
         lines += ["", f"Economics skipped: {ec['skipped']}."]
+    rf = s.get("retrofit")
+    if rf and "skipped" not in rf:
+        b = rf["baseline"]
+        lines += ["", "## Retrofit of the existing network (step 5)", "",
+                  f"Existing network '{b['network']}': Q̇h {b['Qh']} (target {b['Qh_min']}), energy gap {b['energy_gap']} = "
+                  f"cross-pinch in matches {b['cross_pinch_in_matches']} + heaters below the pinch {b['heaters_below_pinch']} + "
+                  f"coolers above the pinch {b['coolers_above_pinch']}; refrigeration below ambient {b['refrigeration_below_ambient']}.", "",
+                  "| Option | Q̇h network | Heat pumps | CAPEX [EUR] | Payback [y] | NPV [EUR] | Gas reduction vs existing |",
+                  "|---|---|---|---|---|---|---|"]
+        lines += [f"| {o['option']} | {o['Qh_network']} | {o['heat_pumps']} | {o['capex_EUR']:,.0f} | {o['payback_years']} | "
+                  f"{o['npv_EUR']:,.0f} | {100 * o['gas_reduction_vs_baseline']:.1f} % |" for o in rf["options"]]
     cb = s.get("cycle_based_design")
     if cb:
         lines += ["", "## Cycle-based design (step 4b: η_L from the working-fluid cycle model)", "",

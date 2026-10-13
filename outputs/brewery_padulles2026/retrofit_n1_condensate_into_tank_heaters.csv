@@ -1,0 +1,7 @@
+stream,T_from_C,T_to_C,duty,below_pinch
+Pre-mashing,49.9944,55.0,0.5506160000000002,0.0
+Mashing,55.0,77.0,3.5,0.0
+Lautering/Filtering,49.9944,75.0,2.50056,0.0
+Wortboiling (preheating),95.0,100.0,0.6,0.0
+Wortboiling (boiling),100.0,101.0,2.4,0.0
+CIP,49.9944,78.0,0.93352,0.0

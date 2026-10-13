@@ -1,0 +1,128 @@
+{
+  "_about": "Heat-exchanger networks of the reference brewery (Padullés et al., 2026). Segments: [stream, T_from_C, T_to_C] in the stream's direction. Indirect matches pass through the stratified HR tank.",
+  "networks": {
+    "N0 existing": {
+      "description": "Existing network: the 'common heat recovery solutions' of Padullés et al. (2026), Sec. 4.2, Figs. 5-7: Pfaduko (direct) and wort-cooling heat recovery into a stratified hot-water tank (indirect). Hot utility 11.3 kWh/hl (published, Sec. 4.3.2 and 7).",
+      "provenance": {
+        "Pfaduko duty 2.4 kWh/hl": "published (Fig. 5)",
+        "wort cooling to tank 7.7 kWh/hl, 0.8 to cooling": "published (Fig. 6)",
+        "tank serves pre-mashing, lautering and CIP from 15 °C": "assumed: Fig. 7 lists pre-mashing, mashing, lautering and CIP; the stratified tank lets heat be reassigned, so the split only affects bookkeeping, not utilities",
+        "extra_dT_K 4 for the tank": "published convention: extra 2 K shift per stream for indirect transfer (Sec. 4.1)",
+        "wort end 23 °C": "derived: 100 - 7.7 / 0.1 kWh/hl K; equals the lowest end temperature allowed by the 8 K indirect approach to 15 °C water"
+      },
+      "matches": [
+        {
+          "name": "Pfaduko (kettle vapour condenser)",
+          "indirect": false,
+          "hot": [
+            [
+              "Boiloff condensation",
+              101,
+              100
+            ]
+          ],
+          "cold": [
+            [
+              "Wortboiling (preheating)",
+              75,
+              95
+            ]
+          ],
+          "note": "Fig. 5: 2.4 kWh/hl from the boil-off to the wort; wort 75 -> 95 °C (derived: 2.4 / 0.12 kWh/hl K); 0.6 kWh/hl external heating 95 -> 100 °C"
+        },
+        {
+          "name": "Wort cooling heat recovery (HR tank)",
+          "indirect": true,
+          "extra_dT_K": 4.0,
+          "hot": [
+            [
+              "Wortcooling",
+              100,
+              23
+            ]
+          ],
+          "cold": [
+            [
+              "Pre-mashing",
+              15,
+              46.6438
+            ],
+            [
+              "Lautering/Filtering",
+              15,
+              46.6438
+            ],
+            [
+              "CIP",
+              15,
+              46.6438
+            ]
+          ],
+          "note": "Fig. 6: 7.7 kWh/hl from wort cooling (100 -> 23 °C) to the tank"
+        }
+      ]
+    },
+    "N1 condensate into tank": {
+      "description": "Retrofit 1: condensate from the Pfaduko (boil-off condensate cooling) also charges the HR tank, as Padullés et al. (2026, Sec. 4.2.2) suggest ('recover the leftover stream ... 0.9 kWh/hl').",
+      "provenance": {
+        "condensate into the tank": "published suggestion (Sec. 4.2.2); end temperature 23 °C from the same 8 K indirect approach"
+      },
+      "matches": [
+        {
+          "name": "Pfaduko (kettle vapour condenser)",
+          "indirect": false,
+          "hot": [
+            [
+              "Boiloff condensation",
+              101,
+              100
+            ]
+          ],
+          "cold": [
+            [
+              "Wortboiling (preheating)",
+              75,
+              95
+            ]
+          ],
+          "note": "Fig. 5: 2.4 kWh/hl from the boil-off to the wort; wort 75 -> 95 °C (derived: 2.4 / 0.12 kWh/hl K); 0.6 kWh/hl external heating 95 -> 100 °C"
+        },
+        {
+          "name": "Wort cooling heat recovery (HR tank)",
+          "indirect": true,
+          "extra_dT_K": 4.0,
+          "hot": [
+            [
+              "Wortcooling",
+              100,
+              23
+            ],
+            [
+              "Condensate cooling",
+              100,
+              23
+            ]
+          ],
+          "cold": [
+            [
+              "Pre-mashing",
+              15,
+              49.9944
+            ],
+            [
+              "Lautering/Filtering",
+              15,
+              49.9944
+            ],
+            [
+              "CIP",
+              15,
+              49.9944
+            ]
+          ],
+          "note": "wort and condensate both cooled to 23 °C into the tank"
+        }
+      ]
+    }
+  }
+}

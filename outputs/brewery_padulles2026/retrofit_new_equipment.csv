@@ -1,0 +1,9 @@
+option,segment,Q_kW,U_kW_per_m2K,approach_K,area_m2,cost_EUR
+N1: condensate into tank,Condensate cooling 100->23 °C,101.9,1.0,4.0,25.5,
+N1: condensate into tank,storage 520.8 -> 575.9 m3,,,,,29375.0
+N1 + both heat pumps,Condensate cooling 100->23 °C,101.9,1.0,4.0,25.5,
+N1 + both heat pumps,storage 520.8 -> 575.9 m3,,,,,29375.0
+N1 + warm-water heat pump only,Condensate cooling 100->23 °C,101.9,1.0,4.0,25.5,
+N1 + warm-water heat pump only,storage 520.8 -> 575.9 m3,,,,,29375.0
+"N1 + both heat pumps, cycle-based COP",Condensate cooling 100->23 °C,101.9,1.0,4.0,25.5,
+"N1 + both heat pumps, cycle-based COP",storage 520.8 -> 575.9 m3,,,,,29375.0

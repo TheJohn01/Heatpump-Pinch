@@ -1,0 +1,6 @@
+option,network,Qh_network,heat_pumps,Qh_residual,W_heat_pumps,refrigeration_taken_over,capex_EUR,savings_EUR,payback_years,npv_EUR,gas_reduction_vs_baseline,co2_avoided_t,primary_energy_reduction,break_even_ratio_NPV
+N1: condensate into tank,N1 condensate into tank,10.4847,none,10.4847,0.0,0.0,55981.0,49401.0,1.13,325482.0,0.0722,176.0,0.0654,inf
+N0 + both heat pumps (Padulles config. 2),N0 existing,11.3,"CO2 HP (warm water) 8.30 (COP 3.55), HTHP (wort boiling) 3.00 (COP 1.99)",0.0,3.848,3.2212,1887500.0,330099.0,5.72,661436.0,1.0,2100.0,0.5043,2.752
+N1 + both heat pumps,N1 condensate into tank,10.4847,"CO2 HP (warm water) 7.48 (COP 3.55), HTHP (wort boiling) 3.00 (COP 1.99)",0.0,3.6181,3.2212,1882333.0,356186.0,5.28,868041.0,1.0,2124.0,0.5339,2.975
+N1 + warm-water heat pump only,N1 condensate into tank,10.4847,CO2 HP (warm water) 7.48 (COP 3.55),3.0,2.11,3.2212,1137333.0,345581.0,3.29,1531148.0,0.7345,1639.0,0.4874,5.011
+"N1 + both heat pumps, cycle-based COP",N1 condensate into tank,10.4847,"CO2 HP (warm water) 7.48 (COP 3.14), HTHP (wort boiling) 3.00 (COP 2.03)",0.0,3.8617,3.2212,1882333.0,328544.0,5.73,654595.0,1.0,2098.0,0.5025,2.744

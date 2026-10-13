@@ -11,7 +11,9 @@ Reads the case's "area_targeting" block:
 Loads are converted to kW with the case's annual basis and operating hours, so
 areas come out in m². Hot-utility cost per kW-year = hours x gas price / boiler
 efficiency (the economics block); cold-utility cost per kW-year is
-'cold_utility_cost_EUR_per_kW_year' (default 0: no sourced chiller COP).
+'cold_utility_cost_EUR_per_kW_year', or, if that is null and the economics
+block sets chiller_cop, hours x electricity price / chiller COP (all of Q̇c,min
+treated as refrigeration: an upper bound when part could go to cooling water).
 """
 
 from __future__ import annotations
@@ -62,7 +64,11 @@ def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
     h = block["film_coefficients_kW_per_m2K"]
     grid = block.get("dTmin_grid_K", list(np.arange(1, 31, 1.0)))
     c_hot = hours * params.gas_price_EUR_per_kWh / params.boiler_efficiency
-    c_cold = float(block.get("cold_utility_cost_EUR_per_kW_year", 0.0))
+    c_cold_given = block.get("cold_utility_cost_EUR_per_kW_year")
+    if c_cold_given is None and params.chiller_cop:
+        c_cold = hours * params.electricity_price_EUR_per_kWh / params.chiller_cop   # refrigeration electricity
+    else:
+        c_cold = float(c_cold_given or 0.0)
     crf = 1 / params.annuity_factor
 
     laws: list[CostLaw] = []

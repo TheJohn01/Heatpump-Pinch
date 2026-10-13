@@ -1,0 +1,6 @@
+stream,T_from_C,T_to_C,duty,above_pinch,below_ambient
+Wortcooling,23.0,15.0,0.8,0.4,0.2
+Condensate cooling,100.0,15.0,0.8999999999999999,0.8576470588235293,0.021176470588235293
+Fermentation,15.0,14.0,1.5,0.0,1.5
+Beer cooling,14.0,3.0,1.1,0.0,1.1
+Filtration/centrifugation,3.0,1.0,0.4,0.0,0.4

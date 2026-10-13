@@ -95,6 +95,10 @@ def test_brewery_full_design_hand_check(tmp_path):
     kW = lambda q: q * 1e3 * 1000 / 8000                   # kWh/hl -> MWh/year -> kW at 8000 h
     capex = (520_000 + 600 * kW(Q_co2)) + (520_000 + 600 * kW(Q_hthp))
     savings = (10.0424 / eta_b * p_gas - W * p_el) * 1e6   # kWh/hl x 1e6 hl/year x EUR/kWh
+    if ec.get("chiller_cop"):
+        # refrigeration below ambient: Q̇c,min 3.4424 minus the GCC heat flow at T* = 15 °C (the
+        # 17 -> 14 °C interval releases 0.3318, 2 of its 3 K lie above 15 °C: 0.2212); all taken over by the heat pumps
+        savings += (3.4424 - 0.2212) / ec["chiller_cop"] * p_el * 1e6
     assert full["capex_EUR"] == pytest.approx(capex, rel=1e-3)
     assert full["savings_EUR"] == pytest.approx(savings, rel=1e-3)
     assert s["economics"]["RQ3"]["ratio_used"] == pytest.approx(p_el / p_gas, abs=1e-3)

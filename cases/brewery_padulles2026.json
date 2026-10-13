@@ -93,8 +93,9 @@
     "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
     "basis": "assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)",
     "ambient_T_C": "published: Sec. 4.3.1",
-    "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1 (checked), mapping assumed; cost law: Stampfli et al. (2018) Table 2, converted to EUR 2023; installed cost bracketed by F = 1 and F = 3.5 (assumed)",
-    "cycle_screening": "step 4b: cycle model with Andersen et al. (2024) Table 3 assumptions; validated against their Appendix A (see tests/test_cycle.py)"
+    "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1, mapping assumed; cost laws: Sinnott and Towler (2020) Table 6.6 plate and frame (primary) and Stampfli et al. (2018) Table 2, bare and x3.5 (Hand factor, Towler Table 6.3); cold utility cost from chiller COP",
+    "cycle_screening": "step 4b: cycle model with Andersen et al. (2024) Table 3 assumptions; validated against their Appendix A (see tests/test_cycle.py)",
+    "retrofit": "step 5, option (a): existing network = Padullés et al. (2026) Sec. 4.2 (Pfaduko + wort-cooling HR tank), data/brewery_networks.json"
   },
   "economics": {
     "gas_price_EUR_per_kWh": 0.0512,
@@ -122,7 +123,8 @@
       "heat_recovery_equipment": "tank 520.8 m3 = 375 m3 x (1.0e6 / 720,000 hl/year), scaled from Padullés et al. (2026), Sec. 5.1",
       "gas_EF_kg_per_kWh": "IPCC 2006 Guidelines Vol. 2 Table 2.2, 56,100 kg CO2/TJ NCV -> 0.182 kg/kWh GCV, direct combustion (same scope as the APA grid factor)",
       "eta_lorenz_sensitivity": "0.45-0.52: Carnot efficiencies implied by DEA HTHP sheets (COP 2.05 at 100 K lift); 0.63: Andersen et al. (2024) polynomial for the HTHP unit (upper envelope, extrapolated: source below 0 °C and isothermal)",
-      "co2_price_scenario": "EUA Dec contract 82.40 EUR/t on 5 Oct 2026 (S&P Global Commodity Insights)"
+      "co2_price_scenario": "EUA Dec contract 82.40 EUR/t on 5 Oct 2026 (S&P Global Commodity Insights)",
+      "chiller_cop": "Sinnott and Towler (2020), Chemical Engineering Design, 6th ed. (Elsevier, ISBN 978-0-08-102599-4), Sec. 6.4.4, Eq. 6.20: real COP about 0.6 x Carnot for a simple cycle. Evaporator at cold utility -1 °C minus 5 K (refrigerated-brine approach 3-5 K, Sec. 12.7.3), condenser at ambient 15 °C + 10 K cooling-water rise + 5 K approach = 30 °C: 0.6 x 267.15/36 = 4.45. Check: CoolProp ammonia cycle (Andersen et al. 2024 assumptions, sink 15->25 °C) gives 4.52. Padullés et al. (2026) give no chiller credit"
     },
     "gas_EF_kg_per_kWh": 0.182,
     "scenarios": {
@@ -164,6 +166,22 @@
       },
       "Grid EF 0.1172 (Electricity Maps 2025)": {
         "grid_EF_kg_per_kWh": 0.1172
+      },
+      "No refrigeration credit (as Padulles et al. 2026)": {
+        "chiller_cop": null
+      },
+      "Chiller COP 6.68 (0.9 x Carnot, Towler upper bound)": {
+        "chiller_cop": 6.68
+      }
+    },
+    "chiller_cop": 4.45,
+    "cost_functions": {
+      "plate_hex": {
+        "alpha": 912.1,
+        "beta": 6840.7,
+        "gamma": 0.95,
+        "size_unit": "m2",
+        "source": "Sinnott and Towler (2020), Table 6.6, plate and frame (304 SS), Ce = 1,350 + 180 S^0.95 USD Jan 2007; x 3.5 Hand installation factor (Table 6.3); x CEPCI 797.9/509.7; / 1.0813 USD/EUR (2023). Valid 1-500 m2"
       }
     }
   },
@@ -220,6 +238,20 @@
     ],
     "cost_law": [
       {
+        "a": 1954.5,
+        "b": 260.6,
+        "c": 0.95,
+        "label": "Towler 2020 plate & frame, bare (F = 1)",
+        "source": "Sinnott and Towler (2020), Table 6.6: plate and frame exchanger, 304 SS, Ce = 1,350 + 180 S^0.95 USD (USGC, Jan 2007, CEPCI 509.7), valid 1-500 m2; x CEPCI 797.9/509.7 (2023) / 1.0813 USD/EUR (ECB 2023 average). No location factor (Portugal not in Table 6.7)"
+      },
+      {
+        "a": 6840.8,
+        "b": 912.1,
+        "c": 0.95,
+        "label": "Towler 2020 x 3.5 (Hand factor, installed)",
+        "source": "As above x 3.5: Hand (1958) installation factor for heat exchangers, Sinnott and Towler (2020) Table 6.3 (includes home-office costs, not offsites or contingency)"
+      },
+      {
         "a": 3847.0,
         "b": 583.7,
         "c": 1.0,
@@ -231,7 +263,7 @@
         "b": 2043.1,
         "c": 1.0,
         "label": "Stampfli 2018 x 3.5 (Hand factor)",
-        "source": "As above x 3.5, Hand (1958) installation factor for heat exchangers (as tabulated in Towler and Sinnott); assumed, to verify"
+        "source": "As above x 3.5, Hand (1958) installation factor for heat exchangers, verified in Sinnott and Towler (2020) Table 6.3. Note: Stampfli's coefficients do not match Bouman et al. (2005) gasketed plate HEX (MPIC = 270 A + 2,540 NZD, Dec 2004, 0.7-3 MW), so their base is unverified"
       }
     ],
     "specific_area_cost_sweep_EUR_per_m2": [
@@ -241,6 +273,49 @@
       1000,
       2000
     ],
-    "cold_utility_cost_EUR_per_kW_year": 0
+    "cold_utility_cost_EUR_per_kW_year": null
+  },
+  "retrofit": {
+    "network_file": "../data/brewery_networks.json",
+    "baseline": "N0 existing",
+    "storage": {
+      "kind": "hr_tank",
+      "size_baseline": 520.8
+    },
+    "new_exchanger": {
+      "kind": "plate_hex",
+      "medium_h_kW_per_m2K": 2.0,
+      "_medium_h": "tank water: Stampfli et al. (2018) water category"
+    },
+    "options": [
+      {
+        "name": "N1: condensate into tank",
+        "network": "N1 condensate into tank",
+        "heat_pumps": false
+      },
+      {
+        "name": "N0 + both heat pumps (Padulles config. 2)",
+        "network": "N0 existing",
+        "heat_pumps": true
+      },
+      {
+        "name": "N1 + both heat pumps",
+        "network": "N1 condensate into tank",
+        "heat_pumps": true
+      },
+      {
+        "name": "N1 + warm-water heat pump only",
+        "network": "N1 condensate into tank",
+        "heat_pumps": [
+          "CO2 HP (warm water)"
+        ]
+      },
+      {
+        "name": "N1 + both heat pumps, cycle-based COP",
+        "network": "N1 condensate into tank",
+        "heat_pumps": true,
+        "cycle_based": true
+      }
+    ]
   }
 }

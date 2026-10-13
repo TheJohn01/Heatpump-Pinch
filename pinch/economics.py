@@ -35,6 +35,8 @@ DEFAULT_COST_FUNCTIONS = {
     "heat_pump": {"alpha": 600.0, "beta": 520_000.0, "gamma": 1.0, "size_unit": "kW"},
     "mvr": {"alpha": 350.0, "beta": 280_000.0, "gamma": 1.0, "size_unit": "kW"},
     "electric_boiler": {"alpha": 210.0, "beta": 110_000.0, "gamma": 1.0, "size_unit": "kW"},
+    # an item whose size is its cost (e.g. the cost difference of an enlarged tank, computed elsewhere)
+    "lump_sum_EUR": {"alpha": 1.0, "beta": 0.0, "gamma": 1.0, "size_unit": "EUR"},
 }
 
 #: Default economic parameters with provenance. "published" = stated in a cited
@@ -52,6 +54,7 @@ DEFAULTS = {
     "co2_price_EUR_per_t": (0.0, "0 by default (site may be outside the EU ETS); sensitivity uses the EUA price"),
     "pef_electricity": (1.9, "published: Commission Delegated Regulation (EU) 2023/807 (EED default)"),
     "pef_gas": (1.0, "convention: primary energy of a fuel = its final energy"),
+    "chiller_cop": (None, "no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles)"),
 }
 
 
@@ -87,6 +90,7 @@ class EconomicParameters:
     pef_electricity: float
     pef_gas: float
     cost_functions: dict[str, CostFunction] = field(default_factory=dict)
+    chiller_cop: float | None = None   # refrigeration COP; None = no credit for avoided chiller electricity
 
     def __post_init__(self) -> None:
         if not 0 < self.boiler_efficiency <= 1.1:
@@ -95,6 +99,8 @@ class EconomicParameters:
             raise ValueError("discount_rate >= 0 and horizon_years >= 1 required")
         if self.gas_price_EUR_per_kWh <= 0 or self.electricity_price_EUR_per_kWh <= 0:
             raise ValueError("energy prices must be positive")
+        if self.chiller_cop is not None and self.chiller_cop <= 0:
+            raise ValueError("chiller_cop must be positive (or None)")
 
     @property
     def price_ratio(self) -> float:
@@ -123,8 +129,10 @@ def load_economics(block: dict | None) -> EconomicParameters:
         p_el = float(block["electricity_price_EUR_per_kWh"])
     else:
         p_el = float(values["electricity_to_gas_ratio"]) * float(values["gas_price_EUR_per_kWh"])
-    costs = {k: CostFunction(**{**v, **block.get("cost_functions", {}).get(k, {})})
-             for k, v in DEFAULT_COST_FUNCTIONS.items()}
+    given = block.get("cost_functions", {})
+    costs = {k: CostFunction(**{**DEFAULT_COST_FUNCTIONS.get(k, {}), **{x: y for x, y in given.get(k, {}).items()
+                                                                     if not x.startswith("_") and x != "source"}})
+             for k in {**DEFAULT_COST_FUNCTIONS, **given}}
     return EconomicParameters(
         gas_price_EUR_per_kWh=float(values["gas_price_EUR_per_kWh"]),
         electricity_price_EUR_per_kWh=p_el,
@@ -139,6 +147,7 @@ def load_economics(block: dict | None) -> EconomicParameters:
         pef_electricity=float(values["pef_electricity"]),
         pef_gas=float(values["pef_gas"]),
         cost_functions=costs,
+        chiller_cop=None if values["chiller_cop"] is None else float(values["chiller_cop"]),
     )
 
 

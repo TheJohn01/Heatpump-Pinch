@@ -269,6 +269,10 @@ with tab_ec:
         if "scenarios" in result.tables:
             st.markdown("**Scenarios from the case file** (each overrides the named inputs on top of the sidebar values)")
             st.dataframe(result.tables["scenarios"], width="stretch")
+        if s.get("retrofit") and "skipped" not in s["retrofit"]:
+            st.markdown("**Retrofit of the existing network (step 5)**: options against the site as it is today")
+            _show(result.figures["retrofit_options"])
+            st.dataframe(result.tables["retrofit_options"], width="stretch")
         if "eta_lorenz_sensitivity" in result.tables:
             st.markdown("**Lorenz-efficiency sensitivity** (heat pumps re-sized)")
             st.dataframe(result.tables["eta_lorenz_sensitivity"], width="stretch")
