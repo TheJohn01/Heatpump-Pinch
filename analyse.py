@@ -25,7 +25,8 @@ import pandas as pd
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
 from pinch.area_analysis import area_targeting_outputs
 from pinch.case import Case, load_case, to_MWh_per_year
-from pinch.economic_analysis import economics_outputs, eta_lorenz_sensitivity
+from pinch.cycle_analysis import load_selected
+from pinch.economic_analysis import cycle_based_design, economics_outputs, eta_lorenz_sensitivity
 from pinch.results import Outputs
 from pinch.streams import StreamSet
 from pinch.design import HeatPumpDesign, design_from_gcc, plausibility_warnings, source_warnings
@@ -36,7 +37,7 @@ ROOT = Path(__file__).resolve().parent
 CASES_DIR = ROOT / "cases"
 
 
-def compute(case: Case, streams: StreamSet | None = None) -> Outputs:
+def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict | None = None) -> Outputs:
     """Run steps 1-4, 6 and 3 (supertargeting) for one case, in memory.
 
     Parameters
@@ -46,6 +47,9 @@ def compute(case: Case, streams: StreamSet | None = None) -> Outputs:
     streams : StreamSet, optional
         Stream data; read from ``case.stream_file`` when omitted (front ends
         pass an uploaded or edited table here).
+    cycle_selected : dict, optional
+        Working-fluid screening result per unit (``screen_cycles.py``); adds a
+        cycle-based design (η_L from the cycle model) to the summary.
 
     Returns
     -------
@@ -138,6 +142,7 @@ def compute(case: Case, streams: StreamSet | None = None) -> Outputs:
     summary["economics"] = eco.summary
     eta_rows = eta_lorenz_sensitivity(case, streams, unit)
     summary["eta_lorenz_sensitivity"] = eta_rows
+    summary["cycle_based_design"] = cycle_based_design(case, streams, unit, cycle_selected)
     area = area_targeting_outputs(case, streams)
     summary["area_targeting"] = area.summary
     for block in (eco, area):
@@ -163,7 +168,8 @@ def write(result: Outputs, out: Path) -> None:
 
 def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
     """Compute one case and write all outputs to ``output_root/<case name>/``. Returns the summary."""
-    result = compute(case)
+    selected = load_selected(ROOT / "outputs" / case.name / "cycle_screening.json")
+    result = compute(case, cycle_selected=selected)
     write(result, Path(output_root) / case.name)
     return result.summary
 
@@ -227,6 +233,17 @@ def markdown(s: dict) -> str:
                       f"{r['RQ3_break_even_ratio_NPV']} |" for r in ec["scenarios"]]
     elif ec:
         lines += ["", f"Economics skipped: {ec['skipped']}."]
+    cb = s.get("cycle_based_design")
+    if cb:
+        lines += ["", "## Cycle-based design (step 4b: η_L from the working-fluid cycle model)", "",
+                  "| Unit | Fluid | Layout | COP | η_L |", "|---|---|---|---|---|"]
+        lines += [f"| {n} | {v.get('fluid', '(assumed η_L)')} | {v.get('layout', '')} | {v['COP']} | {v['eta_lorenz']} |"
+                  for n, v in cb["units"].items()]
+        if "economics" in cb:
+            e = cb["economics"]
+            lines += ["", f"System COP {cb['COP_system']}; full-design payback {e['full_payback_years']} y, "
+                          f"NPV {e['full_npv_EUR']:,.0f} EUR; RQ1 {100 * e['RQ1_max_fraction_payback_ok']:.1f} %; "
+                          f"RQ3 break-even ratio {e['RQ3_break_even_ratio_NPV']}."]
     if s.get("eta_lorenz_sensitivity"):
         lines += ["", "### Lorenz-efficiency sensitivity (heat pumps re-sized)", "",
                   "| η_L | System COP | Full-design payback [y] | NPV [EUR] | RQ1 | RQ3 (NPV = 0) |", "|---|---|---|---|---|---|"]

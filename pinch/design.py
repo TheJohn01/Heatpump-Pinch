@@ -82,7 +82,7 @@ def design_from_gcc(
     levels : tuple of SinkLevelSpec
         Candidate sink levels (any order; sorted by sink outlet temperature).
     eta_lorenz : float
-        Lorenz efficiency for all units [-].
+        Lorenz efficiency for units whose level does not set its own [-].
     default_source_T_C : float
         Source temperature for levels that do not set their own [°C].
 
@@ -95,14 +95,15 @@ def design_from_gcc(
     for spec in levels:
         T_in, T_out = resolve_level(spec, base)
         T_src = default_source_T_C if spec.T_source_C is None else float(spec.T_source_C)
-        resolved.append((T_out, spec.name, T_in, T_src))
+        eta = eta_lorenz if spec.eta_lorenz is None else float(spec.eta_lorenz)
+        resolved.append((T_out, spec.name, T_in, T_src, eta))
     resolved.sort()
 
     current = stream_set
     units: list[HeatPump] = []
     skipped: list[str] = []
-    for T_out, name, T_in, T_src in resolved:
-        template = HeatPump(name, 1.0, T_in, T_out, T_src, T_src, eta_lorenz=eta_lorenz)
+    for T_out, name, T_in, T_src, eta in resolved:
+        template = HeatPump(name, 1.0, T_in, T_out, T_src, T_src, eta_lorenz=eta)
         duty = max_useful_sink_duty(current, template)
         if duty <= 0.0:
             skipped.append(name)

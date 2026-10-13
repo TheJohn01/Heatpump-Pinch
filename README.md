@@ -11,7 +11,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 90 tests
+python -m pytest                                  # 99 tests
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -57,7 +57,7 @@ and `price_ratio_sweep.*`.
 | 1. Stream data, checks, energy-balance closure | Done, tested |
 | 2. Problem table, composite curves, GCC | Done, validated (four-stream example; Padullés et al. 2026) |
 | 3. ΔTmin / cost trade-off | Done: Bath area target, units target, supertargeting; validated on the OU area example (published error found and corrected). Brewery RQ2 with the Stampfli et al. (2018) plate-HEX cost law (bare and ×3.5 installed) plus a sweep |
-| 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b (working fluid, cycle COP with CoolProp) pending |
+| 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b done: CoolProp cycle model (single stage, SLHX, expander, cascade), working-fluid screening, cycle-based η_L and economics; validated on Andersen et al. (2024) Appendix A |
 | 5. HEN retrofit | Not started |
 | 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; RQ1 electrification curve; RQ3 break-even ratio; named scenarios and Lorenz-efficiency sensitivity; paper Sec. 5.2 statements and Appendix B (Case DK1) NPV/payback reproduced |
 
@@ -86,6 +86,8 @@ pinch/
   problem_table.py           Problem Table Algorithm (cascade, targets, pinch)
   curves.py                  Composite curves and GCC data
   heat_pump.py               Lorenz COP, heat pump units, integration, GCC sizing
+  cycle.py                   Vapour-compression cycles with CoolProp (step 4b)
+  cycle_analysis.py          Working-fluid screening of a design; selected fluid per unit
   design.py                  Automatic multi-level design and plausibility screening
   case.py                    Case files and annual (MWh/year) conversion
   plotting.py                Figures (returned, or saved to file)
@@ -95,7 +97,10 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       90 tests (incl. app smoke tests) (validation cases first, then general behaviour)
+tests/                       99 tests (incl. app smoke tests and cycle model) (validation cases first, then general behaviour)
+
+screen_cycles.py             Step 4b: screen the fluids listed in a case file (minutes); analyse.py then
+                             adds the cycle-based design to the summary
 
 Paper-specific scripts (brewery):
 validate_targets.py                 Steps 1-2 validation report
@@ -142,6 +147,8 @@ verify_walmsley2024.py              Targets, COP, inconsistencies and inferred v
 | Brewery, config. 2 | Electricity | 3.6 kWh/hl | 3.55 | −1.5 % |
 | Brewery, config. 3 (HTHP) | Electricity | 3.6 kWh/hl | 3.56 | −1.1 % |
 | Brewery, config. 1 | Electricity vs Fig. 11 (digitised), 100–180 °C | curve | curve | −4.5 to +0.7 % |
+| Cycle model vs Andersen et al. (2024) App. A | SLHX R-600 / transcritical R-744 with expander / cascade R-1234ze(Z)+R-602 | COP 4.94 / 2.69 / 2.62 | 4.99 / 2.69 / 2.79 | +1.1 / +0.1 / +6.5 % |
+| Cycle model vs Andersen et al. (2024) Fig. 2 | SLHX R-602 | COP 3.02 | 3.53 | +17 % (unexplained; published η_Lor not consistent with the stated conditions) |
 | Brewery, Appendix B Case DK1 | NPV10 and payback of 8 options (Table B.4) from their OPEX and CAPEX | Table B.4 | all within rounding | ≤ 0.08 M EUR |
 
 ### Known inconsistencies in the source papers (reported, not corrected)

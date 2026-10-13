@@ -51,6 +51,7 @@
     "skipped": "no annual basis in the case file"
   },
   "eta_lorenz_sensitivity": [],
+  "cycle_based_design": {},
   "area_targeting": {
     "skipped": "no area_targeting block"
   }

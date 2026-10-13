@@ -23,6 +23,7 @@ import streamlit as st
 
 from analyse import compute, markdown, write
 from pinch.case import SinkLevelSpec, load_case
+from pinch.cycle_analysis import load_selected
 from pinch.economics import DEFAULTS
 from pinch.streams import streams_from_frame
 
@@ -186,7 +187,11 @@ try:
                        sink_levels=_levels_from_frame(levels_df), basis=basis,
                        economics=eco if basis else None, area_targeting=area)
     with st.spinner("Computing..."):
-        result = compute(run_case, streams)
+        # step-4b screening results apply only to the unedited published case (same unit temperatures)
+        selected = None
+        if choice != UPLOAD and source_T == case.source_T_C and levels_df.equals(_levels_frame(case.sink_levels)):
+            selected = load_selected(ROOT / "outputs" / case.name / "cycle_screening.json")
+        result = compute(run_case, streams, cycle_selected=selected)
 except ValueError as exc:
     st.error(f"Input problem: {exc}")
     st.stop()
@@ -226,6 +231,18 @@ with tab_hp:
         st.warning(f"**{name}**: " + "; ".join(warnings))
     _show(result.figures["gcc_heat_pumps"])
     st.dataframe(result.tables["heat_pump_design"], width="stretch")
+    cb = s.get("cycle_based_design")
+    if cb:
+        st.markdown("**Cycle-based check (step 4b, `screen_cycles.py`)**: best working fluid per unit and the "
+                    "Lorenz efficiency it implies, versus the value assumed above")
+        st.dataframe(pd.DataFrame([{"unit": n, **v} for n, v in cb["units"].items()]), width="stretch")
+        if "economics" in cb:
+            e = cb["economics"]
+            st.caption(f"With cycle-based COPs: system COP {cb['COP_system']}, full-design payback "
+                       f"{e['full_payback_years']} y, NPV {e['full_npv_EUR']:,.0f} EUR, RQ1 "
+                       f"{100 * e['RQ1_max_fraction_payback_ok']:.1f} %, RQ3 {e['RQ3_break_even_ratio_NPV']}.")
+    elif choice != UPLOAD:
+        st.caption("No cycle-based check for these inputs (run screen_cycles.py on the unedited case).")
 
 with tab_ec:
     if not ec or "skipped" in ec:

@@ -1,0 +1,49 @@
+unit,fluid,layout,feasible,COP,COP_lorenz,eta_lorenz_cycle,eta_lorenz_assumed,T_evap_C,T_cond_C,P_low_bar,P_high_bar,pressure_ratio,T_discharge_C,transcritical,note
+CO2 HP (warm water),R1234ze(E),"single stage, SLHX",True,3.139,6.4494,0.4867,0.55,-7.0,72.2018,1.6604,16.927,10.1945,107.3114,False,
+CO2 HP (warm water),n-Propane,"single stage, SLHX",True,3.1092,6.4494,0.4821,0.55,-7.0,69.4052,3.8085,25.568,6.7135,114.2024,False,
+CO2 HP (warm water),Propylene,"single stage, SLHX",True,3.1066,6.4494,0.4817,0.55,-7.0,67.0805,4.7119,29.1052,6.177,122.3801,False,
+CO2 HP (warm water),IsoButane,"single stage, SLHX",True,3.1024,6.4494,0.481,0.55,-7.0,74.762,1.2157,12.046,9.9087,104.1754,False,
+CO2 HP (warm water),n-Butane,"single stage, SLHX",True,3.1016,6.4494,0.4809,0.55,-7.0,74.7623,0.7858,9.0136,11.471,107.1626,False,
+CO2 HP (warm water),CarbonDioxide,"single stage, SLHX",True,3.0905,6.4494,0.4792,0.55,-7.0,,28.8211,99.6008,3.4558,137.2909,True,
+CO2 HP (warm water),DimethylEther,"single stage, SLHX",True,3.0904,6.4494,0.4792,0.55,-7.0,69.6414,2.0715,17.9364,8.6587,136.5842,False,
+CO2 HP (warm water),R1233zd(E),"single stage, SLHX",True,3.0902,6.4494,0.4791,0.55,-7.0,74.7614,0.3536,5.7829,16.3557,117.4951,False,
+CO2 HP (warm water),DimethylEther,single stage,True,3.0624,6.4494,0.4748,0.55,-7.0,72.2007,2.0715,18.9484,9.1472,117.2779,False,
+CO2 HP (warm water),Propylene,single stage,True,3.0504,6.4494,0.473,0.55,-7.0,70.5341,4.7119,31.121,6.6048,106.0555,False,
+CO2 HP (warm water),CarbonDioxide,single stage,True,3.0362,6.4494,0.4708,0.55,-7.0,,28.8211,106.7593,3.7042,114.8828,True,
+CO2 HP (warm water),n-Propane,single stage,True,3.0275,6.4494,0.4694,0.55,-7.0,73.6546,3.8085,27.7675,7.291,99.517,False,
+CO2 HP (warm water),R1234ze(E),single stage,True,3.021,6.4494,0.4684,0.55,-7.0,77.8961,1.6604,19.1867,11.5554,92.8725,False,
+CO2 HP (warm water),Ammonia,single stage,True,2.9961,6.4494,0.4646,0.55,-7.0,64.9292,3.2784,29.4313,8.9773,224.4502,False,
+CO2 HP (warm water),n-Pentane,"single stage, SLHX",True,2.9888,6.4494,0.4634,0.55,-9.3267,76.8333,0.1571,3.3956,21.6108,107.6684,False,
+CO2 HP (warm water),n-Butane,single stage,True,2.9868,6.4494,0.4631,0.55,-7.0,79.8801,0.7858,10.0896,12.8403,91.4013,False,
+CO2 HP (warm water),R1233zd(E),single stage,True,2.9842,6.4494,0.4627,0.55,-7.0,79.8804,0.3536,6.5663,18.5714,100.6561,False,
+CO2 HP (warm water),IsoButane,single stage,True,2.9797,6.4494,0.462,0.55,-7.0,80.3534,1.2157,13.5359,11.1342,89.6758,False,
+CO2 HP (warm water),n-Pentane,single stage,True,2.9577,6.4494,0.4586,0.55,-7.0,82.4411,0.1761,3.9146,22.2345,87.7111,False,
+CO2 HP (warm water),Ammonia,"single stage, SLHX",True,2.9293,6.4494,0.4542,0.55,-7.0171,64.0317,3.2762,28.8111,8.794,256.9646,False,
+HTHP (wort boiling),Ammonia / n-Pentane,cascade (SLHX top),True,2.0307,3.6168,0.5615,0.55,-7.0,106.0138,,10.1 / 6.8,3.08 / 11.01,102 / 177,False,intermediate (top evaporation) 22.2 °C
+HTHP (wort boiling),n-Pentane,"single stage, SLHX",True,2.0306,3.6168,0.5614,0.55,-7.0,106.0138,0.1761,6.7729,38.4692,214.4777,False,
+HTHP (wort boiling),n-Propane / n-Pentane,cascade (SLHX top),True,2.0234,3.6168,0.5595,0.55,-7.0,106.0138,,7.8 / 6.8,2.06 / 14.86,32 / 186,False,intermediate (top evaporation) 14.5 °C
+HTHP (wort boiling),Ammonia / R1233zd(E),cascade (SLHX top),True,1.982,3.6168,0.548,0.55,-7.0,106.0052,,13.0 / 11.9,3.97 / 7.47,129 / 184,False,intermediate (top evaporation) 30.7 °C
+HTHP (wort boiling),R1234ze(E) / R1233zd(E),cascade (SLHX top),True,1.9716,3.6168,0.5451,0.55,-7.0,106.0052,,4.9 / 11.9,2.95 / 10.36,36 / 197,False,intermediate (top evaporation) 21.4 °C
+HTHP (wort boiling),Ammonia / n-Butane,cascade (SLHX top),True,1.9681,3.6168,0.5442,0.55,-7.0,106.0175,,12.7 / 17.1,3.88 / 6.06,127 / 174,False,intermediate (top evaporation) 29.9 °C
+HTHP (wort boiling),n-Propane / n-Butane,cascade (SLHX top),True,1.956,3.6168,0.5408,0.55,-7.0,106.0175,,9.2 / 17.1,2.41 / 8.08,40 / 184,False,intermediate (top evaporation) 20.6 °C
+HTHP (wort boiling),R1233zd(E),"single stage, SLHX",True,1.9504,3.6168,0.5393,0.55,-7.0,106.0052,0.3536,11.8743,33.5836,244.4477,False,
+HTHP (wort boiling),n-Butane,"single stage, SLHX",True,1.9463,3.6168,0.5381,0.55,-7.0,106.0175,0.7858,17.128,21.7976,220.4403,False,
+HTHP (wort boiling),Ammonia / IsoButane,cascade (SLHX top),True,1.9251,3.6168,0.5323,0.55,-7.0,106.014,,14.7 / 22.2,4.50 / 4.76,143 / 166,False,intermediate (top evaporation) 35.1 °C
+HTHP (wort boiling),CarbonDioxide / n-Butane,cascade (SLHX top),True,1.9129,3.6168,0.5289,0.55,-7.0,106.0175,,37.3 / 17.1,1.29 / 16.88,17 / 211,False,intermediate (top evaporation) -0.4 °C
+HTHP (wort boiling),IsoButane,"single stage, SLHX",True,1.8891,3.6168,0.5223,0.55,-7.0,106.014,1.2157,22.1819,18.2461,214.7634,False,
+HTHP (wort boiling),DimethylEther,"single stage, SLHX",True,1.8069,3.6168,0.4996,0.55,-7.0,106.0058,2.0715,36.7253,17.7289,275.6257,False,
+HTHP (wort boiling),Ammonia,single stage,True,1.7209,3.6168,0.4758,0.55,-7.0,106.0072,3.2784,70.2602,21.4311,337.8466,False,
+HTHP (wort boiling),R1234ze(E),"single stage, SLHX",True,1.71,3.6168,0.4728,0.55,-7.0,,1.6604,37.4926,22.5804,235.6617,True,
+HTHP (wort boiling),Ammonia,"single stage, SLHX",True,1.6837,3.6168,0.4655,0.55,-7.0,106.0072,3.2784,70.2602,21.4311,526.8592,False,
+HTHP (wort boiling),n-Propane,"single stage, SLHX",True,1.6448,3.6168,0.4548,0.55,-7.0,,3.8085,62.0168,16.2839,249.8531,True,
+HTHP (wort boiling),Propylene,"single stage, SLHX",True,1.607,3.6168,0.4443,0.55,-7.0,,4.7119,74.5082,15.8129,272.5532,True,
+HTHP (wort boiling),R1233zd(E),single stage,True,1.558,3.6168,0.4308,0.55,-7.0,106.0052,0.3536,11.8743,33.5836,125.1274,False,
+HTHP (wort boiling),DimethylEther,single stage,True,1.5225,3.6168,0.421,0.55,-7.0,106.0058,2.0715,36.7253,17.7289,158.0346,False,
+HTHP (wort boiling),n-Pentane,single stage,True,1.481,3.6168,0.4095,0.55,-9.8711,106.0138,0.1529,6.7729,44.2826,106.0154,False,
+HTHP (wort boiling),n-Butane,single stage,True,1.4246,3.6168,0.3939,0.55,-7.0,106.0175,0.7858,17.128,21.7976,114.4778,False,
+HTHP (wort boiling),CarbonDioxide,"single stage, SLHX",True,1.354,3.6168,0.3744,0.55,-7.0,,28.8211,184.4577,6.4001,332.7679,True,
+HTHP (wort boiling),IsoButane,single stage,True,1.2787,3.6168,0.3535,0.55,-7.0,106.014,1.2157,22.1819,18.2461,113.1563,False,
+HTHP (wort boiling),Propylene,single stage,True,1.2466,3.6168,0.3447,0.55,-7.0,,4.7119,125.5223,26.6396,200.5252,True,
+HTHP (wort boiling),n-Propane,single stage,True,1.2066,3.6168,0.3336,0.55,-7.0,,3.8085,119.4419,31.3622,188.9319,True,
+HTHP (wort boiling),R1234ze(E),single stage,True,1.1802,3.6168,0.3263,0.55,-7.0,,1.6604,85.087,51.2448,172.9573,True,
+HTHP (wort boiling),CarbonDioxide,single stage,True,0.965,3.6168,0.2668,0.55,-7.0,,28.8211,221.3098,7.6788,193.0928,True,

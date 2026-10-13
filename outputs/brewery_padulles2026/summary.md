@@ -66,6 +66,15 @@ Price ratio 2.217 (electricity 0.1135 EUR/kWh, gas 0.0512 EUR/kWh); boiler effic
 | Grid EF 0.167 (APA 5-year average 2019-2023) | 2.217 | 8.23 | -109,895 | 1,588 | 0.0 % | 2.136 |
 | Grid EF 0.1172 (Electricity Maps 2025) | 2.217 | 8.23 | -109,895 | 1,760 | 0.0 % | 2.136 |
 
+## Cycle-based design (step 4b: η_L from the working-fluid cycle model)
+
+| Unit | Fluid | Layout | COP | η_L |
+|---|---|---|---|---|
+| CO2 HP (warm water) | R1234ze(E) | single stage, SLHX | 3.139 | 0.4867 |
+| HTHP (wort boiling) | Ammonia / n-Pentane | cascade (SLHX top) | 2.031 | 0.5615 |
+
+System COP 2.73; full-design payback 9.39 y, NPV -319,003 EUR; RQ1 0.0 %; RQ3 break-even ratio 1.997.
+
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 
 | η_L | System COP | Full-design payback [y] | NPV [EUR] | RQ1 | RQ3 (NPV = 0) |
@@ -97,3 +106,4 @@ Hot utility 484.73 EUR/kW-year; cold utility 0.0 EUR/kW-year; CRF 0.1295/year. F
 - **basis**: assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)
 - **ambient_T_C**: published: Sec. 4.3.1
 - **area_targeting**: film coefficients: Stampfli et al. (2018) Table 1 (checked), mapping assumed; cost law: Stampfli et al. (2018) Table 2, converted to EUR 2023; installed cost bracketed by F = 1 and F = 3.5 (assumed)
+- **cycle_screening**: step 4b: cycle model with Andersen et al. (2024) Table 3 assumptions; validated against their Appendix A (see tests/test_cycle.py)

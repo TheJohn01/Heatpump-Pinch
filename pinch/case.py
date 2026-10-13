@@ -39,6 +39,7 @@ class SinkLevelSpec:
     T_sink_in_C: float | str
     T_sink_out_C: float | str
     T_source_C: float | None = None
+    eta_lorenz: float | None = None   # overrides the case-wide value for this level
 
 
 @dataclass(frozen=True)
@@ -57,6 +58,8 @@ class Case:
         Extra shift added to every stream (e.g. indirect transfer), default 0.
     eta_lorenz : float
         Lorenz efficiency for heat pump COPs [-].
+    cycle_screening : dict or None
+        Working fluids and layouts to screen (``pinch.cycle_analysis``).
     eta_lorenz_sensitivity : tuple of float
         Optional further Lorenz efficiencies; the design is re-sized and
         re-costed for each (``pinch.economic_analysis.eta_lorenz_sensitivity``).
@@ -95,6 +98,7 @@ class Case:
     area_targeting: dict | None = None
     provenance: dict = field(default_factory=dict)
     eta_lorenz_sensitivity: tuple[float, ...] = ()
+    cycle_screening: dict | None = None
 
 
 def load_case(path: str | Path) -> Case:
@@ -121,6 +125,7 @@ def load_case(path: str | Path) -> Case:
             T_sink_in_C=lv.get("T_sink_in_C", lv.get("T_sink_C")),
             T_sink_out_C=lv.get("T_sink_out_C", lv.get("T_sink_C")),
             T_source_C=lv.get("T_source_C"),
+            eta_lorenz=None if lv.get("eta_lorenz") is None else float(lv["eta_lorenz"]),
         )
         for lv in hp.get("sink_levels", [{"name": "HTHP", "T_sink_C": "gcc_max"}])
     )
@@ -152,6 +157,7 @@ def load_case(path: str | Path) -> Case:
         area_targeting=raw.get("area_targeting"),
         provenance=raw.get("provenance", {}),
         eta_lorenz_sensitivity=eta_sens,
+        cycle_screening=hp.get("cycle_screening"),
     )
 
 

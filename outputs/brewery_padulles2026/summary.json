@@ -51,7 +51,8 @@
     "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
     "basis": "assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)",
     "ambient_T_C": "published: Sec. 4.3.1",
-    "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1 (checked), mapping assumed; cost law: Stampfli et al. (2018) Table 2, converted to EUR 2023; installed cost bracketed by F = 1 and F = 3.5 (assumed)"
+    "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1 (checked), mapping assumed; cost law: Stampfli et al. (2018) Table 2, converted to EUR 2023; installed cost bracketed by F = 1 and F = 3.5 (assumed)",
+    "cycle_screening": "step 4b: cycle model with Andersen et al. (2024) Table 3 assumptions; validated against their Appendix A (see tests/test_cycle.py)"
   },
   "economics": {
     "parameters": {
@@ -429,6 +430,42 @@
       "RQ3_break_even_ratio_payback": 1.625
     }
   ],
+  "cycle_based_design": {
+    "units": {
+      "CO2 HP (warm water)": {
+        "COP": 3.139,
+        "eta_lorenz": 0.4867,
+        "fluid": "R1234ze(E)",
+        "layout": "single stage, SLHX"
+      },
+      "HTHP (wort boiling)": {
+        "COP": 2.031,
+        "eta_lorenz": 0.5615,
+        "fluid": "Ammonia / n-Pentane",
+        "layout": "cascade (SLHX top)"
+      }
+    },
+    "COP_system": 2.73,
+    "W_total": 3.679,
+    "fraction_of_Qh_min_electrified": 1.0,
+    "economics": {
+      "price_ratio": 2.217,
+      "boiler_efficiency": 0.845,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.107,
+      "co2_price_EUR_per_t": 0.0,
+      "full_capex_EUR": 1793176.0,
+      "full_savings_EUR": 190912.0,
+      "full_payback_years": 9.39,
+      "full_npv_EUR": -319003.0,
+      "full_co2_avoided_t": 1769.0,
+      "full_primary_energy_reduction": 0.4118,
+      "RQ1_max_fraction_payback_ok": 0.0,
+      "RQ1_fraction_max_NPV": 0.725,
+      "RQ3_break_even_ratio_NPV": 1.997,
+      "RQ3_break_even_ratio_payback": 1.326
+    }
+  },
   "area_targeting": {
     "hot_utility_cost_EUR_per_kW_year": 484.73,
     "cold_utility_cost_EUR_per_kW_year": 0.0,

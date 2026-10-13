@@ -23,7 +23,63 @@
       0.45,
       0.52,
       0.63
-    ]
+    ],
+    "cycle_screening": {
+      "fluids": [
+        "CarbonDioxide",
+        "Ammonia",
+        "n-Propane",
+        "Propylene",
+        "IsoButane",
+        "n-Butane",
+        "n-Pentane",
+        "DimethylEther",
+        "R1234ze(E)",
+        "R1233zd(E)"
+      ],
+      "layouts": [
+        "std",
+        "slhx"
+      ],
+      "cascades": [
+        [
+          "Ammonia",
+          "n-Butane"
+        ],
+        [
+          "Ammonia",
+          "IsoButane"
+        ],
+        [
+          "Ammonia",
+          "n-Pentane"
+        ],
+        [
+          "Ammonia",
+          "R1233zd(E)"
+        ],
+        [
+          "n-Propane",
+          "n-Butane"
+        ],
+        [
+          "n-Propane",
+          "n-Pentane"
+        ],
+        [
+          "R1234ze(E)",
+          "R1233zd(E)"
+        ],
+        [
+          "CarbonDioxide",
+          "n-Butane"
+        ]
+      ],
+      "units": [
+        "HTHP (wort boiling)"
+      ],
+      "_note": "Candidates from Andersen et al. (2024), Table 2, available in CoolProp. R1234ze(Z) omitted: outside CoolProp's range at the -7 °C evaporation needed. Cascades only for the HTHP (lift 104 K)."
+    }
   },
   "basis": {
     "type": "per_product",
@@ -37,7 +93,8 @@
     "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
     "basis": "assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)",
     "ambient_T_C": "published: Sec. 4.3.1",
-    "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1 (checked), mapping assumed; cost law: Stampfli et al. (2018) Table 2, converted to EUR 2023; installed cost bracketed by F = 1 and F = 3.5 (assumed)"
+    "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1 (checked), mapping assumed; cost law: Stampfli et al. (2018) Table 2, converted to EUR 2023; installed cost bracketed by F = 1 and F = 3.5 (assumed)",
+    "cycle_screening": "step 4b: cycle model with Andersen et al. (2024) Table 3 assumptions; validated against their Appendix A (see tests/test_cycle.py)"
   },
   "economics": {
     "gas_price_EUR_per_kWh": 0.0512,

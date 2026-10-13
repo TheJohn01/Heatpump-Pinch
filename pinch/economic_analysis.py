@@ -153,6 +153,29 @@ def eta_lorenz_sensitivity(case: Case, streams, energy_unit: str, out: Path | No
     return rows
 
 
+def cycle_based_design(case: Case, streams, energy_unit: str, selected: dict | None) -> dict:
+    """Re-size and re-cost the design with the cycle-based Lorenz efficiency of each unit (step 4b).
+
+    ``selected``: output of ``pinch.cycle_analysis.screen_design`` (per unit name).
+    Units without a screening result keep the case's η_L.
+    """
+    from pinch.design import design_from_gcc
+    if not selected:
+        return {}
+    levels = tuple(replace(lv, eta_lorenz=selected[lv.name]["eta_lorenz_cycle"]) if lv.name in selected else lv
+                   for lv in case.sink_levels)
+    d = design_from_gcc(streams, levels, case.eta_lorenz, case.source_T_C)
+    out = {"units": {u.name: {"COP": round(u.COP, 3), "eta_lorenz": round(u.eta_lorenz, 4),
+                              **({k: selected[u.name][k] for k in ("fluid", "layout")} if u.name in selected else {})}
+                     for u in d.units},
+           "COP_system": round(d.COP_system, 3), "W_total": round(d.W_total, 4),
+           "fraction_of_Qh_min_electrified": round(d.fraction_electrified, 4)}
+    if case.basis is not None and case.economics:
+        _, params, to_MWh = _params_and_converter(case, energy_unit)
+        out["economics"] = _headline(_core(d, to_MWh(d.Qh_before), to_MWh, params), params)
+    return out
+
+
 def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str, out: Path) -> dict:
     """Evaluate the design, write tables, figures and economics.json to ``out``; return the summary."""
     res = economics_outputs(case, design, Q_cold_total, energy_unit)

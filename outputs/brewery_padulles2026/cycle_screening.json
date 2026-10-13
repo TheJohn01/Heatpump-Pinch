@@ -1,0 +1,35 @@
+{
+  "assumptions": {
+    "dT_pinch_source_K": 3.0,
+    "dT_pinch_sink_K": 3.0,
+    "dT_superheat_K": 3.0,
+    "dT_pinch_slhx_K": 5.0,
+    "dT_pinch_cascade_K": 3.0,
+    "eta_is_compressor": 0.7,
+    "heat_loss_factor": 0.05,
+    "eta_motor": 0.95,
+    "eta_is_expander": 0.5,
+    "n_points": 25,
+    "source": "Andersen et al. (2024), Applied Energy 376, 124312, Table 3"
+  },
+  "selected": {
+    "CO2 HP (warm water)": {
+      "fluid": "R1234ze(E)",
+      "layout": "single stage, SLHX",
+      "COP": 3.139,
+      "eta_lorenz_cycle": 0.4867,
+      "eta_lorenz_assumed": 0.55,
+      "COP_assumed": 3.5472,
+      "note": ""
+    },
+    "HTHP (wort boiling)": {
+      "fluid": "Ammonia / n-Pentane",
+      "layout": "cascade (SLHX top)",
+      "COP": 2.0307,
+      "eta_lorenz_cycle": 0.5615,
+      "eta_lorenz_assumed": 0.55,
+      "COP_assumed": 1.9893,
+      "note": "intermediate (top evaporation) 22.2 °C"
+    }
+  }
+}
