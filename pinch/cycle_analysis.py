@@ -15,9 +15,10 @@ Case-file block::
         "units": ["HTHP (wort boiling)"]                    # optional: restrict cascades to these units
     }
 
-Selection is by COP only. Pressure ratio and discharge temperature are
-reported for each option but not screened (no sourced limits); the engineer
-should reject impractical options explicitly in the case file.
+Selection: the highest COP among options that pass the practical limits
+(``limits`` in the block; defaults in ``DEFAULT_LIMITS``, with sources). Options
+that fail are kept in the table with the reason, so the effect of the limits
+is visible.
 """
 
 from __future__ import annotations
@@ -28,16 +29,41 @@ from pathlib import Path
 
 import pandas as pd
 
-from pinch.cycle import CycleAssumptions, CycleResult, SecondaryStream, cascade, single_stage
+from pinch.cycle import CycleAssumptions, CycleResult, SecondaryStream, cascade, single_stage, two_stage
+
+#: Practical limits for screening, conservative. Sources: IEA HPT Annex 58, Task 1
+#: report (2023), Table 1-3: single-stage pressure ratio up to 10 for piston and
+#: scroll compressors (screw: above 20; turbo: 5) -> 10 per stage taken here, the
+#: conservative value (screw machines would allow more); Sec. 1.2.1 (ammonia):
+#: compressors withstand about 76 bar and 110 °C.
+DEFAULT_LIMITS = {"max_pressure_ratio_per_stage": 10.0, "ammonia_max_pressure_bar": 76.0,
+                  "ammonia_max_discharge_C": 110.0}
+
+
+def practical_issues(r: CycleResult, limits: dict | None = None) -> list[str]:
+    """Reasons why a feasible cycle would be impractical (empty list if none)."""
+    lim = {**DEFAULT_LIMITS, **(limits or {})}
+    out = []
+    stages = r.stages or [r]
+    for st in stages:
+        if st.pressure_ratio > lim["max_pressure_ratio_per_stage"]:
+            out.append(f"{st.fluid}: pressure ratio {st.pressure_ratio:.1f} > {lim['max_pressure_ratio_per_stage']:g}")
+        if st.fluid == "Ammonia":
+            if st.P_high_bar > lim["ammonia_max_pressure_bar"]:
+                out.append(f"ammonia high pressure {st.P_high_bar:.0f} bar > {lim['ammonia_max_pressure_bar']:g}")
+            if st.T_discharge_C > lim["ammonia_max_discharge_C"]:
+                out.append(f"ammonia discharge {st.T_discharge_C:.0f} °C > {lim['ammonia_max_discharge_C']:g}")
+    return out
 from pinch.design import HeatPumpDesign
 
 
-def _row(unit_name: str, r: CycleResult, eta_assumed: float) -> dict:
+def _row(unit_name: str, r: CycleResult, eta_assumed: float, limits: dict | None = None) -> dict:
     d = {"unit": unit_name, "fluid": r.fluid, "layout": r.layout, "feasible": r.feasible,
          "COP": r.COP, "COP_lorenz": r.COP_lorenz, "eta_lorenz_cycle": r.eta_lorenz,
          "eta_lorenz_assumed": eta_assumed, "T_evap_C": r.T_evap_C, "T_cond_C": r.T_cond_C,
          "P_low_bar": r.P_low_bar, "P_high_bar": r.P_high_bar, "pressure_ratio": r.pressure_ratio,
-         "T_discharge_C": r.T_discharge_C, "transcritical": r.transcritical, "note": r.note}
+         "T_discharge_C": r.T_discharge_C, "transcritical": r.transcritical, "note": r.note,
+         "practical_issues": "; ".join(practical_issues(r, limits)) if r.feasible else ""}
     if r.stages:
         b, t = r.stages
         d.update({"T_evap_C": b.T_evap_C, "pressure_ratio": f"{b.pressure_ratio:.2f} / {t.pressure_ratio:.2f}",
@@ -66,12 +92,17 @@ def screen_design(design: HeatPumpDesign, block: dict,
         results: list[CycleResult] = []
         for fl in block.get("fluids", []):
             for lay in layouts:
+                if lay.startswith("two-stg"):
+                    if cascade_units is None or u.name in cascade_units:
+                        results.append(two_stage(fl, source, sink, assumptions, variant=lay))
+                    continue
                 results.append(single_stage(fl, source, sink, assumptions, slhx="slhx" in lay, expander="exp" in lay))
         if cascade_units is None or u.name in cascade_units:
             for lo, hi in block.get("cascades", []):
                 results.append(cascade(lo, hi, source, sink, assumptions, slhx_high=True))
-        rows += [_row(u.name, r, u.eta_lorenz) for r in results]
-        ok = [r for r in results if r.feasible]
+        limits = block.get("limits")
+        rows += [_row(u.name, r, u.eta_lorenz, limits) for r in results]
+        ok = [r for r in results if r.feasible and not practical_issues(r, limits)]
         if ok:
             best = max(ok, key=lambda r: r.COP)
             selected[u.name] = {"fluid": best.fluid, "layout": best.layout, "COP": round(best.COP, 4),

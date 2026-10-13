@@ -60,13 +60,17 @@ SENSITIVITIES = [
     ("Boiler efficiency 0.929", "econ", {"boiler_efficiency": 0.929}, "implied by Padullés App. B (DK1)"),
     ("Boiler efficiency 1.0 (bound)", "econ", {"boiler_efficiency": 1.0}, "as in Padullés Sec. 5"),
     ("No refrigeration credit", "econ", {"chiller_cop": None}, "as in Padullés et al. (2026)"),
+    ("Refrigeration credit 50 % (batch mismatch)", "econ", {"refrigeration_credit_fraction": 0.5},
+     "advisory bound: heat pump and cooling loads not simultaneous; also covers the paper's lower Q̇c (3.2 vs 3.44)"),
     ("Chiller COP 3.14", "econ", {"chiller_cop": 3.14}, "Sinnott & Towler Example 6.7 (cooling water 40 °C)"),
     ("Chiller COP 6.68", "econ", {"chiller_cop": 6.68}, "Sinnott & Towler: 0.9 x Carnot (complex cycles)"),
     ("CO2 price 82.4 EUR/t", "econ", {"co2_price_EUR_per_t": 82.4}, "EUA, 5 Oct 2026"),
     ("Horizon 20 years", "econ", {"horizon_years": 20}, "DEA sheet 2.a: HTHP technical lifetime 20 y"),
     ("Lorenz efficiency 0.45", "eta", 0.45, "DEA HTHP data, implied 0.45-0.52"),
     ("Lorenz efficiency 0.63", "eta", 0.63, "Andersen et al. (2024) polynomial, HTHP"),
-    ("Cycle-based COP per unit", "cycle", None, "CoolProp screening (step 4b)"),
+    ("Cycle-based COP per unit", "cycle", None, "CoolProp screening (step 4b), practical options only"),
+    ("Cycle-based COP -17 %", "cycle_scaled", 0.83,
+     "advisory: our model is 17 % above Andersen et al. (2024) Fig. 2 at one point"),
     ("Heat pump CAPEX -25 %", "hp_capex", 0.75, "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"),
     ("Heat pump CAPEX +25 %", "hp_capex", 1.25, "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"),
     ("Retrofit exchanger CAPEX x3", "hx_capex", 3.0, "stress test"),
@@ -77,6 +81,9 @@ SENSITIVITIES = [
      [("econ", {"boiler_efficiency": 1.0, "chiller_cop": None})], "Padullés et al. (2026), Sec. 5"),
     ("Combined pessimistic: no credit, cycle-based COP, HP CAPEX +25 %", "combo",
      [("econ", {"chiller_cop": None}), ("cycle", None), ("hp_capex", 1.25)], "one-at-a-time ranges above, together"),
+    ("Combined conservative: credit 50 %, cycle COP -17 %, HP CAPEX +25 %, boiler 0.929", "combo",
+     [("econ", {"refrigeration_credit_fraction": 0.5, "boiler_efficiency": 0.929}), ("cycle_scaled", 0.83),
+      ("hp_capex", 1.25)], "advisory envelope for the items that cannot be verified"),
 ]
 
 
@@ -91,8 +98,9 @@ def _apply(case: Case, kind: str, value, selected: dict | None) -> Case:
     if kind == "eta":
         return replace(case, eta_lorenz=float(value),
                        sink_levels=tuple(replace(lv, eta_lorenz=None) for lv in case.sink_levels))
-    if kind == "cycle":
-        return replace(case, sink_levels=tuple(replace(lv, eta_lorenz=selected[lv.name]["eta_lorenz_cycle"])
+    if kind in ("cycle", "cycle_scaled"):
+        k = 1.0 if kind == "cycle" else float(value)
+        return replace(case, sink_levels=tuple(replace(lv, eta_lorenz=k * selected[lv.name]["eta_lorenz_cycle"])
                                                if lv.name in selected else lv for lv in case.sink_levels))
     if kind in ("hp_capex", "hx_capex"):
         key = "heat_pump" if kind == "hp_capex" else "plate_hex"
@@ -159,7 +167,7 @@ def consolidate(case_file: Path) -> pd.DataFrame:
     rows = [{"sensitivity": "Base case", "basis": "sourced inputs (see sources_case_studies.md)",
              **answers(case, streams, unit, selected)}]
     for label, kind, value, basis in SENSITIVITIES:
-        if (kind == "cycle" or (kind == "combo" and any(k == "cycle" for k, _ in value))) and not selected:
+        if (kind.startswith("cycle") or (kind == "combo" and any(k.startswith("cycle") for k, _ in value))) and not selected:
             continue
         rows.append({"sensitivity": label, "basis": basis, **answers(_apply(case, kind, value, selected), streams, unit, selected)})
     return pd.DataFrame(rows)

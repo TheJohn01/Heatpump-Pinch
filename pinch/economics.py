@@ -54,6 +54,7 @@ DEFAULTS = {
     "co2_price_EUR_per_t": (0.0, "0 by default (site may be outside the EU ETS); sensitivity uses the EUA price"),
     "pef_electricity": (1.9, "published: Commission Delegated Regulation (EU) 2023/807 (EED default)"),
     "pef_gas": (1.0, "convention: primary energy of a fuel = its final energy"),
+    "refrigeration_credit_fraction": (1.0, "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)"),
     "chiller_cop": (None, "no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles)"),
 }
 
@@ -91,6 +92,7 @@ class EconomicParameters:
     pef_gas: float
     cost_functions: dict[str, CostFunction] = field(default_factory=dict)
     chiller_cop: float | None = None   # refrigeration COP; None = no credit for avoided chiller electricity
+    refrigeration_credit_fraction: float = 1.0
 
     def __post_init__(self) -> None:
         if not 0 < self.boiler_efficiency <= 1.1:
@@ -99,6 +101,8 @@ class EconomicParameters:
             raise ValueError("discount_rate >= 0 and horizon_years >= 1 required")
         if self.gas_price_EUR_per_kWh <= 0 or self.electricity_price_EUR_per_kWh <= 0:
             raise ValueError("energy prices must be positive")
+        if not 0.0 <= self.refrigeration_credit_fraction <= 1.0:
+            raise ValueError("refrigeration_credit_fraction must be in [0, 1]")
         if self.chiller_cop is not None and self.chiller_cop <= 0:
             raise ValueError("chiller_cop must be positive (or None)")
 
@@ -148,6 +152,7 @@ def load_economics(block: dict | None) -> EconomicParameters:
         pef_gas=float(values["pef_gas"]),
         cost_functions=costs,
         chiller_cop=None if values["chiller_cop"] is None else float(values["chiller_cop"]),
+        refrigeration_credit_fraction=float(values["refrigeration_credit_fraction"]),
     )
 
 

@@ -39,7 +39,9 @@
       ],
       "layouts": [
         "std",
-        "slhx"
+        "slhx",
+        "two-stg",
+        "two-stg2"
       ],
       "cascades": [
         [
@@ -78,7 +80,13 @@
       "units": [
         "HTHP (wort boiling)"
       ],
-      "_note": "Candidates from Andersen et al. (2024), Table 2, available in CoolProp. R1234ze(Z) omitted: outside CoolProp's range at the -7 °C evaporation needed. Cascades only for the HTHP (lift 104 K)."
+      "_note": "Candidates from Andersen et al. (2024), Table 2, available in CoolProp. R1234ze(Z) omitted: outside CoolProp's range at the -7 °C evaporation needed. Cascades and two-stage cycles only for the HTHP (lift 104 K).",
+      "limits": {
+        "max_pressure_ratio_per_stage": 10.0,
+        "ammonia_max_pressure_bar": 76.0,
+        "ammonia_max_discharge_C": 110.0,
+        "_source": "IEA HPT Annex 58 Task 1 report (2023): Table 1-3 (single-stage pressure ratio up to 10 for piston/scroll; conservative, screw allows > 20) and Sec. 1.2.1 (ammonia compressors about 76 bar, 110 °C)"
+      }
     }
   },
   "basis": {
@@ -114,8 +122,8 @@
       ]
     ],
     "sources": {
-      "prices": "Eurostat nrg_pc_205 (electricity, band ID 2,000-19,999 MWh) and nrg_pc_203 (gas, band I3 10,000-99,999 GJ), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh (gas on GCV). Parsed copy: data/sources/eurostat_portugal_prices.csv. Band check: gas fuel ~ 1.2e7 kWh/year = 43,000 GJ (I3); heat pump electricity alone 3.4 GWh/year (ID); total site electricity not published (to verify that it stays below 20 GWh/year, band IE otherwise)",
-      "boiler_efficiency": "DEA Technology Data - Industrial Process Heat, sheet 6.1 (2025): 93.9 % net (NCV) annual average, steam boiler with economiser; x 0.90 (NCV/GCV) = 0.845 on the GCV basis of the gas price",
+      "prices": "Eurostat nrg_pc_205 (electricity, band ID 2,000-19,999 MWh) and nrg_pc_203 (gas, band I3 10,000-99,999 GJ), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh (gas on GCV). Parsed copy: data/sources/eurostat_portugal_prices.csv. Band check: gas fuel ~ 1.2e7 kWh/year = 43,000 GJ (I3); heat pump electricity alone 3.4 GWh/year (ID); site electricity 7.5-11.5 kWh/hl for breweries above 1 Mhl/y (IFC EHS Guidelines for Breweries 2007, Table 3) + heat pumps 3.4-3.9 kWh/hl = 11-15 GWh/year: band ID. ID is also the conservative choice (dearer than IE)",
+      "boiler_efficiency": "DEA Technology Data - Industrial Process Heat, sheet 6.1 (2025): 93.9 % net (NCV) annual average, steam boiler with economiser; x 0.90 (NCV/GCV) = 0.845 on the GCV basis of the gas price. Gas prices are on GCV: Regulation (EU) 2016/1952, Annex I, point 4; NCV/GCV = 0.90: IPCC (1996) Reference Manual, Ch. 1, Table 1-4 note a (10 % for natural gas)",
       "operating_hours_per_year": "published: Padullés et al. (2026), Sec. 5.1",
       "discount_rate, horizon_years": "published: Padullés et al. (2026), Sec. 5.2",
       "payback_threshold_years": "research question 1 (5 years)",
@@ -172,16 +180,19 @@
       },
       "Chiller COP 6.68 (0.9 x Carnot, Towler upper bound)": {
         "chiller_cop": 6.68
+      },
+      "Refrigeration credit 50 % (batch mismatch)": {
+        "refrigeration_credit_fraction": 0.5
       }
     },
     "chiller_cop": 4.45,
     "cost_functions": {
       "plate_hex": {
-        "alpha": 912.1,
-        "beta": 6840.7,
+        "alpha": 911.8,
+        "beta": 6838.6,
         "gamma": 0.95,
         "size_unit": "m2",
-        "source": "Sinnott and Towler (2020), Table 6.6, plate and frame (304 SS), Ce = 1,350 + 180 S^0.95 USD Jan 2007; x 3.5 Hand installation factor (Table 6.3); x CEPCI 797.9/509.7; / 1.0813 USD/EUR (2023). Valid 1-500 m2"
+        "source": "Sinnott and Towler (2020), Table 6.6, plate and frame (304 SS), Ce = 1,350 + 180 S^0.95 USD Jan 2007; x 3.5 Hand installation factor (Table 6.3); x CEPCI 797.9/509.7; / 1.0816 USD/EUR (ECB, 2023 mean of monthly averages); CEPCI 2017 = 567.5 and 2023 = 797.9 confirmed in Chem. Eng. Sept. 2024, p. 45 (latest monthly: May 2024 final 800.2). Valid 1-500 m2"
       }
     }
   },
@@ -238,15 +249,15 @@
     ],
     "cost_law": [
       {
-        "a": 1954.5,
-        "b": 260.6,
+        "a": 1953.9,
+        "b": 260.5,
         "c": 0.95,
         "label": "Towler 2020 plate & frame, bare (F = 1)",
-        "source": "Sinnott and Towler (2020), Table 6.6: plate and frame exchanger, 304 SS, Ce = 1,350 + 180 S^0.95 USD (USGC, Jan 2007, CEPCI 509.7), valid 1-500 m2; x CEPCI 797.9/509.7 (2023) / 1.0813 USD/EUR (ECB 2023 average). No location factor (Portugal not in Table 6.7)"
+        "source": "Sinnott and Towler (2020), Table 6.6: plate and frame exchanger, 304 SS, Ce = 1,350 + 180 S^0.95 USD (USGC, Jan 2007, CEPCI 509.7), valid 1-500 m2; x CEPCI 797.9/509.7 (2023) / 1.0816 USD/EUR (ECB Data Portal EXR.M.USD.EUR.SP00.A, mean of the 2023 monthly averages). No location factor (Portugal not in Table 6.7)"
       },
       {
-        "a": 6840.8,
-        "b": 912.1,
+        "a": 6838.6,
+        "b": 911.8,
         "c": 0.95,
         "label": "Towler 2020 x 3.5 (Hand factor, installed)",
         "source": "As above x 3.5: Hand (1958) installation factor for heat exchangers, Sinnott and Towler (2020) Table 6.3 (includes home-office costs, not offsites or contingency)"
@@ -255,14 +266,14 @@
         "a": 3847.0,
         "b": 583.7,
         "c": 1.0,
-        "label": "Stampfli 2018, bare (F = 1)",
-        "source": "Stampfli et al. (2018), Table 2: stainless-steel plate HEX, MPIC = 4,350 + 660 A NZD (assumed 2017 NZD, from Bouman et al. 2005 indexed with Stats NZ 2017); / 1.5897 NZD/EUR (ECB 2017 annual average) x CEPCI 797.9/567.5 (2023/2017). Bare equipment cost: lower bound"
+        "label": "Stampfli 2018 (cross-check only), bare (F = 1)",
+        "source": "Stampfli et al. (2018), Table 2: stainless-steel plate HEX, MPIC = 4,350 + 660 A NZD (assumed 2017 NZD, from Bouman et al. 2005 indexed with Stats NZ 2017); / 1.5897 NZD/EUR (ECB Data Portal EXR.A.NZD.EUR.SP00.A, 2017) x CEPCI 797.9/567.5 (2023/2017). Bare equipment cost: lower bound"
       },
       {
         "a": 13466.0,
         "b": 2043.1,
         "c": 1.0,
-        "label": "Stampfli 2018 x 3.5 (Hand factor)",
+        "label": "Stampfli 2018 (cross-check only) x 3.5 (Hand factor)",
         "source": "As above x 3.5, Hand (1958) installation factor for heat exchangers, verified in Sinnott and Towler (2020) Table 6.3. Note: Stampfli's coefficients do not match Bouman et al. (2005) gasketed plate HEX (MPIC = 270 A + 2,540 NZD, Dec 2004, 0.7-3 MW), so their base is unverified"
       }
     ],

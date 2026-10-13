@@ -19,11 +19,12 @@
   "default_sources": {
     "electricity_to_gas_ratio": "published: Padullés et al. (2026), Sec. 5.2, 'current European ratios of around 2'",
     "pef_electricity": "published: Commission Delegated Regulation (EU) 2023/807 (EED default)",
-    "pef_gas": "convention: primary energy of a fuel = its final energy"
+    "pef_gas": "convention: primary energy of a fuel = its final energy",
+    "refrigeration_credit_fraction": "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)"
   },
   "case_sources": {
-    "prices": "Eurostat nrg_pc_205 (electricity, band ID 2,000-19,999 MWh) and nrg_pc_203 (gas, band I3 10,000-99,999 GJ), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh (gas on GCV). Parsed copy: data/sources/eurostat_portugal_prices.csv. Band check: gas fuel ~ 1.2e7 kWh/year = 43,000 GJ (I3); heat pump electricity alone 3.4 GWh/year (ID); total site electricity not published (to verify that it stays below 20 GWh/year, band IE otherwise)",
-    "boiler_efficiency": "DEA Technology Data - Industrial Process Heat, sheet 6.1 (2025): 93.9 % net (NCV) annual average, steam boiler with economiser; x 0.90 (NCV/GCV) = 0.845 on the GCV basis of the gas price",
+    "prices": "Eurostat nrg_pc_205 (electricity, band ID 2,000-19,999 MWh) and nrg_pc_203 (gas, band I3 10,000-99,999 GJ), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh (gas on GCV). Parsed copy: data/sources/eurostat_portugal_prices.csv. Band check: gas fuel ~ 1.2e7 kWh/year = 43,000 GJ (I3); heat pump electricity alone 3.4 GWh/year (ID); site electricity 7.5-11.5 kWh/hl for breweries above 1 Mhl/y (IFC EHS Guidelines for Breweries 2007, Table 3) + heat pumps 3.4-3.9 kWh/hl = 11-15 GWh/year: band ID. ID is also the conservative choice (dearer than IE)",
+    "boiler_efficiency": "DEA Technology Data - Industrial Process Heat, sheet 6.1 (2025): 93.9 % net (NCV) annual average, steam boiler with economiser; x 0.90 (NCV/GCV) = 0.845 on the GCV basis of the gas price. Gas prices are on GCV: Regulation (EU) 2016/1952, Annex I, point 4; NCV/GCV = 0.90: IPCC (1996) Reference Manual, Ch. 1, Table 1-4 note a (10 % for natural gas)",
     "operating_hours_per_year": "published: Padullés et al. (2026), Sec. 5.1",
     "discount_rate, horizon_years": "published: Padullés et al. (2026), Sec. 5.2",
     "payback_threshold_years": "research question 1 (5 years)",
@@ -362,6 +363,25 @@
       "RQ1_fraction_max_NPV": 0.725,
       "RQ3_break_even_ratio_NPV": 2.484,
       "RQ3_break_even_ratio_payback": 1.65
+    },
+    {
+      "scenario": "Refrigeration credit 50 % (batch mismatch)",
+      "price_ratio": 2.217,
+      "boiler_efficiency": 0.845,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.107,
+      "co2_price_EUR_per_t": 0.0,
+      "chiller_cop": 4.45,
+      "full_capex_EUR": 1793176.0,
+      "full_savings_EUR": 259072.0,
+      "full_payback_years": 6.92,
+      "full_npv_EUR": 207307.0,
+      "full_co2_avoided_t": 1834.0,
+      "full_primary_energy_reduction": 0.4552,
+      "RQ1_max_fraction_payback_ok": 0.725,
+      "RQ1_fraction_max_NPV": 0.725,
+      "RQ3_break_even_ratio_NPV": 2.387,
+      "RQ3_break_even_ratio_payback": 1.585
     }
   ]
 }

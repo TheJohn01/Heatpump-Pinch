@@ -6,28 +6,28 @@
   "RQ2": [
     {
       "cost_law": "Towler 2020 plate & frame, bare (F = 1)",
-      "a": 1954.5,
-      "b": 260.6,
+      "a": 1953.9,
+      "b": 260.5,
       "c": 0.95,
       "dTmin_opt_K": 0.2,
-      "TAC_min_EUR": 672717.0,
+      "TAC_min_EUR": 672712.0,
       "area_m2": 335.2,
       "Qh_min_kW": 1202.8,
       "at_grid_edge": false
     },
     {
       "cost_law": "Towler 2020 x 3.5 (Hand factor, installed)",
-      "a": 6840.8,
-      "b": 912.1,
+      "a": 6838.6,
+      "b": 911.8,
       "c": 0.95,
       "dTmin_opt_K": 0.6,
-      "TAC_min_EUR": 701808.0,
+      "TAC_min_EUR": 701795.0,
       "area_m2": 269.7,
       "Qh_min_kW": 1208.3,
       "at_grid_edge": false
     },
     {
-      "cost_law": "Stampfli 2018, bare (F = 1)",
+      "cost_law": "Stampfli 2018 (cross-check only), bare (F = 1)",
       "a": 3847.0,
       "b": 583.7,
       "c": 1.0,
@@ -38,7 +38,7 @@
       "at_grid_edge": false
     },
     {
-      "cost_law": "Stampfli 2018 x 3.5 (Hand factor)",
+      "cost_law": "Stampfli 2018 (cross-check only) x 3.5 (Hand factor)",
       "a": 13466.0,
       "b": 2043.1,
       "c": 1.0,

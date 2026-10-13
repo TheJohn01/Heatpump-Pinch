@@ -14,22 +14,22 @@
   },
   "selected": {
     "CO2 HP (warm water)": {
-      "fluid": "R1234ze(E)",
+      "fluid": "n-Propane",
       "layout": "single stage, SLHX",
-      "COP": 3.139,
-      "eta_lorenz_cycle": 0.4867,
+      "COP": 3.1092,
+      "eta_lorenz_cycle": 0.4821,
       "eta_lorenz_assumed": 0.55,
       "COP_assumed": 3.5472,
       "note": ""
     },
     "HTHP (wort boiling)": {
-      "fluid": "Ammonia / n-Pentane",
+      "fluid": "n-Propane / n-Butane",
       "layout": "cascade (SLHX top)",
-      "COP": 2.0307,
-      "eta_lorenz_cycle": 0.5615,
+      "COP": 1.956,
+      "eta_lorenz_cycle": 0.5408,
       "eta_lorenz_assumed": 0.55,
       "COP_assumed": 1.9893,
-      "note": "intermediate (top evaporation) 22.2 °C"
+      "note": "intermediate (top evaporation) 20.6 °C"
     }
   }
 }

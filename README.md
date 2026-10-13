@@ -11,7 +11,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 109 tests (about 3 min)
+python -m pytest                                  # 113 tests (about 4 min)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -57,7 +57,7 @@ and `price_ratio_sweep.*`.
 | 1. Stream data, checks, energy-balance closure | Done, tested |
 | 2. Problem table, composite curves, GCC | Done, validated (four-stream example; Padullés et al. 2026) |
 | 3. ΔTmin / cost trade-off | Done: Bath area target, units target, supertargeting; validated on the OU area example (published error found and corrected). Brewery RQ2 with the Stampfli et al. (2018) plate-HEX cost law (bare and ×3.5 installed) plus a sweep |
-| 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b done: CoolProp cycle model (single stage, SLHX, expander, cascade), working-fluid screening, cycle-based η_L and economics; validated on Andersen et al. (2024) Appendix A |
+| 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b done: CoolProp cycle model (single stage, SLHX, expander, two-stage, cascade), practical limits (Annex 58), working-fluid screening, cycle-based η_L and economics; validated on Andersen et al. (2024) Appendix A |
 | 5. HEN retrofit | Done: existing-network evaluation (direct and storage-based matches), pinch diagnostics (energy gap = cross-pinch + heaters below + coolers above), network-constrained heat pump sizing, retrofit options with exchanger and storage costs; brewery: paper's Pfaduko + HR tank reproduced (11.3 kWh/hl) |
 | 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; RQ1 electrification curve; RQ3 break-even ratio; named scenarios and Lorenz-efficiency sensitivity; paper Sec. 5.2 statements and Appendix B (Case DK1) NPV/payback reproduced |
 
@@ -100,8 +100,10 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       109 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       113 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
 
+ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
+ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
 consolidate_rq.py            RQ1-RQ3 answers with one-at-a-time and combined sensitivities
                              (outputs/<case>/rq_consolidated.csv/.md, rq_tornado.png)
 screen_cycles.py             Step 4b: screen the fluids listed in a case file (minutes); analyse.py then

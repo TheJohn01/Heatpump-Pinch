@@ -143,3 +143,10 @@ def test_padulles2026_appendix_B_DK1_npv_and_payback(name):
     assert e.npv_EUR / 1e6 == pytest.approx(npv_pub, abs=0.083)
     pbp_tol = 0.05 + pbp_pub * 0.01 / (DK1_BASE_OPEX_MEUR - opex) + 0.005 / (DK1_BASE_OPEX_MEUR - opex)
     assert e.payback_years == pytest.approx(pbp_pub, abs=pbp_tol)
+
+
+def test_refrigeration_credit_fraction_scales_credit():
+    from pinch.economics import load_economics
+    with pytest.raises(ValueError):
+        load_economics({"refrigeration_credit_fraction": 1.5})
+    assert load_economics({}).refrigeration_credit_fraction == 1.0

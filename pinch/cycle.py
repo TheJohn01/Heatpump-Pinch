@@ -183,6 +183,7 @@ class _State:
     q_src: float = math.nan
     w_el: float = math.nan
     T2: float = math.nan
+    pr_stage: float = math.nan   # largest pressure ratio of one compression stage (two-stage cycles)
 
 
 def _evaluate(f: _Fluid, T_e: float, P_hi: float, sink_T: Callable[[float], float], T_sink_in: float,
@@ -192,9 +193,66 @@ def _evaluate(f: _Fluid, T_e: float, P_hi: float, sink_T: Callable[[float], floa
     A state outside the equation of state's range (CoolProp error) is infeasible.
     """
     try:
+        if isinstance(expander, tuple):          # ("two-stg" | "two-stg2", intermediate-pressure factor)
+            return _evaluate_two_stage_raw(f, T_e, P_hi, sink_T, T_sink_in, a, *expander)
         return _evaluate_raw(f, T_e, P_hi, sink_T, T_sink_in, a, slhx, expander)
     except ValueError:
         return _State(False)
+
+
+def _evaluate_two_stage_raw(f: _Fluid, T_e: float, P_hi: float, sink_T, T_sink_in: float, a: CycleAssumptions,
+                            variant: str, mid_factor: float) -> _State:
+    """Two-stage cycle with a liquid separator at P_mid = mid_factor * sqrt(P_lo P_hi).
+
+    Andersen et al. (2024), Fig. 1 B: "two-stg" injects the separator vapour into
+    the low-stage discharge; "two-stg2" (open intercooler) sends the low-stage
+    discharge into the separator, so the high stage draws saturated vapour.
+    Specific quantities per kg of high-stage flow.
+    """
+    if T_e >= f.T_crit - 0.5 or T_e < f.T_min:
+        return _State(False)
+    P_lo = f.P_sat(T_e)
+    P_mid = mid_factor * math.sqrt(P_lo * P_hi)
+    if not (P_lo * 1.0001 < P_mid < P_hi / 1.0001) or P_mid >= f.P_crit * 0.98:
+        return _State(False)
+    h1 = f.h_pt(P_lo, T_e + a.dT_superheat_K)
+    subcritical = P_hi < f.P_crit
+    T7 = T_sink_in + a.dT_pinch_sink_K
+    if subcritical:
+        h7 = f.h_sat(P_hi, 0.0) if T7 >= f.T_sat(P_hi) - 1e-6 else f.h_pt(P_hi, T7)
+    else:
+        h7 = f.h_pt(P_hi, T7)
+    h_l, h_v = f.h_sat(P_mid, 0.0), f.h_sat(P_mid, 1.0)
+    dh1 = (f.h_ps(P_mid, f.s_ph(P_lo, h1)) - h1) / a.eta_is_compressor
+    h2 = h1 + dh1
+    if h2 <= h_v:
+        return _State(False)                      # wet low-stage discharge
+    if variant == "two-stg":
+        x8 = (h7 - h_l) / (h_v - h_l)
+        if not 0.0 <= x8 < 1.0:
+            return _State(False)
+        m_lp = 1.0 - x8
+        h3 = m_lp * h2 + x8 * h_v
+    elif variant == "two-stg2":
+        m_lp = (h_v - h7) / (h2 - h_l)
+        if m_lp <= 0:
+            return _State(False)
+        h3 = h_v
+    else:
+        raise ValueError(f"unknown two-stage variant {variant}")
+    dh2 = (f.h_ps(P_hi, f.s_ph(P_mid, h3)) - h3) / a.eta_is_compressor
+    h4 = h3 + dh2
+    if subcritical and h4 <= f.h_sat(P_hi, 1.0):
+        return _State(False)                      # wet high-stage discharge
+    w_el = (m_lp * dh1 + dh2) / (1 - a.heat_loss_factor) / a.eta_motor
+    q_sink, q_src = h4 - h7, m_lp * (h1 - h_l)
+    if q_sink <= 0 or q_src <= 0:
+        return _State(False)
+    if _min_dT(lambda x: f.T_ph(P_hi, h4 - x * (h4 - h7)), sink_T, a.n_points) < a.dT_pinch_sink_K - 1e-6:
+        return _State(False)
+    st = _State(True, q_sink / w_el, T_e, P_lo, P_hi, h1, h_l, h4, h7, q_sink, q_src, w_el, f.T_ph(P_hi, h4))
+    st.pr_stage = max(P_mid / P_lo, P_hi / P_mid)
+    return st
 
 
 def _evaluate_raw(f: _Fluid, T_e: float, P_hi: float, sink_T: Callable[[float], float], T_sink_in: float,
@@ -358,7 +416,8 @@ def _result(fluid: str, layout: str, s: _State, source: SecondaryStream, sink: S
     return CycleResult(
         fluid, layout, True, COP=s.COP, COP_lorenz=cop_L, eta_lorenz=s.COP / cop_L,
         T_evap_C=s.T_e - KELVIN, T_cond_C=math.nan if trans else f.T_sat(s.P_hi) - KELVIN,
-        P_low_bar=s.P_lo / 1e5, P_high_bar=s.P_hi / 1e5, pressure_ratio=s.P_hi / s.P_lo,
+        P_low_bar=s.P_lo / 1e5, P_high_bar=s.P_hi / 1e5,
+        pressure_ratio=s.pr_stage if math.isfinite(s.pr_stage) else s.P_hi / s.P_lo,
         T_discharge_C=s.T2 - KELVIN, transcritical=trans,
         q_sink_kJ_kg=s.q_sink / 1e3, q_source_kJ_kg=s.q_src / 1e3, w_el_kJ_kg=s.w_el / 1e3)
 
@@ -383,6 +442,35 @@ def single_stage(fluid: str, source: SecondaryStream, sink: SecondaryStream,
                       assumptions, slhx, expander)
     layout = "single stage" + (", SLHX" if slhx else "") + (", expander" if expander else "")
     r = _result(fluid, layout, s, source, sink)
+    if r.feasible and r.COP >= r.COP_lorenz:
+        raise AssertionError("second-law violation: cycle COP above the Lorenz COP")
+    return r
+
+
+def two_stage(fluid: str, source: SecondaryStream, sink: SecondaryStream,
+              assumptions: CycleAssumptions = CycleAssumptions(), variant: str = "two-stg2") -> CycleResult:
+    """Optimised two-stage cycle with a liquid separator (Andersen et al., 2024, Fig. 1 B).
+
+    The intermediate pressure is optimised as a factor on the geometric mean of
+    the evaporation and condensation pressures. ``pressure_ratio`` in the result
+    is the largest ratio of a single stage.
+    """
+    sink_T = lambda x: sink.T_from_hot_end(x) + KELVIN  # noqa: E731
+
+    def solve(ln_factor: float) -> _State:
+        return _solve_single(fluid, source, sink_T, sink.T_hot_C + KELVIN, sink.T_cold_C + KELVIN, assumptions,
+                             False, (variant, math.exp(ln_factor)))
+
+    grid = [math.log(x) for x in (0.6, 0.8, 1.0, 1.25, 1.6)]
+    states = [(st.COP if st.feasible else -math.inf, g, st) for g in grid for st in [solve(g)]]
+    best_cop, best_g, best = max(states, key=lambda t: t[0])
+    if math.isfinite(best_cop):
+        res = minimize_scalar(lambda g: -(lambda st: st.COP if st.feasible else -1e9)(solve(g)),
+                              bounds=(best_g - 0.25, best_g + 0.25), method="bounded", options={"xatol": 0.01})
+        st = solve(res.x)
+        if st.feasible and st.COP > best.COP:
+            best = st
+    r = _result(fluid, f"two stage ({variant})", best, source, sink)
     if r.feasible and r.COP >= r.COP_lorenz:
         raise AssertionError("second-law violation: cycle COP above the Lorenz COP")
     return r

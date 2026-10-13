@@ -77,3 +77,27 @@ def test_isothermal_sink_and_source_feasible():
     r = single_stage("n-Butane", SecondaryStream(-1, -1), SecondaryStream(103, 103), slhx=True)
     assert r.feasible and 0 < r.eta_lorenz < 1
     assert r.T_evap_C == pytest.approx(-1 - 3 - 3, abs=0.05)   # source - pinch - superheat
+
+
+# ------------------------------------------------------------------ two-stage cycles (Andersen Appendix A)
+def test_appendix_A_two_stage_vapour_injection():
+    """Two-stg, R-1234ze(E); 50 °C, 50 K, -40 K, 10 K; published COP 2.14. Deviation -0.1 %."""
+    from pinch.cycle import two_stage
+    r = two_stage("R1234ze(E)", *conditions(50, 50, -40, 10), variant="two-stg")
+    assert r.COP == pytest.approx(2.14, rel=0.02)
+
+
+def test_appendix_A_two_stage_open_intercooler_water():
+    """Two-stg2, R-718; 80 °C, 60 K, -20 K, 10 K; published COP 3.15. Ours 2.99 (-5.0 %), on the
+    conservative side; intermediate pressure optimised on a factor of the geometric mean."""
+    from pinch.cycle import two_stage
+    r = two_stage("Water", *conditions(80, 60, -20, 10), variant="two-stg2")
+    assert r.COP == pytest.approx(3.15, rel=0.06)
+    assert r.COP < 3.15
+
+
+def test_practical_limits_flag_high_pressure_ratio():
+    from pinch.cycle_analysis import practical_issues
+    r = single_stage("n-Pentane", SecondaryStream(-1, -1), SecondaryStream(103, 103), slhx=True)
+    issues = practical_issues(r)
+    assert r.feasible and any("pressure ratio" in i for i in issues)     # about 38 > 10 (Annex 58 Table 1-3)

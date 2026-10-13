@@ -134,7 +134,7 @@ def electrification_curve(design: HeatPumpDesign, Qh_base_MWh: float, to_MWh, pa
         fraction = target / design.Qh_before if design.Qh_before > 0 else 0.0
         E = to_MWh(W)
         if params.chiller_cop and refrigeration > 0:
-            taken = min(replaced[i] if replaced else 0.0, refrigeration)
+            taken = min(replaced[i] if replaced else 0.0, refrigeration) * params.refrigeration_credit_fraction
             E += to_MWh(refrigeration - taken) / params.chiller_cop
         points.append(CurvePoint(fraction, Option(f"{100 * fraction:.1f} %", Qh_base_MWh - delivered,
                                                   E, tuple(equipment))))

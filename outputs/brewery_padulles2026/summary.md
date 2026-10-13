@@ -67,6 +67,7 @@ Price ratio 2.217 (electricity 0.1135 EUR/kWh, gas 0.0512 EUR/kWh); boiler effic
 | Grid EF 0.1172 (Electricity Maps 2025) | 2.217 | 5.97 | 524,508 | 1,845 | 72.5 % | 2.705 |
 | No refrigeration credit (as Padulles et al. 2026) | 2.217 | 8.23 | -109,895 | 1,795 | 0.0 % | 2.136 |
 | Chiller COP 6.68 (0.9 x Carnot, Towler upper bound) | 2.217 | 6.58 | 312,724 | 1,846 | 72.5 % | 2.484 |
+| Refrigeration credit 50 % (batch mismatch) | 2.217 | 6.92 | 207,307 | 1,834 | 72.5 % | 2.387 |
 
 ## Retrofit of the existing network (step 5)
 
@@ -74,20 +75,20 @@ Existing network 'N0 existing': Q̇h 11.3 (target 10.0424), energy gap 1.2577 = 
 
 | Option | Q̇h network | Heat pumps | CAPEX [EUR] | Payback [y] | NPV [EUR] | Gas reduction vs existing |
 |---|---|---|---|---|---|---|
-| N1: condensate into tank | 10.4847 | none | 55,981 | 1.13 | 325,482 | 7.2 % |
+| N1: condensate into tank | 10.4847 | none | 55,972 | 1.13 | 325,491 | 7.2 % |
 | N0 + both heat pumps (Padulles config. 2) | 11.3 | CO2 HP (warm water) 8.30 (COP 3.55), HTHP (wort boiling) 3.00 (COP 1.99) | 1,887,500 | 5.72 | 661,436 | 100.0 % |
-| N1 + both heat pumps | 10.4847 | CO2 HP (warm water) 7.48 (COP 3.55), HTHP (wort boiling) 3.00 (COP 1.99) | 1,882,333 | 5.28 | 868,041 | 100.0 % |
-| N1 + warm-water heat pump only | 10.4847 | CO2 HP (warm water) 7.48 (COP 3.55) | 1,137,333 | 3.29 | 1,531,148 | 73.5 % |
-| N1 + both heat pumps, cycle-based COP | 10.4847 | CO2 HP (warm water) 7.48 (COP 3.14), HTHP (wort boiling) 3.00 (COP 2.03) | 1,882,333 | 5.73 | 654,595 | 100.0 % |
+| N1 + both heat pumps | 10.4847 | CO2 HP (warm water) 7.48 (COP 3.55), HTHP (wort boiling) 3.00 (COP 1.99) | 1,882,325 | 5.28 | 868,049 | 100.0 % |
+| N1 + warm-water heat pump only | 10.4847 | CO2 HP (warm water) 7.48 (COP 3.55) | 1,137,325 | 3.29 | 1,531,156 | 73.5 % |
+| N1 + both heat pumps, cycle-based COP | 10.4847 | CO2 HP (warm water) 7.48 (COP 3.11), HTHP (wort boiling) 3.00 (COP 1.96) | 1,882,325 | 5.89 | 585,109 | 100.0 % |
 
 ## Cycle-based design (step 4b: η_L from the working-fluid cycle model)
 
 | Unit | Fluid | Layout | COP | η_L |
 |---|---|---|---|---|
-| CO2 HP (warm water) | R1234ze(E) | single stage, SLHX | 3.139 | 0.4867 |
-| HTHP (wort boiling) | Ammonia / n-Pentane | cascade (SLHX top) | 2.031 | 0.5615 |
+| CO2 HP (warm water) | n-Propane | single stage, SLHX | 3.109 | 0.4821 |
+| HTHP (wort boiling) | n-Propane / n-Butane | cascade (SLHX top) | 1.956 | 0.5408 |
 
-System COP 2.73; full-design payback 6.57 y, NPV 315,400 EUR; RQ1 72.5 %; RQ3 break-even ratio 2.487.
+System COP 2.676; full-design payback 6.78 y, NPV 250,408 EUR; RQ1 72.5 %; RQ3 break-even ratio 2.426.
 
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 
@@ -103,10 +104,10 @@ Hot utility 484.73 EUR/kW-year; cold utility 204.04494382022472 EUR/kW-year; CRF
 
 | Cost law | ΔTmin,opt [K] | Area [m²] | Q̇h,min [kW] | TAC [EUR/year] |
 |---|---|---|---|---|
-| Towler 2020 plate & frame, bare (F = 1) | 0.2 | 335 | 1,203 | 672,717 |
-| Towler 2020 x 3.5 (Hand factor, installed) | 0.6 | 270 | 1,208 | 701,808 |
-| Stampfli 2018, bare (F = 1) | 0.5 | 281 | 1,207 | 690,145 |
-| Stampfli 2018 x 3.5 (Hand factor) | 1.6 | 211 | 1,222 | 750,288 |
+| Towler 2020 plate & frame, bare (F = 1) | 0.2 | 335 | 1,203 | 672,712 |
+| Towler 2020 x 3.5 (Hand factor, installed) | 0.6 | 270 | 1,208 | 701,795 |
+| Stampfli 2018 (cross-check only), bare (F = 1) | 0.5 | 281 | 1,207 | 690,145 |
+| Stampfli 2018 (cross-check only) x 3.5 (Hand factor) | 1.6 | 211 | 1,222 | 750,288 |
 | sweep: 100 EUR/m2 installed, linear (not a sourced estimate) | 0.08 | 390 | 1,201 | 664,008 |
 | sweep: 250 EUR/m2 installed, linear (not a sourced estimate) | 0.2 | 335 | 1,203 | 670,954 |
 | sweep: 500 EUR/m2 installed, linear (not a sourced estimate) | 0.4 | 294 | 1,206 | 681,034 |
