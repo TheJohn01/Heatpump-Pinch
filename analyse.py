@@ -23,33 +23,52 @@ from pathlib import Path
 import pandas as pd
 
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
+from pinch.area_analysis import area_targeting_outputs
 from pinch.case import Case, load_case, to_MWh_per_year
-from pinch.area_analysis import run_area_targeting
-from pinch.economic_analysis import eta_lorenz_sensitivity, run_economics
+from pinch.economic_analysis import economics_outputs, eta_lorenz_sensitivity
+from pinch.results import Outputs
+from pinch.streams import StreamSet
 from pinch.design import HeatPumpDesign, design_from_gcc, plausibility_warnings, source_warnings
 from pinch.heat_pump import andersen2024_eta_lorenz
-from pinch.plotting import plot_composite_curves, plot_gcc, plot_gcc_with_units
+from pinch.plotting import composite_curves_figure, gcc_figure, gcc_with_units_figure
 
 ROOT = Path(__file__).resolve().parent
 CASES_DIR = ROOT / "cases"
 
 
-def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
-    """Run steps 1, 2 and 4 for one case and write all outputs. Returns the summary."""
-    out = output_root / case.name
-    out.mkdir(parents=True, exist_ok=True)
+def compute(case: Case, streams: StreamSet | None = None) -> Outputs:
+    """Run steps 1-4, 6 and 3 (supertargeting) for one case, in memory.
 
-    streams = with_extra_shift(load_streams(case.stream_file), case.extra_shift_K)
+    Parameters
+    ----------
+    case : Case
+        Site description (see ``pinch.case``).
+    streams : StreamSet, optional
+        Stream data; read from ``case.stream_file`` when omitted (front ends
+        pass an uploaded or edited table here).
+
+    Returns
+    -------
+    Outputs
+        summary (dict), tables (DataFrames) and figures (matplotlib Figures),
+        keyed by the file stem used when written to disk.
+    """
+    if streams is None:
+        streams = load_streams(case.stream_file)
+    streams = with_extra_shift(streams, case.extra_shift_K)
     unit = streams.energy_unit
     table = problem_table(streams)
     balance = energy_balance(streams)
 
-    table.to_frame().to_csv(out / "problem_table.csv", index=False)
-    plot_composite_curves(streams, table, out / "composite_curves.png", title=f"Shifted composite curves: {case.name}")
-    plot_gcc(table, out / "gcc.png", title=f"Grand Composite Curve: {case.name}")
+    tables = {"problem_table": table.to_frame()}
+    figures = {
+        "composite_curves": composite_curves_figure(streams, table, title=f"Shifted composite curves: {case.name}"),
+        "gcc": gcc_figure(table, title=f"Grand Composite Curve: {case.name}"),
+    }
 
     design: HeatPumpDesign = design_from_gcc(streams, case.sink_levels, case.eta_lorenz, case.source_T_C)
     r = design.integration
+    src_warn = source_warnings(design, case.ambient_T_C)
     rows = []
     for u in design.units:
         eta_A, eta_A_warn = andersen2024_eta_lorenz(u.T_source_in_C, u.T_sink_out_C,
@@ -67,12 +86,11 @@ def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
             "placement": r.placement[u.name],
             "eta_lorenz_Andersen2024_check": round(eta_A, 3),
             "Andersen2024_validity": "; ".join(eta_A_warn) or "within fitted range",
-            "warnings": "; ".join(plausibility_warnings(u, case.screening)
-                                  + source_warnings(design, case.ambient_T_C).get(u.name, [])),
+            "warnings": "; ".join(plausibility_warnings(u, case.screening) + src_warn.get(u.name, [])),
         })
-    pd.DataFrame(rows).to_csv(out / "heat_pump_design.csv", index=False)
-    plot_gcc_with_units(table, list(design.units), out / "gcc_heat_pumps.png",
-                        title=f"Heat pumps sized from the GCC: {case.name}")
+    tables["heat_pump_design"] = pd.DataFrame(rows)
+    figures["gcc_heat_pumps"] = gcc_with_units_figure(table, list(design.units),
+                                                      title=f"Heat pumps sized from the GCC: {case.name}")
 
     def annual(x):
         v = to_MWh_per_year(x, unit, case.basis)
@@ -112,19 +130,46 @@ def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
             "residual_hot_utility": annual(design.Qh_residual),
         },
         "warnings": {u.name: w for u in design.units
-                     if (w := plausibility_warnings(u, case.screening)
-                         + source_warnings(design, case.ambient_T_C).get(u.name, []))},
+                     if (w := plausibility_warnings(u, case.screening) + src_warn.get(u.name, []))},
         "provenance": case.provenance,
     }
-    summary["economics"] = run_economics(case, design, balance["Q_cold_total"], unit, out)
-    summary["eta_lorenz_sensitivity"] = eta_lorenz_sensitivity(case, streams, unit, out)
-    summary["area_targeting"] = run_area_targeting(case, streams, out)
-    (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
-    (out / "summary.md").write_text(_markdown(summary), encoding="utf-8")
-    return summary
+
+    eco = economics_outputs(case, design, balance["Q_cold_total"], unit)
+    summary["economics"] = eco.summary
+    eta_rows = eta_lorenz_sensitivity(case, streams, unit)
+    summary["eta_lorenz_sensitivity"] = eta_rows
+    area = area_targeting_outputs(case, streams)
+    summary["area_targeting"] = area.summary
+    for block in (eco, area):
+        tables.update(block.tables)
+        figures.update(block.figures)
+    if eta_rows:
+        tables["eta_lorenz_sensitivity"] = pd.DataFrame(eta_rows)
+    return Outputs(summary, tables, figures)
 
 
-def _markdown(s: dict) -> str:
+def write(result: Outputs, out: Path) -> None:
+    """Write every table, figure and the summary (JSON and Markdown) to ``out``."""
+    s = result.summary
+    result.write(out, "summary.json")
+    (Path(out) / "summary.md").write_text(markdown(s), encoding="utf-8")
+    if "skipped" not in s.get("economics", {"skipped": ""}):
+        (Path(out) / "economics.json").write_text(json.dumps(s["economics"], indent=2, ensure_ascii=False, default=str),
+                                                  encoding="utf-8")
+    if "skipped" not in s.get("area_targeting", {"skipped": ""}):
+        (Path(out) / "supertargeting.json").write_text(json.dumps(s["area_targeting"], indent=2, ensure_ascii=False),
+                                                       encoding="utf-8")
+
+
+def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
+    """Compute one case and write all outputs to ``output_root/<case name>/``. Returns the summary."""
+    result = compute(case)
+    write(result, Path(output_root) / case.name)
+    return result.summary
+
+
+def markdown(s: dict) -> str:
+    """Human-readable summary (Markdown)."""
     u, t, d = s["energy_unit"], s["targets"], s["heat_pump_design"]
     lines = [
         f"# {s['case']}", "", s["description"], "", f"Source: {s['reference']}", "",

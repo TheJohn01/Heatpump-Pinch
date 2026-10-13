@@ -133,7 +133,17 @@ def load_streams(path: str | Path) -> StreamSet:
         direction does not match its type, or stream names are duplicated.
     """
     path = Path(path)
-    df = pd.read_csv(path)
+    return streams_from_frame(pd.read_csv(path), source=str(path))
+
+
+def streams_from_frame(df: pd.DataFrame, source: str = "table") -> StreamSet:
+    """Validate a stream table already in memory (same columns as the CSV).
+
+    Used by ``load_streams`` and by interactive front ends (uploaded or edited
+    tables). Raises ValueError with a message naming the offending stream or column.
+    """
+    df = df.copy()
+    path = Path(source)
 
     missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
     if missing:
@@ -189,7 +199,9 @@ def load_streams(path: str | Path) -> StreamSet:
             )
         )
 
-    return StreamSet(streams=tuple(streams), energy_unit=energy_unit, source=str(path))
+    if not streams:
+        raise ValueError(f"{path.name}: no streams")
+    return StreamSet(streams=tuple(streams), energy_unit=energy_unit, source=source)
 
 
 def with_extra_shift(stream_set: StreamSet, extra_K: float) -> StreamSet:

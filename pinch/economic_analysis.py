@@ -35,6 +35,7 @@ import numpy as np
 import pandas as pd
 
 from pinch.case import Case, to_MWh_per_year
+from pinch.results import Outputs
 from pinch.design import HeatPumpDesign
 from pinch.economics import (DEFAULTS, EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate,
                              load_economics)
@@ -134,7 +135,7 @@ def _params_and_converter(case: Case, energy_unit: str):
     return block, params, to_MWh
 
 
-def eta_lorenz_sensitivity(case: Case, streams, energy_unit: str, out: Path) -> list[dict]:
+def eta_lorenz_sensitivity(case: Case, streams, energy_unit: str, out: Path | None = None) -> list[dict]:
     """Re-size and re-cost the heat pumps for each Lorenz efficiency in the case file."""
     from pinch.design import design_from_gcc
     values = getattr(case, "eta_lorenz_sensitivity", ()) or ()
@@ -147,14 +148,24 @@ def eta_lorenz_sensitivity(case: Case, streams, energy_unit: str, out: Path) -> 
         c = _core(d, to_MWh(d.Qh_before), to_MWh, params)
         rows.append({"eta_lorenz": float(eta), "COP_system": round(d.COP_system, 3),
                      f"W_total_{energy_unit.replace('/', '_per_')}": round(d.W_total, 4), **_headline(c, params)})
-    pd.DataFrame(rows).to_csv(out / "eta_lorenz_sensitivity.csv", index=False)
+    if out is not None and rows:
+        pd.DataFrame(rows).to_csv(Path(out) / "eta_lorenz_sensitivity.csv", index=False)
     return rows
 
 
 def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str, out: Path) -> dict:
-    """Evaluate the design, write tables and figures, and return a summary."""
+    """Evaluate the design, write tables, figures and economics.json to ``out``; return the summary."""
+    res = economics_outputs(case, design, Q_cold_total, energy_unit)
+    if "skipped" not in res.summary:
+        res.write(out, "economics.json")
+    return res.summary
+
+
+def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str) -> Outputs:
+    """Evaluate the design in memory: summary, tables and figures (nothing written)."""
     if case.basis is None:
-        return {"skipped": "no annual basis in the case file"}
+        return Outputs({"skipped": "no annual basis in the case file"})
+    tables, figures = {}, {}
     block, params, to_MWh = _params_and_converter(case, energy_unit)
 
     Qh_MWh = to_MWh(design.Qh_before)
@@ -200,14 +211,14 @@ def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energ
         c_s = _core(design, Qh_MWh, to_MWh, p_s)
         scenario_rows.append({"scenario": name, **_headline(c_s, p_s)})
     if scenario_rows:
-        pd.DataFrame(scenario_rows).to_csv(out / "scenarios.csv", index=False)
+        tables["scenarios"] = pd.DataFrame(scenario_rows)
 
     # tables
     curve_df = pd.DataFrame([{"fraction_of_Qh_min": round(f, 4), **e.as_dict()} for f, e in evals])
-    curve_df.to_csv(out / "electrification_curve.csv", index=False)
+    tables["electrification_curve"] = curve_df
     ratios = np.round(np.arange(1.0, 4.01, 0.1), 2)
     sweep = pd.DataFrame([{"ratio": r, **evaluate(full_option, baseline, params.with_ratio(r)).as_dict()} for r in ratios])
-    sweep.to_csv(out / "price_ratio_sweep.csv", index=False)
+    tables["price_ratio_sweep"] = sweep
 
     # figures
     f = curve_df["fraction_of_Qh_min"] * 100
@@ -225,8 +236,7 @@ def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energ
     ax1.set_title(f"Electrification curve: {case.name} (ratio {params.price_ratio:.2f})")
     ax1.grid(alpha=0.3)
     fig.tight_layout()
-    fig.savefig(out / "electrification_curve.png", dpi=200)
-    plt.close(fig)
+    figures["electrification_curve"] = fig
 
     fig, ax1 = plt.subplots(figsize=(7, 4.5))
     ax1.plot(sweep["ratio"], sweep["payback_years"].replace(np.inf, np.nan), color="#1F77B4", lw=2)
@@ -244,8 +254,7 @@ def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energ
     ax1.set_title(f"Full design vs price ratio: {case.name}")
     ax1.grid(alpha=0.3)
     fig.tight_layout()
-    fig.savefig(out / "price_ratio_sweep.png", dpi=200)
-    plt.close(fig)
+    figures["price_ratio_sweep"] = fig
 
     summary = {
         "parameters": {k: getattr(params, k, None) for k in (
@@ -260,5 +269,4 @@ def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energ
         "results": results,
         "scenarios": scenario_rows,
     }
-    (out / "economics.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
-    return summary
+    return Outputs(summary, tables, figures)

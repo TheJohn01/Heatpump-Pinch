@@ -1,0 +1,7 @@
+# Exact versions used to produce the committed results and run the test suite
+# (Python 3.13.16, Linux). Install with:  pip install -r requirements.txt
+numpy==2.5.3
+pandas==3.0.5
+matplotlib==3.11.2
+streamlit==1.65.0
+CoolProp==8.0.0

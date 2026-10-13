@@ -1,4 +1,8 @@
-"""Figures for the pinch analysis, saved to file with labelled axes and units."""
+"""Figures for the pinch analysis, with labelled axes and units.
+
+``*_figure`` functions return a matplotlib Figure (for interactive front ends);
+``plot_*`` functions build the same figure, save it to file and close it.
+"""
 
 from __future__ import annotations
 
@@ -6,8 +10,9 @@ from pathlib import Path
 
 import matplotlib
 
-matplotlib.use("Agg")  # file output only; deterministic, no display needed
+matplotlib.use("Agg")  # no display needed; deterministic output
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 
 from pinch.curves import composite_curve, grand_composite_curve
 from pinch.problem_table import ProblemTable
@@ -18,13 +23,19 @@ COLD_COLOUR = "#2471A3"
 GCC_COLOUR = "#1F2A30"
 
 
-def plot_composite_curves(
-    stream_set: StreamSet, table: ProblemTable, path: str | Path, title: str = ""
-) -> Path:
-    """Plot the shifted hot and cold composite curves and save the figure.
+def save_figure(fig: Figure, path: str | Path, dpi: int = 200) -> Path:
+    """Save a figure (creating the folder) and close it. Returns the path."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=dpi)
+    plt.close(fig)
+    return path
 
-    The cold composite is offset by Qc_min so that the curves touch at the
-    pinch. Returns the output path.
+
+def composite_curves_figure(stream_set: StreamSet, table: ProblemTable, title: str = "") -> Figure:
+    """Shifted hot and cold composite curves.
+
+    The cold composite is offset by Qc_min so that the curves touch at the pinch.
     """
     H_hot, T_hot = composite_curve(stream_set, "hot", shifted=True)
     H_cold, T_cold = composite_curve(stream_set, "cold", shifted=True, H_offset=table.Qc_min)
@@ -46,15 +57,11 @@ def plot_composite_curves(
     ax.grid(alpha=0.3)
     ax.legend(loc="lower right")
     fig.tight_layout()
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(path, dpi=200)
-    plt.close(fig)
-    return path
+    return fig
 
 
-def plot_gcc(table: ProblemTable, path: str | Path, title: str = "") -> Path:
-    """Plot the Grand Composite Curve and save the figure. Returns the output path."""
+def gcc_figure(table: ProblemTable, title: str = "") -> Figure:
+    """Grand Composite Curve."""
     H, T_star = grand_composite_curve(table)
     unit = table.energy_unit
 
@@ -70,14 +77,10 @@ def plot_gcc(table: ProblemTable, path: str | Path, title: str = "") -> Path:
     ax.set_title(title or "Grand Composite Curve")
     ax.grid(alpha=0.3)
     fig.tight_layout()
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(path, dpi=200)
-    plt.close(fig)
-    return path
+    return fig
 
 
-def plot_gcc_with_units(table: ProblemTable, units, path: str | Path, title: str = "") -> Path:
+def gcc_with_units_figure(table: ProblemTable, units, title: str = "") -> Figure:
     """GCC with heat pump sink and source profiles drawn as utility lines.
 
     Sinks are stacked from H = 0 in order of increasing temperature; sources
@@ -117,8 +120,19 @@ def plot_gcc_with_units(table: ProblemTable, units, path: str | Path, title: str
     ax.set_title(title or "GCC with heat pump placement")
     ax.grid(alpha=0.3)
     fig.tight_layout()
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(path, dpi=200)
-    plt.close(fig)
-    return path
+    return fig
+
+
+def plot_composite_curves(stream_set: StreamSet, table: ProblemTable, path: str | Path, title: str = "") -> Path:
+    """Save the composite curves to file. Returns the output path."""
+    return save_figure(composite_curves_figure(stream_set, table, title), path)
+
+
+def plot_gcc(table: ProblemTable, path: str | Path, title: str = "") -> Path:
+    """Save the GCC to file. Returns the output path."""
+    return save_figure(gcc_figure(table, title), path)
+
+
+def plot_gcc_with_units(table: ProblemTable, units, path: str | Path, title: str = "") -> Path:
+    """Save the GCC with heat pump profiles to file. Returns the output path."""
+    return save_figure(gcc_with_units_figure(table, units, title), path)

@@ -25,7 +25,12 @@
         "T_source_C": 30
       }
     ],
-    "_sink_levels": "Candidate sinks, sized automatically from the GCC from lowest to highest. 'gcc_max' = isothermal sink at the highest GCC temperature. A level may set its own T_source_C."
+    "_sink_levels": "Candidate sinks, sized automatically from the GCC from lowest to highest. 'gcc_max' = isothermal sink at the highest GCC temperature. A level may set its own T_source_C.",
+    "eta_lorenz_sensitivity": [
+      0.45,
+      0.63
+    ],
+    "_eta_lorenz_sensitivity": "Optional: further Lorenz efficiencies; heat pumps are re-sized and re-costed for each."
   },
   "basis": {
     "type": "power",
@@ -33,22 +38,26 @@
   },
   "_basis": "Optional. {'type': 'power', 'operating_hours_per_year': h} for loads in kW/MW, or {'type': 'per_product', 'production_per_year': x, 'production_unit': 'hl'} for loads such as kWh/hl. Use null if unknown: no annual figures are then reported.",
   "economics": {
-    "gas_price_EUR_per_kWh": 0.055,
-    "electricity_price_EUR_per_kWh": 0.132,
-    "boiler_efficiency": 1.0,
+    "gas_price_EUR_per_kWh": 0.0512,
+    "electricity_price_EUR_per_kWh": 0.1135,
+    "boiler_efficiency": 0.845,
     "operating_hours_per_year": 8000,
     "discount_rate": 0.05,
     "horizon_years": 10,
     "payback_threshold_years": 5,
-    "grid_EF_kg_per_kWh": 0.1172,
+    "grid_EF_kg_per_kWh": 0.107,
     "co2_price_EUR_per_t": 0,
-    "co2_price_sensitivity_EUR_per_t": 82.4,
     "heat_recovery_equipment": [],
     "sources": {
-      "prices": "cite the price source, period, band and tax basis"
+      "prices": "cite the price source, period, band and tax basis (example values: Eurostat Portugal 2026-S1, electricity band ID, gas band I3, excl. VAT)"
+    },
+    "scenarios": {
+      "EU ETS CO2 price": {
+        "co2_price_EUR_per_t": 82.4
+      }
     }
   },
-  "_economics": "Optional; needs 'basis'. Any key left out takes the default in pinch/economics.py (DEFAULTS, each with its source). For a 'power' basis, operating_hours_per_year must match the basis. heat_recovery_equipment: list of [kind, size] (kinds: hr_tank [m3], heat_pump/mvr/electric_boiler [kW]) to evaluate a site without heat recovery.",
+  "_economics": "Optional; needs 'basis'. Any key left out takes the default in pinch/economics.py (DEFAULTS, each with its source). For a 'power' basis, operating_hours_per_year must match the basis. heat_recovery_equipment: list of [kind, size] (kinds: hr_tank [m3], heat_pump/mvr/electric_boiler [kW]) to evaluate a site without heat recovery. scenarios: {name: {parameter: value}} re-runs the full design, RQ1 and RQ3 with those overrides.",
   "screening": {
     "sink_warn_C": 120,
     "sink_max_C": 200,

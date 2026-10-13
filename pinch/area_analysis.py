@@ -30,6 +30,7 @@ import pandas as pd
 from pinch.area import CostLaw, supertarget
 from pinch.case import Case, to_MWh_per_year
 from pinch.economics import load_economics
+from pinch.results import Outputs
 from pinch.streams import StreamSet
 
 
@@ -41,11 +42,20 @@ def to_kW(stream_set: StreamSet, case: Case, hours: float) -> StreamSet:
 
 
 def run_area_targeting(case: Case, streams: StreamSet, out: Path) -> dict:
+    """Supertargeting written to ``out`` (CSV, PNG, JSON); returns the summary."""
+    res = area_targeting_outputs(case, streams)
+    if "skipped" not in res.summary:
+        res.write(out, "supertargeting.json")
+    return res.summary
+
+
+def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
+    """Supertargeting in memory: summary, table and figure (nothing written)."""
     block = getattr(case, "area_targeting", None) or {}
     if not block:
-        return {"skipped": "no area_targeting block"}
+        return Outputs({"skipped": "no area_targeting block"})
     if case.basis is None:
-        return {"skipped": "no annual basis (needed to convert loads to kW)"}
+        return Outputs({"skipped": "no annual basis (needed to convert loads to kW)"})
     params = load_economics(case.economics)
     hours = params.operating_hours_per_year
     s_kW = to_kW(streams, case, hours)
@@ -62,7 +72,7 @@ def run_area_targeting(case: Case, streams: StreamSet, out: Path) -> dict:
     for b in block.get("specific_area_cost_sweep_EUR_per_m2", []):
         laws.append(CostLaw(0.0, float(b), 1.0, f"sweep: {b} EUR/m2 installed, linear (not a sourced estimate)"))
     if not laws:
-        return {"skipped": "no cost law and no sweep given"}
+        return Outputs({"skipped": "no cost law and no sweep given"})
 
     results, frames = [], []
     for law in laws:
@@ -75,7 +85,6 @@ def run_area_targeting(case: Case, streams: StreamSet, out: Path) -> dict:
                         "dTmin_opt_K": float(best["dTmin_K"]), "TAC_min_EUR": round(float(best["TAC_EUR"]), 0),
                         "area_m2": round(float(best["area_m2"]), 1), "Qh_min_kW": round(float(best["Qh_min"]), 1),
                         "at_grid_edge": bool(best["dTmin_K"] in (min(grid), max(grid)))})
-    pd.concat(frames).to_csv(out / "supertargeting.csv", index=False)
 
     fig, ax = plt.subplots(figsize=(7, 4.5))
     for df, r in zip(frames, results):
@@ -87,11 +96,8 @@ def run_area_targeting(case: Case, streams: StreamSet, out: Path) -> dict:
     ax.grid(alpha=0.3)
     ax.legend(fontsize=7)
     fig.tight_layout()
-    fig.savefig(out / "supertargeting.png", dpi=200)
-    plt.close(fig)
 
     summary = {"hot_utility_cost_EUR_per_kW_year": round(c_hot, 2), "cold_utility_cost_EUR_per_kW_year": c_cold,
                "crf_per_year": round(crf, 4), "film_coefficients_source": block.get("film_coefficients_source", ""),
                "RQ2": results}
-    (out / "supertargeting.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
-    return summary
+    return Outputs(summary, {"supertargeting": pd.concat(frames)}, {"supertargeting": fig})

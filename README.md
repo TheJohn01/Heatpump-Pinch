@@ -10,11 +10,29 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 ## Quick start
 
 ```bash
-pip install pandas numpy matplotlib pytest CoolProp
-python -m pytest                                  # 84 tests
+pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
+python -m pytest                                  # 90 tests
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
+streamlit run app.py                              # interactive front end
 ```
+
+`pip install -e ".[app,dev]"` installs the package with loose version bounds instead
+(`pyproject.toml`); `requirements.txt` pins the versions that produced the committed results.
+
+## Interactive front end (`app.py`)
+
+A Streamlit page over the same `analyse.compute` function used by the command line and the
+tests (no calculation of its own). Pick a published case or upload a stream CSV (optional
+column `h_kW_per_m2K` enables ΔTmin supertargeting), edit the stream table and heat pump sink
+levels, change η_L, prices, boiler efficiency, emission factors and financial parameters, and
+read targets, heat pump design, RQ1/RQ3 and RQ2 in tabs. A Sources tab lists the provenance of
+every input; all results download as one zip in the same layout as `outputs/`. Input errors are
+shown as messages, not tracebacks. Smoke tests in `tests/test_app.py` check that every case runs
+and that the numbers shown equal the command-line results.
+
+Status: for local use and demonstration. Before a public deployment: finish steps 4b and 5,
+source the chiller COP, and note that uploaded data would pass through the hosting provider.
 
 Outputs go to `outputs/<case name>/`: `problem_table.csv`, `composite_curves.png`,
 `gcc.png`, `gcc_heat_pumps.png`, `heat_pump_design.csv`, `summary.json`, `summary.md`, and, when the
@@ -46,7 +64,9 @@ and `price_ratio_sweep.*`.
 ## Layout
 
 ```
-analyse.py                   General entry point: one or more case files -> outputs/<case>/
+analyse.py                   General entry point: compute() in memory, write() to outputs/<case>/
+app.py                       Streamlit front end over analyse.compute
+pyproject.toml, requirements*.txt  Packaging; exact tested versions
 cases/
   TEMPLATE.json              Documented template for a new site
   brewery_padulles2026.json  Main case (Padullés et al., 2026)
@@ -68,13 +88,14 @@ pinch/
   heat_pump.py               Lorenz COP, heat pump units, integration, GCC sizing
   design.py                  Automatic multi-level design and plausibility screening
   case.py                    Case files and annual (MWh/year) conversion
-  plotting.py                Figures saved to file
+  plotting.py                Figures (returned, or saved to file)
+  results.py                 Outputs container: summary, tables, figures; write to disk
   validation.py              Reference vs computed comparison
   economics.py               Cost functions, evaluation, break-even ratio (defaults with sources)
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       84 tests (validation cases first, then general behaviour)
+tests/                       90 tests (incl. app smoke tests) (validation cases first, then general behaviour)
 
 Paper-specific scripts (brewery):
 validate_targets.py                 Steps 1-2 validation report
