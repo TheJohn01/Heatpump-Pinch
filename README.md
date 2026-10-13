@@ -11,7 +11,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 107 tests (about 3 min)
+python -m pytest                                  # 109 tests (about 3 min)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -100,8 +100,10 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       107 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       109 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
 
+consolidate_rq.py            RQ1-RQ3 answers with one-at-a-time and combined sensitivities
+                             (outputs/<case>/rq_consolidated.csv/.md, rq_tornado.png)
 screen_cycles.py             Step 4b: screen the fluids listed in a case file (minutes); analyse.py then
                              adds the cycle-based design to the summary
 
