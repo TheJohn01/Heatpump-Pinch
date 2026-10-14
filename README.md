@@ -1,10 +1,10 @@
 # heatpump-pinch: pinch analysis and heat pump integration for industrial sites
 
 [![Open the app](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://heatpump-pinch.streamlit.app)
-[![Tests](https://github.com/YOUR-GITHUB-USERNAME/heatpump-pinch/actions/workflows/tests.yml/badge.svg)](https://github.com/YOUR-GITHUB-USERNAME/heatpump-pinch/actions/workflows/tests.yml)
+[![Tests](https://github.com/TheJohn01/Heatpump-Pinch/actions/workflows/tests.yml/badge.svg)](https://github.com/TheJohn01/Heatpump-Pinch/actions/workflows/tests.yml)
 [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
-MSc dissertation, Project 1: electrification of process heat with high-temperature heat pumps.
+Electrification of process heat with high-temperature heat pumps.
 
 **Online app:** <https://heatpump-pinch.streamlit.app> (Streamlit Community Cloud; the first
 load after a period of inactivity takes up to a minute while the app wakes up).
