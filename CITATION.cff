@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
-title: "heatpump-pinch: pinch analysis, heat pump integration and techno-economics for industrial process-heat electrification"
+title: "Heatpump-Pinch: pinch analysis, heat pump integration and techno-economics for industrial process-heat electrification"
 abstract: >-
   Python toolkit and Streamlit front end developed for an MSc dissertation in
   Chemical Engineering (electrification of process heat). It computes pinch
@@ -15,7 +15,7 @@ authors:
 version: 0.7.0
 date-released: 2026-10-14
 license: MIT
-repository-code: "https://github.com/YOUR-GITHUB-USERNAME/heatpump-pinch"
+repository-code: "https://github.com/TheJohn01/Heatpump-Pinch"
 keywords:
   - pinch analysis
   - heat pump
