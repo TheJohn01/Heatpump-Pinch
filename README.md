@@ -1,6 +1,25 @@
 # heatpump-pinch: pinch analysis and heat pump integration for industrial sites
 
+[![Open the app](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://heatpump-pinch.streamlit.app)
+[![Tests](https://github.com/YOUR-GITHUB-USERNAME/heatpump-pinch/actions/workflows/tests.yml/badge.svg)](https://github.com/YOUR-GITHUB-USERNAME/heatpump-pinch/actions/workflows/tests.yml)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+
 MSc dissertation, Project 1: electrification of process heat with high-temperature heat pumps.
+
+**Online app:** <https://heatpump-pinch.streamlit.app> (Streamlit Community Cloud; the first
+load after a period of inactivity takes up to a minute while the app wakes up).
+
+```mermaid
+flowchart LR
+    IN["Stream CSV + case JSON"] --> S1["1. Streams<br/>checks, energy balance"]
+    S1 --> S2["2. Problem table<br/>composites, GCC"]
+    S2 --> S3["3. ΔTmin<br/>supertargeting"]
+    S2 --> S4["4. Heat pumps<br/>GCC sizing, CoolProp cycles"]
+    S4 --> S5["5. HEN retrofit<br/>existing network"]
+    S3 --> S6["6. Economics<br/>CAPEX, OPEX, NPV, CO2"]
+    S5 --> S6
+    S6 --> OUT["RQ1–RQ3<br/>dashboard and outputs/"]
+```
 
 The toolkit works for any process described by a stream table: it computes energy
 targets, composite curves and the Grand Composite Curve (GCC), sizes heat pumps from
@@ -38,7 +57,9 @@ pan, menu to export PNG/SVG. Results are cached per set of inputs. Input errors 
 messages. Tests: `tests/test_app.py` (every step and case, input persistence, dashboard,
 sources) and `ui_smoke.py` (browser: upload, malformed file, cell edit).
 
-Status: for local use and demonstration; uploaded data would pass through any hosting provider.
+Hosting: the online app runs on Streamlit Community Cloud (servers in the United States).
+Anything uploaded there passes through that provider, so use published or anonymised data only;
+for confidential plant data, run the app locally (`streamlit run app.py`).
 
 ## Analysing a new site
 
@@ -194,3 +215,15 @@ The University of Oklahoma "Units and Area Targeting" notes give a total area of
 four-stream example with utilities (U = 0.001 MW/m²K). Intervals I–V are reproduced exactly. Interval
 VI's printed ΔT_LM (81.9 K) uses the cold temperatures of interval V; with its own temperatures it is
 56.6 K, and the corrected total (2757.3 m²) equals our composite-curve area (2757.0 m²).
+
+## Licence, data and citation
+
+* **Code**: MIT licence (`LICENSE`).
+* **Data**: the stream tables and reference values in `data/` are transcribed from the cited
+  publications (Padullés et al., 2026, open access; Walmsley et al., 2024, MDPI *Energies*,
+  CC BY 4.0; textbook and lecture-note examples) and remain subject to their original terms;
+  cite the original sources when reusing them. `data/sources/` holds Eurostat and ECB series,
+  reused with acknowledgement of the source as their reuse policies require.
+  The MIT licence does not cover these data.
+* **Citation**: see `CITATION.cff` (GitHub shows a "Cite this repository" button).
+

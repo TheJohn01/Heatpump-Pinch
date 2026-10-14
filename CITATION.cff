@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "heatpump-pinch: pinch analysis, heat pump integration and techno-economics for industrial process-heat electrification"
+abstract: >-
+  Python toolkit and Streamlit front end developed for an MSc dissertation in
+  Chemical Engineering (electrification of process heat). It computes pinch
+  targets with individual temperature shifts, composite and grand composite
+  curves, sizes heat pumps from the GCC, screens working fluids with a CoolProp
+  cycle model, evaluates heat-exchanger network retrofits and performs the
+  techno-economic analysis. Validated against published case studies.
+authors:
+  - family-names: Caldas
+    given-names: Tomás
+version: 0.7.0
+date-released: 2026-10-14
+license: MIT
+repository-code: "https://github.com/YOUR-GITHUB-USERNAME/heatpump-pinch"
+keywords:
+  - pinch analysis
+  - heat pump
+  - process integration
+  - electrification
+  - techno-economic analysis

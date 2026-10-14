@@ -1,12 +1,14 @@
 [build-system]
-requires = ["setuptools>=69"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "heatpump-pinch"
-version = "0.6.0"
+version = "0.7.0"
 description = "Pinch analysis, heat pump integration and techno-economics for industrial process-heat electrification"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 authors = [{ name = "Tomás Caldas" }]
 # Lower bounds = versions the code needs; exact tested versions are pinned in requirements.txt.
