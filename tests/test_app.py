@@ -114,3 +114,70 @@ def test_sources_page_runs():
     at = st_testing.AppTest.from_function(_sources, default_timeout=180)
     at.run()
     _ok(at)
+
+
+# ---------------------------------------------------------------- cases without published annual data
+def _case_app(case, step, basis_on=None, h=None):
+    """Load a case, optionally switch the annual basis on and fill film coefficients, show a step."""
+    def page(case, step, basis_on, h):
+        import app_pages
+        import streamlit as st
+        app_pages.init_state()
+        if st.session_state.choice != case:
+            app_pages.load_inputs(case)
+            if basis_on is not None:
+                st.session_state.basis_on = basis_on
+            if h is not None:
+                st.session_state.streams_df[app_pages.H_COLUMN] = h
+        st.session_state.step = st.session_state.step_ctl = step
+        app_pages.workflow_page()
+    at = st_testing.AppTest.from_function(page, args=(case, step, basis_on, h), default_timeout=300)
+    at.run()
+    _ok(at)
+    return at
+
+
+def _texts(at):
+    return " ".join([i.value for i in at.info] + [c.value for c in at.caption])
+
+
+def test_case_without_basis_explains_what_is_missing():
+    at = _case_app("walmsley2024_milk_evaporator", "6 Economics")
+    assert "Switch on the annual basis in step 1" in _texts(at)
+    at = _case_app("walmsley2024_milk_evaporator", "3 ΔTmin")
+    assert "film coefficient for every stream" in _texts(at)
+    at = _case_app("walmsley2024_milk_evaporator", "5 Retrofit")
+    assert "No existing heat-exchanger network" in _texts(at)
+
+
+def test_assumed_basis_runs_economics_and_is_labelled():
+    at = _case_app("walmsley2024_milk_evaporator", "6 Economics", basis_on=True)
+    assert any(m.label.startswith("RQ3") for m in at.metric), [m.label for m in at.metric]
+    assert "No economic data published" in _texts(at)
+    case = at.session_state["base_case"]
+    assert at.session_state["basis"] == {"type": "power", "operating_hours_per_year": 8000.0}
+    assert case.basis is None                      # the published case is untouched
+
+
+def test_assumed_film_coefficients_run_supertargeting():
+    at = _case_app("walmsley2024_milk_evaporator", "3 ΔTmin", basis_on=True, h=2.0)
+    assert not any("film coefficient for every stream" in i.value for i in at.info)
+    assert len(at.dataframe) >= 1                  # RQ2 table shown
+
+
+def test_assumed_basis_recorded_in_provenance():
+    import app_pages
+    from streamlit.testing.v1 import AppTest
+
+    def page():
+        import app_pages
+        import streamlit as st
+        app_pages.init_state()
+        app_pages.load_inputs("fourstream_example")
+        st.session_state.basis_on = True
+        case, _ = app_pages.build_case()
+        st.write(case.provenance.get("annual basis", "missing"))
+    at = AppTest.from_function(page, default_timeout=120)
+    at.run()
+    _ok(at)
+    assert any("assumed in the app" in m.value for m in at.markdown), [m.value for m in at.markdown]

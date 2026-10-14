@@ -28,9 +28,9 @@ import streamlit as st
 
 from analyse import compute, markdown, write
 from pinch import charts, problem_table, with_extra_shift
-from pinch.case import SinkLevelSpec, load_case
+from pinch.case import POWER_TO_MW, SinkLevelSpec, load_case
 from pinch.cycle_analysis import load_selected
-from pinch.economics import DEFAULTS
+from pinch.economics import DEFAULT_COST_FUNCTIONS, DEFAULTS
 from pinch.streams import streams_from_frame
 
 ROOT = Path(__file__).resolve().parent
@@ -77,12 +77,20 @@ def load_inputs(choice: str, uploaded: pd.DataFrame | None = None, upload_name: 
         case = replace(case, name=Path(upload_name).stem, description="User-supplied stream table.",
                        reference="User upload", screening={}, provenance={"stream data": "user upload (not verified)"},
                        retrofit=None, cycle_screening=None, eta_lorenz_sensitivity=())
-        streams_df = uploaded
-        basis = {"type": "power", "operating_hours_per_year": 8000.0}
+        streams_df = uploaded.copy()
+        basis = None                     # proposed below from the stream unit
     else:
         case = load_case(CASES[choice])
         streams_df = pd.read_csv(case.stream_file)
         basis = case.basis
+    if H_COLUMN not in streams_df.columns:   # film coefficients: from the case file, else to be filled in
+        h = (case.area_targeting or {}).get("film_coefficients_kW_per_m2K", {})
+        streams_df[H_COLUMN] = [h.get(str(n)) for n in streams_df["stream"]]
+        streams_df[H_COLUMN] = streams_df[H_COLUMN].astype(float)
+    try:
+        unit = streams_from_frame(streams_df.drop(columns=[H_COLUMN]), source="check").energy_unit
+    except Exception:            # malformed table: the error is shown when the results are computed
+        unit = ""
     for k in [k for k in ss.keys() if str(k).startswith("_w_")]:   # widgets re-read the new values
         del ss[k]
     ss.choice = choice
@@ -96,18 +104,40 @@ def load_inputs(choice: str, uploaded: pd.DataFrame | None = None, upload_name: 
     ss.eta = float(case.eta_lorenz)
     ss.source_T = float(case.source_T_C)
     ss.ambient = float(case.ambient_T_C if case.ambient_T_C is not None else 15.0)
-    ss.basis = dict(basis) if basis else None
+    ss.energy_unit = unit
+    ss.basis_published = dict(basis) if basis else None
+    ss.basis_on = basis is not None or choice == UPLOAD
+    ss.basis_value = float(basis["production_per_year"] if basis and basis["type"] == "per_product" else
+                           basis["operating_hours_per_year"] if basis else
+                           DEFAULTS["operating_hours_per_year"][0] if unit in POWER_TO_MW else 1.0e6)
+    ss.basis = _basis()
     eco = dict(case.economics or {})
     for key, *_ in ECON_FIELDS:
         ss[f"econ_{key}"] = _econ_default(eco, key)
-    ss.run_area = bool(case.area_targeting) or choice == UPLOAD
+    ss.run_area = True
     ss.rq_table = None
     ss.scalar_original = _scalars()
 
 
+def _basis() -> dict | None:
+    """Annual basis from the step-1 inputs; its type follows the stream-data unit."""
+    if not ss.basis_on or not ss.energy_unit:
+        return None
+    if ss.energy_unit in POWER_TO_MW:
+        return {"type": "power", "operating_hours_per_year": float(ss.basis_value)}
+    if "/" in ss.energy_unit:
+        return {"type": "per_product", "production_per_year": float(ss.basis_value),
+                "production_unit": ss.energy_unit.split("/", 1)[1]}
+    return None
+
+
+def _h_complete(df: pd.DataFrame) -> bool:
+    return H_COLUMN in df.columns and bool(pd.to_numeric(df[H_COLUMN], errors="coerce").gt(0).all())
+
+
 def _scalars() -> dict:
     keys = ["eta", "source_T", "ambient", "run_area"] + [f"econ_{k}" for k, *_ in ECON_FIELDS]
-    return {k: ss[k] for k in keys} | {"basis": json.dumps(ss.basis, sort_keys=True)}
+    return {k: ss[k] for k in keys} | {"basis": json.dumps(_basis(), sort_keys=True)}
 
 
 def init_state() -> None:
@@ -119,7 +149,8 @@ def init_state() -> None:
 
 
 def _copy(widget_key: str, name: str) -> None:
-    ss[name] = ss[widget_key]
+    if widget_key in ss:     # a widget removed by a case change may still send its last callback
+        ss[name] = ss[widget_key]
 
 
 def bind(widget, label: str, name: str, *args, **kw):
@@ -183,18 +214,28 @@ def build_case():
     for key, *_ in ECON_FIELDS:
         v = ss[f"econ_{key}"]
         eco[key] = (None if (key == "chiller_cop" and float(v) <= 0) else (int(v) if key == "horizon_years" else float(v)))
-    basis = ss.basis
+    basis = ss.basis = _basis()
     if basis and basis["type"] == "power":
         eco["operating_hours_per_year"] = basis["operating_hours_per_year"]
-    area = case.area_targeting if ss.run_area else None
-    if ss.run_area and ss.choice == UPLOAD:
-        area = None
-        if H_COLUMN in df.columns:
-            area = {"film_coefficients_kW_per_m2K": dict(zip(df["stream"].astype(str), df[H_COLUMN].astype(float))),
-                    "film_coefficients_source": "user upload", "cost_law": None,
-                    "specific_area_cost_sweep_EUR_per_m2": [250, 500, 1000, 2000]}
+    area = None
+    if ss.run_area and _h_complete(df):
+        h = dict(zip(df["stream"].astype(str), df[H_COLUMN].astype(float)))
+        if case.area_targeting:          # case cost laws; film coefficients as shown in the table
+            area = {**case.area_targeting, "film_coefficients_kW_per_m2K": h}
+        else:                            # no sourced cost law for this case: linear sweep only
+            area = {"film_coefficients_kW_per_m2K": h, "film_coefficients_source": "entered in the app (assumed)",
+                    "cost_law": None, "specific_area_cost_sweep_EUR_per_m2": [250, 500, 1000, 2000]}
+    provenance = dict(case.provenance)
+    if basis != ss.basis_published:
+        provenance["annual basis"] = ("none" if basis is None else f"assumed in the app: {json.dumps(basis)}"
+                                      " (not published for this case)" if ss.basis_published is None else
+                                      f"changed in the app: {json.dumps(basis)} (published: "
+                                      f"{json.dumps(ss.basis_published)})")
+    if area and not case.area_targeting:
+        provenance["film coefficients"] = "entered in the app (assumed, not published for this case)"
     run_case = replace(case, eta_lorenz=float(ss.eta), source_T_C=float(ss.source_T), ambient_T_C=float(ss.ambient),
-                       sink_levels=tuple(levels), basis=basis, economics=eco if basis else None, area_targeting=area)
+                       sink_levels=tuple(levels), basis=basis, economics=eco if basis else None, area_targeting=area,
+                       provenance=provenance)
     return run_case, streams
 
 
@@ -316,19 +357,33 @@ def _step_streams() -> None:
             if ss.choice != UPLOAD:
                 st.info("Upload a CSV to replace the published case.")
         st.subheader("Annual basis")
-        b = ss.basis
-        if b and b["type"] == "per_product":
-            v = st.number_input(f"Production [{b['production_unit']}/year]", min_value=1.0,
-                                value=float(b["production_per_year"]))
-            ss.basis = {**b, "production_per_year": v}
-        elif b:
-            v = st.number_input("Operating hours [h/year]", 1.0, 8784.0, float(b["operating_hours_per_year"]))
-            ss.basis = {**b, "operating_hours_per_year": v}
+        unit = ss.energy_unit
+        if not unit:
+            st.caption("Fix the stream table first.")
         else:
-            st.caption("No annual basis: results stay in the stream-data unit.")
+            bind(st.toggle, "Convert to annual figures", "basis_on",
+                 help="Needed for ΔTmin supertargeting (step 3) and the economics (step 6).")
+            if ss.basis_on:
+                if unit in POWER_TO_MW:
+                    bind(st.number_input, "Operating hours [h/year]", "basis_value", 1.0, 8784.0, step=100.0)
+                else:
+                    bind(st.number_input, f"Production [{unit.split('/', 1)[1]}/year]", "basis_value",
+                         min_value=1.0, step=1.0e5, format="%.0f")
+            ss.basis = _basis()
+            pub = ss.basis_published
+            if pub is None and ss.basis_on:
+                st.caption("⚠️ The source publishes no annual basis for this case: this value is **your "
+                           "assumption** and is recorded as such on the Sources page."
+                           + (" Default 8000 h/year (Padullés et al., 2026)." if unit in POWER_TO_MW else ""))
+            elif pub is None:
+                st.caption(f"No annual basis: results stay in {unit}. Supertargeting and economics need one.")
+            elif ss.basis != pub:
+                st.caption("Changed from the published value (recorded on the Sources page).")
     with right:
         st.subheader("Stream table (editable)")
-        st.caption("Each change recomputes every step. Latent loads over 1 K. 'Amb.' streams use 15 °C.")
+        st.caption("Each change recomputes every step. Latent loads over 1 K. 'Amb.' streams use 15 °C. "
+                   f"`{H_COLUMN}`: film coefficient for ΔTmin supertargeting (step 3)"
+                   + ("; empty where the source gives none." if not (ss.base_case.area_targeting or {}) else "."))
         _editor("streams_df", "streams_ver", num_rows="dynamic")
         r = results()
         if r:
@@ -367,14 +422,30 @@ def _step_dtmin() -> None:
     with left, st.container(border=True):
         st.subheader("Supertargeting")
         bind(st.toggle, "Run ΔTmin supertargeting (RQ2)", "run_area")
-        st.caption("Cost laws and film coefficients come from the case file (Sources page).")
+        if ss.base_case.area_targeting and ss.choice != UPLOAD:
+            st.caption("Cost laws from the case file (Sources page); film coefficients from the "
+                       f"`{H_COLUMN}` column in step 1.")
+        else:
+            st.caption("No sourced exchanger cost law for this case: the trade-off is shown for a sweep of "
+                       "installed costs (250-2000 €/m², linear), not a cost estimate. Film coefficients: "
+                       f"`{H_COLUMN}` column in step 1.")
     with right:
         r = results()
         if not r:
             return
         at = r[2].get("area_targeting", {})
+        if not ss.run_area:
+            st.info("Supertargeting switched off.")
+            return
+        if not _h_complete(ss.streams_df):
+            st.info(f"Supertargeting needs a film coefficient for every stream: fill the `{H_COLUMN}` column "
+                    "in step 1 (the source does not publish them). Typical values: Stampfli et al. (2018) use "
+                    "0.5 (liquid product), 2.0 (water) and 5.0 (boiling/condensing) kW/(m²·K); Sinnott and "
+                    "Towler (2020), Table 12.1, give overall coefficients by service.")
+            return
         if not at or "skipped" in at:
-            st.info(f"Supertargeting not run: {at.get('skipped', 'switched off')}.")
+            st.info(f"Supertargeting not run: {at.get('skipped', 'switched off')}."
+                    + (" Switch on the annual basis in step 1." if ss.basis is None else ""))
             return
         _chart(charts.supertargeting_chart(r[3]["supertargeting"]))
         st.dataframe(pd.DataFrame(at["RQ2"]).drop(columns=["a", "b", "c"], errors="ignore"), width="stretch")
@@ -428,7 +499,16 @@ def _step_retrofit() -> None:
         return
     rf = r[2].get("retrofit")
     if not rf or "skipped" in rf:
-        st.info(f"No existing network for this case: {rf['skipped'] if rf else 'add a retrofit block and a network file'}.")
+        if rf:
+            st.info(f"Retrofit not run: {rf['skipped']}.")
+        else:
+            st.info("**No existing heat-exchanger network for this case.** A retrofit compares new options with "
+                    "the plant as it is built today; the source does not publish that network, and inventing "
+                    "one would make the result meaningless. To add one, describe the existing exchangers, "
+                    "heaters and coolers in `data/<case>_networks.json` (format: `data/brewery_networks.json`) "
+                    "and add a `retrofit` block to the case file (see `cases/brewery_padulles2026.json`). "
+                    "The targets (step 2), heat pumps (step 4) and economics (step 6) do not need it: they "
+                    "compare with a grass-roots design at the energy targets.")
         return
     b, u = rf["baseline"], r[2]["energy_unit"]
     st.subheader(f"Existing network: {b['network']}")
@@ -473,8 +553,17 @@ def _step_economics() -> None:
             return
         ec = r[2].get("economics", {})
         if not ec or "skipped" in ec:
-            st.info(f"Economics not run: {ec.get('skipped', 'no annual basis')}.")
+            st.info(f"Economics not run: {ec.get('skipped', 'no annual basis')}."
+                    + (" Switch on the annual basis in step 1 (your assumption if the source gives none)."
+                       if ss.basis is None else ""))
             return
+        if not ss.base_case.economics or ss.choice == UPLOAD:
+            st.caption("⚠️ No economic data published for this case: prices, rates and the investment cost "
+                       "functions are the defaults (Padullés et al., 2026, Table 3, from the Danish Energy "
+                       "Agency catalogue; heat pump "
+                       f"{DEFAULT_COST_FUNCTIONS['heat_pump']['beta'] / 1e3:.0f} k€ + "
+                       f"{DEFAULT_COST_FUNCTIONS['heat_pump']['alpha']:.0f} €/kW). Check them against your "
+                       "own sources (Sources page).")
         tables = r[3]
         r1, r3, full = ec["RQ1"], ec["RQ3"], ec["results"]["full design (heat recovery installed)"]
         c = st.columns(4)
@@ -483,7 +572,10 @@ def _step_economics() -> None:
                     delta=f"{r3['break_even_ratio_NPV'] - r3['ratio_used']:+.2f} vs today", delta_color="off", border=True)
         c[2].metric("Full design: payback", f"{full['payback_years']:.1f} y", border=True)
         c[3].metric(f"Full design: NPV{int(ss['econ_horizon_years'])}", f"{full['npv_EUR'] / 1e6:+.2f} M€", border=True)
-        st.caption("Against the site with heat recovery at target. The Retrofit step compares with the existing network.")
+        st.caption("Against a site with heat recovery at the energy target (grass-roots comparison)."
+                   + (" The Retrofit step compares with the existing network." if r[0].retrofit else
+                      " No existing network is published for this case, so savings against today's plant "
+                      "cannot be computed."))
         thr = float(ss["econ_payback_threshold_years"])
         a, b = st.columns(2)
         with a:
@@ -530,8 +622,9 @@ def dashboard_page() -> None:
     head[0].caption(f"Consolidated sensitivities: {origin or 'not computed for these inputs'}")
     if rq is None:
         st.info("The consolidated table needs an existing-network (retrofit) block; press the button to compute it "
-                "for the current inputs." if case.retrofit else "This case has no retrofit block, so the "
-                "consolidated RQ table is not available.")
+                "for the current inputs." if case.retrofit else "The consolidated RQ table is built around the "
+                "existing-site retrofit, and this case has no published existing network (step 5). RQ1 and RQ3 "
+                "for this case are in Workflow → 6 Economics once an annual basis is set.")
         return
     b = rq.iloc[0]
     c = st.columns(4)
