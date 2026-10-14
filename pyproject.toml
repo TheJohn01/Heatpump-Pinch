@@ -20,7 +20,7 @@ dependencies = [
 
 [project.optional-dependencies]
 app = ["streamlit>=1.50", "altair>=5"]
-cycle = ["CoolProp>=6.6"]          # step 4b (working-fluid cycle COP), not used yet
+cycle = ["CoolProp>=6.6", "scipy>=1.10"]   # step 4b: working-fluid cycle model
 dev = ["pytest>=8"]
 
 [project.scripts]
