@@ -160,11 +160,21 @@ def answers(case: Case, streams, unit: str, selected: dict | None) -> dict:
 
 
 def consolidate(case_file: Path) -> pd.DataFrame:
+    """Consolidated table for a case file (cycle screening read from outputs/<case>/)."""
     case = load_case(case_file)
     streams = with_extra_shift(load_streams(case.stream_file), case.extra_shift_K)
-    unit = streams.energy_unit
     selected = load_selected(ROOT / "outputs" / case.name / "cycle_screening.json")
-    rows = [{"sensitivity": "Base case", "basis": "sourced inputs (see sources_case_studies.md)",
+    df = consolidate_case(case, streams, selected)
+    df.loc[0, "basis"] = "sourced inputs (see sources_case_studies.md)"
+    return df
+
+
+def consolidate_case(case: Case, streams, selected: dict | None) -> pd.DataFrame:
+    """Consolidated table for a case already in memory (used by the app for edited inputs)."""
+    if not case.retrofit or case.basis is None:
+        raise ValueError("the consolidated table needs a retrofit block and an annual basis")
+    unit = streams.energy_unit
+    rows = [{"sensitivity": "Base case", "basis": "current inputs",
              **answers(case, streams, unit, selected)}]
     for label, kind, value, basis in SENSITIVITIES:
         if (kind.startswith("cycle") or (kind == "combo" and any(k.startswith("cycle") for k, _ in value))) and not selected:

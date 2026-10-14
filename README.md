@@ -11,7 +11,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 113 tests (about 4 min)
+python -m pytest                                  # 130 tests (about 3 min)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -20,24 +20,25 @@ streamlit run app.py                              # interactive front end
 `pip install -e ".[app,dev]"` installs the package with loose version bounds instead
 (`pyproject.toml`); `requirements.txt` pins the versions that produced the committed results.
 
-## Interactive front end (`app.py`)
+## Interactive front end (`app.py`, `app_pages.py`)
 
-A Streamlit page over the same `analyse.compute` function used by the command line and the
-tests (no calculation of its own). Pick a published case or upload a stream CSV (optional
-column `h_kW_per_m2K` enables ΔTmin supertargeting), edit the stream table and heat pump sink
-levels, change η_L, prices, boiler efficiency, emission factors and financial parameters, and
-read targets, heat pump design, RQ1/RQ3 and RQ2 in tabs. A Sources tab lists the provenance of
-every input; all results download as one zip in the same layout as `outputs/`. Input errors are
-shown as messages, not tracebacks. Smoke tests in `tests/test_app.py` check that every case runs
-and that the numbers shown equal the command-line results.
+Three pages in a top navigation bar (no sidebar), over the same `analyse.compute`
+used by the command line and the tests (no calculation of its own):
 
-Status: for local use and demonstration. Before a public deployment: finish steps 4b and 5,
-source the chiller COP, and note that uploaded data would pass through the hosting provider.
+* **Workflow**: a step-by-step wizard following the method (1 streams, 2 targets,
+  3 ΔTmin, 4 heat pumps, 5 retrofit, 6 economics). Steps with many inputs use a split
+  workspace: inputs on the left, results on the right. Inputs persist across steps and pages.
+* **Dashboard**: RQ1–RQ3 on one screen with the consolidated sensitivities and the
+  tornado chart; "Recompute table" re-runs every sensitivity for the current inputs (≈15 s).
+* **Sources**: provenance of every input, the assumptions register, downloads (zip of all
+  outputs, summary as Markdown/JSON).
 
-Outputs go to `outputs/<case name>/`: `problem_table.csv`, `composite_curves.png`,
-`gcc.png`, `gcc_heat_pumps.png`, `heat_pump_design.csv`, `summary.json`, `summary.md`, and, when the
-case has an annual basis and an `economics` block, `economics.json`, `electrification_curve.*`
-and `price_ratio_sweep.*`.
+Charts are interactive (Altair, `pinch/charts.py`): hover for values, wheel to zoom, drag to
+pan, menu to export PNG/SVG. Results are cached per set of inputs. Input errors are shown as
+messages. Tests: `tests/test_app.py` (every step and case, input persistence, dashboard,
+sources) and `ui_smoke.py` (browser: upload, malformed file, cell edit).
+
+Status: for local use and demonstration; uploaded data would pass through any hosting provider.
 
 ## Analysing a new site
 
@@ -65,7 +66,7 @@ and `price_ratio_sweep.*`.
 
 ```
 analyse.py                   General entry point: compute() in memory, write() to outputs/<case>/
-app.py                       Streamlit front end over analyse.compute
+app.py, app_pages.py         Streamlit front end (Workflow / Dashboard / Sources) over analyse.compute
 pyproject.toml, requirements*.txt  Packaging; exact tested versions
 cases/
   TEMPLATE.json              Documented template for a new site
@@ -94,13 +95,14 @@ pinch/
   design.py                  Automatic multi-level design and plausibility screening
   case.py                    Case files and annual (MWh/year) conversion
   plotting.py                Figures (returned, or saved to file)
+  charts.py                  Interactive charts for the front end (Altair)
   results.py                 Outputs container: summary, tables, figures; write to disk
   validation.py              Reference vs computed comparison
   economics.py               Cost functions, evaluation, break-even ratio (defaults with sources)
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       113 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       130 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
 
 ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
