@@ -1,4 +1,4 @@
-# heatpump-pinch: pinch analysis and heat pump integration for industrial sites
+# Heatpump-Pinch: pinch analysis and heat pump integration for industrial sites
 
 [![Open the app](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://heatpump-pinch.streamlit.app)
 [![Tests](https://github.com/TheJohn01/Heatpump-Pinch/actions/workflows/tests.yml/badge.svg)](https://github.com/TheJohn01/Heatpump-Pinch/actions/workflows/tests.yml)
