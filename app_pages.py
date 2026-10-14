@@ -83,6 +83,8 @@ def load_inputs(choice: str, uploaded: pd.DataFrame | None = None, upload_name: 
         case = load_case(CASES[choice])
         streams_df = pd.read_csv(case.stream_file)
         basis = case.basis
+    ss.basis_hint = (json.loads(CASES[choice].read_text(encoding="utf-8")).get("basis_hint")
+                     if choice != UPLOAD else None)
     if H_COLUMN not in streams_df.columns:   # film coefficients: from the case file, else to be filled in
         h = (case.area_targeting or {}).get("film_coefficients_kW_per_m2K", {})
         streams_df[H_COLUMN] = [h.get(str(n)) for n in streams_df["stream"]]
@@ -375,6 +377,8 @@ def _step_streams() -> None:
                 st.caption("⚠️ The source publishes no annual basis for this case: this value is **your "
                            "assumption** and is recorded as such on the Sources page."
                            + (" Default 8000 h/year (Padullés et al., 2026)." if unit in POWER_TO_MW else ""))
+                if ss.get("basis_hint"):
+                    st.caption(ss.basis_hint)
             elif pub is None:
                 st.caption(f"No annual basis: results stay in {unit}. Supertargeting and economics need one.")
             elif ss.basis != pub:
@@ -439,9 +443,10 @@ def _step_dtmin() -> None:
             return
         if not _h_complete(ss.streams_df):
             st.info(f"Supertargeting needs a film coefficient for every stream: fill the `{H_COLUMN}` column "
-                    "in step 1 (the source does not publish them). Typical values: Stampfli et al. (2018) use "
-                    "0.5 (liquid product), 2.0 (water) and 5.0 (boiling/condensing) kW/(m²·K); Sinnott and "
-                    "Towler (2020), Table 12.1, give overall coefficients by service.")
+                    "in step 1 (the source does not publish them). Film coefficients used by Stampfli et al. (2018) "
+                    "for a dairy: 0.5 (liquid product), 2.0 (water) and 5.0 (boiling/condensing) kW/(m²·K). "
+                    "Sinnott and Towler (2020), Table 12.1, give *overall* coefficients U by service (e.g. "
+                    "gas-gas 0.01-0.05 kW/(m²·K)); for two similar films, h ≈ 2U.")
             return
         if not at or "skipped" in at:
             st.info(f"Supertargeting not run: {at.get('skipped', 'switched off')}."
@@ -557,13 +562,20 @@ def _step_economics() -> None:
                     + (" Switch on the annual basis in step 1 (your assumption if the source gives none)."
                        if ss.basis is None else ""))
             return
-        if not ss.base_case.economics or ss.choice == UPLOAD:
-            st.caption("⚠️ No economic data published for this case: prices, rates and the investment cost "
-                       "functions are the defaults (Padullés et al., 2026, Table 3, from the Danish Energy "
-                       "Agency catalogue; heat pump "
+        note = (ss.base_case.economics or {}).get("_note")
+        if ss.choice == UPLOAD:
+            st.caption("⚠️ Your own table: prices are the template values (Eurostat Portugal 2026-S1, bands ID/I3) "
+                       "and heat pumps use the brewery cost function of Padullés et al. (2026, Table 3: "
                        f"{DEFAULT_COST_FUNCTIONS['heat_pump']['beta'] / 1e3:.0f} k€ + "
-                       f"{DEFAULT_COST_FUNCTIONS['heat_pump']['alpha']:.0f} €/kW). Check them against your "
+                       f"{DEFAULT_COST_FUNCTIONS['heat_pump']['alpha']:.0f} €/kW). Check both against your "
                        "own sources (Sources page).")
+        elif note:
+            st.caption("⚠️ " + note)
+        cls = ec.get("heat_pump_cost_class", {})
+        extrap = [u for u, k in cls.items() if "extrapolated" in k]
+        if extrap:
+            st.warning("Heat pump cost extrapolated beyond the catalogue (no data above 150 °C): "
+                       + ", ".join(extrap) + ". Treat their investment and payback as indicative only.")
         tables = r[3]
         r1, r3, full = ec["RQ1"], ec["RQ3"], ec["results"]["full design (heat recovery installed)"]
         c = st.columns(4)

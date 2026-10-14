@@ -129,7 +129,7 @@ def electrification_curve(design: HeatPumpDesign, Qh_base_MWh: float, to_MWh, pa
                 break
             remaining -= q
             W += q / u.COP
-            equipment.append(("heat_pump", capacity_kW(to_MWh(q), params)))
+            equipment.append((params.heat_pump_kind(u.T_sink_out_C), capacity_kW(to_MWh(q), params)))
         delivered = to_MWh(target)
         fraction = target / design.Qh_before if design.Qh_before > 0 else 0.0
         E = to_MWh(W)
@@ -372,6 +372,9 @@ def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, e
         "refrigeration_duty": round(c["refrigeration"], 4),
         "default_sources": {k: v[1] for k, v in DEFAULTS.items() if k not in block},
         "case_sources": block.get("sources", {}),
+        "heat_pump_cost_class": {u.name: (lambda k: f"{k[0]} (extrapolated: sink above every class)" if k[1]
+                                          else k[0])(params.heat_pump_cost_class(u.T_sink_out_C))
+                                 for u in design.units},
         "RQ1": rq1,
         "RQ3": rq3,
         "results": results,

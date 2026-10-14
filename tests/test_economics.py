@@ -150,3 +150,40 @@ def test_refrigeration_credit_fraction_scales_credit():
     with pytest.raises(ValueError):
         load_economics({"refrigeration_credit_fraction": 1.5})
     assert load_economics({}).refrigeration_credit_fraction == 1.0
+
+
+# ---------------------------------------------------------------- heat pump cost by sink temperature
+def test_heat_pump_cost_classes_pick_catalogue_sheet():
+    from pinch.economics import load_economics
+    block = {"cost_functions": {"a": {"alpha": 950.0, "beta": 0.0, "gamma": 1.0, "size_unit": "kW"},
+                                "b": {"alpha": 1200.0, "beta": 0.0, "gamma": 1.0, "size_unit": "kW"}},
+             "heat_pump_cost_classes": [{"max_sink_T_C": 125, "cost_function": "b"},
+                                        {"max_sink_T_C": 60, "cost_function": "a"}]}
+    p = load_economics(block)
+    assert p.heat_pump_cost_class(55.0) == ("a", False)
+    assert p.heat_pump_cost_class(60.0) == ("a", False)
+    assert p.heat_pump_cost_class(105.0) == ("b", False)
+    assert p.heat_pump_cost_class(160.0) == ("b", True)            # above every class: extrapolated
+    assert load_economics({}).heat_pump_kind(105.0) == "heat_pump"  # no classes: Padullés Table 3
+
+
+def test_heat_pump_cost_classes_need_their_cost_function():
+    from pinch.economics import load_economics
+    with pytest.raises(ValueError, match="no cost function"):
+        load_economics({"heat_pump_cost_classes": [{"max_sink_T_C": 60, "cost_function": "missing"}]})
+
+
+def test_milk_evaporator_capex_uses_dea_sheets():
+    """Hand check: 0.64 MW at 55 °C (sheet 1.1, 0.95 M€/MW) + 2.90 MW at 105 °C (sheet 2.a, 1.2 M€/MW)."""
+    from dataclasses import replace
+    from analyse import compute
+    from pinch.case import load_case
+    from pinch.validation import ROOT
+    c = load_case(ROOT / "cases" / "walmsley2024_milk_evaporator.json")
+    res = compute(replace(c, basis={"type": "power", "operating_hours_per_year": 8000.0}))
+    t = res.tables["heat_pump_design"]
+    expected = sum(q * (950.0 if T <= 60 else 1200.0) for q, T in zip(t["Q_sink_kW"], t["T_sink_out_C"]))
+    full = res.summary["economics"]["results"]["full design (heat recovery installed)"]
+    assert full["capex_EUR"] == pytest.approx(expected, rel=1e-6)
+    assert res.summary["economics"]["heat_pump_cost_class"] == {"HP warm (milk preheat)": "hp_dea_1_1",
+                                                                "HTHP 105 °C": "hp_dea_2a"}

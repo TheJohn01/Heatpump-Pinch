@@ -93,6 +93,26 @@ class EconomicParameters:
     cost_functions: dict[str, CostFunction] = field(default_factory=dict)
     chiller_cop: float | None = None   # refrigeration COP; None = no credit for avoided chiller electricity
     refrigeration_credit_fraction: float = 1.0
+    #: ((max sink temperature [°C], cost-function kind), ...) in ascending order; empty = one
+    #: "heat_pump" cost function for every unit (Padullés et al. 2026, Table 3)
+    heat_pump_cost_classes: tuple = ()
+
+    def heat_pump_kind(self, T_sink_out_C: float) -> str:
+        """Cost-function kind for a heat pump delivering heat up to ``T_sink_out_C``.
+
+        Above the highest class the last class is used (an extrapolation, reported
+        by ``heat_pump_cost_class``).
+        """
+        return self.heat_pump_cost_class(T_sink_out_C)[0]
+
+    def heat_pump_cost_class(self, T_sink_out_C: float) -> tuple[str, bool]:
+        """(cost-function kind, True if the sink is above every class)."""
+        if not self.heat_pump_cost_classes:
+            return "heat_pump", False
+        for T_max, kind in self.heat_pump_cost_classes:
+            if T_sink_out_C <= T_max + 1e-9:
+                return kind, False
+        return self.heat_pump_cost_classes[-1][1], True
 
     def __post_init__(self) -> None:
         if not 0 < self.boiler_efficiency <= 1.1:
@@ -137,6 +157,11 @@ def load_economics(block: dict | None) -> EconomicParameters:
     costs = {k: CostFunction(**{**DEFAULT_COST_FUNCTIONS.get(k, {}), **{x: y for x, y in given.get(k, {}).items()
                                                                      if not x.startswith("_") and x != "source"}})
              for k in {**DEFAULT_COST_FUNCTIONS, **given}}
+    classes = tuple(sorted((float(c["max_sink_T_C"]), str(c["cost_function"]))
+                           for c in block.get("heat_pump_cost_classes", [])))
+    for _, kind in classes:
+        if kind not in costs:
+            raise ValueError(f"heat_pump_cost_classes: no cost function '{kind}' in economics.cost_functions")
     return EconomicParameters(
         gas_price_EUR_per_kWh=float(values["gas_price_EUR_per_kWh"]),
         electricity_price_EUR_per_kWh=p_el,
@@ -153,6 +178,7 @@ def load_economics(block: dict | None) -> EconomicParameters:
         cost_functions=costs,
         chiller_cop=None if values["chiller_cop"] is None else float(values["chiller_cop"]),
         refrigeration_credit_fraction=float(values["refrigeration_credit_fraction"]),
+        heat_pump_cost_classes=classes,
     )
 
 

@@ -30,7 +30,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 134 tests (about 3 min)
+python -m pytest                                  # 139 tests (about 3 min)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -130,7 +130,7 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       134 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       139 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
 
 ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
@@ -209,6 +209,13 @@ Every default in `pinch/economics.py` (`DEFAULTS`) carries its source:
 | Primary energy factor, electricity | 1.9 | Delegated Regulation (EU) 2023/807 |
 | Chiller COP (refrigeration credit) | none by default; brewery 4.45 | Sinnott and Towler (2020), Sec. 6.4.4: 0.6 × Carnot (−6 °C / 30 °C); CoolProp ammonia cycle check 4.52 |
 | Heat-exchanger cost (brewery) | 6,841 + 912 A^0.95 EUR | Sinnott and Towler (2020), Table 6.6 plate and frame × 3.5 (Hand, Table 6.3), CEPCI 2023, ECB 2023 |
+
+Cases without published economics (dairy, four-stream) carry their own `economics` block with
+assumed, sourced inputs: Eurostat Portugal 2026-S1 prices for their consumption band at 8000 h/year
+(gas I4 0.0445, electricity ID 0.1135 €/kWh), and heat pump investment from the Danish Energy Agency
+catalogue by sink temperature (`heat_pump_cost_classes`: sheet 1.1 ≤ 60 °C 0.95, 2.a ≤ 125 °C 1.2,
+2.b ≤ 150 °C 1.55 M€/MW; above 150 °C extrapolated and flagged). Padullés et al.'s single function
+(Table 3) stays for the brewery, whose results it reproduces.
 
 A case lists further values under `economics.scenarios` (each scenario overrides named
 parameters and reports the full design, RQ1 and RQ3 again) and further Lorenz efficiencies under

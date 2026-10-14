@@ -144,7 +144,7 @@ def _texts(at):
 def test_case_without_basis_explains_what_is_missing():
     at = _case_app("walmsley2024_milk_evaporator", "6 Economics")
     assert "Switch on the annual basis in step 1" in _texts(at)
-    at = _case_app("walmsley2024_milk_evaporator", "3 ΔTmin")
+    at = _case_app("walmsley2024_spray_dryer", "3 ΔTmin")       # air streams: no sourced coefficients
     assert "film coefficient for every stream" in _texts(at)
     at = _case_app("walmsley2024_milk_evaporator", "5 Retrofit")
     assert "No existing heat-exchanger network" in _texts(at)
@@ -153,14 +153,14 @@ def test_case_without_basis_explains_what_is_missing():
 def test_assumed_basis_runs_economics_and_is_labelled():
     at = _case_app("walmsley2024_milk_evaporator", "6 Economics", basis_on=True)
     assert any(m.label.startswith("RQ3") for m in at.metric), [m.label for m in at.metric]
-    assert "No economic data published" in _texts(at)
+    assert "No economic data in the source" in _texts(at)
     case = at.session_state["base_case"]
     assert at.session_state["basis"] == {"type": "power", "operating_hours_per_year": 8000.0}
     assert case.basis is None                      # the published case is untouched
 
 
 def test_assumed_film_coefficients_run_supertargeting():
-    at = _case_app("walmsley2024_milk_evaporator", "3 ΔTmin", basis_on=True, h=2.0)
+    at = _case_app("walmsley2024_spray_dryer", "3 ΔTmin", basis_on=True, h=0.05)
     assert not any("film coefficient for every stream" in i.value for i in at.info)
     assert len(at.dataframe) >= 1                  # RQ2 table shown
 
@@ -181,3 +181,13 @@ def test_assumed_basis_recorded_in_provenance():
     at.run()
     _ok(at)
     assert any("assumed in the app" in m.value for m in at.markdown), [m.value for m in at.markdown]
+
+
+def test_operating_hours_note_shown_for_dairy():
+    at = _case_app("walmsley2024_milk_evaporator", "1 Streams", basis_on=True)
+    assert "upper bound" in _texts(at)
+
+
+def test_extrapolated_heat_pump_cost_is_flagged():
+    at = _case_app("fourstream_example", "6 Economics", basis_on=True)
+    assert any("extrapolated beyond the catalogue" in w.value for w in at.warning), [w.value for w in at.warning]
