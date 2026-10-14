@@ -191,3 +191,21 @@ def test_operating_hours_note_shown_for_dairy():
 def test_extrapolated_heat_pump_cost_is_flagged():
     at = _case_app("fourstream_example", "6 Economics", basis_on=True)
     assert any("extrapolated beyond the catalogue" in w.value for w in at.warning), [w.value for w in at.warning]
+
+
+def test_break_even_ratio_never_reached_is_shown_as_none():
+    def page():
+        import app_pages
+        import streamlit as st
+        app_pages.init_state()
+        if st.session_state.choice != "walmsley2024_spray_dryer":
+            app_pages.load_inputs("walmsley2024_spray_dryer")
+            st.session_state.basis_on = True
+            st.session_state.basis_value = 4000.0
+            st.session_state.econ_electricity_price_EUR_per_kWh = 0.1135
+        st.session_state.step = st.session_state.step_ctl = "6 Economics"
+        app_pages.workflow_page()
+    at = st_testing.AppTest.from_function(page, default_timeout=300)
+    at.run()
+    _ok(at)
+    assert next(m for m in at.metric if m.label.startswith("RQ3")).value == "none"

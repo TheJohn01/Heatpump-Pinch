@@ -30,7 +30,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 139 tests (about 3 min)
+python -m pytest                                  # 141 tests (about 3 min)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -130,7 +130,7 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       139 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       141 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
 
 ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
@@ -212,9 +212,12 @@ Every default in `pinch/economics.py` (`DEFAULTS`) carries its source:
 
 Cases without published economics (dairy, four-stream) carry their own `economics` block with
 assumed, sourced inputs: Eurostat Portugal 2026-S1 prices for their consumption band at 8000 h/year
-(gas I4 0.0445, electricity ID 0.1135 €/kWh), and heat pump investment from the Danish Energy Agency
+(milk evaporator: gas I5 0.0420, electricity IE 0.0897 €/kWh), and heat pump investment from the Danish Energy Agency
 catalogue by sink temperature (`heat_pump_cost_classes`: sheet 1.1 ≤ 60 °C 0.95, 2.a ≤ 125 °C 1.2,
-2.b ≤ 150 °C 1.55 M€/MW; above 150 °C extrapolated and flagged). Padullés et al.'s single function
+2.b ≤ 150 °C 1.55 M€/MW; above 150 °C extrapolated and flagged) with the catalogue's add-ons
+(`heat_pump_cost_adders`: lift above 75 K +0.15/0.2, steam generation +0.2 M€/MW) and a scenario with
+the new hot-water piping cost. Price bands are checked at site level where the site is known (dairy:
+30 t/h milk-powder plant, Walmsley et al. 2016); the case notes say how the bands move with the hours. Padullés et al.'s single function
 (Table 3) stays for the brewery, whose results it reproduces.
 
 A case lists further values under `economics.scenarios` (each scenario overrides named

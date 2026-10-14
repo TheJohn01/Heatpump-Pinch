@@ -142,8 +142,8 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
             Q_src = sum(u.Q_source for u in units)
         replaced = min(Q_src, res.refrigeration) * params.refrigeration_credit_fraction
         E = to_MWh(W) + (to_MWh(res.refrigeration - replaced) / cop_ch if cop_ch else 0.0)
-        eq = tuple(equipment) + tuple((params.heat_pump_kind(u.T_sink_out_C), capacity_kW(to_MWh(u.Q_sink), params))
-                                      for u in units)
+        eq = tuple(equipment) + tuple((k, capacity_kW(to_MWh(u.Q_sink), params))
+                                      for u in units for k in params.heat_pump_cost_items(u)[0])
         option = Option(opt["name"], to_MWh(Qh_after), E, eq)
         ev = _evaluate(option, baseline, params)
         rows.append({"option": opt["name"], "network": net.name,
@@ -200,7 +200,7 @@ def _curve(units, res: NetworkResult, option, baseline, params, to_MWh, equipmen
             remaining -= q
             W += q / u.COP
             src += q * (1 - 1 / u.COP)
-            eq.append((params.heat_pump_kind(u.T_sink_out_C), capacity_kW(to_MWh(q), params)))
+            eq.extend((k, capacity_kW(to_MWh(q), params)) for k in params.heat_pump_cost_items(u)[0])
         refr_left = res.refrigeration - min(src, res.refrigeration) * params.refrigeration_credit_fraction
         E = to_MWh(W) + (to_MWh(refr_left) / params.chiller_cop if params.chiller_cop else 0.0)
         ev = _evaluate(Option(f"{target:.3f}", to_MWh(res.Qh - target), E, tuple(eq)), baseline, params)

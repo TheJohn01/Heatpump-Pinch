@@ -174,7 +174,8 @@ def test_heat_pump_cost_classes_need_their_cost_function():
 
 
 def test_milk_evaporator_capex_uses_dea_sheets():
-    """Hand check: 0.64 MW at 55 °C (sheet 1.1, 0.95 M€/MW) + 2.90 MW at 105 °C (sheet 2.a, 1.2 M€/MW)."""
+    """Hand check: 0.64 MW at 55 °C (sheet 1.1, 0.95 M€/MW) + 2.90 MW of steam at 105 °C from 15 °C
+    (sheet 2.a 1.2 + lift above 75 K 0.15 + steam generation 0.2 = 1.55 M€/MW)."""
     from dataclasses import replace
     from analyse import compute
     from pinch.case import load_case
@@ -182,8 +183,22 @@ def test_milk_evaporator_capex_uses_dea_sheets():
     c = load_case(ROOT / "cases" / "walmsley2024_milk_evaporator.json")
     res = compute(replace(c, basis={"type": "power", "operating_hours_per_year": 8000.0}))
     t = res.tables["heat_pump_design"]
-    expected = sum(q * (950.0 if T <= 60 else 1200.0) for q, T in zip(t["Q_sink_kW"], t["T_sink_out_C"]))
+    expected = sum(q * (950.0 if T <= 60 else 1550.0) for q, T in zip(t["Q_sink_kW"], t["T_sink_out_C"]))
     full = res.summary["economics"]["results"]["full design (heat recovery installed)"]
     assert full["capex_EUR"] == pytest.approx(expected, rel=1e-6)
-    assert res.summary["economics"]["heat_pump_cost_class"] == {"HP warm (milk preheat)": "hp_dea_1_1",
-                                                                "HTHP 105 °C": "hp_dea_2a"}
+    assert res.summary["economics"]["heat_pump_cost_class"] == {
+        "HP warm (milk preheat)": "hp_dea_1_1", "HTHP 105 °C": "hp_dea_2a + dea_lift_2a + dea_steam"}
+
+
+def test_heat_pump_cost_adders_follow_lift_and_steam():
+    from types import SimpleNamespace as U
+    from pinch.economics import load_economics
+    lin = lambda a: {"alpha": a, "beta": 0.0, "gamma": 1.0, "size_unit": "kW"}  # noqa: E731
+    p = load_economics({"cost_functions": {"b": lin(1200.0), "lift": lin(150.0), "steam": lin(200.0)},
+                        "heat_pump_cost_classes": [{"max_sink_T_C": 125, "cost_function": "b"}],
+                        "heat_pump_cost_adders": [{"cost_function": "lift", "applies_to": ["b"], "min_lift_K": 75},
+                                                  {"cost_function": "steam", "applies_to": ["b"], "isothermal_sink": True}]})
+    hot_water = U(T_sink_in_C=60.0, T_sink_out_C=90.0, T_source_in_C=30.0, T_source_out_C=25.0)   # lift 65 K
+    steam = U(T_sink_in_C=105.0, T_sink_out_C=105.0, T_source_in_C=15.0, T_source_out_C=14.0)   # lift 91 K
+    assert p.heat_pump_cost_items(hot_water) == (("b",), False)
+    assert p.heat_pump_cost_items(steam) == (("b", "lift", "steam"), False)

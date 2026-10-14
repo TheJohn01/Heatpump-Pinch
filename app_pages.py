@@ -18,6 +18,7 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import math
 import tempfile
 import zipfile
 from dataclasses import dataclass, replace
@@ -580,8 +581,14 @@ def _step_economics() -> None:
         r1, r3, full = ec["RQ1"], ec["RQ3"], ec["results"]["full design (heat recovery installed)"]
         c = st.columns(4)
         c[0].metric(f"RQ1: share, payback ≤ {r1['threshold_years']:g} y", f"{100 * r1['max_fraction_with_payback_below_threshold']:.1f} %", border=True)
-        c[1].metric("RQ3: break-even ratio", f"{r3['break_even_ratio_NPV']:.2f}",
-                    delta=f"{r3['break_even_ratio_NPV'] - r3['ratio_used']:+.2f} vs today", delta_color="off", border=True)
+        be = float(r3["break_even_ratio_NPV"])
+        if math.isfinite(be) and be > 0:
+            c[1].metric("RQ3: break-even ratio", f"{be:.2f}", delta=f"{be - r3['ratio_used']:+.2f} vs today",
+                        delta_color="off", border=True)
+        else:   # break_even_ratio: <= 0 or -inf = never pays off; +inf = pays off at any ratio
+            c[1].metric("RQ3: break-even ratio", "any" if be == math.inf else "none", border=True,
+                        help="Pays off at any electricity price." if be == math.inf else
+                        "Does not pay off within the horizon even with free electricity.")
         c[2].metric("Full design: payback", f"{full['payback_years']:.1f} y", border=True)
         c[3].metric(f"Full design: NPV{int(ss['econ_horizon_years'])}", f"{full['npv_EUR'] / 1e6:+.2f} M€", border=True)
         st.caption("Against a site with heat recovery at the energy target (grass-roots comparison)."

@@ -96,6 +96,31 @@ class EconomicParameters:
     #: ((max sink temperature [°C], cost-function kind), ...) in ascending order; empty = one
     #: "heat_pump" cost function for every unit (Padullés et al. 2026, Table 3)
     heat_pump_cost_classes: tuple = ()
+    #: ((cost-function kind, base kinds it applies to, min lift [K] or None, isothermal sink only), ...):
+    #: add-ons such as the DEA catalogue's "lift above 75 K" and "steam generation" equipment costs
+    heat_pump_cost_adders: tuple = ()
+
+    def heat_pump_cost_items(self, unit) -> tuple[tuple[str, ...], bool]:
+        """Cost-function kinds for one heat pump unit (base class plus add-ons), and the extrapolation flag.
+
+        ``unit`` needs ``T_sink_in_C``, ``T_sink_out_C`` and ``T_source_out_C``/``T_source_in_C``. Lift is
+        sink outlet minus source outlet, the definition of the DEA catalogue (sheet 1.2: 80 °C, 75 K
+        from a 15 -> 5 °C source). An isothermal sink (in = out) is taken as steam generation.
+        """
+        base, extrapolated = self.heat_pump_cost_class(unit.T_sink_out_C)
+        T_src = unit.T_source_out_C if unit.T_source_out_C is not None else unit.T_source_in_C
+        lift = None if T_src is None else unit.T_sink_out_C - T_src
+        isothermal = abs(unit.T_sink_out_C - unit.T_sink_in_C) < 1e-9
+        kinds = [base]
+        for kind, applies_to, min_lift, iso_only in self.heat_pump_cost_adders:
+            if base not in applies_to:
+                continue
+            if min_lift is not None and (lift is None or lift <= min_lift):
+                continue
+            if iso_only and not isothermal:
+                continue
+            kinds.append(kind)
+        return tuple(kinds), extrapolated
 
     def heat_pump_kind(self, T_sink_out_C: float) -> str:
         """Cost-function kind for a heat pump delivering heat up to ``T_sink_out_C``.
@@ -159,9 +184,12 @@ def load_economics(block: dict | None) -> EconomicParameters:
              for k in {**DEFAULT_COST_FUNCTIONS, **given}}
     classes = tuple(sorted((float(c["max_sink_T_C"]), str(c["cost_function"]))
                            for c in block.get("heat_pump_cost_classes", [])))
-    for _, kind in classes:
+    adders = tuple((str(a["cost_function"]), tuple(a["applies_to"]),
+                    None if a.get("min_lift_K") is None else float(a["min_lift_K"]), bool(a.get("isothermal_sink")))
+                   for a in block.get("heat_pump_cost_adders", []))
+    for kind in [k for _, k in classes] + [a[0] for a in adders]:
         if kind not in costs:
-            raise ValueError(f"heat_pump_cost_classes: no cost function '{kind}' in economics.cost_functions")
+            raise ValueError(f"heat pump cost: no cost function '{kind}' in economics.cost_functions")
     return EconomicParameters(
         gas_price_EUR_per_kWh=float(values["gas_price_EUR_per_kWh"]),
         electricity_price_EUR_per_kWh=p_el,
@@ -179,6 +207,7 @@ def load_economics(block: dict | None) -> EconomicParameters:
         chiller_cop=None if values["chiller_cop"] is None else float(values["chiller_cop"]),
         refrigeration_credit_fraction=float(values["refrigeration_credit_fraction"]),
         heat_pump_cost_classes=classes,
+        heat_pump_cost_adders=adders,
     )
 
 
