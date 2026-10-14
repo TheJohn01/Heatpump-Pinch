@@ -220,7 +220,7 @@ VI's printed ΔT_LM (81.9 K) uses the cold temperatures of interval V; with its 
 
 * **Code**: MIT licence (`LICENSE`).
 * **Data**: the stream tables and reference values in `data/` are transcribed from the cited
-  publications (Padullés et al., 2026, open access; Walmsley et al., 2024, MDPI *Energies*,
+  publications (Padullés et al., 2026, *Energy Conversion and Management*, CC BY; Walmsley et al., 2024, MDPI *Energies*,
   CC BY 4.0; textbook and lecture-note examples) and remain subject to their original terms;
   cite the original sources when reusing them. `data/sources/` holds Eurostat and ECB series,
   reused with acknowledgement of the source as their reuse policies require.
