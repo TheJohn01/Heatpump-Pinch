@@ -30,7 +30,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 141 tests (about 3 min)
+python -m pytest                                  # 143 tests (about 3 min)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -130,7 +130,7 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       141 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       143 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
 
 ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)

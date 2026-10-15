@@ -20,6 +20,7 @@
 | Heat pump CAPEX -25 % | 100.0 % | 4.0 y / +1.32 M€ | 2.74 y | 0.6 | 3.13 / 5.50 | 2.22 | DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW |
 | Heat pump CAPEX +25 % | 73.5 % | 4.07 y / +1.26 M€ | 4.56 y | 0.6 | 2.58 / 4.52 | 2.22 | DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW |
 | Retrofit exchanger CAPEX x3 | 75.9 % | 5.0 y / +0.94 M€ | 3.65 y | 0.6 | 2.75 / 4.91 | 2.22 | stress test |
+| Film coefficients x5 (gasketed plates) | 85.2 % | 4.99 y / +0.96 M€ | 3.65 y | 0.1 | 2.98 / 5.03 | 2.22 | Sinnott & Towler Table 12.1: plate, water-water U 5,000-7,500 W/m2K vs 1,000 implied by Stampfli |
 | Production 0.25 Mhl/year | 7.2 % | 1.95 y / +0.07 M€ | 8.92 y | 0.6 | 0.23 / 2.09 | 2.22 | Padullés Table 1 range (UK case) |
 | Production 0.5 Mhl/year | 73.5 % | 4.84 y / +0.50 M€ | 5.41 y | 0.6 | 1.91 / 4.03 | 2.22 | Padullés Table 1 range |
 | Production 1.5 Mhl/year | 100.0 % | 4.29 y / +1.83 M€ | 3.07 y | 0.6 | 3.28 / 5.34 | 2.22 | Padullés Table 1 range (TH case) |

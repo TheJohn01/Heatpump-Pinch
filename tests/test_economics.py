@@ -202,3 +202,27 @@ def test_heat_pump_cost_adders_follow_lift_and_steam():
     steam = U(T_sink_in_C=105.0, T_sink_out_C=105.0, T_source_in_C=15.0, T_source_out_C=14.0)   # lift 91 K
     assert p.heat_pump_cost_items(hot_water) == (("b",), False)
     assert p.heat_pump_cost_items(steam) == (("b", "lift", "steam"), False)
+
+
+def test_cooling_water_cost_follows_price_and_hours():
+    """Sinnott & Towler Sec. 6.4.4: 0.0341 kWh + 0.00042 EUR per kWh removed; 8000 h at 0.1135 EUR/kWh = 34.3."""
+    from dataclasses import replace
+    from analyse import compute
+    from pinch.case import load_case
+    from pinch.validation import ROOT
+    c = load_case(ROOT / "cases" / "fourstream_example.json")
+    for hours, p_el in [(8000.0, 0.1135), (6000.0, 0.0897)]:
+        eco = {**c.economics, "operating_hours_per_year": hours, "electricity_price_EUR_per_kWh": p_el}
+        at = compute(replace(c, basis={"type": "power", "operating_hours_per_year": hours}, economics=eco)).summary["area_targeting"]
+        assert at["cold_utility_cost_EUR_per_kW_year"] == pytest.approx(hours * (p_el * 0.0341 + 0.000421), rel=1e-3)
+
+
+def test_spray_dryer_has_no_steam_add_on():
+    """Liang et al. (2023): the dryer air is heated directly, not with steam."""
+    from dataclasses import replace
+    from analyse import compute
+    from pinch.case import load_case
+    from pinch.validation import ROOT
+    c = load_case(ROOT / "cases" / "walmsley2024_spray_dryer.json")
+    cls = compute(replace(c, basis={"type": "power", "operating_hours_per_year": 8000.0})).summary["economics"]["heat_pump_cost_class"]
+    assert not any("steam" in v for v in cls.values())

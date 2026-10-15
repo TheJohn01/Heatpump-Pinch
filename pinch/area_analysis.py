@@ -65,7 +65,11 @@ def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
     grid = block.get("dTmin_grid_K", list(np.arange(1, 31, 1.0)))
     c_hot = hours * params.gas_price_EUR_per_kWh / params.boiler_efficiency
     c_cold_given = block.get("cold_utility_cost_EUR_per_kW_year")
-    if c_cold_given is None and params.chiller_cop:
+    cw = block.get("cooling_water")   # {"electricity_kWh_per_kWh": e, "other_EUR_per_kWh": o} per kWh of heat removed
+    if cw:
+        c_cold = hours * (params.electricity_price_EUR_per_kWh * float(cw["electricity_kWh_per_kWh"])
+                          + float(cw.get("other_EUR_per_kWh", 0.0)))
+    elif c_cold_given is None and params.chiller_cop:
         c_cold = hours * params.electricity_price_EUR_per_kWh / params.chiller_cop   # refrigeration electricity
     else:
         c_cold = float(c_cold_given or 0.0)

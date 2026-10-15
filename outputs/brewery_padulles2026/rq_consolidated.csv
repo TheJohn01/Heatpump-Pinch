@@ -19,6 +19,7 @@ Cycle-based COP -17 %,advisory: our model is 17 % above Andersen et al. (2024) F
 Heat pump CAPEX -25 %,DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW,1.0,n1___both_heat_pumps (partial),4.0,1.325,0.6,3.134,5.504,2.74,4.29,1.133,2.217
 Heat pump CAPEX +25 %,DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW,0.7345,n1___warm_water_heat_pump_only (partial),4.07,1.261,0.6,2.576,4.517,4.56,6.57,0.411,2.217
 Retrofit exchanger CAPEX x3,stress test,0.7588,n1___both_heat_pumps (partial),5.0,0.945,0.6,2.752,4.914,3.65,5.72,0.661,2.217
+Film coefficients x5 (gasketed plates),"Sinnott & Towler Table 12.1: plate, water-water U 5,000-7,500 W/m2K vs 1,000 implied by Stampfli",0.8515,n1___both_heat_pumps (partial),4.99,0.956,0.1,2.982,5.025,3.65,5.26,0.876,2.217
 Production 0.25 Mhl/year,Padullés Table 1 range (UK case),0.0722,N1: condensate into tank,1.95,0.071,0.6,0.226,2.091,8.92,15.17,-0.615,2.217
 Production 0.5 Mhl/year,Padullés Table 1 range,0.7345,n1___warm_water_heat_pump_only (partial),4.84,0.498,0.6,1.91,4.033,5.41,8.87,-0.189,2.217
 Production 1.5 Mhl/year,Padullés Table 1 range (TH case),1.0,n1___both_heat_pumps (partial),4.29,1.832,0.6,3.284,5.339,3.07,4.29,1.832,2.217

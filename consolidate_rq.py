@@ -74,6 +74,8 @@ SENSITIVITIES = [
     ("Heat pump CAPEX -25 %", "hp_capex", 0.75, "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"),
     ("Heat pump CAPEX +25 %", "hp_capex", 1.25, "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"),
     ("Retrofit exchanger CAPEX x3", "hx_capex", 3.0, "stress test"),
+    ("Film coefficients x5 (gasketed plates)", "film", 5.0,
+     "Sinnott & Towler Table 12.1: plate, water-water U 5,000-7,500 W/m2K vs 1,000 implied by Stampfli"),
     ("Production 0.25 Mhl/year", "scale", 0.25e6, "Padullés Table 1 range (UK case)"),
     ("Production 0.5 Mhl/year", "scale", 0.5e6, "Padullés Table 1 range"),
     ("Production 1.5 Mhl/year", "scale", 1.5e6, "Padullés Table 1 range (TH case)"),
@@ -109,6 +111,10 @@ def _apply(case: Case, kind: str, value, selected: dict | None) -> Case:
         base = {**DEFAULT_COST_FUNCTIONS.get(key, {}), **cf.get(key, {})}
         cf[key] = {**base, "alpha": base["alpha"] * value, "beta": base["beta"] * value}
         return replace(case, economics={**case.economics, "cost_functions": cf})
+    if kind == "film":
+        at = dict(case.area_targeting)
+        at["film_coefficients_kW_per_m2K"] = {k: v * float(value) for k, v in at["film_coefficients_kW_per_m2K"].items()}
+        return replace(case, area_targeting=at)
     if kind == "scale":
         f = value / case.basis["production_per_year"]
         retro = copy.deepcopy(case.retrofit)

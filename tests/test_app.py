@@ -201,7 +201,7 @@ def test_break_even_ratio_never_reached_is_shown_as_none():
         if st.session_state.choice != "walmsley2024_spray_dryer":
             app_pages.load_inputs("walmsley2024_spray_dryer")
             st.session_state.basis_on = True
-            st.session_state.basis_value = 4000.0
+            st.session_state.basis_value = 2000.0
             st.session_state.econ_electricity_price_EUR_per_kWh = 0.1135
         st.session_state.step = st.session_state.step_ctl = "6 Economics"
         app_pages.workflow_page()

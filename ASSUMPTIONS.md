@@ -15,7 +15,7 @@ Status: **V** verified against a source or a known answer · **D** decision take
 | 7 | MVR COP 15 vs η 0.55 (paper) | L | MVR not used in the final options |
 | 8 | Two-stage cycles | V | Implemented; Andersen App. A: R-1234ze(E) two-stg −0.1 %, water two-stg2 −5.0 % |
 | 9 | Practical compressor limits | V, C | IEA HPT Annex 58 Task 1, Table 1-3: pressure ratio per stage ≤ 10 (piston/scroll; screw > 20, so 10 is conservative); ammonia ≤ 76 bar, 110 °C. Selected: propane SLHX (warm water, COP 3.11), propane/butane cascade (HTHP, COP 1.96) |
-| 10 | Film coefficients (Stampfli dairy categories) | V | Implied U: water–water 1000, product–water 400, condensing–water 1430 W/m²K, inside Sinnott & Towler Table 12.1 shell-and-tube ranges (plates are higher, so areas are conservative) |
+| 10 | Film coefficients (Stampfli dairy categories) | V | Implied U: water–water 1000, product–water 400, condensing–water 1430 W/m²K, inside Sinnott & Towler Table 12.1 shell-and-tube ranges (plates are higher, so areas are conservative). Gasketed plates (Table 12.1): water–water 5,000–7,500 W/m²K, 5–7.5× higher; sensitivity 'Film coefficients x5' in the consolidated table: ΔTmin,opt 0.1 K, RQ1 85 % |
 | 11 | Gas prices on GCV; NCV/GCV = 0.90 | V | Regulation (EU) 2016/1952, Annex I, point 4; IPCC (1996) Reference Manual, Ch. 1, Table 1-4 note a |
 | 12 | Electricity tariff band ID | V, C | IFC EHS Guidelines for Breweries (2007): 7.5–11.5 kWh/hl → 11–15 GWh/y with heat pumps. ID is also dearer than IE (conservative) |
 | 13 | Exchange rates | V | ECB Data Portal: NZD 2017 = 1.5897 (annual); USD 2023 = 1.0816 (mean of monthly averages) |
@@ -29,6 +29,6 @@ Status: **V** verified against a source or a known answer · **D** decision take
 | 21 | New condensate exchanger (4 K, U = 1.0) and tank ∝ heat | C | Stress test: exchanger capex ×3 |
 | 22 | ΔTmin,opt 0.4–1.0 K | C | Lower bound: pumping, fouling and batch timing not modelled; Sinnott & Towler give 10–30 K typical |
 | 23 | App: upload, bad input, cell edit | V | `ui_smoke.py` (browser): upload OK; missing columns reported; CP 0.2 → 0.3 gives Q̇h 13.5 MW = problem-table value |
-| 24 | Dairy cases: economics | L | Walmsley et al. (2024) give no operating hours or prices: steps 1–4 only. Network/retrofit generality tested on the four-stream example |
+| 24 | Dairy cases: economics | D | Walmsley et al. (2024) give no operating hours or prices. Assumed, sourced inputs in the case files: DEA heat pump costs by sink temperature with lift/steam add-ons, Eurostat Portugal bands at site level (Walmsley et al. 2016: 30 t/h plant, 210–220 kWh/t, 5.2 GJ/t), 8000 h/year as an upper bound; demonstration only. Network/retrofit generality tested on the four-stream example |
 | 25 | Spray dryer first-law inconsistency | L | Published targets reproduced only with inferred temperatures (Fig. 5) |
 | 26 | Walmsley evaporator ΔTcont 0.5 vs 2.5 K | L | Targets unaffected |
