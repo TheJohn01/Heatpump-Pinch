@@ -1,0 +1,52 @@
+{
+  "hot_utility_cost_EUR_per_kW_year": 315.98,
+  "cold_utility_cost_EUR_per_kW_year": 0.0,
+  "crf_per_year": 0.1295,
+  "film_coefficients_source": "Liang et al. (2022), Table 2 (from Zühlsdorf et al.): overall U water-air 42.5 W/(m2 K) on the air-side area. Air-air heat transfer is done through water loops (direct air-air exchange is not used in practice, Sec. 2.1), i.e. two water-air exchangers in series: h = 0.0425 kW/(m2 K) per air stream gives U = 21 W/(m2 K) per match",
+  "RQ2": [
+    {
+      "cost_law": "sweep: 25 EUR/m2 installed, linear (not a sourced estimate)",
+      "a": 0.0,
+      "b": 25.0,
+      "c": 1.0,
+      "dTmin_opt_K": 2.0,
+      "TAC_min_EUR": 1365575.0,
+      "area_m2": 17481.5,
+      "Qh_min_kW": 4142.6,
+      "at_grid_edge": true
+    },
+    {
+      "cost_law": "sweep: 50 EUR/m2 installed, linear (not a sourced estimate)",
+      "a": 0.0,
+      "b": 50.0,
+      "c": 1.0,
+      "dTmin_opt_K": 4.0,
+      "TAC_min_EUR": 1408658.0,
+      "area_m2": 12518.0,
+      "Qh_min_kW": 4201.6,
+      "at_grid_edge": false
+    },
+    {
+      "cost_law": "sweep: 100 EUR/m2 installed, linear (not a sourced estimate)",
+      "a": 0.0,
+      "b": 100.0,
+      "c": 1.0,
+      "dTmin_opt_K": 8.0,
+      "TAC_min_EUR": 1469677.0,
+      "area_m2": 7869.5,
+      "Qh_min_kW": 4328.7,
+      "at_grid_edge": false
+    },
+    {
+      "cost_law": "sweep: 250 EUR/m2 installed, linear (not a sourced estimate)",
+      "a": 0.0,
+      "b": 250.0,
+      "c": 1.0,
+      "dTmin_opt_K": 14.0,
+      "TAC_min_EUR": 1584848.0,
+      "area_m2": 4439.6,
+      "Qh_min_kW": 4560.8,
+      "at_grid_edge": false
+    }
+  ]
+}

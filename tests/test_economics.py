@@ -217,12 +217,13 @@ def test_cooling_water_cost_follows_price_and_hours():
         assert at["cold_utility_cost_EUR_per_kW_year"] == pytest.approx(hours * (p_el * 0.0341 + 0.000421), rel=1e-3)
 
 
-def test_spray_dryer_has_no_steam_add_on():
-    """Liang et al. (2023): the dryer air is heated directly, not with steam."""
-    from dataclasses import replace
+def test_spray_dryer_steam_add_on_only_for_steam_heat_pump():
+    """Liang et al. (2022): water loops up to 114 °C, a closed-loop steam heat pump for the main air."""
     from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
     c = load_case(ROOT / "cases" / "walmsley2024_spray_dryer.json")
-    cls = compute(replace(c, basis={"type": "power", "operating_hours_per_year": 8000.0})).summary["economics"]["heat_pump_cost_class"]
-    assert not any("steam" in v for v in cls.values())
+    assert c.basis == {"type": "power", "operating_hours_per_year": 6000}        # published by Liang et al. (2022)
+    cls = compute(c).summary["economics"]["heat_pump_cost_class"]
+    assert "steam" not in cls["HTHP 120 °C (fluid beds)"]
+    assert "dea_steam" in cls["HTHP 200 °C (main air)"]

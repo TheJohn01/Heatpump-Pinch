@@ -52,8 +52,8 @@ used by the command line and the tests (no calculation of its own):
 * **Sources**: provenance of every input, the assumptions register, downloads (zip of all
   outputs, summary as Markdown/JSON).
 
-Cases whose source publishes no annual basis, film coefficients or existing network (the dairy
-and four-stream cases): switch on **Convert to annual figures** in step 1 and enter operating hours,
+Cases whose source publishes no annual basis, film coefficients or existing network (the milk
+evaporator and four-stream cases; the spray dryer's 6000 h/year come from Liang et al., 2022): switch on **Convert to annual figures** in step 1 and enter operating hours,
 and fill the `h_kW_per_m2K` column, to run ΔTmin supertargeting (step 3, cost sweep only) and the
 economics (step 6, default prices and cost functions). These values are your assumptions and are
 recorded as such on the Sources page. The retrofit (step 5) needs a description of the existing
@@ -101,7 +101,8 @@ cases/
   brewery_padulles2026.json  Main case (Padullés et al., 2026)
   fourstream_example.json    Four-stream chemical process (non-food demonstration)
   walmsley2024_milk_evaporator.json  Dairy: MVR milk evaporator, kW (Walmsley et al., 2024)
-  walmsley2024_spray_dryer.json      Dairy: milk powder spray dryer, kW (Table 1 as published; see warning)
+  walmsley2024_spray_dryer.json      Dairy: milk powder spray dryer, kW (Table 1 as published; see warning);
+                                     6000 h/year and air-side U from Liang et al. (2022), the stream data's source
 data/
   brewery_streams.csv        Padullés et al. (2026), Table 2; 'Amb.' = 15 °C (inferred)
   fourstream_example.csv     Univ. Oklahoma ChE notes, Example 1.1

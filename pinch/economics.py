@@ -96,7 +96,8 @@ class EconomicParameters:
     #: ((max sink temperature [°C], cost-function kind), ...) in ascending order; empty = one
     #: "heat_pump" cost function for every unit (Padullés et al. 2026, Table 3)
     heat_pump_cost_classes: tuple = ()
-    #: ((cost-function kind, base kinds it applies to, min lift [K] or None, isothermal sink only), ...):
+    #: ((cost-function kind, base kinds it applies to, min lift [K] or None, isothermal sink only,
+    #:   min sink temperature [°C] or None), ...):
     #: add-ons such as the DEA catalogue's "lift above 75 K" and "steam generation" equipment costs
     heat_pump_cost_adders: tuple = ()
 
@@ -112,8 +113,10 @@ class EconomicParameters:
         lift = None if T_src is None else unit.T_sink_out_C - T_src
         isothermal = abs(unit.T_sink_out_C - unit.T_sink_in_C) < 1e-9
         kinds = [base]
-        for kind, applies_to, min_lift, iso_only in self.heat_pump_cost_adders:
+        for kind, applies_to, min_lift, iso_only, min_sink in self.heat_pump_cost_adders:
             if base not in applies_to:
+                continue
+            if min_sink is not None and unit.T_sink_out_C < min_sink:
                 continue
             if min_lift is not None and (lift is None or lift <= min_lift):
                 continue
@@ -185,7 +188,8 @@ def load_economics(block: dict | None) -> EconomicParameters:
     classes = tuple(sorted((float(c["max_sink_T_C"]), str(c["cost_function"]))
                            for c in block.get("heat_pump_cost_classes", [])))
     adders = tuple((str(a["cost_function"]), tuple(a["applies_to"]),
-                    None if a.get("min_lift_K") is None else float(a["min_lift_K"]), bool(a.get("isothermal_sink")))
+                    None if a.get("min_lift_K") is None else float(a["min_lift_K"]), bool(a.get("isothermal_sink")),
+                    None if a.get("min_sink_T_C") is None else float(a["min_sink_T_C"]))
                    for a in block.get("heat_pump_cost_adders", []))
     for kind in [k for _, k in classes] + [a[0] for a in adders]:
         if kind not in costs:

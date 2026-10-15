@@ -144,7 +144,7 @@ def _texts(at):
 def test_case_without_basis_explains_what_is_missing():
     at = _case_app("walmsley2024_milk_evaporator", "6 Economics")
     assert "Switch on the annual basis in step 1" in _texts(at)
-    at = _case_app("walmsley2024_spray_dryer", "3 ΔTmin")       # air streams: no sourced coefficients
+    at = _case_app("walmsley2024_milk_evaporator", "3 ΔTmin", h=float("nan"))   # coefficients cleared
     assert "film coefficient for every stream" in _texts(at)
     at = _case_app("walmsley2024_milk_evaporator", "5 Retrofit")
     assert "No existing heat-exchanger network" in _texts(at)
