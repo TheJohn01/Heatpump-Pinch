@@ -49,15 +49,104 @@
     "co2_price_EUR_per_t": 0,
     "heat_recovery_equipment": [],
     "sources": {
-      "prices": "cite the price source, period, band and tax basis (example values: Eurostat Portugal 2026-S1, electricity band ID, gas band I3, excl. VAT)"
+      "prices": "cite the price source, period, band and tax basis (example values: Eurostat Portugal 2026-S1, electricity band ID, gas band I3, excl. VAT)",
+      "heat_pump_cost": "Danish Energy Agency catalogue (2025) by sink temperature (sheets 1.1 / 2.a / 2.b), with its add-ons for lift above 75 K and steam generation (isothermal sinks); remove the steam add-on if the heat pump heats air or water directly. Padullés et al. (2026, Table 3) is fitted to brewery heat pumps (below the catalogue above about 1.7 MW)"
     },
     "scenarios": {
       "EU ETS CO2 price": {
         "co2_price_EUR_per_t": 82.4
       }
-    }
+    },
+    "cost_functions": {
+      "hp_dea_1_1": {
+        "alpha": 950.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 1.1 'Heat pump, up to 60 °C, temp. lift 40 K': 0.95 M€/MW (0.91-0.95), unit size 0.5-5 MW. O&M (DEA 2025) sheet 1.1: fixed 2,127 EUR/MW/y, variable 3.07 EUR/MWh",
+        "fixed_om_EUR_per_unit_year": 2.127,
+        "variable_om_EUR_per_MWh": 3.07
+      },
+      "hp_dea_2a": {
+        "alpha": 1200.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.a 'High-temperature heat pumps up to 125 °C': 1.2 M€/MW (0.9-1.5), unit size 0.3-25 MW. O&M (DEA 2025) sheet 2.a: fixed 2,494 EUR/MW/y, variable 3.6 EUR/MWh",
+        "fixed_om_EUR_per_unit_year": 2.494,
+        "variable_om_EUR_per_MWh": 3.6
+      },
+      "hp_dea_2b": {
+        "alpha": 1550.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.b 'High-temperature heat pumps up to 150 °C': 1.55 M€/MW (1.25-1.8), unit size 0.5-80 MW. No catalogue sheet above 150 °C: units with hotter sinks are costed with this sheet as an extrapolation (flagged). O&M (DEA 2025) sheet 2.b: fixed 2,494 EUR/MW/y, variable 3.6 EUR/MWh",
+        "fixed_om_EUR_per_unit_year": 2.494,
+        "variable_om_EUR_per_MWh": 3.6
+      },
+      "dea_lift_2a": {
+        "alpha": 150.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheet 2.a: 'Additional equipment cost for temperature lift above 75 K' 0.15 M€/MW (0.05-0.25)"
+      },
+      "dea_lift_2b": {
+        "alpha": 200.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheet 2.b: 'Additional equipment cost for temperature lift above 75 K' 0.2 M€/MW (0.1-0.3)"
+      },
+      "dea_steam": {
+        "alpha": 200.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheets 2.a and 2.b: 'Steam generation increases equipment cost by' 0.2 M€/MW (0.05-0.3); applied to isothermal sinks (steam). The sheets' COP penalty for steam (-0.15) is not applied: COP comes from the Lorenz model"
+      }
+    },
+    "heat_pump_cost_classes": [
+      {
+        "max_sink_T_C": 60,
+        "cost_function": "hp_dea_1_1"
+      },
+      {
+        "max_sink_T_C": 125,
+        "cost_function": "hp_dea_2a"
+      },
+      {
+        "max_sink_T_C": 150,
+        "cost_function": "hp_dea_2b"
+      }
+    ],
+    "heat_pump_cost_adders": [
+      {
+        "cost_function": "dea_lift_2a",
+        "applies_to": [
+          "hp_dea_2a"
+        ],
+        "min_lift_K": 75
+      },
+      {
+        "cost_function": "dea_lift_2b",
+        "applies_to": [
+          "hp_dea_2b"
+        ],
+        "min_lift_K": 75
+      },
+      {
+        "cost_function": "dea_steam",
+        "applies_to": [
+          "hp_dea_2a",
+          "hp_dea_2b"
+        ],
+        "isothermal_sink": true
+      }
+    ]
   },
-  "_economics": "Optional; needs 'basis'. Any key left out takes the default in pinch/economics.py (DEFAULTS, each with its source). For a 'power' basis, operating_hours_per_year must match the basis. heat_recovery_equipment: list of [kind, size] (kinds: hr_tank [m3], heat_pump/mvr/electric_boiler [kW]) to evaluate a site without heat recovery. scenarios: {name: {parameter: value}} re-runs the full design, RQ1 and RQ3 with those overrides.",
+  "_economics": "Optional; needs 'basis'. Any key left out takes the default in pinch/economics.py (DEFAULTS, each with its source). For a 'power' basis, operating_hours_per_year must match the basis. heat_recovery_equipment: list of [kind, size] (kinds: hr_tank [m3], heat_pump/mvr/electric_boiler [kW]) to evaluate a site without heat recovery. scenarios: {name: {parameter: value}} re-runs the full design, RQ1 and RQ3 with those overrides. Heat pumps: cost function chosen by sink temperature (heat_pump_cost_classes) plus add-ons (heat_pump_cost_adders); O&M per cost function (fixed_om_EUR_per_unit_year, variable_om_EUR_per_MWh).",
   "screening": {
     "sink_warn_C": 120,
     "sink_max_C": 200,

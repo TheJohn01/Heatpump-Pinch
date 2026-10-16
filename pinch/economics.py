@@ -30,11 +30,18 @@ from dataclasses import dataclass, field, replace
 
 #: Cost functions C = beta + alpha * X**gamma [EUR]. Source: Padullés et al. (2026),
 #: Table 3, taken from the Danish Energy Agency Technology Catalogue.
+#: O&M from the Danish Energy Agency, Technology Data - Industrial Process Heat (2025 values): heat pump
+#: sheet 2.a (2,494 EUR/MW/y, 3.6 EUR/MWh; both brewery heat pumps deliver <= 125 °C), MVR sheet 4
+#: (2,345 EUR/MW/y, 2.1 EUR/MWh), electric boiler sheet 5.1a (1,442 EUR/MW/y, 0.674 EUR/MWh).
+#: Padullés et al. (2026) include no O&M: their reproduction scripts set it to zero.
 DEFAULT_COST_FUNCTIONS = {
     "hr_tank": {"alpha": 7450.0, "beta": 0.0, "gamma": 0.65, "size_unit": "m3"},
-    "heat_pump": {"alpha": 600.0, "beta": 520_000.0, "gamma": 1.0, "size_unit": "kW"},
-    "mvr": {"alpha": 350.0, "beta": 280_000.0, "gamma": 1.0, "size_unit": "kW"},
-    "electric_boiler": {"alpha": 210.0, "beta": 110_000.0, "gamma": 1.0, "size_unit": "kW"},
+    "heat_pump": {"alpha": 600.0, "beta": 520_000.0, "gamma": 1.0, "size_unit": "kW",
+                  "fixed_om_EUR_per_unit_year": 2.494, "variable_om_EUR_per_MWh": 3.6},
+    "mvr": {"alpha": 350.0, "beta": 280_000.0, "gamma": 1.0, "size_unit": "kW",
+            "fixed_om_EUR_per_unit_year": 2.345, "variable_om_EUR_per_MWh": 2.1},
+    "electric_boiler": {"alpha": 210.0, "beta": 110_000.0, "gamma": 1.0, "size_unit": "kW",
+                        "fixed_om_EUR_per_unit_year": 1.442, "variable_om_EUR_per_MWh": 0.674},
     # an item whose size is its cost (e.g. the cost difference of an enlarged tank, computed elsewhere)
     "lump_sum_EUR": {"alpha": 1.0, "beta": 0.0, "gamma": 1.0, "size_unit": "EUR"},
 }
@@ -55,6 +62,7 @@ DEFAULTS = {
     "pef_electricity": (1.9, "published: Commission Delegated Regulation (EU) 2023/807 (EED default)"),
     "pef_gas": (1.0, "convention: primary energy of a fuel = its final energy"),
     "refrigeration_credit_fraction": (1.0, "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)"),
+    "boiler_variable_om_EUR_per_MWh": (1.23, "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up"),
     "chiller_cop": (None, "no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles)"),
 }
 
@@ -67,6 +75,10 @@ class CostFunction:
     beta: float
     gamma: float
     size_unit: str = ""
+    #: operation and maintenance: fixed per size unit and year; variable per MWh of heat delivered
+    #: (only for sizes in kW, delivered over the operating hours)
+    fixed_om_EUR_per_unit_year: float = 0.0
+    variable_om_EUR_per_MWh: float = 0.0
 
     def cost(self, size: float) -> float:
         if size < 0:
@@ -93,6 +105,7 @@ class EconomicParameters:
     cost_functions: dict[str, CostFunction] = field(default_factory=dict)
     chiller_cop: float | None = None   # refrigeration COP; None = no credit for avoided chiller electricity
     refrigeration_credit_fraction: float = 1.0
+    boiler_variable_om_EUR_per_MWh: float = 0.0
     #: ((max sink temperature [°C], cost-function kind), ...) in ascending order; empty = one
     #: "heat_pump" cost function for every unit (Padullés et al. 2026, Table 3)
     heat_pump_cost_classes: tuple = ()
@@ -211,6 +224,7 @@ def load_economics(block: dict | None) -> EconomicParameters:
         chiller_cop=None if values["chiller_cop"] is None else float(values["chiller_cop"]),
         refrigeration_credit_fraction=float(values["refrigeration_credit_fraction"]),
         heat_pump_cost_classes=classes,
+        boiler_variable_om_EUR_per_MWh=float(values["boiler_variable_om_EUR_per_MWh"]),
         heat_pump_cost_adders=adders,
     )
 
@@ -270,12 +284,25 @@ def capex(option: Option, params: EconomicParameters) -> float:
     return total
 
 
+def om(option: Option, p: EconomicParameters) -> float:
+    """Operation and maintenance [EUR/year]: equipment (fixed + variable) and the boiler's variable O&M."""
+    total = option.gas_heat_MWh * p.boiler_variable_om_EUR_per_MWh
+    for kind, size in option.equipment:
+        cf = p.cost_functions[kind]
+        total += cf.fixed_om_EUR_per_unit_year * size
+        if cf.variable_om_EUR_per_MWh:
+            if cf.size_unit != "kW":
+                raise ValueError(f"{kind}: variable O&M needs a size in kW")
+            total += cf.variable_om_EUR_per_MWh * size * p.operating_hours_per_year / 1000
+    return total
+
+
 def _annual(option: Option, p: EconomicParameters) -> tuple[float, float, float, float]:
-    """(gas fuel MWh, OPEX EUR, CO2 t, primary energy MWh) per year."""
+    """(gas fuel MWh, OPEX EUR, CO2 t, primary energy MWh) per year. OPEX includes O&M (``om``)."""
     fuel = option.gas_heat_MWh / p.boiler_efficiency
     co2_gas_t = fuel * p.gas_EF_kg_per_kWh  # MWh x kg/kWh = t
     opex = (fuel * p.gas_price_EUR_per_kWh + option.electricity_MWh * p.electricity_price_EUR_per_kWh) * 1000 \
-        + co2_gas_t * p.co2_price_EUR_per_t
+        + co2_gas_t * p.co2_price_EUR_per_t + om(option, p)
     co2 = co2_gas_t + option.electricity_MWh * p.grid_EF_kg_per_kWh
     pe = fuel * p.pef_gas + option.electricity_MWh * p.pef_electricity
     return fuel, opex, co2, pe
@@ -324,7 +351,8 @@ def break_even_ratio(option: Option, baseline: Option, params: EconomicParameter
     fuel, _, _, _ = _annual(option, params)
     p_gas = params.gas_price_EUR_per_kWh
     # savings(r) = A - r * B: A from gas and CO2 terms, B from the electricity difference
-    A = (fuel_b - fuel) * p_gas * 1000 + (fuel_b - fuel) * params.gas_EF_kg_per_kWh * params.co2_price_EUR_per_t
+    A = (fuel_b - fuel) * p_gas * 1000 + (fuel_b - fuel) * params.gas_EF_kg_per_kWh * params.co2_price_EUR_per_t \
+        + om(baseline, params) - om(option, params)
     B = (option.electricity_MWh - baseline.electricity_MWh) * p_gas * 1000
     if B <= 0:
         return math.inf if A - required >= 0 else -math.inf
@@ -334,3 +362,10 @@ def break_even_ratio(option: Option, baseline: Option, params: EconomicParameter
 def capacity_kW(heat_MWh_per_year: float, params: EconomicParameters) -> float:
     """Equipment capacity [kW] for constant operation over the operating hours."""
     return heat_MWh_per_year * 1000 / params.operating_hours_per_year
+
+
+#: Padullés et al. (2026) include no operation and maintenance costs: overrides that reproduce their convention
+NO_OM = {"boiler_variable_om_EUR_per_MWh": 0.0,
+         "cost_functions": {k: {"fixed_om_EUR_per_unit_year": 0.0, "variable_om_EUR_per_MWh": 0.0}
+                            for k in ("heat_pump", "mvr", "electric_boiler")}}
+

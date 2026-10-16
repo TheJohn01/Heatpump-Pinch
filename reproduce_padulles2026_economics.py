@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from pinch.economics import Option, capacity_kW, evaluate, load_economics
+from pinch.economics import NO_OM, Option, capacity_kW, evaluate, load_economics
 from pinch.heat_pump import HeatPump
 from pinch.validation import ROOT
 
@@ -79,7 +79,8 @@ def best(production_hl, ratio, hr_installed, params, criterion):
 def main() -> None:
     OUT.mkdir(exist_ok=True)
     params = load_economics({"gas_price_EUR_per_kWh": 0.06, "boiler_efficiency": 1.0, "gas_EF_kg_per_kWh": 0.219,
-                             "operating_hours_per_year": 8000, "discount_rate": 0.05, "horizon_years": 10})
+                             "operating_hours_per_year": 8000, "discount_rate": 0.05, "horizon_years": 10,
+                             **NO_OM})   # the paper includes no O&M
 
     rows = []
     for size in (0.25e6, 0.5e6, 0.75e6, 1.0e6, 1.5e6):

@@ -28,6 +28,7 @@
     "pef_electricity": "published: Commission Delegated Regulation (EU) 2023/807 (EED default)",
     "pef_gas": "convention: primary energy of a fuel = its final energy",
     "refrigeration_credit_fraction": "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)",
+    "boiler_variable_om_EUR_per_MWh": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up",
     "chiller_cop": "no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles)"
   },
   "case_sources": {
@@ -47,18 +48,18 @@
     "max_NPV_EUR": 0.0
   },
   "RQ3": {
-    "break_even_ratio_NPV": 0.589,
-    "break_even_ratio_payback": -0.073,
+    "break_even_ratio_NPV": 0.494,
+    "break_even_ratio_payback": -0.168,
     "ratio_used": 2.016
   },
   "results": {
     "full design (heat recovery installed)": {
       "option": "80.5 %",
       "capex_EUR": 6134727.3067,
-      "opex_EUR": 1602817.8486,
-      "savings_EUR": -137256.4285,
+      "opex_EUR": 1699432.8246,
+      "savings_EUR": -199641.4884,
       "payback_years": Infinity,
-      "npv_EUR": -7194585.0651,
+      "npv_EUR": -7676305.9613,
       "gas_fuel_MWh": 6430.9826,
       "electricity_MWh": 14678.2511,
       "co2_t": 2741.0117,
@@ -78,15 +79,15 @@
       "co2_price_EUR_per_t": 0.0,
       "chiller_cop": null,
       "full_capex_EUR": 6993203.0,
-      "full_savings_EUR": -137256.0,
+      "full_savings_EUR": -109711.0,
       "full_payback_years": Infinity,
-      "full_npv_EUR": -8053061.0,
+      "full_npv_EUR": -7840359.0,
       "full_co2_avoided_t": 3253.0,
       "full_primary_energy_reduction": -0.0421,
       "RQ1_max_fraction_payback_ok": 0.0,
       "RQ1_fraction_max_NPV": 0.0,
-      "RQ3_break_even_ratio_NPV": 0.419,
-      "RQ3_break_even_ratio_payback": -0.336
+      "RQ3_break_even_ratio_NPV": 0.461,
+      "RQ3_break_even_ratio_payback": -0.294
     }
   ]
 }

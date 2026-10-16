@@ -77,7 +77,8 @@
       "electricity_to_gas_ratio": "published: Padullés et al. (2026), Sec. 5.2, 'current European ratios of around 2'",
       "pef_electricity": "published: Commission Delegated Regulation (EU) 2023/807 (EED default)",
       "pef_gas": "convention: primary energy of a fuel = its final energy",
-      "refrigeration_credit_fraction": "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)"
+      "refrigeration_credit_fraction": "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)",
+      "boiler_variable_om_EUR_per_MWh": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up"
     },
     "case_sources": {
       "prices": "Eurostat nrg_pc_205 (electricity, band ID 2,000-19,999 MWh) and nrg_pc_203 (gas, band I3 10,000-99,999 GJ), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh (gas on GCV). Parsed copy: data/sources/eurostat_portugal_prices.csv. Band check: gas fuel ~ 1.2e7 kWh/year = 43,000 GJ (I3); heat pump electricity alone 3.4 GWh/year (ID); site electricity 7.5-11.5 kWh/hl for breweries above 1 Mhl/y (IFC EHS Guidelines for Breweries 2007, Table 3) + heat pumps 3.4-3.9 kWh/hl = 11-15 GWh/year: band ID. ID is also the conservative choice (dearer than IE)",
@@ -101,24 +102,24 @@
       "_definition": "fraction = heat pump heat / Q̇h,min of the site with heat recovery installed",
       "threshold_years": 5.0,
       "fraction_with_max_NPV": 0.725,
-      "max_NPV_EUR": 1175927.0,
+      "max_NPV_EUR": 1025160.0,
       "site_without_HR: max gas reduction with payback below threshold": 1.0,
       "site_without_HR: heat pump share of Q̇h,min in that project": 1.0
     },
     "RQ3": {
-      "break_even_ratio_NPV": 2.705,
-      "break_even_ratio_payback": 1.796,
+      "break_even_ratio_NPV": 2.512,
+      "break_even_ratio_payback": 1.603,
       "ratio_used": 2.217,
-      "break_even_ratio_NPV_with_HR_investment": 7.248
+      "break_even_ratio_NPV_with_HR_investment": 7.155
     },
     "results": {
       "full design (heat recovery installed)": {
         "option": "100.0 %",
         "capex_EUR": 1793176.4713,
-        "opex_EUR": 390490.6941,
-        "savings_EUR": 300150.7995,
-        "payback_years": 5.9743,
-        "npv_EUR": 524508.4413,
+        "opex_EUR": 429773.8683,
+        "savings_EUR": 273219.7195,
+        "payback_years": 6.5631,
+        "npv_EUR": 316553.7799,
         "gas_fuel_MWh": -0.0,
         "electricity_MWh": 3440.4466,
         "co2_t": 368.1278,
@@ -130,10 +131,10 @@
       "heat recovery only (vs no HR)": {
         "option": "heat recovery only",
         "capex_EUR": 434502.6273,
-        "opex_EUR": 690641.4936,
-        "savings_EUR": 688179.3247,
-        "payback_years": 0.6314,
-        "npv_EUR": 4879435.7021,
+        "opex_EUR": 702993.5878,
+        "savings_EUR": 702149.2306,
+        "payback_years": 0.6188,
+        "npv_EUR": 4987307.6123,
         "gas_fuel_MWh": 11884.4414,
         "electricity_MWh": 723.8599,
         "co2_t": 2240.4213,
@@ -145,10 +146,10 @@
       "heat recovery + heat pumps (vs no HR)": {
         "option": "heat recovery + heat pumps",
         "capex_EUR": 2227679.0987,
-        "opex_EUR": 390490.6941,
-        "savings_EUR": 988330.1243,
-        "payback_years": 2.254,
-        "npv_EUR": 5403944.1434,
+        "opex_EUR": 429773.8683,
+        "savings_EUR": 975368.9501,
+        "payback_years": 2.2839,
+        "npv_EUR": 5303861.3923,
         "gas_fuel_MWh": -0.0,
         "electricity_MWh": 3440.4466,
         "co2_t": 368.1278,
@@ -168,15 +169,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 241305.0,
-        "full_payback_years": 7.43,
-        "full_npv_EUR": 70114.0,
+        "full_savings_EUR": 214374.0,
+        "full_payback_years": 8.36,
+        "full_npv_EUR": -137840.0,
         "full_co2_avoided_t": 1872.0,
         "full_primary_energy_reduction": 0.507,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.598,
-        "RQ3_break_even_ratio_payback": 1.63
+        "RQ3_break_even_ratio_NPV": 2.391,
+        "RQ3_break_even_ratio_payback": 1.424
       },
       {
         "scenario": "Prices 2025-S1 (ID 0.1230 / I3 0.0546)",
@@ -187,15 +188,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 314750.0,
-        "full_payback_years": 5.7,
-        "full_npv_EUR": 637242.0,
+        "full_savings_EUR": 287819.0,
+        "full_payback_years": 6.23,
+        "full_npv_EUR": 429287.0,
         "full_co2_avoided_t": 1872.0,
         "full_primary_energy_reduction": 0.507,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.809,
-        "RQ3_break_even_ratio_payback": 1.957
+        "RQ3_break_even_ratio_NPV": 2.628,
+        "RQ3_break_even_ratio_payback": 1.775
       },
       {
         "scenario": "Electricity band IE (0.0897), 2026-S1",
@@ -206,15 +207,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 364806.0,
-        "full_payback_years": 4.92,
-        "full_npv_EUR": 1023755.0,
+        "full_savings_EUR": 337874.0,
+        "full_payback_years": 5.31,
+        "full_npv_EUR": 815801.0,
         "full_co2_avoided_t": 1872.0,
         "full_primary_energy_reduction": 0.507,
-        "RQ1_max_fraction_payback_ok": 1.0,
+        "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.705,
-        "RQ3_break_even_ratio_payback": 1.796
+        "RQ3_break_even_ratio_NPV": 2.512,
+        "RQ3_break_even_ratio_payback": 1.603
       },
       {
         "scenario": "Previous inputs (ECO-reported 2025-S1: 0.132 / 0.055)",
@@ -225,15 +226,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 295055.0,
-        "full_payback_years": 6.08,
-        "full_npv_EUR": 485159.0,
+        "full_savings_EUR": 268124.0,
+        "full_payback_years": 6.69,
+        "full_npv_EUR": 277204.0,
         "full_co2_avoided_t": 1872.0,
         "full_primary_energy_reduction": 0.507,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.821,
-        "RQ3_break_even_ratio_payback": 1.974
+        "RQ3_break_even_ratio_NPV": 2.64,
+        "RQ3_break_even_ratio_payback": 1.794
       },
       {
         "scenario": "Boiler efficiency 0.817 (US DOE)",
@@ -244,15 +245,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 321005.0,
-        "full_payback_years": 5.59,
-        "full_npv_EUR": 685536.0,
+        "full_savings_EUR": 294073.0,
+        "full_payback_years": 6.1,
+        "full_npv_EUR": 477581.0,
         "full_co2_avoided_t": 1946.0,
         "full_primary_energy_reduction": 0.5217,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.855,
-        "RQ3_break_even_ratio_payback": 1.946
+        "RQ3_break_even_ratio_NPV": 2.661,
+        "RQ3_break_even_ratio_payback": 1.753
       },
       {
         "scenario": "Boiler efficiency 0.929 (implied by Padulles App. B, DK1)",
@@ -263,15 +264,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 245132.0,
-        "full_payback_years": 7.32,
-        "full_npv_EUR": 99667.0,
+        "full_savings_EUR": 218201.0,
+        "full_payback_years": 8.22,
+        "full_npv_EUR": -108288.0,
         "full_co2_avoided_t": 1677.0,
         "full_primary_energy_reduction": 0.4635,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.31,
-        "RQ3_break_even_ratio_payback": 1.401
+        "RQ3_break_even_ratio_NPV": 2.116,
+        "RQ3_break_even_ratio_payback": 1.207
       },
       {
         "scenario": "Boiler efficiency 1.0 (bound)",
@@ -282,15 +283,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 205836.0,
-        "full_payback_years": 8.71,
-        "full_npv_EUR": -203766.0,
+        "full_savings_EUR": 178905.0,
+        "full_payback_years": 10.02,
+        "full_npv_EUR": -411721.0,
         "full_co2_avoided_t": 1537.0,
         "full_primary_energy_reduction": 0.4275,
-        "RQ1_max_fraction_payback_ok": 0.725,
+        "RQ1_max_fraction_payback_ok": 0.0,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.027,
-        "RQ3_break_even_ratio_payback": 1.118
+        "RQ3_break_even_ratio_NPV": 1.833,
+        "RQ3_break_even_ratio_payback": 0.925
       },
       {
         "scenario": "EU ETS CO2 price 82.4 EUR/t",
@@ -301,15 +302,15 @@
         "co2_price_EUR_per_t": 82.4,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 478379.0,
-        "full_payback_years": 3.75,
-        "full_npv_EUR": 1900742.0,
+        "full_savings_EUR": 451448.0,
+        "full_payback_years": 3.97,
+        "full_npv_EUR": 1692788.0,
         "full_co2_avoided_t": 1872.0,
         "full_primary_energy_reduction": 0.507,
         "RQ1_max_fraction_payback_ok": 1.0,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 3.987,
-        "RQ3_break_even_ratio_payback": 3.078
+        "RQ3_break_even_ratio_NPV": 3.793,
+        "RQ3_break_even_ratio_payback": 2.884
       },
       {
         "scenario": "Gas EF 0.219 (Padulles Sec. 5.3)",
@@ -320,15 +321,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 300151.0,
-        "full_payback_years": 5.97,
-        "full_npv_EUR": 524508.0,
+        "full_savings_EUR": 273220.0,
+        "full_payback_years": 6.56,
+        "full_npv_EUR": 316554.0,
         "full_co2_avoided_t": 2312.0,
         "full_primary_energy_reduction": 0.507,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.705,
-        "RQ3_break_even_ratio_payback": 1.796
+        "RQ3_break_even_ratio_NPV": 2.512,
+        "RQ3_break_even_ratio_payback": 1.603
       },
       {
         "scenario": "Grid EF 0.092 (APA mainland 2023)",
@@ -339,15 +340,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 300151.0,
-        "full_payback_years": 5.97,
-        "full_npv_EUR": 524508.0,
+        "full_savings_EUR": 273220.0,
+        "full_payback_years": 6.56,
+        "full_npv_EUR": 316554.0,
         "full_co2_avoided_t": 1913.0,
         "full_primary_energy_reduction": 0.507,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.705,
-        "RQ3_break_even_ratio_payback": 1.796
+        "RQ3_break_even_ratio_NPV": 2.512,
+        "RQ3_break_even_ratio_payback": 1.603
       },
       {
         "scenario": "Grid EF 0.167 (APA 5-year average 2019-2023)",
@@ -358,15 +359,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 300151.0,
-        "full_payback_years": 5.97,
-        "full_npv_EUR": 524508.0,
+        "full_savings_EUR": 273220.0,
+        "full_payback_years": 6.56,
+        "full_npv_EUR": 316554.0,
         "full_co2_avoided_t": 1709.0,
         "full_primary_energy_reduction": 0.507,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.705,
-        "RQ3_break_even_ratio_payback": 1.796
+        "RQ3_break_even_ratio_NPV": 2.512,
+        "RQ3_break_even_ratio_payback": 1.603
       },
       {
         "scenario": "Grid EF 0.1172 (Electricity Maps 2025)",
@@ -377,15 +378,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 300151.0,
-        "full_payback_years": 5.97,
-        "full_npv_EUR": 524508.0,
+        "full_savings_EUR": 273220.0,
+        "full_payback_years": 6.56,
+        "full_npv_EUR": 316554.0,
         "full_co2_avoided_t": 1845.0,
         "full_primary_energy_reduction": 0.507,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.705,
-        "RQ3_break_even_ratio_payback": 1.796
+        "RQ3_break_even_ratio_NPV": 2.512,
+        "RQ3_break_even_ratio_payback": 1.603
       },
       {
         "scenario": "No refrigeration credit (as Padulles et al. 2026)",
@@ -396,15 +397,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": null,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 217993.0,
-        "full_payback_years": 8.23,
-        "full_npv_EUR": -109895.0,
+        "full_savings_EUR": 191062.0,
+        "full_payback_years": 9.39,
+        "full_npv_EUR": -317849.0,
         "full_co2_avoided_t": 1795.0,
         "full_primary_energy_reduction": 0.45,
         "RQ1_max_fraction_payback_ok": 0.0,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.136,
-        "RQ3_break_even_ratio_payback": 1.418
+        "RQ3_break_even_ratio_NPV": 1.983,
+        "RQ3_break_even_ratio_payback": 1.265
       },
       {
         "scenario": "Chiller COP 6.68 (0.9 x Carnot, Towler upper bound)",
@@ -415,15 +416,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 6.68,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 272724.0,
-        "full_payback_years": 6.58,
-        "full_npv_EUR": 312724.0,
+        "full_savings_EUR": 245793.0,
+        "full_payback_years": 7.3,
+        "full_npv_EUR": 104770.0,
         "full_co2_avoided_t": 1846.0,
         "full_primary_energy_reduction": 0.4893,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.484,
-        "RQ3_break_even_ratio_payback": 1.65
+        "RQ3_break_even_ratio_NPV": 2.306,
+        "RQ3_break_even_ratio_payback": 1.472
       },
       {
         "scenario": "Refrigeration credit 50 % (batch mismatch)",
@@ -434,15 +435,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": 4.45,
         "full_capex_EUR": 1793176.0,
-        "full_savings_EUR": 259072.0,
-        "full_payback_years": 6.92,
-        "full_npv_EUR": 207307.0,
+        "full_savings_EUR": 232141.0,
+        "full_payback_years": 7.72,
+        "full_npv_EUR": -648.0,
         "full_co2_avoided_t": 1834.0,
         "full_primary_energy_reduction": 0.4552,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
-        "RQ3_break_even_ratio_NPV": 2.387,
-        "RQ3_break_even_ratio_payback": 1.585
+        "RQ3_break_even_ratio_NPV": 2.216,
+        "RQ3_break_even_ratio_payback": 1.414
       }
     ]
   },
@@ -458,15 +459,15 @@
       "co2_price_EUR_per_t": 0.0,
       "chiller_cop": 4.45,
       "full_capex_EUR": 1793176.0,
-      "full_savings_EUR": 213375.0,
-      "full_payback_years": 8.4,
-      "full_npv_EUR": -145551.0,
+      "full_savings_EUR": 186444.0,
+      "full_payback_years": 9.62,
+      "full_npv_EUR": -353505.0,
       "full_co2_avoided_t": 1790.0,
       "full_primary_energy_reduction": 0.3975,
       "RQ1_max_fraction_payback_ok": 0.725,
       "RQ1_fraction_max_NPV": 0.725,
-      "RQ3_break_even_ratio_NPV": 2.111,
-      "RQ3_break_even_ratio_payback": 1.402
+      "RQ3_break_even_ratio_NPV": 1.96,
+      "RQ3_break_even_ratio_payback": 1.251
     },
     {
       "eta_lorenz": 0.52,
@@ -479,15 +480,15 @@
       "co2_price_EUR_per_t": 0.0,
       "chiller_cop": 4.45,
       "full_capex_EUR": 1793176.0,
-      "full_savings_EUR": 277622.0,
-      "full_payback_years": 6.46,
-      "full_npv_EUR": 350551.0,
+      "full_savings_EUR": 250691.0,
+      "full_payback_years": 7.15,
+      "full_npv_EUR": 142596.0,
       "full_co2_avoided_t": 1851.0,
       "full_primary_energy_reduction": 0.4786,
       "RQ1_max_fraction_payback_ok": 0.725,
       "RQ1_fraction_max_NPV": 0.725,
-      "RQ3_break_even_ratio_NPV": 2.521,
-      "RQ3_break_even_ratio_payback": 1.674
+      "RQ3_break_even_ratio_NPV": 2.341,
+      "RQ3_break_even_ratio_payback": 1.494
     },
     {
       "eta_lorenz": 0.63,
@@ -500,15 +501,15 @@
       "co2_price_EUR_per_t": 0.0,
       "chiller_cop": 4.45,
       "full_capex_EUR": 1793176.0,
-      "full_savings_EUR": 349737.0,
-      "full_payback_years": 5.13,
-      "full_npv_EUR": 907399.0,
+      "full_savings_EUR": 322806.0,
+      "full_payback_years": 5.55,
+      "full_npv_EUR": 699445.0,
       "full_co2_avoided_t": 1919.0,
       "full_primary_energy_reduction": 0.5696,
-      "RQ1_max_fraction_payback_ok": 0.79,
+      "RQ1_max_fraction_payback_ok": 0.725,
       "RQ1_fraction_max_NPV": 0.725,
-      "RQ3_break_even_ratio_NPV": 3.224,
-      "RQ3_break_even_ratio_payback": 2.141
+      "RQ3_break_even_ratio_NPV": 2.993,
+      "RQ3_break_even_ratio_payback": 1.91
     }
   ],
   "cycle_based_design": {
@@ -537,15 +538,15 @@
       "co2_price_EUR_per_t": 0.0,
       "chiller_cop": 4.45,
       "full_capex_EUR": 1793176.0,
-      "full_savings_EUR": 264654.0,
-      "full_payback_years": 6.78,
-      "full_npv_EUR": 250408.0,
+      "full_savings_EUR": 237722.0,
+      "full_payback_years": 7.54,
+      "full_npv_EUR": 42454.0,
       "full_co2_avoided_t": 1839.0,
       "full_primary_energy_reduction": 0.4622,
       "RQ1_max_fraction_payback_ok": 0.725,
       "RQ1_fraction_max_NPV": 0.725,
-      "RQ3_break_even_ratio_NPV": 2.426,
-      "RQ3_break_even_ratio_payback": 1.611
+      "RQ3_break_even_ratio_NPV": 2.252,
+      "RQ3_break_even_ratio_payback": 1.437
     }
   },
   "retrofit": {
@@ -603,9 +604,9 @@
         "W_heat_pumps": 0.0,
         "refrigeration_taken_over": 0.0,
         "capex_EUR": 55972.0,
-        "savings_EUR": 49401.0,
-        "payback_years": 1.13,
-        "npv_EUR": 325491.0,
+        "savings_EUR": 50404.0,
+        "payback_years": 1.11,
+        "npv_EUR": 333235.0,
         "gas_reduction_vs_baseline": 0.0722,
         "co2_avoided_t": 176.0,
         "primary_energy_reduction": 0.0654,
@@ -620,13 +621,13 @@
         "W_heat_pumps": 3.848,
         "refrigeration_taken_over": 3.2212,
         "capex_EUR": 1887500.0,
-        "savings_EUR": 330099.0,
-        "payback_years": 5.72,
-        "npv_EUR": 661436.0,
+        "savings_EUR": 299795.0,
+        "payback_years": 6.3,
+        "npv_EUR": 427439.0,
         "gas_reduction_vs_baseline": 1.0,
         "co2_avoided_t": 2100.0,
         "primary_energy_reduction": 0.5043,
-        "break_even_ratio_NPV": 2.752
+        "break_even_ratio_NPV": 2.563
       },
       {
         "option": "N1 + both heat pumps",
@@ -637,13 +638,13 @@
         "W_heat_pumps": 3.6181,
         "refrigeration_taken_over": 3.2212,
         "capex_EUR": 1882325.0,
-        "savings_EUR": 356186.0,
-        "payback_years": 5.28,
-        "npv_EUR": 868049.0,
+        "savings_EUR": 329071.0,
+        "payback_years": 5.72,
+        "npv_EUR": 658678.0,
         "gas_reduction_vs_baseline": 1.0,
         "co2_avoided_t": 2124.0,
         "primary_energy_reduction": 0.5339,
-        "break_even_ratio_NPV": 2.975
+        "break_even_ratio_NPV": 2.792
       },
       {
         "option": "N1 + warm-water heat pump only",
@@ -654,13 +655,13 @@
         "W_heat_pumps": 2.11,
         "refrigeration_taken_over": 3.2212,
         "capex_EUR": 1137325.0,
-        "savings_EUR": 345581.0,
-        "payback_years": 3.29,
-        "npv_EUR": 1531156.0,
+        "savings_EUR": 326511.0,
+        "payback_years": 3.48,
+        "npv_EUR": 1383908.0,
         "gas_reduction_vs_baseline": 0.7345,
         "co2_avoided_t": 1639.0,
         "primary_energy_reduction": 0.4874,
-        "break_even_ratio_NPV": 5.011
+        "break_even_ratio_NPV": 4.742
       },
       {
         "option": "N1 + both heat pumps, cycle-based COP",
@@ -671,35 +672,35 @@
         "W_heat_pumps": 3.941,
         "refrigeration_taken_over": 3.2212,
         "capex_EUR": 1882325.0,
-        "savings_EUR": 319544.0,
-        "payback_years": 5.89,
-        "npv_EUR": 585109.0,
+        "savings_EUR": 292429.0,
+        "payback_years": 6.44,
+        "npv_EUR": 375737.0,
         "gas_reduction_vs_baseline": 1.0,
         "co2_avoided_t": 2090.0,
         "primary_energy_reduction": 0.4923,
-        "break_even_ratio_NPV": 2.677
+        "break_even_ratio_NPV": 2.512
       }
     ],
     "RQ1_vs_existing_site": {
       "N0 + both heat pumps (Padulles config. 2)": {
         "max_gas_reduction_payback_ok": 0.73,
         "gas_reduction_at_max_NPV": 0.73,
-        "max_NPV_EUR": 1317104.0
+        "max_NPV_EUR": 1146285.0
       },
       "N1 + both heat pumps": {
-        "max_gas_reduction_payback_ok": 0.8423,
+        "max_gas_reduction_payback_ok": 0.7309,
         "gas_reduction_at_max_NPV": 0.7309,
-        "max_NPV_EUR": 1525246.0
+        "max_NPV_EUR": 1378839.0
       },
       "N1 + warm-water heat pump only": {
         "max_gas_reduction_payback_ok": 0.7345,
         "gas_reduction_at_max_NPV": 0.7345,
-        "max_NPV_EUR": 1531161.0
+        "max_NPV_EUR": 1383913.0
       },
       "N1 + both heat pumps, cycle-based COP": {
         "max_gas_reduction_payback_ok": 0.7309,
         "gas_reduction_at_max_NPV": 0.7309,
-        "max_NPV_EUR": 1266202.0
+        "max_NPV_EUR": 1119795.0
       }
     },
     "assumptions": {

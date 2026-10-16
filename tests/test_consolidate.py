@@ -13,12 +13,18 @@ def table():
 
 def test_base_row_matches_retrofit_and_hand_check(table):
     b = table.loc["Base case"]
-    # warm-water heat pump increment over the condensate retrofit, from the retrofit table:
-    # (1,137,333 - 55,981) EUR / (345,581 - 49,401) EUR/year = 3.65 years
-    assert b["warm_water_HP_incremental_payback_y"] == pytest.approx((1_137_333 - 55_981) / (345_581 - 49_401), abs=0.01)
-    assert b["RQ3_ratio_warm_water_HP_only"] == pytest.approx(5.011, abs=0.01)
-    assert b["RQ3_ratio_full_electrification"] == pytest.approx(2.975, abs=0.01)
-    assert b["RQ1_gas_share"] >= 0.735 - 1e-4          # at least the warm-water heat pump option
+    # warm-water heat pump increment over the condensate retrofit, from the retrofit table (O&M included):
+    # (1,137,325 - 55,972) EUR / (326,511 - 50,404) EUR/year = 3.92 years. The savings include DEA O&M:
+    # N1: +815 MWh x 1.23 boiler O&M = +1,003; warm-water heat pump: +8,300 MWh x 1.23 boiler O&M
+    # - 7,480 MWh x 3.6 - 935 kW x 2.494 heat pump O&M = -19,051 EUR/year versus no O&M
+    assert b["warm_water_HP_incremental_payback_y"] == pytest.approx((1_137_325 - 55_972) / (326_511 - 50_404), abs=0.01)
+    assert b["RQ3_ratio_warm_water_HP_only"] == pytest.approx(4.742, abs=0.01)
+    assert b["RQ3_ratio_full_electrification"] == pytest.approx(2.792, abs=0.01)
+    assert b["RQ1_gas_share"] >= 0.7345 - 1e-4         # at least the warm-water heat pump option (1 - 3.0/11.3)
+    # without O&M (Padullés' convention) the previous base row is reproduced
+    n = table.loc["No O&M (as Padullés et al.)"]
+    assert n["RQ3_ratio_full_electrification"] == pytest.approx(2.975, abs=0.01)
+    assert n["warm_water_HP_incremental_payback_y"] == pytest.approx(3.65, abs=0.01)
     assert b["RQ1_payback_y"] <= 5.0 + 1e-9
 
 

@@ -60,7 +60,7 @@ def test_price_change_moves_ratio_and_persists_across_steps(brewery):
     at = _goto(at, STEPS[5])
     assert any("1.76" in c.value for c in at.caption), [c.value for c in at.caption]
     delta = next(m for m in at.metric if m.label.startswith("RQ3")).delta
-    assert delta.startswith("+0.95"), delta          # 2.71 break-even - 1.76 today
+    assert delta.startswith("+0.75"), delta          # 2.51 break-even (with DEA O&M) - 1.76 today
     at.session_state["econ_electricity_price_EUR_per_kWh"] = 0.1135
     at.run()
 
@@ -215,3 +215,14 @@ def test_retrofit_tab_shows_bracket_for_spray_dryer():
     at = _case_app("walmsley2024_spray_dryer", "5 Retrofit")
     assert any("no heat recovery (published)" in h.value for h in at.subheader), [h.value for h in at.subheader]
     assert len(at.dataframe) >= 1
+
+
+def test_upload_uses_catalogue_heat_pump_costs():
+    """Uploaded tables are costed with the DEA catalogue classes (template), not the brewery function."""
+    import app_pages
+    from pinch.economics import load_economics
+    from pinch.case import load_case
+    c = load_case(app_pages.ROOT / "cases" / "TEMPLATE.json")
+    p = load_economics(c.economics)
+    assert p.heat_pump_cost_class(105.0) == ("hp_dea_2a", False)
+    assert p.cost_functions["hp_dea_2a"].variable_om_EUR_per_MWh == 3.6

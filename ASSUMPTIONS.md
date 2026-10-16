@@ -24,7 +24,7 @@ Status: **V** verified against a source or a known answer · **D** decision take
 | 16 | Location factor for Portugal | L | Not in Sinnott & Towler Table 6.7; none applied |
 | 17 | Chiller COP 4.45 | V | 0.6 × Carnot (Sinnott & Towler Sec. 6.4.4); CoolProp NH₃ 4.52. Range 3.14 (Example 6.7, 40 °C cooling water) to 6.68 |
 | 18 | Refrigeration credit simultaneity | C | Paper's continuous operation (8000 h) gives full credit; advisory rows: 50 % and none |
-| 19 | Heat pump capex | V | Padullés Table 3 (1.12 M€/MW at 1 MW) vs DEA sheet 2.a 1.2 (0.9–1.5) M€/MW: ±25 % rows. Fixed O&M ≈ 2 k€/MW·y (DEA 1.1/1.2), < 1 % of savings, neglected |
+| 19 | Heat pump capex | V | Padullés Table 3 (1.12 M€/MW at 1 MW) vs DEA sheet 2.a 1.2 (0.9–1.5) M€/MW: ±25 % rows. O&M now included (DEA 2025): heat pumps 2,494 €/MW·y + 3.6 €/MWh of heat (sheet 2.a), gas boiler variable O&M 1.23 €/MWh avoided (sheet 6.1; fixed not credited, boiler kept as back-up). Effect: RQ1 84 → 73.5 %, RQ3 2.98 → 2.79; row 'No O&M (as Padullés et al.)' reproduces the previous base |
 | 20 | Production 1 Mhl/y | C | Within Padullés Table 1; rows at 0.25, 0.5, 1.5 Mhl/y |
 | 21 | New condensate exchanger (4 K, U = 1.0) and tank ∝ heat | C | Stress test: exchanger capex ×3 |
 | 22 | ΔTmin,opt 0.4–1.0 K | C | Lower bound: pumping, fouling and batch timing not modelled; Sinnott & Towler give 10–30 K typical |
@@ -33,3 +33,5 @@ Status: **V** verified against a source or a known answer · **D** decision take
 | 25 | Spray dryer first-law inconsistency | L | Published targets reproduced only with inferred temperatures (Fig. 5) |
 | 26 | Walmsley evaporator ΔTcont 0.5 vs 2.5 K | L | Targets unaffected |
 | 27 | Retrofit without a published network | D | Bracket: no heat recovery (published for the spray dryer: Liang et al. 2022, Sec. 2.1, Fig. 1) vs already at target (= step 6). New network costed from the area and units targets. Heat pump sources replace refrigeration only if at or below the coldest refrigerated stream (brewery: yes, unchanged) |
+| 28 | Portuguese CO₂ addition on gas (CIEC Art. 92.º-A) | C | Base CO₂ price 0. The tax applies to natural gas outside the EU ETS (ERSE 2020), 67.4 €/t in 2025; Eurostat's price (excl. VAT) holds at most 3.8 €/MWh of non-recoverable taxes, so the full tax is not in it. Energy-intensive consumers (SGCIE, > 500 toe/y; brewery ≈ 1,000 toe/y) may be exempt: legal text not retrieved. Row 'Portuguese CO2 addition 67.4 EUR/t': RQ1 100 %, RQ3 3.90 |
+| 29 | Heat pump cost for uploaded tables | V | Template uses the DEA catalogue by sink temperature with add-ons and O&M (Padullés' brewery function is below the catalogue above ≈ 1.7 MW) |

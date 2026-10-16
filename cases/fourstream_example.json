@@ -47,21 +47,27 @@
         "beta": 0.0,
         "gamma": 1.0,
         "size_unit": "kW",
-        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 1.1 'Heat pump, up to 60 °C, temp. lift 40 K': 0.95 M€/MW (0.91-0.95), unit size 0.5-5 MW"
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 1.1 'Heat pump, up to 60 °C, temp. lift 40 K': 0.95 M€/MW (0.91-0.95), unit size 0.5-5 MW. O&M (DEA 2025) sheet 1.1: fixed 2,127 EUR/MW/y, variable 3.07 EUR/MWh",
+        "fixed_om_EUR_per_unit_year": 2.127,
+        "variable_om_EUR_per_MWh": 3.07
       },
       "hp_dea_2a": {
         "alpha": 1200.0,
         "beta": 0.0,
         "gamma": 1.0,
         "size_unit": "kW",
-        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.a 'High-temperature heat pumps up to 125 °C': 1.2 M€/MW (0.9-1.5), unit size 0.3-25 MW"
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.a 'High-temperature heat pumps up to 125 °C': 1.2 M€/MW (0.9-1.5), unit size 0.3-25 MW. O&M (DEA 2025) sheet 2.a: fixed 2,494 EUR/MW/y, variable 3.6 EUR/MWh",
+        "fixed_om_EUR_per_unit_year": 2.494,
+        "variable_om_EUR_per_MWh": 3.6
       },
       "hp_dea_2b": {
         "alpha": 1550.0,
         "beta": 0.0,
         "gamma": 1.0,
         "size_unit": "kW",
-        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.b 'High-temperature heat pumps up to 150 °C': 1.55 M€/MW (1.25-1.8), unit size 0.5-80 MW. No catalogue sheet above 150 °C: units with hotter sinks are costed with this sheet as an extrapolation (flagged)"
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.b 'High-temperature heat pumps up to 150 °C': 1.55 M€/MW (1.25-1.8), unit size 0.5-80 MW. No catalogue sheet above 150 °C: units with hotter sinks are costed with this sheet as an extrapolation (flagged). O&M (DEA 2025) sheet 2.b: fixed 2,494 EUR/MW/y, variable 3.6 EUR/MWh",
+        "fixed_om_EUR_per_unit_year": 2.494,
+        "variable_om_EUR_per_MWh": 3.6
       },
       "dea_lift_2a": {
         "alpha": 150.0,

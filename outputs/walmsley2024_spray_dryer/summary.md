@@ -39,28 +39,28 @@ Price ratio 2.016 (electricity 0.0897 EUR/kWh, gas 0.0445 EUR/kWh); boiler effic
 | Quantity | Value |
 |---|---|
 | Full design: CAPEX [EUR] | 6,134,727 |
-| Full design: annual savings [EUR/year] | -137,256 |
+| Full design: annual savings [EUR/year] | -199,641 |
 | Full design: simple payback [years] | inf |
-| Full design: NPV [EUR] | -7,194,585 |
+| Full design: NPV [EUR] | -7,676,306 |
 | Full design: CO2 avoided [t/year] | 3,253 |
 | Full design: primary-energy reduction | -4.2 % |
 | RQ1: largest share of Q̇h,min with payback ≤ 5 y | 0.0 % |
 | RQ1: share with maximum NPV | 0.0 % |
-| RQ3: break-even ratio, NPV = 0 | 0.589 |
-| RQ3: break-even ratio, payback = threshold | -0.073 |
+| RQ3: break-even ratio, NPV = 0 | 0.494 |
+| RQ3: break-even ratio, payback = threshold | -0.168 |
 
 ### Scenarios (parameter overrides)
 
 | Scenario | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | RQ1 | RQ3 (NPV = 0) |
 |---|---|---|---|---|---|---|
-| with hot-water piping (DEA indirect cost) | 2.016 | inf | -8,053,061 | 3,253 | 0.0 % | 0.419 |
+| with hot-water piping (DEA indirect cost) | 2.016 | inf | -7,840,359 | 3,253 | 0.0 % | 0.461 |
 
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 
 | η_L | System COP | Full-design payback [y] | NPV [EUR] | RQ1 | RQ3 (NPV = 0) |
 |---|---|---|---|---|---|
-| 0.45 | 1.373 | inf | -8,324,223 | 0.0 % | 0.53 |
-| 0.52 | 1.587 | inf | -6,803,557 | 0.0 % | 0.613 |
+| 0.45 | 1.373 | inf | -8,805,944 | 0.0 % | 0.444 |
+| 0.52 | 1.587 | inf | -7,285,278 | 0.0 % | 0.514 |
 
 ## ΔTmin supertargeting (step 3, RQ2)
 

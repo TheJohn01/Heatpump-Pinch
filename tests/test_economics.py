@@ -37,6 +37,8 @@ def test_evaluate_hand_calculation():
     e = evaluate(hp, base, P)
     capex = 520_000 + 600 * 125.0
     savings = 1000 * 60 - 400 * 120          # EUR/year: gas at 60, electricity at 120 EUR/MWh
+    # O&M (DEA): boiler 1.23 EUR/MWh avoided; heat pump 2.494 EUR/kW/y + 3.6 EUR/MWh of heat (sheet 2.a)
+    savings += 1000 * 1.23 - (2.494 * 125.0 + 3.6 * 1000)
     assert e.capex_EUR == pytest.approx(capex)
     assert e.savings_EUR == pytest.approx(savings)
     assert e.payback_years == pytest.approx(capex / savings)
@@ -95,6 +97,8 @@ def test_brewery_full_design_hand_check(tmp_path):
     kW = lambda q: q * 1e3 * 1000 / 8000                   # kWh/hl -> MWh/year -> kW at 8000 h
     capex = (520_000 + 600 * kW(Q_co2)) + (520_000 + 600 * kW(Q_hthp))
     savings = (10.0424 / eta_b * p_gas - W * p_el) * 1e6   # kWh/hl x 1e6 hl/year x EUR/kWh
+    # O&M (DEA): boiler 1.23 EUR/MWh of heat avoided; heat pumps 2.494 EUR/kW/y + 3.6 EUR/MWh (sheet 2.a)
+    savings += 10.0424 * 1e3 * 1.23 - (2.494 * (kW(Q_co2) + kW(Q_hthp)) + 3.6 * (Q_co2 + Q_hthp) * 1e3)
     if ec.get("chiller_cop"):
         # refrigeration below ambient: Q̇c,min 3.4424 minus the GCC heat flow at T* = 15 °C (the
         # 17 -> 14 °C interval releases 0.3318, 2 of its 3 K lie above 15 °C: 0.2212); all taken over by the heat pumps

@@ -31,7 +31,7 @@ from analyse import compute, markdown, write
 from pinch import charts, problem_table, with_extra_shift
 from pinch.case import POWER_TO_MW, SinkLevelSpec, load_case
 from pinch.cycle_analysis import load_selected
-from pinch.economics import DEFAULT_COST_FUNCTIONS, DEFAULTS
+from pinch.economics import DEFAULTS
 from pinch.streams import streams_from_frame
 
 ROOT = Path(__file__).resolve().parent
@@ -602,11 +602,10 @@ def _step_economics() -> None:
             return
         note = (ss.base_case.economics or {}).get("_note")
         if ss.choice == UPLOAD:
-            st.caption("⚠️ Your own table: prices are the template values (Eurostat Portugal 2026-S1, bands ID/I3) "
-                       "and heat pumps use the brewery cost function of Padullés et al. (2026, Table 3: "
-                       f"{DEFAULT_COST_FUNCTIONS['heat_pump']['beta'] / 1e3:.0f} k€ + "
-                       f"{DEFAULT_COST_FUNCTIONS['heat_pump']['alpha']:.0f} €/kW). Check both against your "
-                       "own sources (Sources page).")
+            st.caption("⚠️ Your own table: prices are the template values (Eurostat Portugal 2026-S1, bands ID/I3: check "
+                       "your consumption band) and heat pumps are costed with the Danish Energy Agency catalogue by "
+                       "sink temperature, with its lift and steam add-ons and O&M. Check both against your own "
+                       "sources (Sources page).")
         elif note:
             st.caption("⚠️ " + note)
         cls = ec.get("heat_pump_cost_class", {})

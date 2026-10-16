@@ -65,6 +65,10 @@ SENSITIVITIES = [
     ("Chiller COP 3.14", "econ", {"chiller_cop": 3.14}, "Sinnott & Towler Example 6.7 (cooling water 40 °C)"),
     ("Chiller COP 6.68", "econ", {"chiller_cop": 6.68}, "Sinnott & Towler: 0.9 x Carnot (complex cycles)"),
     ("CO2 price 82.4 EUR/t", "econ", {"co2_price_EUR_per_t": 82.4}, "EUA, 5 Oct 2026"),
+    ("Portuguese CO2 addition 67.4 EUR/t", "econ", {"co2_price_EUR_per_t": 67.395},
+     "CIEC Art. 92.º-A, 2025 rate (Observador, 1 Jan 2025); applies to natural gas outside the EU ETS (ERSE 2020); "
+     "upper value: up to 3.8 EUR/MWh of non-recoverable taxes (about 21 EUR/t) may already be in the Eurostat price, "
+     "and energy-intensive consumers (SGCIE) may be exempt"),
     ("Horizon 20 years", "econ", {"horizon_years": 20}, "DEA sheet 2.a: HTHP technical lifetime 20 y"),
     ("Lorenz efficiency 0.45", "eta", 0.45, "DEA HTHP data, implied 0.45-0.52"),
     ("Lorenz efficiency 0.63", "eta", 0.63, "Andersen et al. (2024) polynomial, HTHP"),
@@ -79,8 +83,9 @@ SENSITIVITIES = [
     ("Production 0.25 Mhl/year", "scale", 0.25e6, "Padullés Table 1 range (UK case)"),
     ("Production 0.5 Mhl/year", "scale", 0.5e6, "Padullés Table 1 range"),
     ("Production 1.5 Mhl/year", "scale", 1.5e6, "Padullés Table 1 range (TH case)"),
-    ("Combined: Padullés conventions (boiler 1.0, no refrigeration credit)", "combo",
-     [("econ", {"boiler_efficiency": 1.0, "chiller_cop": None})], "Padullés et al. (2026), Sec. 5"),
+    ("No O&M (as Padullés et al.)", "no_om", None, "Padullés et al. (2026) include no O&M; base uses DEA O&M"),
+    ("Combined: Padullés conventions (boiler 1.0, no refrigeration credit, no O&M)", "combo",
+     [("econ", {"boiler_efficiency": 1.0, "chiller_cop": None}), ("no_om", None)], "Padullés et al. (2026), Sec. 5"),
     ("Combined pessimistic: no credit, cycle-based COP, HP CAPEX +25 %", "combo",
      [("econ", {"chiller_cop": None}), ("cycle", None), ("hp_capex", 1.25)], "one-at-a-time ranges above, together"),
     ("Combined conservative: credit 50 %, cycle COP -17 %, HP CAPEX +25 %, boiler 0.929", "combo",
@@ -111,6 +116,13 @@ def _apply(case: Case, kind: str, value, selected: dict | None) -> Case:
         base = {**DEFAULT_COST_FUNCTIONS.get(key, {}), **cf.get(key, {})}
         cf[key] = {**base, "alpha": base["alpha"] * value, "beta": base["beta"] * value}
         return replace(case, economics={**case.economics, "cost_functions": cf})
+    if kind == "no_om":
+        from pinch.economics import NO_OM
+        cf = copy.deepcopy(case.economics.get("cost_functions", {}))
+        for k, v in NO_OM["cost_functions"].items():
+            cf[k] = {**cf.get(k, {}), **v}
+        return replace(case, economics={**case.economics, "cost_functions": cf,
+                                        "boiler_variable_om_EUR_per_MWh": 0.0})
     if kind == "film":
         at = dict(case.area_targeting)
         at["film_coefficients_kW_per_m2K"] = {k: v * float(value) for k, v in at["film_coefficients_kW_per_m2K"].items()}
