@@ -499,6 +499,49 @@ def _step_heat_pumps() -> None:
             st.caption("Working-fluid check applies to the unedited published case (run screen_cycles.py for others).")
 
 
+RETROFIT_NEEDS = (
+    "**For an exact retrofit**, describe the plant as built today in `data/<case>_networks.json` (format: "
+    "`data/brewery_networks.json`): every existing exchanger (which hot stream heats which cold stream, between "
+    "which temperatures), and which streams are on heaters and coolers. The site's measured hot and cold utility "
+    "use is the check that the description is complete. Then add a `retrofit` block to the case file (see "
+    "`cases/brewery_padulles2026.json`).")
+
+
+def _retrofit_bounds(r) -> None:
+    """Retrofit bracket when no existing network is published (pinch.retrofit.retrofit_bounds)."""
+    s, u = r[2].get("retrofit_bounds"), r[2]["energy_unit"]
+    if not s or "skipped" in s:
+        st.info("**No existing heat-exchanger network for this case**, and no bracket either: "
+                + (s["skipped"] if s else "it needs the annual basis and the economics (step 1).") + "\n\n" + RETROFIT_NEEDS)
+        return
+    status = s["baseline_status"]
+    head = {"published": "Existing plant: no heat recovery (published)",
+            "likely_at_target": "Existing plant: heat-integrated, exchangers not published",
+            "hypothetical": "No real plant: illustrative bounds",
+            "upper_bound": "Existing network unknown: bounds"}.get(status, "Bounds")
+    st.subheader(head)
+    (st.success if status == "published" else st.warning)(s["baseline_meaning"][0].upper() + s["baseline_meaning"][1:] + ".")
+    if s.get("note"):
+        st.caption(s["note"])
+    b0, hen = s["no_heat_recovery"], s["new_heat_recovery_network"]
+    c = st.columns(4)
+    c[0].metric(f"Q̇h with no heat recovery [{u}]", f"{b0['Qh']:.4g}", border=True)
+    c[1].metric(f"Q̇h at target [{u}]", f"{s['Qh_min']:.4g}", delta=f"{s['Qh_min'] - b0['Qh']:+.3g}",
+                delta_color="inverse", border=True)
+    c[2].metric("New network: area / units", "n/a" if hen["area_m2"] is None else f"{hen['area_m2']:,.0f} m² / {hen['units']}",
+                border=True)
+    c[3].metric("New network: cost", "n/a" if hen["capex_EUR"] is None else f"{hen['capex_EUR'] / 1e6:.2f} M€", border=True,
+                help=hen["cost_law"])
+    df = pd.DataFrame(s["options"])
+    rows = df if status != "likely_at_target" else pd.concat([df.iloc[[3]], df.iloc[:3]])
+    st.dataframe(rows, width="stretch", hide_index=True)
+    st.caption("New network: area and units targets at the case's temperature shifts, cost law: " + hen["cost_law"]
+               + ". Heat pumps on the plant without recovery are sized on the network-constrained stream set "
+               "(no process-to-process transfer).")
+    with st.expander("What is needed for an exact retrofit"):
+        st.markdown(RETROFIT_NEEDS)
+
+
 def _step_retrofit() -> None:
     r = results()
     if not r:
@@ -508,13 +551,7 @@ def _step_retrofit() -> None:
         if rf:
             st.info(f"Retrofit not run: {rf['skipped']}.")
         else:
-            st.info("**No existing heat-exchanger network for this case.** A retrofit compares new options with "
-                    "the plant as it is built today; the source does not publish that network, and inventing "
-                    "one would make the result meaningless. To add one, describe the existing exchangers, "
-                    "heaters and coolers in `data/<case>_networks.json` (format: `data/brewery_networks.json`) "
-                    "and add a `retrofit` block to the case file (see `cases/brewery_padulles2026.json`). "
-                    "The targets (step 2), heat pumps (step 4) and economics (step 6) do not need it: they "
-                    "compare with a grass-roots design at the energy targets.")
+            _retrofit_bounds(r)
         return
     b, u = rf["baseline"], r[2]["energy_unit"]
     st.subheader(f"Existing network: {b['network']}")

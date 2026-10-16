@@ -215,5 +215,11 @@
     "_cost": "no verified cost law: Liang et al. (2022) Table 3 fit installed fin-and-tube costs, log10(C) = 5.8265 - 1.0102 log10(A) + 0.2192 log10(A)^2 (A air-side, 10-6500 m2, 1998 basis from their ref. [28]), i.e. about 480, 60 and 22 per m2 at 100, 1000 and 6500 m2; it cannot be escalated here (currency and CEPCI 1998 not verified), so it only sets the order of the sweep",
     "cold_utility_cost_EUR_per_kW_year": 0,
     "_cold_utility": "the exhaust is vented to atmosphere: no cooling utility cost"
+  },
+  "retrofit_bounds": {
+    "baseline_status": "published",
+    "note": "Liang et al. (2022), Sec. 2.1 and Fig. 1: in the standard installation the inlet air is not heated by the exhaust (no air-to-air exchange), every air stream is heated by steam heaters and the exhaust is vented. Their electrified design recovers exhaust heat through water loops, which the film coefficients here represent (two water-air exchangers per match). The new-network cost uses the sweep (no verified air-water exchanger cost law)",
+    "hen_cost_EUR_per_m2": 100,
+    "hen_cost_note": "not a cost estimate: Liang et al. (2022) Table 3 fin-and-tube fit gives about 72 per m2 at 756 m2 per unit on a 1998 basis (currency and escalation not verified); costs have risen since. 100 €/m2 also gives dTmin,opt 8 K in step 3, the approach of Liang's minimum cost of heat"
   }
 }

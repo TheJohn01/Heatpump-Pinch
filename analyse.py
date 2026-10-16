@@ -154,6 +154,16 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
             summary["retrofit"] = retro.summary
             tables.update(retro.tables)
             figures.update(retro.figures)
+    elif case.basis is not None and summary["economics"] and "skipped" not in summary["economics"]:
+        from pinch.economic_analysis import _params_and_converter
+        from pinch.retrofit import retrofit_bounds
+        try:
+            bounds = retrofit_bounds(case, streams, unit, _params_and_converter(case, unit)[1])
+        except (ValueError, KeyError) as exc:
+            summary["retrofit_bounds"] = {"skipped": str(exc)}
+        else:
+            summary["retrofit_bounds"] = bounds.summary
+            tables.update(bounds.tables)
     area = area_targeting_outputs(case, streams)
     summary["area_targeting"] = area.summary
     for block in (eco, area):

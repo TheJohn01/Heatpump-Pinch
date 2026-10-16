@@ -209,3 +209,9 @@ def test_break_even_ratio_never_reached_is_shown_as_none():
     at.run()
     _ok(at)
     assert next(m for m in at.metric if m.label.startswith("RQ3")).value == "none"
+
+
+def test_retrofit_tab_shows_bracket_for_spray_dryer():
+    at = _case_app("walmsley2024_spray_dryer", "5 Retrofit")
+    assert any("no heat recovery (published)" in h.value for h in at.subheader), [h.value for h in at.subheader]
+    assert len(at.dataframe) >= 1

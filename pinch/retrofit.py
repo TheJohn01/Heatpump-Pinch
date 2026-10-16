@@ -55,6 +55,16 @@ from pinch.results import Outputs
 from pinch.streams import StreamSet
 
 
+def sources_can_replace_refrigeration(streams: StreamSet, T_source_C: float, T_amb_C: float | None) -> bool:
+    """True if heat pump sources at ``T_source_C`` (T*) are cold enough to take over the refrigeration:
+    at or below the lowest shifted target temperature of the hot streams cooled below ambient."""
+    if T_amb_C is None:
+        return False
+    cold_ends = [s.T_out_C - s.dT_shift_K for s in streams.streams
+                 if s.kind == "hot" and min(s.T_in_C, s.T_out_C) - s.dT_shift_K < T_amb_C]
+    return bool(cold_ends) and T_source_C <= min(cold_ends) + 1e-9
+
+
 def _new_hot_segments(base, option) -> list[tuple]:
     """(match, segment, extra_dT_K) for hot segments of indirect matches absent from the baseline."""
     old = {(g.stream, g.T_from_C, g.T_to_C) for m in base.matches for g in m.hot}
@@ -140,7 +150,8 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
             units, Qh_after = d.units, d.Qh_residual
             W = sum(u.W for u in units)
             Q_src = sum(u.Q_source for u in units)
-        replaced = min(Q_src, res.refrigeration) * params.refrigeration_credit_fraction
+        replaced = (min(Q_src, res.refrigeration) * params.refrigeration_credit_fraction
+                    if sources_can_replace_refrigeration(streams, case.source_T_C, case.ambient_T_C) else 0.0)
         E = to_MWh(W) + (to_MWh(res.refrigeration - replaced) / cop_ch if cop_ch else 0.0)
         eq = tuple(equipment) + tuple((k, capacity_kW(to_MWh(u.Q_sink), params))
                                       for u in units for k in params.heat_pump_cost_items(u)[0])
@@ -158,7 +169,9 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
                      "primary_energy_reduction": round(ev.primary_energy_reduction, 4),
                      "break_even_ratio_NPV": round(_be(option, baseline, params), 3)})
         if units:
-            curves[opt["name"]] = _curve(units, res, option, baseline, params, to_MWh, tuple(equipment))
+            curves[opt["name"]] = _curve(units, res, option, baseline, params, to_MWh, tuple(equipment),
+                                         can_replace=sources_can_replace_refrigeration(streams, case.source_T_C,
+                                                                                       case.ambient_T_C))
 
     table = pd.DataFrame(rows)
     tables["retrofit_options"] = table
@@ -186,7 +199,8 @@ def _be(option, baseline, params):
     return break_even_ratio(option, baseline, params, "npv")
 
 
-def _curve(units, res: NetworkResult, option, baseline, params, to_MWh, equipment, n: int = 201) -> pd.DataFrame:
+def _curve(units, res: NetworkResult, option, baseline, params, to_MWh, equipment, n: int = 201,
+           can_replace: bool = True) -> pd.DataFrame:
     """Partial heat pump duty (highest COP first) on top of the option's network changes."""
     units = sorted(units, key=lambda u: -u.COP)
     total = sum(u.Q_sink for u in units)
@@ -201,7 +215,8 @@ def _curve(units, res: NetworkResult, option, baseline, params, to_MWh, equipmen
             W += q / u.COP
             src += q * (1 - 1 / u.COP)
             eq.extend((k, capacity_kW(to_MWh(q), params)) for k in params.heat_pump_cost_items(u)[0])
-        refr_left = res.refrigeration - min(src, res.refrigeration) * params.refrigeration_credit_fraction
+        refr_left = res.refrigeration - (min(src, res.refrigeration) * params.refrigeration_credit_fraction
+                                         if can_replace else 0.0)
         E = to_MWh(W) + (to_MWh(refr_left) / params.chiller_cop if params.chiller_cop else 0.0)
         ev = _evaluate(Option(f"{target:.3f}", to_MWh(res.Qh - target), E, tuple(eq)), baseline, params)
         out.append({"heat_pump_heat": round(target, 4), "payback_years": ev.payback_years, "npv_EUR": ev.npv_EUR,
@@ -235,3 +250,130 @@ def _figure(table: pd.DataFrame, case_name: str):
     fig.suptitle(f"Retrofit options against the existing network: {case_name}")
     fig.tight_layout()
     return fig
+
+
+# ------------------------------------------------------------------ bounds when no network is published
+BASELINE_STATUS = {
+    "published": "the source states that the plant has no heat recovery: this baseline is the real plant",
+    "upper_bound": ("the real plant recovers some heat, but its exchangers are not published: savings against "
+                    "'no heat recovery' are an upper bound, savings against 'already at target' a lower bound"),
+    "hypothetical": "textbook example, no real plant: both baselines are hypothetical bounds",
+    "likely_at_target": ("the source describes a heat-integrated plant whose exchangers are not published: the "
+                         "lower bound ('already at target') is the realistic estimate; 'no heat recovery' greatly "
+                         "overstates the savings"),
+}
+
+
+def _hen_cost_law(block: dict, override_EUR_per_m2: float | None = None, override_note: str = ""):
+    """(CostLaw, note) for a new heat-recovery network: the installed (x 3.5) law if given, else the first law,
+    else the median of the cost sweep (not a cost estimate); (None, reason) if none is available."""
+    from pinch.area import CostLaw
+    if override_EUR_per_m2 is not None:
+        b = float(override_EUR_per_m2)
+        return CostLaw(0.0, b, 1.0, f"{b:g} EUR/m2"), f"{b:g} €/m² installed ({override_note or 'case value'})"
+    given = block.get("cost_law") or []
+    laws = [given] if isinstance(given, dict) else list(given)
+    if laws:
+        pick = next((cl for cl in laws if "3.5" in cl.get("label", "")), laws[0])
+        return CostLaw(float(pick["a"]), float(pick["b"]), float(pick["c"]), pick.get("label", pick.get("source", ""))), \
+            pick.get("label", pick.get("source", ""))
+    sweep = sorted(block.get("specific_area_cost_sweep_EUR_per_m2") or [])
+    if sweep:
+        b = float(sweep[(len(sweep) - 1) // 2])
+        return CostLaw(0.0, b, 1.0, f"sweep {b:g} EUR/m2"), (f"{b:g} €/m² installed (middle of the sweep "
+                                                             f"{sweep[0]:g}-{sweep[-1]:g} €/m²; not a cost estimate)")
+    return None, "no film coefficients or cost law: new-network cost not included"
+
+
+def retrofit_bounds(case: Case, streams: StreamSet, energy_unit: str, params) -> Outputs:
+    """Retrofit bracket for a case without a published existing network (step 5).
+
+    Two baselines bound the plant as it is today:
+
+    * **no heat recovery**: every stream on utilities (a network with no exchangers). Real for plants
+      whose source says so; otherwise an upper bound on the savings;
+    * **heat recovery at the energy target**: the grass-roots comparison of step 6; a lower bound.
+
+    Options against the first baseline: heat pumps only (sized on the network-constrained stream set),
+    a new heat-recovery network at the targets (cost from the area and units targets with the case's film
+    coefficients and cost law: ``pinch.area``), and both. The last row repeats the heat pumps against the
+    second baseline.
+    """
+    from pinch.area import area_target
+    from pinch.area_analysis import to_kW
+    from pinch.economic_analysis import refrigeration_duty
+    from pinch.network import Network
+
+    if case.basis is None:
+        return Outputs({"skipped": "no annual basis"})
+    info = dict(getattr(case, "retrofit_bounds", None) or {})
+    status = info.get("baseline_status", "upper_bound")
+    to_MWh = lambda x: to_MWh_per_year(x, energy_unit, case.basis)  # noqa: E731
+    cop_ch, frac = params.chiller_cop, params.refrigeration_credit_fraction
+
+    b0_net = Network("no heat recovery (all utilities)", ())
+    b0 = evaluate_network(streams, b0_net, case.ambient_T_C)
+    refr0 = b0.refrigeration
+    base0 = Option("baseline: no heat recovery", to_MWh(b0.Qh), to_MWh(refr0) / cop_ch if cop_ch else 0.0)
+
+    table = problem_table(streams)
+    refrT = refrigeration_duty(streams, case.ambient_T_C, heat_recovery=True)
+    baseT = Option("baseline: heat recovery at target", to_MWh(table.Qh_min), to_MWh(refrT) / cop_ch if cop_ch else 0.0)
+
+    # new heat-recovery network at the targets
+    block = case.area_targeting or {}
+    h = block.get("film_coefficients_kW_per_m2K", {})
+    law, law_note = _hen_cost_law(block, info.get("hen_cost_EUR_per_m2"), info.get("hen_cost_note", ""))
+    hen = {"cost_law": law_note}
+    hen_equipment: tuple = ()
+    if law is not None and h and all(s.name in h for s in streams.streams):
+        at = area_target(to_kW(streams, case, params.operating_hours_per_year), h)
+        capex_hen = law.network_cost(at.area, at.units)
+        hen.update({"area_m2": round(at.area, 1), "units": at.units, "capex_EUR": round(capex_hen, 0)})
+        hen_equipment = (("lump_sum_EUR", capex_hen),)
+    else:
+        hen.update({"area_m2": None, "units": None, "capex_EUR": None,
+                    "cost_law": "film coefficients missing for some streams: new-network cost not included"})
+
+    def heat_pumps(stream_set, refr):
+        d = design_from_gcc(stream_set, case.sink_levels, case.eta_lorenz, case.source_T_C)
+        W = sum(u.W for u in d.units)
+        # sources take over refrigeration only if they are as cold as the refrigeration duty (as in run_retrofit)
+        ok = sources_can_replace_refrigeration(streams, case.source_T_C, case.ambient_T_C)
+        taken = min(sum(u.Q_source for u in d.units), refr) * frac if ok else 0.0
+        E = to_MWh(W) + (to_MWh(refr - taken) / cop_ch if cop_ch else 0.0)
+        eq = tuple((k, capacity_kW(to_MWh(u.Q_sink), params)) for u in d.units for k in params.heat_pump_cost_items(u)[0])
+        return d, E, eq
+
+    d0, E0, eq0 = heat_pumps(constrained_streams(streams, b0_net), refr0)
+    dT, ET, eqT = heat_pumps(streams, refrT)
+    E_hen = to_MWh(refrT) / cop_ch if cop_ch else 0.0
+    cases = [
+        ("Heat pumps only", base0, Option("heat pumps only", to_MWh(d0.Qh_residual), E0, eq0), d0),
+        ("New heat recovery at target", base0, Option("new HEN", to_MWh(table.Qh_min), E_hen, hen_equipment), None),
+        ("New heat recovery at target + heat pumps", base0,
+         Option("new HEN + heat pumps", to_MWh(dT.Qh_residual), ET, hen_equipment + eqT), dT),
+        ("Lower bound: plant already at target, heat pumps only", baseT,
+         Option("heat pumps at target", to_MWh(dT.Qh_residual), ET, eqT), dT),
+    ]
+    rows = []
+    for label, base, option, d in cases:
+        ev = evaluate(option, base, params)
+        rows.append({"option": label, "baseline": base.name.removeprefix("baseline: "),
+                     "heat_pumps": ", ".join(f"{u.name} {u.Q_sink:.4g} (COP {u.COP:.2f})" for u in d.units) if d else "none",
+                     "Qh_baseline": round(b0.Qh if base is base0 else table.Qh_min, 4),
+                     "Qh_after": round(option.gas_heat_MWh / to_MWh(1.0), 2) if to_MWh(1.0) else None,
+                     "capex_EUR": round(ev.capex_EUR, 0), "savings_EUR": round(ev.savings_EUR, 0),
+                     "payback_years": round(ev.payback_years, 2) if math.isfinite(ev.payback_years) else ev.payback_years,
+                     "npv_EUR": round(ev.npv_EUR, 0), "gas_reduction_vs_baseline": round(ev.gas_reduction, 4),
+                     "co2_avoided_t": round(ev.co2_avoided_t, 0),
+                     "break_even_ratio_NPV": round(_be(option, base, params), 3)})
+    summary = {"baseline_status": status, "baseline_meaning": BASELINE_STATUS.get(status, status),
+               "note": info.get("note", ""),
+               "no_heat_recovery": b0.summary(), "Qh_min": round(table.Qh_min, 4),
+               "new_heat_recovery_network": hen, "options": rows,
+               "assumptions": {"new network": "area target (Bath formula, case film coefficients) and units target "
+                                              "at the case's temperature shifts, costed per unit with the cost law",
+                               "heat pumps": "case sink levels; on the no-recovery plant they are sized on the "
+                                             "network-constrained stream set (no process-to-process transfer)"}}
+    return Outputs(summary, {"retrofit_bounds": pd.DataFrame(rows)}, {})

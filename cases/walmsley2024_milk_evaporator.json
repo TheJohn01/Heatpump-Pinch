@@ -234,5 +234,9 @@
     "specific_area_cost_sweep_EUR_per_m2": [],
     "_cold_utility": "cold utility = chilled water: cost from the economics chiller_cop and electricity price"
   },
-  "basis_hint": "No operating hours are published for this plant. Milk supply varies considerably during the year (Atkins et al., 2009), so New Zealand milk-powder plants do not run all year: 8000 h/year is an upper bound. Price bands for this 30 t/h plant (Walmsley et al., 2016): gas I5 (0.0420 €/kWh) above 6,400 h/year, I4 (0.0445) below; electricity IE (0.0897) between 2,500 and 8,680 h/year. Change the prices in step 6 if you change the hours."
+  "basis_hint": "No operating hours are published for this plant. Milk supply varies considerably during the year (Atkins et al., 2009), so New Zealand milk-powder plants do not run all year: 8000 h/year is an upper bound. Price bands for this 30 t/h plant (Walmsley et al., 2016): gas I5 (0.0420 €/kWh) above 6,400 h/year, I4 (0.0445) below; electricity IE (0.0897) between 2,500 and 8,680 h/year. Change the prices in step 6 if you change the hours.",
+  "retrofit_bounds": {
+    "baseline_status": "likely_at_target",
+    "note": "Walmsley et al. (2024), Sec. 3.2 and Fig. 4: the base case derives from the heat-integrated 'ultra-low energy' design of Walmsley et al. (2018, Energy 146, 67-81) and the raw milk is preheated 8 -> 95 °C by heat recovery, but the exchangers are not listed. Use the lower bound; the exact existing network may be in Walmsley et al. (2018)"
+  }
 }

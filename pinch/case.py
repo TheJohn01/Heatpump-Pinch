@@ -102,6 +102,7 @@ class Case:
     eta_lorenz_sensitivity: tuple[float, ...] = ()
     cycle_screening: dict | None = None
     retrofit: dict | None = None
+    retrofit_bounds: dict | None = None   # used when no network is published: baseline status and note
 
 
 def load_case(path: str | Path) -> Case:
@@ -162,6 +163,7 @@ def load_case(path: str | Path) -> Case:
         eta_lorenz_sensitivity=eta_sens,
         cycle_screening=hp.get("cycle_screening"),
         retrofit=_resolve_retrofit(raw.get("retrofit"), path),
+        retrofit_bounds=raw.get("retrofit_bounds"),
     )
 
 

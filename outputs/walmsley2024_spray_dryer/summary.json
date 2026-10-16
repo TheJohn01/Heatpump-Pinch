@@ -197,6 +197,94 @@
     }
   ],
   "cycle_based_design": {},
+  "retrofit_bounds": {
+    "baseline_status": "published",
+    "baseline_meaning": "the source states that the plant has no heat recovery: this baseline is the real plant",
+    "note": "Liang et al. (2022), Sec. 2.1 and Fig. 1: in the standard installation the inlet air is not heated by the exhaust (no air-to-air exchange), every air stream is heated by steam heaters and the exhaust is vented. Their electrified design recovers exhaust heat through water loops, which the film coefficients here represent (two water-air exchangers per match). The new-network cost uses the sweep (no verified air-water exchanger cost law)",
+    "no_heat_recovery": {
+      "network": "no heat recovery (all utilities)",
+      "Qh": 6031.0,
+      "Qc": 6869.0,
+      "Qh_min": 4638.2,
+      "Qc_min": 5476.2,
+      "energy_gap": 1392.8,
+      "heat_recovered": 0.0,
+      "cross_pinch_in_matches": 0.0,
+      "heaters_below_pinch": 1392.8,
+      "coolers_above_pinch": 0.0,
+      "refrigeration_below_ambient": 1830.1976,
+      "pinch_T_star_C": 59.0
+    },
+    "Qh_min": 4638.2,
+    "new_heat_recovery_network": {
+      "cost_law": "100 €/m² installed (not a cost estimate: Liang et al. (2022) Table 3 fin-and-tube fit gives about 72 per m2 at 756 m2 per unit on a 1998 basis (currency and escalation not verified); costs have risen since. 100 €/m2 also gives dTmin,opt 8 K in step 3, the approach of Liang's minimum cost of heat)",
+      "area_m2": 3781.2,
+      "units": 5,
+      "capex_EUR": 378120.0
+    },
+    "options": [
+      {
+        "option": "Heat pumps only",
+        "baseline": "no heat recovery",
+        "heat_pumps": "HTHP 120 °C (fluid beds) 3299 (COP 1.87), HTHP 200 °C (main air) 1826 (COP 1.28)",
+        "Qh_baseline": 6031.0,
+        "Qh_after": 905.7,
+        "capex_EUR": 8015007.0,
+        "savings_EUR": -97564.0,
+        "payback_years": Infinity,
+        "npv_EUR": -8768371.0,
+        "gas_reduction_vs_baseline": 0.8498,
+        "co2_avoided_t": 4575.0,
+        "break_even_ratio_NPV": 0.683
+      },
+      {
+        "option": "New heat recovery at target",
+        "baseline": "no heat recovery",
+        "heat_pumps": "none",
+        "Qh_baseline": 6031.0,
+        "Qh_after": 4638.2,
+        "capex_EUR": 378120.0,
+        "savings_EUR": 440092.0,
+        "payback_years": 0.86,
+        "npv_EUR": 3020153.0,
+        "gas_reduction_vs_baseline": 0.2309,
+        "co2_avoided_t": 1800.0,
+        "break_even_ratio_NPV": Infinity
+      },
+      {
+        "option": "New heat recovery at target + heat pumps",
+        "baseline": "no heat recovery",
+        "heat_pumps": "HTHP 120 °C (fluid beds) 1906 (COP 1.87), HTHP 200 °C (main air) 1826 (COP 1.28)",
+        "Qh_baseline": 6031.0,
+        "Qh_after": 905.7,
+        "capex_EUR": 6512847.0,
+        "savings_EUR": 302835.0,
+        "payback_years": 21.51,
+        "npv_EUR": -4174432.0,
+        "gas_reduction_vs_baseline": 0.8498,
+        "co2_avoided_t": 5053.0,
+        "break_even_ratio_NPV": 1.188
+      },
+      {
+        "option": "Lower bound: plant already at target, heat pumps only",
+        "baseline": "heat recovery at target",
+        "heat_pumps": "HTHP 120 °C (fluid beds) 1906 (COP 1.87), HTHP 200 °C (main air) 1826 (COP 1.28)",
+        "Qh_baseline": 4638.2,
+        "Qh_after": 905.7,
+        "capex_EUR": 6134727.0,
+        "savings_EUR": -137256.0,
+        "payback_years": Infinity,
+        "npv_EUR": -7194585.0,
+        "gas_reduction_vs_baseline": 0.8047,
+        "co2_avoided_t": 3253.0,
+        "break_even_ratio_NPV": 0.589
+      }
+    ],
+    "assumptions": {
+      "new network": "area target (Bath formula, case film coefficients) and units target at the case's temperature shifts, costed per unit with the cost law",
+      "heat pumps": "case sink levels; on the no-recovery plant they are sized on the network-constrained stream set (no process-to-process transfer)"
+    }
+  },
   "area_targeting": {
     "hot_utility_cost_EUR_per_kW_year": 315.98,
     "cold_utility_cost_EUR_per_kW_year": 0.0,

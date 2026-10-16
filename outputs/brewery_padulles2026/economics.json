@@ -35,6 +35,10 @@
     "co2_price_scenario": "EUA Dec contract 82.40 EUR/t on 5 Oct 2026 (S&P Global Commodity Insights)",
     "chiller_cop": "Sinnott and Towler (2020), Chemical Engineering Design, 6th ed. (Elsevier, ISBN 978-0-08-102599-4), Sec. 6.4.4, Eq. 6.20: real COP about 0.6 x Carnot for a simple cycle. Evaporator at cold utility -1 °C minus 5 K (refrigerated-brine approach 3-5 K, Sec. 12.7.3), condenser at ambient 15 °C + 10 K cooling-water rise + 5 K approach = 30 °C: 0.6 x 267.15/36 = 4.45. Check: CoolProp ammonia cycle (Andersen et al. 2024 assumptions, sink 15->25 °C) gives 4.52. Padullés et al. (2026) give no chiller credit"
   },
+  "heat_pump_cost_class": {
+    "CO2 HP (warm water)": "heat_pump",
+    "HTHP (wort boiling)": "heat_pump"
+  },
   "RQ1": {
     "max_fraction_with_payback_below_threshold": 0.725,
     "_definition": "fraction = heat pump heat / Q̇h,min of the site with heat recovery installed",

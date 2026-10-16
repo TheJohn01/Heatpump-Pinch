@@ -30,7 +30,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 143 tests (about 3 min)
+python -m pytest                                  # 146 tests (about 3 min)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -56,8 +56,12 @@ Cases whose source publishes no annual basis, film coefficients or existing netw
 evaporator and four-stream cases; the spray dryer's 6000 h/year come from Liang et al., 2022): switch on **Convert to annual figures** in step 1 and enter operating hours,
 and fill the `h_kW_per_m2K` column, to run ΔTmin supertargeting (step 3, cost sweep only) and the
 economics (step 6, default prices and cost functions). These values are your assumptions and are
-recorded as such on the Sources page. The retrofit (step 5) needs a description of the existing
-heat-exchanger network, which these sources do not give, so it does not run for them.
+recorded as such on the Sources page. Step 5 needs the existing heat-exchanger network for an exact
+retrofit; where none is published it shows a bracket (`pinch.retrofit.retrofit_bounds`): the plant with
+no heat recovery (published for the spray dryer, Liang et al. 2022), a new network at the targets
+(area and units targets costed with the case's cost law), heat pumps on either, and the lower bound
+of a plant already at target (= step 6). `retrofit_bounds.baseline_status` in the case file says which
+end is realistic (milk evaporator: the lower bound).
 
 Charts are interactive (Altair, `pinch/charts.py`): hover for values, wheel to zoom, drag to
 pan, menu to export PNG/SVG. Results are cached per set of inputs. Input errors are shown as
@@ -131,7 +135,7 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       143 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       146 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
 
 ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)

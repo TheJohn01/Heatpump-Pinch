@@ -1,0 +1,5 @@
+option,baseline,heat_pumps,Qh_baseline,Qh_after,capex_EUR,savings_EUR,payback_years,npv_EUR,gas_reduction_vs_baseline,co2_avoided_t,break_even_ratio_NPV
+Heat pumps only,no heat recovery,"HTHP 120 °C (fluid beds) 3299 (COP 1.87), HTHP 200 °C (main air) 1826 (COP 1.28)",6031.0,905.7,8015007.0,-97564.0,inf,-8768371.0,0.8498,4575.0,0.683
+New heat recovery at target,no heat recovery,none,6031.0,4638.2,378120.0,440092.0,0.86,3020153.0,0.2309,1800.0,inf
+New heat recovery at target + heat pumps,no heat recovery,"HTHP 120 °C (fluid beds) 1906 (COP 1.87), HTHP 200 °C (main air) 1826 (COP 1.28)",6031.0,905.7,6512847.0,302835.0,21.51,-4174432.0,0.8498,5053.0,1.188
+"Lower bound: plant already at target, heat pumps only",heat recovery at target,"HTHP 120 °C (fluid beds) 1906 (COP 1.87), HTHP 200 °C (main air) 1826 (COP 1.28)",4638.2,905.7,6134727.0,-137256.0,inf,-7194585.0,0.8047,3253.0,0.589

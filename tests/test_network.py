@@ -107,3 +107,34 @@ def test_infeasible_and_unbalanced_matches_are_rejected():
     with pytest.raises(ValueError, match="direction"):
         evaluate_network(streams, Network("n", (Match("Z", (Segment("Reactor 1 product", 40, 100),),
                                                           (Segment("Reactor 1 feed", 20, 65),)),)))
+
+
+# ---------------------------------------------------------------- retrofit bracket without a published network
+def test_retrofit_bounds_spray_dryer_published_no_recovery():
+    """Liang et al. (2022): no air-to-air recovery today. Energy gap = steam heating below the pinch."""
+    from analyse import compute
+    from pinch.case import load_case
+    from pinch.validation import ROOT
+    s = compute(load_case(ROOT / "cases" / "walmsley2024_spray_dryer.json")).summary["retrofit_bounds"]
+    assert s["baseline_status"] == "published"
+    b0 = s["no_heat_recovery"]
+    assert b0["Qh"] == pytest.approx(6031.0)                       # sum of the cold streams, Table 1
+    assert b0["Qh"] - s["Qh_min"] == pytest.approx(b0["heaters_below_pinch"], abs=0.5)
+    rows = {r["option"]: r for r in s["options"]}
+    assert rows["New heat recovery at target"]["Qh_after"] == pytest.approx(s["Qh_min"], rel=1e-6)
+    assert rows["New heat recovery at target"]["capex_EUR"] == pytest.approx(s["new_heat_recovery_network"]["capex_EUR"], rel=1e-6)
+
+
+def test_retrofit_bounds_lower_bound_equals_step6():
+    """The 'already at target' row is the grass-roots comparison of step 6."""
+    from dataclasses import replace
+    from analyse import compute
+    from pinch.case import load_case
+    from pinch.validation import ROOT
+    c = load_case(ROOT / "cases" / "walmsley2024_milk_evaporator.json")
+    s = compute(replace(c, basis={"type": "power", "operating_hours_per_year": 8000.0})).summary
+    low = next(r for r in s["retrofit_bounds"]["options"] if r["option"].startswith("Lower bound"))
+    full = s["economics"]["results"]["full design (heat recovery installed)"]
+    assert low["capex_EUR"] == pytest.approx(full["capex_EUR"], rel=1e-6)
+    assert low["npv_EUR"] == pytest.approx(full["npv_EUR"], rel=1e-4)
+    assert s["retrofit_bounds"]["baseline_status"] == "likely_at_target"
