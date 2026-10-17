@@ -26,20 +26,15 @@ Sensitivities
 
 from __future__ import annotations
 
-import json
-import math
 from dataclasses import dataclass, replace
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from pinch.case import Case, display_name, to_MWh_per_year
-from pinch.problem_table import problem_table
+from pinch.plotting import electrification_curve_figure, price_ratio_figure
+from pinch.problem_table_algorithm import problem_table
 from pinch.refrigeration import CoolingCascade, refrigeration_taken_over
 from pinch.results import Outputs
 from pinch.sensitivity import apply as apply_sensitivity
@@ -206,15 +201,6 @@ def cycle_based_design(case: Case, streams, energy_unit: str, selected: dict | N
     return out
 
 
-def run_economics(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str, out: Path,
-                  streams=None) -> dict:
-    """Evaluate the design, write tables, figures and economics.json to ``out``; return the summary."""
-    res = economics_outputs(case, design, Q_cold_total, energy_unit, streams)
-    if "skipped" not in res.summary:
-        res.write(out, "economics.json")
-    return res.summary
-
-
 def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, energy_unit: str,
                       streams=None) -> Outputs:
     """Evaluate the design in memory: summary, tables and figures (nothing written).
@@ -280,41 +266,12 @@ def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, e
     sweep = pd.DataFrame([{"ratio": r, **evaluate(full_option, baseline, params.with_ratio(r)).as_dict()} for r in ratios])
     tables["price_ratio_sweep"] = sweep
 
-    # figures
-    f = curve_df["fraction_of_Qh_min"] * 100
-    fig, ax1 = plt.subplots(figsize=(7, 4.5))
-    pbp = curve_df["payback_years"].replace(np.inf, np.nan)
-    ax1.plot(f, pbp, color="#1F77B4", lw=2, label="Payback")
-    ax1.axhline(threshold, color="#1F77B4", ls=":", lw=1)
-    ax1.set_xlabel("Share of Q̇h,min supplied by heat pumps [%]")
-    ax1.set_ylabel("Simple payback [years]", color="#1F77B4")
-    ax1.set_ylim(0, max(3 * threshold, 1))
-    ax2 = ax1.twinx()
-    ax2.plot(f, curve_df["npv_EUR"] / 1e6, color="#D62728", lw=2, label=f"NPV{params.horizon_years}")
-    ax2.axhline(0, color="#D62728", ls=":", lw=1)
-    ax2.set_ylabel(f"NPV{params.horizon_years} at {100 * params.discount_rate:.0f} % [M EUR]", color="#D62728")
-    ax1.set_title(f"Electrification curve: {display_name(case.name)} (ratio {params.price_ratio:.2f})")
-    ax1.grid(alpha=0.3)
-    fig.tight_layout()
-    figures["electrification_curve"] = fig
-
-    fig, ax1 = plt.subplots(figsize=(7, 4.5))
-    ax1.plot(sweep["ratio"], sweep["payback_years"].replace(np.inf, np.nan), color="#1F77B4", lw=2)
-    ax1.axhline(threshold, color="#1F77B4", ls=":", lw=1)
-    ax1.set_ylim(0, max(3 * threshold, 1))
-    ax1.set_xlabel("Electricity-to-gas price ratio [-]")
-    ax1.set_ylabel("Simple payback [years]", color="#1F77B4")
-    ax2 = ax1.twinx()
-    ax2.plot(sweep["ratio"], sweep["npv_EUR"] / 1e6, color="#D62728", lw=2)
-    ax2.axhline(0, color="#D62728", ls=":", lw=1)
-    ax2.set_ylabel(f"NPV{params.horizon_years} [M EUR]", color="#D62728")
-    ax1.axvline(params.price_ratio, color="grey", ls="--", lw=1)
-    ax1.annotate(f"case ratio {params.price_ratio:.2f}", xy=(params.price_ratio, 0.5), xytext=(4, 0),
-                 textcoords="offset points", fontsize=8, color="grey")
-    ax1.set_title(f"Full design vs price ratio: {display_name(case.name)}")
-    ax1.grid(alpha=0.3)
-    fig.tight_layout()
-    figures["price_ratio_sweep"] = fig
+    # figures (pinch.plotting)
+    figures["electrification_curve"] = electrification_curve_figure(
+        curve_df, threshold, params.horizon_years, params.discount_rate,
+        f"Electrification curve: {display_name(case.name)} (ratio {params.price_ratio:.2f})")
+    figures["price_ratio_sweep"] = price_ratio_figure(sweep, threshold, params.horizon_years, params.price_ratio,
+                                                      f"Full design vs price ratio: {display_name(case.name)}")
 
     summary = {
         "parameters": {k: getattr(params, k, None) for k in (

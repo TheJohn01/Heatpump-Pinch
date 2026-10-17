@@ -33,7 +33,7 @@ from dataclasses import dataclass, replace
 import numpy as np
 
 from pinch.curves import piecewise_composite, stream_pieces
-from pinch.problem_table import ProblemTable, problem_table
+from pinch.problem_table_algorithm import ProblemTable, problem_table
 from pinch.streams import Stream, StreamSet
 
 

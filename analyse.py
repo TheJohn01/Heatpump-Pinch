@@ -207,7 +207,7 @@ def markdown(s: dict) -> str:
         f"| Heat recovery | {t['heat_recovery']} |",
         f"| Pinch T* [°C] | {', '.join(str(p) for p in t['pinch_T_star_C']) or 'none (threshold)'} |", "",
         "## Heat pumps sized from the GCC", "",
-        f"| Quantity | Value |", "|---|---|",
+        "| Quantity | Value |", "|---|---|",
         f"| Units | {', '.join(d['units']) or 'none'} |",
         f"| Heat delivered [{u}] | {d['Q_sink_total']} |",
         f"| Electricity [{u}] | {d['W_total']} |",

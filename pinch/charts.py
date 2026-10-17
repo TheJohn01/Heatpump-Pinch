@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 
 from pinch.curves import composite_curve
-from pinch.problem_table import ProblemTable
+from pinch.problem_table_algorithm import ProblemTable
 from pinch.streams import StreamSet
 
 HOT = "#C0392B"

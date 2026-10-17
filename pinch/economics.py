@@ -143,14 +143,6 @@ class EconomicParameters:
             kinds.append(kind)
         return tuple(kinds), extrapolated
 
-    def heat_pump_kind(self, T_sink_out_C: float) -> str:
-        """Cost-function kind for a heat pump delivering heat up to ``T_sink_out_C``.
-
-        Above the highest class the last class is used (an extrapolation, reported
-        by ``heat_pump_cost_class``).
-        """
-        return self.heat_pump_cost_class(T_sink_out_C)[0]
-
     def heat_pump_cost_class(self, T_sink_out_C: float) -> tuple[str, bool]:
         """(cost-function kind, True if the sink is above every class)."""
         if not self.heat_pump_cost_classes:
@@ -393,4 +385,26 @@ def heat_pump_equipment(params: EconomicParameters, unit, capacity_kW_avg: float
                     for k in kinds)
         items.append(("lump_sum_EUR", extra))
     return items
+
+
+def defaults_markdown() -> str:
+    """Markdown table of ``DEFAULTS`` and ``DEFAULT_COST_FUNCTIONS`` with their sources.
+
+    README.md carries this table between generated-block markers; ``regenerate_outputs.py`` rewrites it
+    and its ``--check`` fails if it is stale, so the provenance is written once, here (redundancy audit,
+    item 6). Case-specific values and their sources are in each case file (``economics.sources``).
+    """
+    def cell(x) -> str:
+        return str(x).replace("|", "\\|")
+    lines = ["| Parameter | Default | Source |", "|---|---|---|"]
+    lines += [f"| `{k}` | {cell('none' if v is None else v)} | {cell(src)} |" for k, (v, src) in DEFAULTS.items()]
+    for kind, cf in DEFAULT_COST_FUNCTIONS.items():
+        if kind == "lump_sum_EUR":
+            continue
+        law = f"{cf['beta']:,.0f} + {cf['alpha']:,.0f} X^{cf['gamma']:g} EUR, X in {cf['size_unit']}"
+        om = (f"; O&M {cf['fixed_om_EUR_per_unit_year'] * 1000:,.0f} EUR/MW/y + {cf['variable_om_EUR_per_MWh']:g} EUR/MWh"
+              if cf.get("fixed_om_EUR_per_unit_year") else "")
+        lines.append(f"| cost function `{kind}` | {law}{om} | Padullés et al. (2026), Table 3"
+                     f"{'; O&M: Danish Energy Agency, Industrial Process Heat (2025)' if om else ''} |")
+    return "\n".join(lines) + "\n"
 

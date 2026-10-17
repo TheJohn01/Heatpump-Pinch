@@ -19,16 +19,12 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from pinch import load_streams, problem_table
 from pinch.heat_pump import HeatPump, integrate, max_useful_sink_duty
-from pinch.plotting import plot_gcc_with_units
+from pinch.plotting import config1_vs_fig11_figure, gcc_with_units_figure, save_figure
 from pinch.validation import ROOT
 
 
@@ -125,24 +121,7 @@ def main(config: Config = Config()) -> None:
     config1_check = pd.DataFrame(fig_rows)
     config1_check.to_csv(out / "step4_config1_vs_fig11.csv", index=False)
 
-    fig, ax = plt.subplots(figsize=(6.5, 4.5))
-    for label, colour, name in (("with_HR", "#2E7D32", "With heat recovery"), ("no_HR", "#2471A3", "No heat recovery")):
-        ax.plot(sweep["T_steam_C"], sweep[f"W_{label}_kWh_hl"], color=colour, lw=2, label=f"{name} (this work)")
-        pts = c1[f"W_figure_{label}"]["points"]
-        ax.errorbar([float(t) for t in pts], list(pts.values()), yerr=c1[f"W_figure_{label}"]["uncertainty"],
-                    fmt="o", color=colour, mfc="white", capsize=3, label=f"{name} (read from Fig. 11)")
-    ax.axvline(base.T_star_C[0], color="grey", ls=":", lw=1)
-    ax.annotate("GCC maximum T* = 103 °C", xy=(base.T_star_C[0], 1), xytext=(4, 0),
-                textcoords="offset points", fontsize=8, color="grey")
-    ax.set_xlabel("Utility steam temperature [°C]")
-    ax.set_ylabel("Electricity consumption [kWh/hl]")
-    ax.set_ylim(0, 25)
-    ax.set_title("Configuration 1 (CCHS): this work vs. Padullés et al. (2026)")
-    ax.grid(alpha=0.3)
-    ax.legend(fontsize=8)
-    fig.tight_layout()
-    fig.savefig(out / "step4_config1_vs_fig11.png", dpi=200)
-    plt.close(fig)
+    save_figure(config1_vs_fig11_figure(sweep, c1, float(base.T_star_C[0])), out / "step4_config1_vs_fig11.png")
 
     # ------------------------------------------------------------- Part B
     checks = []
@@ -189,10 +168,10 @@ def main(config: Config = Config()) -> None:
     } for u in design])
     part_c.to_csv(out / "step4_partC_mer_design.csv", index=False)
 
-    plot_gcc_with_units(base, units_2, out / "step4_gcc_config2.png",
-                        title="Configuration 2 (paper's duties) on the minimum-energy GCC")
-    plot_gcc_with_units(base, design, out / "step4_gcc_mer_design.png",
-                        title="Minimum-energy two-heat-pump design sized from the GCC")
+    save_figure(gcc_with_units_figure(base, units_2, title="Configuration 2 (paper's duties) on the minimum-energy GCC"),
+                out / "step4_gcc_config2.png")
+    save_figure(gcc_with_units_figure(base, design, title="Minimum-energy two-heat-pump design sized from the GCC"),
+                out / "step4_gcc_mer_design.png")
 
     pd.set_option("display.width", 200)
     print("\nPart A: units\n" + part_a.to_string(index=False))

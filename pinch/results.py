@@ -10,7 +10,7 @@ from pathlib import Path
 import pandas as pd
 from matplotlib.figure import Figure
 
-from pinch.plotting import save_figure
+from pinch.plotting import close_figure, save_figure
 
 
 @dataclass
@@ -46,7 +46,6 @@ class Outputs:
 
     def close_figures(self) -> None:
         """Release figure memory (call after displaying them)."""
-        import matplotlib.pyplot as plt
         for fig in self.figures.values():
-            plt.close(fig)
+            close_figure(fig)
         self.figures = {}

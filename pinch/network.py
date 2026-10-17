@@ -38,7 +38,7 @@ import numpy as np
 import pandas as pd
 
 from pinch.curves import piecewise_composite
-from pinch.problem_table import problem_table
+from pinch.problem_table_algorithm import problem_table
 from pinch.streams import Stream, StreamSet
 
 TOL = 1e-6

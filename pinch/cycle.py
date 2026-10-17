@@ -38,7 +38,7 @@ Not modelled: pressure drops, compressor maps and part load.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 from typing import Callable
 
 import CoolProp.CoolProp as CP
@@ -140,10 +140,6 @@ class _Fluid:
     def h_pt(self, P: float, T: float) -> float:
         self.AS.update(CP.PT_INPUTS, P, T)
         return self.AS.hmass()
-
-    def s_pt(self, P: float, T: float) -> float:
-        self.AS.update(CP.PT_INPUTS, P, T)
-        return self.AS.smass()
 
     def h_ps(self, P: float, s: float) -> float:
         self.AS.update(CP.PSmass_INPUTS, P, s)
@@ -550,17 +546,3 @@ def cascade(fluid_low: str, fluid_high: str, source: SecondaryStream, sink: Seco
                        eta_lorenz=cop / cop_L, pressure_ratio=max(s.pressure_ratio for s in stages),
                        T_discharge_C=max(s.T_discharge_C for s in stages), stages=stages,
                        note=f"intermediate (top evaporation) {top.T_e - KELVIN:.1f} °C")
-
-
-def screen_fluids(fluids: list[str], source: SecondaryStream, sink: SecondaryStream,
-                  assumptions: CycleAssumptions = CycleAssumptions(),
-                  layouts: tuple[str, ...] = ("std", "slhx")) -> list[CycleResult]:
-    """Best single-stage cycle per fluid and layout, sorted by COP (feasible first)."""
-    out = []
-    for fl in fluids:
-        for lay in layouts:
-            try:
-                out.append(single_stage(fl, source, sink, assumptions, slhx="slhx" in lay, expander="exp" in lay))
-            except ValueError as exc:  # CoolProp out of range
-                out.append(CycleResult(fl, lay, False, note=f"CoolProp: {exc}"[:120]))
-    return sorted(out, key=lambda r: (not r.feasible, -(r.COP if r.feasible else 0)))

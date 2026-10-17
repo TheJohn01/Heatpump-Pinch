@@ -61,12 +61,6 @@ class ProblemTable:
     Q_cold_total: float
 
     @property
-    def is_threshold(self) -> bool:
-        """True if one utility target is zero (threshold problem, no true pinch)."""
-        tol = _tolerance(self.cascade_feasible)
-        return self.Qh_min <= tol or self.Qc_min <= tol
-
-    @property
     def heat_recovery(self) -> float:
         """Maximum heat recovery = total cold load - Qh_min [energy unit]."""
         return self.Q_cold_total - self.Qh_min

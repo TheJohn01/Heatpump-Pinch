@@ -18,20 +18,15 @@ treated as refrigeration: an upper bound when part could go to cooling water).
 
 from __future__ import annotations
 
-import json
 from dataclasses import replace
-from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from pinch.area import CostLaw, supertarget
 from pinch.case import Case, display_name, to_MWh_per_year
 from pinch.economics import load_economics
+from pinch.plotting import supertargeting_figure
 from pinch.results import Outputs
 from pinch.streams import StreamSet
 
@@ -41,14 +36,6 @@ def to_kW(stream_set: StreamSet, case: Case, hours: float) -> StreamSet:
     factor = to_MWh_per_year(1.0, stream_set.energy_unit, case.basis) * 1000 / hours
     return replace(stream_set, energy_unit="kW",
                    streams=tuple(replace(s, Q=s.Q * factor) for s in stream_set.streams))
-
-
-def run_area_targeting(case: Case, streams: StreamSet, out: Path) -> dict:
-    """Supertargeting written to ``out`` (CSV, PNG, JSON); returns the summary."""
-    res = area_targeting_outputs(case, streams)
-    if "skipped" not in res.summary:
-        res.write(out, "supertargeting.json")
-    return res.summary
 
 
 def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
@@ -104,16 +91,7 @@ def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
                         "dTmin_within_1pct_K": list(flat[0.01]), "dTmin_within_2pct_K": list(flat[0.02]),
                         "energy_share_of_TAC": round(float(best["energy_cost_EUR"] / best["TAC_EUR"]), 3)})
 
-    fig, ax = plt.subplots(figsize=(7, 4.5))
-    for df, r in zip(frames, results):
-        ax.plot(df["dTmin_K"], df["TAC_EUR"] / 1e3, lw=1.8, label=f"b = {r['b']:.0f} EUR/m² (opt. {r['dTmin_opt_K']:g} K)")
-        ax.plot(r["dTmin_opt_K"], r["TAC_min_EUR"] / 1e3, "o", color=ax.lines[-1].get_color())
-    ax.set_xlabel("ΔTmin [K]")
-    ax.set_ylabel("Total annual cost [k EUR/year]")
-    ax.set_title(f"ΔTmin supertargeting: {display_name(case.name)}")
-    ax.grid(alpha=0.3)
-    ax.legend(fontsize=7)
-    fig.tight_layout()
+    fig = supertargeting_figure(frames, results, f"ΔTmin supertargeting: {display_name(case.name)}")
 
     summary = {"hot_utility_cost_EUR_per_kW_year": round(c_hot, 2), "cold_utility_cost_EUR_per_kW_year": c_cold,
                "crf_per_year": round(crf, 4), "film_coefficients_source": block.get("film_coefficients_source", ""),

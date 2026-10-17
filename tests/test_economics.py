@@ -7,7 +7,6 @@
 3. The general analysis on the brewery case against a hand calculation.
 """
 
-import math
 
 import pytest
 
@@ -168,7 +167,7 @@ def test_heat_pump_cost_classes_pick_catalogue_sheet():
     assert p.heat_pump_cost_class(60.0) == ("a", False)
     assert p.heat_pump_cost_class(105.0) == ("b", False)
     assert p.heat_pump_cost_class(160.0) == ("b", True)            # above every class: extrapolated
-    assert load_economics({}).heat_pump_kind(105.0) == "heat_pump"  # no classes: Padullés Table 3
+    assert load_economics({}).heat_pump_cost_class(105.0) == ("heat_pump", False)  # no classes: Padullés Table 3
 
 
 def test_heat_pump_cost_classes_need_their_cost_function():

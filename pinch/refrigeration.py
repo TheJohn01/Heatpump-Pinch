@@ -54,7 +54,7 @@ import pandas as pd
 
 from pinch.curves import piecewise_composite
 from pinch.heat_pump import HeatPump
-from pinch.problem_table import ProblemTable
+from pinch.problem_table_algorithm import ProblemTable
 from pinch.streams import StreamSet
 
 

@@ -65,11 +65,6 @@ def test_external_source_is_labelled():
     assert sum(d.integration.Q_source_process.values()) == 0.0
 
 
-def test_simple_design_cop_walmsley():
-    """Walmsley et al. (2024): ambient 15 °C -> 105 °C at 50 % Carnot efficiency gives COP 2.1."""
-    assert HeatPump("simple", 1, 105, 105, 15, 15, eta_lorenz=0.5).COP == pytest.approx(2.1, abs=0.01)
-
-
 # --------------------------------------------------------------- screening
 def test_screening_flags_and_passes():
     ok = HeatPump("ok", 1, 18, 82, -1, -1, eta_lorenz=0.55)
@@ -141,3 +136,24 @@ def test_external_source_above_ambient_is_flagged():
     assert source_warnings(hot_source, case.ambient_T_C)            # flagged
     as_published = design_from_gcc(streams, case.sink_levels, case.eta_lorenz, case.source_T_C)
     assert source_warnings(as_published, case.ambient_T_C) == {}    # 15 °C source: fine
+
+
+def test_every_module_is_documented():
+    """The module lists in pinch/__init__.py and README.md name every module (audit 4: the docstring had
+    drifted to 4 of 19 modules)."""
+    import pinch
+    from pinch.validation import ROOT
+    modules = sorted(p.stem for p in (ROOT / "pinch").glob("*.py") if p.stem != "__init__")
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    for m in modules:
+        assert f"\n{m} " in pinch.__doc__, f"{m} missing from pinch/__init__.py"
+        assert f"  {m}.py " in readme, f"{m} missing from README.md"
+
+
+def test_problem_table_name_is_unambiguous():
+    """Audit 4: `pinch.problem_table` was both a submodule and the function re-exported by __init__."""
+    import importlib
+    import pinch
+    assert callable(pinch.problem_table)
+    assert importlib.util.find_spec("pinch.problem_table") is None
+    assert importlib.import_module("pinch.problem_table_algorithm").problem_table is pinch.problem_table

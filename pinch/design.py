@@ -23,7 +23,7 @@ import numpy as np
 
 from pinch.case import SinkLevelSpec
 from pinch.heat_pump import HeatPump, IntegrationResult, add_units, integrate, max_useful_sink_duty
-from pinch.problem_table import ProblemTable, problem_table
+from pinch.problem_table_algorithm import ProblemTable, problem_table
 from pinch.streams import StreamSet
 
 

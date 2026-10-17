@@ -37,23 +37,17 @@ For each option:
 
 from __future__ import annotations
 
-import json
 import math
 from dataclasses import replace
-from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 from pinch.case import Case, display_name, to_MWh_per_year
 from pinch.design import design_from_gcc, partial_designs
 from pinch.economics import Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment
 from pinch.network import NetworkResult, constrained_streams, evaluate_network, load_networks
-from pinch.problem_table import problem_table
+from pinch.plotting import retrofit_options_figure
+from pinch.problem_table_algorithm import problem_table
 from pinch.refrigeration import CoolingCascade, refrigeration_taken_over
 from pinch.results import Outputs
 from pinch.streams import StreamSet
@@ -207,7 +201,8 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
                                                 "approach = stream shift + half the indirect extra approach",
                                "storage": "volume proportional to the heat charged (same temperature range)",
                                "heat pump sources": "take over refrigeration first; remainder from ambient"}}
-    return Outputs(summary, tables, {"retrofit_options": _figure(table, case.name)})
+    return Outputs(summary, tables, {"retrofit_options": retrofit_options_figure(
+        table, f"Retrofit options against the existing network: {display_name(case.name)}")})
 
 
 def network_cooling(streams: StreamSet, res: NetworkResult, T_amb_C: float | None) -> CoolingCascade | None:
@@ -248,30 +243,6 @@ def _curve(units, res: NetworkResult, cooling: CoolingCascade | None, baseline, 
 
 def _slug(s: str) -> str:
     return "".join(c if c.isalnum() else "_" for c in s).strip("_").lower()[:40]
-
-
-def _figure(table: pd.DataFrame, case_name: str):
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4.5))
-    y = np.arange(len(table))
-    a1.barh(y, table["gas_reduction_vs_baseline"] * 100, color="#2471A3")
-    a1.set_yticks(y, table["option"], fontsize=8)
-    a1.set_xlabel("Gas reduction vs existing site [%]")
-    a1.invert_yaxis()
-    a1.grid(axis="x", alpha=0.3)
-    pbp = table["payback_years"].replace([np.inf], np.nan)
-    a2.barh(y, pbp, color="#C0392B")
-    a2.set_yticks(y, [""] * len(y))
-    a2.set_xlabel("Simple payback [years]")
-    a2.set_xlim(0, 1.35 * float(np.nanmax(pbp)) if np.isfinite(np.nanmax(pbp)) else 10)
-    a2.invert_yaxis()
-    a2.grid(axis="x", alpha=0.3)
-    for i, (p, npv) in enumerate(zip(pbp, table["npv_EUR"])):
-        if np.isfinite(p):
-            a2.annotate(f"NPV {npv / 1e6:+.2f} M€", (p, i), xytext=(3, 0), textcoords="offset points",
-                        va="center", fontsize=7)
-    fig.suptitle(f"Retrofit options against the existing network: {display_name(case_name)}")
-    fig.tight_layout()
-    return fig
 
 
 # ------------------------------------------------------------------ bounds when no network is published

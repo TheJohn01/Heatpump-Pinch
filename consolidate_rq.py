@@ -32,10 +32,6 @@ import math
 from dataclasses import replace
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import pandas as pd
 
 from pinch import load_streams, with_extra_shift
@@ -43,6 +39,7 @@ from pinch.area_analysis import area_targeting_outputs
 from pinch.case import Case, display_name, load_case
 from pinch.cycle_analysis import load_selected
 from pinch.economic_analysis import _params_and_converter
+from pinch.plotting import save_figure, tornado_figure
 from pinch.retrofit import run_retrofit
 from pinch.sensitivity import apply
 
@@ -218,24 +215,8 @@ def _markdown(df: pd.DataFrame, threshold: float, prod: dict | None = None) -> s
 
 def _tornado(df: pd.DataFrame, path: Path, title: str) -> None:
     """Break-even ratio of the warm-water heat pump's increment (the unit that answers RQ1)."""
-    col = "RQ3_ratio_WW_HP"
-    base = df.iloc[0]
-    d = df.iloc[1:].copy()
-    d["delta"] = d[col] - base[col]
-    d = d.reindex(d["delta"].abs().sort_values().index)
-    fig, ax = plt.subplots(figsize=(9, 7))
-    ax.barh(d["sensitivity"], d["delta"], left=base[col], color=["#2471A3" if v > 0 else "#C0392B" for v in d["delta"]])
-    ax.axvline(base[col], color="black", lw=1)
-    ax.axvline(base["price_ratio"], color="grey", ls="--", lw=1)
-    ax.annotate(f"today's ratio {base['price_ratio']:.2f}", (base["price_ratio"], 0), xytext=(3, -12),
-                textcoords="offset points", fontsize=7, color="grey")
-    ax.set_xlabel("Break-even price ratio, warm-water heat pump increment (NPV = 0) [-]")
-    ax.tick_params(axis="y", labelsize=7)
-    ax.set_title(title, fontsize=10)
-    ax.grid(axis="x", alpha=0.3)
-    fig.tight_layout()
-    fig.savefig(path, dpi=200)
-    plt.close(fig)
+    save_figure(tornado_figure(df, "RQ3_ratio_WW_HP", title,
+                               "Break-even price ratio, warm-water heat pump increment (NPV = 0) [-]"), path)
 
 
 def main() -> None:

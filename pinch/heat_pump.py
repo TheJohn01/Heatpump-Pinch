@@ -38,7 +38,7 @@ from dataclasses import dataclass, replace
 
 import numpy as np
 
-from pinch.problem_table import ProblemTable, problem_table
+from pinch.problem_table_algorithm import ProblemTable, problem_table
 from pinch.streams import Stream, StreamSet
 
 KELVIN = 273.15
