@@ -1,0 +1,337 @@
+{
+  "case": "fourstream_example",
+  "description": "Classic four-stream chemical process (two reactor feeds and products), loads in MW. Illustrates the tool on a non-food process with high-temperature demand.",
+  "reference": "University of Oklahoma, ChE design course notes 'Minimum Utility', Example 1.1 (stream data and targets).",
+  "energy_unit": "MW",
+  "targets": {
+    "Q_hot_total": 61.5,
+    "Q_cold_total": 59.0,
+    "Qh_min": 7.5,
+    "Qc_min": 10.0,
+    "heat_recovery": 51.5,
+    "pinch_T_star_C": [
+      145.0
+    ],
+    "T_star_range_C": [
+      245.0,
+      25.0
+    ]
+  },
+  "heat_pump_design": {
+    "eta_lorenz": 0.55,
+    "units": [
+      "HTHP 160 °C",
+      "HTHP 200 °C"
+    ],
+    "levels_skipped_no_useful_duty": [],
+    "Q_sink_total": 3.75,
+    "W_total": 0.7941,
+    "COP_system": 4.722,
+    "Qh_residual": 3.75,
+    "fraction_of_Qh_min_electrified": 0.5,
+    "cold_utility_replaced": 2.9559,
+    "source_external_total": 0.0
+  },
+  "annual_MWh_per_year": {
+    "basis": {
+      "type": "power",
+      "operating_hours_per_year": 8000
+    },
+    "Qh_min": 60000.0,
+    "Qc_min": 80000.0,
+    "heat_pump_electricity": 6353.0,
+    "residual_hot_utility": 30000.0
+  },
+  "warnings": {
+    "HTHP 200 °C": [
+      "sink 200 °C above 160 °C: limited commercial availability"
+    ]
+  },
+  "provenance": {
+    "stream data": "published (lecture notes, Example 1.1)",
+    "eta_lorenz": "assumed, same value as the brewery case (Padullés et al., 2026)",
+    "source_T_C": "assumed: 130 °C, below the pinch (T* 145 °C), where the process rejects heat",
+    "sink levels": "assumed, illustrative: 160 °C (commercial range) and 200 °C (upper end of IEA HPT Annex 58 scope)",
+    "basis": "ASSUMED for reproduce_secondary_economics.py: 8000 h/year (case basis_hint). Original: none: the source gives no operating hours",
+    "ambient_T_C": "assumed: not given by the source",
+    "economics": "assumed: no economic data in the source (see economics.sources)",
+    "film coefficients": "from the overall U of the University of Oklahoma notes (equal split)",
+    "eta_lorenz_sensitivity": "0.45-0.52: Lorenz (Carnot) efficiencies implied by the DEA catalogue HTHP sheets 2.a/2.b (COP 4.45/2.75/2.4/2.05 at lifts of 40/65/80/100 K), as for the brewery",
+    "COP check": "eta_lorenz 0.55 (copied from the brewery) is above the 0.45-0.52 implied by the DEA catalogue: COP 7.94 at 30 K lift vs about 5.5-6 extrapolated from DEA (4.45 at 40 K); at 0.45 the NPV10 turns from +0.07 to -1.17 M€",
+    "steam sink": "assumed: the isothermal sink levels stand for steam mains (conventional for a chemical site; not stated by the source), so the DEA steam add-on applies"
+  },
+  "economics": {
+    "parameters": {
+      "gas_price_EUR_per_kWh": 0.0445,
+      "electricity_price_EUR_per_kWh": 0.1135,
+      "boiler_efficiency": 0.845,
+      "operating_hours_per_year": 8000.0,
+      "discount_rate": 0.05,
+      "horizon_years": 10,
+      "payback_threshold_years": 5.0,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.107,
+      "co2_price_EUR_per_t": 0.0,
+      "pef_electricity": 1.9,
+      "pef_gas": 1.0,
+      "chiller_cop": null
+    },
+    "price_ratio": 2.551,
+    "refrigeration_duty": 0.0,
+    "default_sources": {
+      "electricity_to_gas_ratio": "published: Padullés et al. (2026), Sec. 5.2, 'current European ratios of around 2'",
+      "boiler_efficiency": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): total efficiency, net, annual average 93.9 % (range 91.9-94.9 %), steam boiler with economiser; converted to the gross (GCV) basis of Eurostat gas prices with NCV/GCV = 0.90: 0.939 x 0.90 = 0.845. Earlier default 0.817 (US DOE Steam Tip Sheet #15, HHV) kept as sensitivity",
+      "discount_rate": "published: Padullés et al. (2026), Sec. 5.2",
+      "horizon_years": "published: Padullés et al. (2026), Sec. 5.2 (NPV10)",
+      "payback_threshold_years": "research question 1 (industry practice 3-5 years: Cooremans, cited in Padullés et al. 2026)",
+      "gas_EF_kg_per_kWh": "IPCC 2006 Guidelines, Vol. 2, Ch. 2, Table 2.2: natural gas, stationary combustion, 56,100 kg CO2/TJ (NCV) = 0.202 kg/kWh NCV = 0.182 kg/kWh GCV (NCV/GCV = 0.90), direct combustion only, matching the scope of production-based grid factors. Padullés et al. (2026, Sec. 5.3) use 0.219 (scope not stated); report it as a sensitivity",
+      "grid_EF_kg_per_kWh": "APA, 'Fator de Emissão da Eletricidade - 2025', Table T1: Portugal 2023, 0.107 t CO2eq/MWh (annual, production-based, direct emissions). Sensitivities: mainland 2023 0.092; 5-year moving average 0.167 (Table T2); Electricity Maps 2025 flow-traced 0.1172",
+      "co2_price_EUR_per_t": "0 by default (site may be outside the EU ETS); sensitivity uses the EUA price",
+      "pef_electricity": "published: Commission Delegated Regulation (EU) 2023/807 (EED default)",
+      "pef_gas": "convention: primary energy of a fuel = its final energy, on the net calorific value (NCV) basis of energy statistics",
+      "gas_ncv_over_gcv": "IPCC (1996) Revised Guidelines, Reference Manual, Ch. 1, Table 1-4 note a: GCV-NCV 10 % for natural gas. Gas is bought on GCV (Regulation (EU) 2016/1952); primary energy is counted on NCV, the basis of the EU primary-energy factors (Directive 2012/27/EU Annex IV; supervisor review B5)",
+      "refrigeration_credit_fraction": "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)",
+      "boiler_variable_om_EUR_per_MWh": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up",
+      "chiller_cop": "no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles)"
+    },
+    "case_sources": {
+      "prices": "Eurostat nrg_pc_203 (gas) and nrg_pc_205 (electricity), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh, gas on GCV (data/sources/eurostat_portugal_prices.csv). The plant is not in Portugal: these prices place it in the dissertation's context. Bands: gas I3 0.0512, I4 0.0445, I5 0.0420; electricity ID 0.1135, IE 0.0897, IF 0.0789. Band check at 8000 h/year, process only (the source describes no site): gas 255,600 GJ/year (I4); heat pump electricity 6.4 GWh/year (ID). A larger site would pay less for electricity (IE 0.0897), which favours the heat pumps: ID is the conservative choice",
+      "heat_pump_cost": "Danish Energy Agency catalogue (2025) by sink temperature, linear in capacity, plus the catalogue's add-ons for lift above 75 K (sink outlet minus source outlet) and steam generation (isothermal sinks). Replaces Padullés et al. (2026, Table 3), which is fitted to brewery heat pumps and gives 0.75-0.88 M€/MW for 2-3 MW units, below the catalogue range 0.9-1.5 M€/MW for sinks up to 125 °C. Indirect cost of new hot-water piping (0.23 M€/MW, 'relevant when needing to install new hot water piping instead of existing steam piping') is a scenario, not in the base"
+    },
+    "heat_pump_cost_class": {
+      "HTHP 160 °C": "hp_dea_2b + dea_steam (extrapolated: sink above every class)",
+      "HTHP 200 °C": "hp_dea_2b + dea_steam (extrapolated: sink above every class)"
+    },
+    "RQ1": {
+      "max_fraction_with_payback_below_threshold": 0.0,
+      "_definition": "fraction = heat pump heat / Q̇h,min of the site with heat recovery installed",
+      "threshold_years": 5.0,
+      "fraction_with_max_NPV": 0.2,
+      "max_NPV_EUR": 681899.0
+    },
+    "RQ3": {
+      "break_even_ratio_NPV": 2.298,
+      "break_even_ratio_payback": 0.661,
+      "ratio_used": 2.551
+    },
+    "results": {
+      "full design (heat recovery installed)": {
+        "option": "50.0 %",
+        "capex_EUR": 6562500.0236,
+        "opex_EUR": 2455194.3161,
+        "savings_EUR": 778368.9975,
+        "payback_years": 8.4311,
+        "npv_EUR": -552140.9476,
+        "gas_fuel_MWh": 35502.9585,
+        "electricity_MWh": 6352.953,
+        "co2_t": 7141.3044,
+        "co2_avoided_t": 5781.7725,
+        "primary_energy_MWh": 44023.2733,
+        "primary_energy_reduction": 0.3111,
+        "gas_reduction": 0.5
+      }
+    },
+    "scenarios": [
+      {
+        "scenario": "with hot-water piping (DEA indirect cost)",
+        "price_ratio": 2.551,
+        "boiler_efficiency": 0.845,
+        "gas_EF_kg_per_kWh": 0.182,
+        "grid_EF_kg_per_kWh": 0.107,
+        "co2_price_EUR_per_t": 0.0,
+        "chiller_cop": null,
+        "full_capex_EUR": 7425000.0,
+        "full_savings_EUR": 895721.0,
+        "full_payback_years": 8.29,
+        "full_npv_EUR": -508476.0,
+        "full_co2_avoided_t": 5782.0,
+        "full_primary_energy_reduction": 0.3111,
+        "RQ1_max_fraction_payback_ok": 0.0,
+        "RQ1_fraction_max_NPV": 0.2,
+        "RQ3_break_even_ratio_NPV": 2.318,
+        "RQ3_break_even_ratio_payback": 0.466
+      }
+    ]
+  },
+  "eta_lorenz_sensitivity": [
+    {
+      "eta_lorenz": 0.45,
+      "COP_system": 3.864,
+      "W_total_MW": 0.9706,
+      "price_ratio": 2.551,
+      "boiler_efficiency": 0.845,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.107,
+      "co2_price_EUR_per_t": 0.0,
+      "chiller_cop": null,
+      "full_capex_EUR": 6562500.0,
+      "full_savings_EUR": 618133.0,
+      "full_payback_years": 10.62,
+      "full_npv_EUR": -1789438.0,
+      "full_co2_avoided_t": 5631.0,
+      "full_primary_energy_reduction": 0.2691,
+      "RQ1_max_fraction_payback_ok": 0.0,
+      "RQ1_fraction_max_NPV": 0.2,
+      "RQ3_break_even_ratio_NPV": 1.88,
+      "RQ3_break_even_ratio_payback": 0.541
+    },
+    {
+      "eta_lorenz": 0.52,
+      "COP_system": 4.465,
+      "W_total_MW": 0.8399,
+      "price_ratio": 2.551,
+      "boiler_efficiency": 0.845,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.107,
+      "co2_price_EUR_per_t": 0.0,
+      "chiller_cop": null,
+      "full_capex_EUR": 6562500.0,
+      "full_savings_EUR": 736769.0,
+      "full_payback_years": 8.91,
+      "full_npv_EUR": -873362.0,
+      "full_co2_avoided_t": 5743.0,
+      "full_primary_energy_reduction": 0.3002,
+      "RQ1_max_fraction_payback_ok": 0.0,
+      "RQ1_fraction_max_NPV": 0.2,
+      "RQ3_break_even_ratio_NPV": 2.172,
+      "RQ3_break_even_ratio_payback": 0.625
+    }
+  ],
+  "cycle_based_design": {},
+  "retrofit_bounds": {
+    "baseline_status": "hypothetical",
+    "baseline_meaning": "textbook example, no real plant: both baselines are hypothetical bounds",
+    "note": "University of Oklahoma lecture-note example: there is no real plant, so both baselines are bounds for illustration",
+    "no_heat_recovery": {
+      "network": "no heat recovery (all utilities)",
+      "Qh": 59.0,
+      "Qc": 61.5,
+      "Qh_min": 7.5,
+      "Qc_min": 10.0,
+      "energy_gap": 51.5,
+      "heat_recovered": 0.0,
+      "cross_pinch_in_matches": 0.0,
+      "heaters_below_pinch": 24.0,
+      "coolers_above_pinch": 27.5,
+      "refrigeration_below_ambient": 0.0,
+      "pinch_T_star_C": 145.0
+    },
+    "Qh_min": 7.5,
+    "new_heat_recovery_network": {
+      "cost_law": "Towler 2020 U-tube shell and tube (carbon steel) x 3.5 (Hand factor, installed)",
+      "area_m2": 2407.9,
+      "units": 5,
+      "capex_EUR": 2537950.0
+    },
+    "options": [
+      {
+        "option": "Heat pumps only",
+        "baseline": "no heat recovery",
+        "heat_pumps": "HTHP 160 °C 31.5 (COP 7.94), HTHP 200 °C 17 (COP 3.72)",
+        "Qh_baseline": 59.0,
+        "Qh_after": 10.5,
+        "capex_EUR": 84875000.0,
+        "savings_EUR": 11638708.0,
+        "payback_years": 7.29,
+        "npv_EUR": 4996020.0,
+        "gas_reduction_vs_baseline": 0.822,
+        "co2_avoided_t": 76259.0,
+        "break_even_ratio_NPV": 2.763
+      },
+      {
+        "option": "New heat recovery at target",
+        "baseline": "no heat recovery",
+        "heat_pumps": "none",
+        "Qh_baseline": 59.0,
+        "Qh_after": 7.5,
+        "capex_EUR": 2537950.0,
+        "savings_EUR": 22203801.0,
+        "payback_years": 0.11,
+        "npv_EUR": 168913919.0,
+        "gas_reduction_vs_baseline": 0.8729,
+        "co2_avoided_t": 88738.0,
+        "break_even_ratio_NPV": Infinity
+      },
+      {
+        "option": "New heat recovery at target + heat pumps",
+        "baseline": "no heat recovery",
+        "heat_pumps": "HTHP 160 °C 1.5 (COP 7.94), HTHP 200 °C 2.25 (COP 3.72)",
+        "Qh_baseline": 59.0,
+        "Qh_after": 3.75,
+        "capex_EUR": 9100450.0,
+        "savings_EUR": 22982170.0,
+        "payback_years": 0.4,
+        "npv_EUR": 168361778.0,
+        "gas_reduction_vs_baseline": 0.9364,
+        "co2_avoided_t": 94520.0,
+        "break_even_ratio_NPV": 79.675
+      },
+      {
+        "option": "Lower bound: plant already at target, heat pumps only",
+        "baseline": "heat recovery at target",
+        "heat_pumps": "HTHP 160 °C 1.5 (COP 7.94), HTHP 200 °C 2.25 (COP 3.72)",
+        "Qh_baseline": 7.5,
+        "Qh_after": 3.75,
+        "capex_EUR": 6562500.0,
+        "savings_EUR": 778369.0,
+        "payback_years": 8.43,
+        "npv_EUR": -552141.0,
+        "gas_reduction_vs_baseline": 0.5,
+        "co2_avoided_t": 5782.0,
+        "break_even_ratio_NPV": 2.298
+      }
+    ],
+    "assumptions": {
+      "new network": "area target (Bath formula, case film coefficients) and units target at the case's temperature shifts, costed per unit with the cost law",
+      "heat pumps": "case sink levels; on the no-recovery plant they are sized on the network-constrained stream set (no process-to-process transfer)"
+    }
+  },
+  "area_targeting": {
+    "hot_utility_cost_EUR_per_kW_year": 421.3,
+    "cold_utility_cost_EUR_per_kW_year": 34.3308,
+    "crf_per_year": 0.1295,
+    "film_coefficients_source": "University of Oklahoma ChE design notes 'Units and Area Targeting' (same example): overall U = 0.001 MW/(m2 K) = 1 kW/(m2 K) for every match; split into equal film coefficients of 2 kW/(m2 K) so that 1/U = 1/h_hot + 1/h_cold (lecture notes, not peer-reviewed). Utility-side coefficients take the same value",
+    "RQ2": [
+      {
+        "cost_law": "Towler 2020 U-tube shell and tube (carbon steel), bare (F = 1)",
+        "a": 34735.9,
+        "b": 66.58,
+        "c": 1.2,
+        "dTmin_opt_K": 1.0,
+        "TAC_min_EUR": 2153236.0,
+        "area_m2": 7247.4,
+        "Qh_min_kW": 3900.0,
+        "at_grid_edge": true,
+        "dTmin_within_1pct_K": [
+          1.0,
+          1.0
+        ],
+        "dTmin_within_2pct_K": [
+          1.0,
+          1.0
+        ],
+        "energy_share_of_TAC": 0.865
+      },
+      {
+        "cost_law": "Towler 2020 U-tube shell and tube (carbon steel) x 3.5 (Hand factor, installed)",
+        "a": 121575.6,
+        "b": 233.02,
+        "c": 1.2,
+        "dTmin_opt_K": 2.0,
+        "TAC_min_EUR": 2819261.0,
+        "area_m2": 5649.4,
+        "Qh_min_kW": 4300.0,
+        "at_grid_edge": false,
+        "dTmin_within_1pct_K": [
+          2.0,
+          2.0
+        ],
+        "dTmin_within_2pct_K": [
+          2.0,
+          3.0
+        ],
+        "energy_share_of_TAC": 0.725
+      }
+    ]
+  }
+}

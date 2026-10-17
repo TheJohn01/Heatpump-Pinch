@@ -13,13 +13,13 @@
     "source": "Andersen et al. (2024), Applied Energy 376, 124312, Table 3"
   },
   "selected": {
-    "CO2 HP (warm water)": {
+    "Warm-water HP": {
       "fluid": "n-Propane",
       "layout": "single stage, SLHX",
       "COP": 3.1092,
       "eta_lorenz_cycle": 0.4821,
-      "eta_lorenz_assumed": 0.55,
-      "COP_assumed": 3.5472,
+      "eta_lorenz_assumed": 0.5,
+      "COP_assumed": 3.2247,
       "note": ""
     },
     "HTHP (wort boiling)": {
@@ -27,8 +27,8 @@
       "layout": "cascade (SLHX top)",
       "COP": 1.956,
       "eta_lorenz_cycle": 0.5408,
-      "eta_lorenz_assumed": 0.55,
-      "COP_assumed": 1.9893,
+      "eta_lorenz_assumed": 0.5,
+      "COP_assumed": 1.8084,
       "note": "intermediate (top evaporation) 20.6 °C"
     }
   }

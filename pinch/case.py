@@ -209,3 +209,22 @@ def to_MWh_per_year(value: float, energy_unit: str, basis: dict | None) -> float
     if energy_unit not in POWER_TO_MW:
         raise ValueError(f"unit '{energy_unit}' is not a power unit; use a 'per_product' basis")
     return value * POWER_TO_MW[energy_unit] * basis["operating_hours_per_year"]
+
+
+#: Readable names for figure titles (internal identifiers stay in file names).
+DISPLAY_NAMES = {
+    "brewery_padulles2026": "Brewery (Padullés et al., 2026)",
+    "brewery_base": "Brewery (Padullés et al., 2026)",
+    "brewery_indirect": "Brewery, +2 K indirect-transfer shift",
+    "fourstream_example": "Four-stream example (OU notes)",
+    "fourstream_balanced_ou": "Four-stream example with utilities (OU notes)",
+    "northwestern_4stream": "Four-stream example (Northwestern)",
+    "walmsley2024_milk_evaporator": "Milk evaporator (Walmsley et al., 2024)",
+    "walmsley2024_spray_dryer": "Milk spray dryer (Walmsley et al., 2024)",
+}
+
+
+def display_name(name: str) -> str:
+    """Readable name for a case or reference identifier (the identifier itself if unknown)."""
+    return DISPLAY_NAMES.get(name, name.replace("_", " "))
+

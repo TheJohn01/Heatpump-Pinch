@@ -1,0 +1,93 @@
+{
+  "parameters": {
+    "gas_price_EUR_per_kWh": 0.0445,
+    "electricity_price_EUR_per_kWh": 0.1135,
+    "boiler_efficiency": 0.845,
+    "operating_hours_per_year": 8000.0,
+    "discount_rate": 0.05,
+    "horizon_years": 10,
+    "payback_threshold_years": 5.0,
+    "gas_EF_kg_per_kWh": 0.182,
+    "grid_EF_kg_per_kWh": 0.107,
+    "co2_price_EUR_per_t": 0.0,
+    "pef_electricity": 1.9,
+    "pef_gas": 1.0,
+    "chiller_cop": null
+  },
+  "price_ratio": 2.551,
+  "refrigeration_duty": 0.0,
+  "default_sources": {
+    "electricity_to_gas_ratio": "published: Padullés et al. (2026), Sec. 5.2, 'current European ratios of around 2'",
+    "boiler_efficiency": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): total efficiency, net, annual average 93.9 % (range 91.9-94.9 %), steam boiler with economiser; converted to the gross (GCV) basis of Eurostat gas prices with NCV/GCV = 0.90: 0.939 x 0.90 = 0.845. Earlier default 0.817 (US DOE Steam Tip Sheet #15, HHV) kept as sensitivity",
+    "discount_rate": "published: Padullés et al. (2026), Sec. 5.2",
+    "horizon_years": "published: Padullés et al. (2026), Sec. 5.2 (NPV10)",
+    "payback_threshold_years": "research question 1 (industry practice 3-5 years: Cooremans, cited in Padullés et al. 2026)",
+    "gas_EF_kg_per_kWh": "IPCC 2006 Guidelines, Vol. 2, Ch. 2, Table 2.2: natural gas, stationary combustion, 56,100 kg CO2/TJ (NCV) = 0.202 kg/kWh NCV = 0.182 kg/kWh GCV (NCV/GCV = 0.90), direct combustion only, matching the scope of production-based grid factors. Padullés et al. (2026, Sec. 5.3) use 0.219 (scope not stated); report it as a sensitivity",
+    "grid_EF_kg_per_kWh": "APA, 'Fator de Emissão da Eletricidade - 2025', Table T1: Portugal 2023, 0.107 t CO2eq/MWh (annual, production-based, direct emissions). Sensitivities: mainland 2023 0.092; 5-year moving average 0.167 (Table T2); Electricity Maps 2025 flow-traced 0.1172",
+    "co2_price_EUR_per_t": "0 by default (site may be outside the EU ETS); sensitivity uses the EUA price",
+    "pef_electricity": "published: Commission Delegated Regulation (EU) 2023/807 (EED default)",
+    "pef_gas": "convention: primary energy of a fuel = its final energy, on the net calorific value (NCV) basis of energy statistics",
+    "gas_ncv_over_gcv": "IPCC (1996) Revised Guidelines, Reference Manual, Ch. 1, Table 1-4 note a: GCV-NCV 10 % for natural gas. Gas is bought on GCV (Regulation (EU) 2016/1952); primary energy is counted on NCV, the basis of the EU primary-energy factors (Directive 2012/27/EU Annex IV; supervisor review B5)",
+    "refrigeration_credit_fraction": "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)",
+    "boiler_variable_om_EUR_per_MWh": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up",
+    "chiller_cop": "no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles)"
+  },
+  "case_sources": {
+    "prices": "Eurostat nrg_pc_203 (gas) and nrg_pc_205 (electricity), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh, gas on GCV (data/sources/eurostat_portugal_prices.csv). The plant is not in Portugal: these prices place it in the dissertation's context. Bands: gas I3 0.0512, I4 0.0445, I5 0.0420; electricity ID 0.1135, IE 0.0897, IF 0.0789. Band check at 8000 h/year, process only (the source describes no site): gas 255,600 GJ/year (I4); heat pump electricity 6.4 GWh/year (ID). A larger site would pay less for electricity (IE 0.0897), which favours the heat pumps: ID is the conservative choice",
+    "heat_pump_cost": "Danish Energy Agency catalogue (2025) by sink temperature, linear in capacity, plus the catalogue's add-ons for lift above 75 K (sink outlet minus source outlet) and steam generation (isothermal sinks). Replaces Padullés et al. (2026, Table 3), which is fitted to brewery heat pumps and gives 0.75-0.88 M€/MW for 2-3 MW units, below the catalogue range 0.9-1.5 M€/MW for sinks up to 125 °C. Indirect cost of new hot-water piping (0.23 M€/MW, 'relevant when needing to install new hot water piping instead of existing steam piping') is a scenario, not in the base"
+  },
+  "heat_pump_cost_class": {
+    "HTHP 160 °C": "hp_dea_2b + dea_steam (extrapolated: sink above every class)",
+    "HTHP 200 °C": "hp_dea_2b + dea_steam (extrapolated: sink above every class)"
+  },
+  "RQ1": {
+    "max_fraction_with_payback_below_threshold": 0.0,
+    "_definition": "fraction = heat pump heat / Q̇h,min of the site with heat recovery installed",
+    "threshold_years": 5.0,
+    "fraction_with_max_NPV": 0.2,
+    "max_NPV_EUR": 681899.0
+  },
+  "RQ3": {
+    "break_even_ratio_NPV": 2.298,
+    "break_even_ratio_payback": 0.661,
+    "ratio_used": 2.551
+  },
+  "results": {
+    "full design (heat recovery installed)": {
+      "option": "50.0 %",
+      "capex_EUR": 6562500.0236,
+      "opex_EUR": 2455194.3161,
+      "savings_EUR": 778368.9975,
+      "payback_years": 8.4311,
+      "npv_EUR": -552140.9476,
+      "gas_fuel_MWh": 35502.9585,
+      "electricity_MWh": 6352.953,
+      "co2_t": 7141.3044,
+      "co2_avoided_t": 5781.7725,
+      "primary_energy_MWh": 44023.2733,
+      "primary_energy_reduction": 0.3111,
+      "gas_reduction": 0.5
+    }
+  },
+  "scenarios": [
+    {
+      "scenario": "with hot-water piping (DEA indirect cost)",
+      "price_ratio": 2.551,
+      "boiler_efficiency": 0.845,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.107,
+      "co2_price_EUR_per_t": 0.0,
+      "chiller_cop": null,
+      "full_capex_EUR": 7425000.0,
+      "full_savings_EUR": 895721.0,
+      "full_payback_years": 8.29,
+      "full_npv_EUR": -508476.0,
+      "full_co2_avoided_t": 5782.0,
+      "full_primary_energy_reduction": 0.3111,
+      "RQ1_max_fraction_payback_ok": 0.0,
+      "RQ1_fraction_max_NPV": 0.2,
+      "RQ3_break_even_ratio_NPV": 2.318,
+      "RQ3_break_even_ratio_payback": 0.466
+    }
+  ]
+}

@@ -18,7 +18,7 @@ Source: Padullés et al. (2026), Energy Conversion and Management 357, 121292, T
 
 | Quantity | Value |
 |---|---|
-| Units | CO2 HP (warm water), HTHP (wort boiling) |
+| Units | Warm-water HP, HTHP (wort boiling) |
 | Heat delivered [kWh/hl] | 10.0424 |
 | Electricity [kWh/hl] | 3.7845 |
 | System COP [-] | 2.654 |
@@ -43,7 +43,7 @@ Price ratio 2.217 (electricity 0.1135 EUR/kWh, gas 0.0512 EUR/kWh); boiler effic
 | Full design: simple payback [years] | 7.6576 |
 | Full design: NPV [EUR] | 15,027 |
 | Full design: CO2 avoided [t/year] | 1,835 |
-| Full design: primary-energy reduction | 45.8 % |
+| Full design: primary-energy reduction | 40.4 % |
 | Grass-roots variant (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ 5 y | 72.5 % |
 | Grass-roots variant: share with maximum NPV | 72.5 % |
 | Grass-roots variant: break-even ratio of the full design, NPV = 0 | 2.229 |
@@ -78,16 +78,16 @@ Existing network 'N0 existing': Q̇h 11.3 (target 10.0424), energy gap 1.2577 = 
 | Option | Q̇h network | Heat pumps | CAPEX [EUR] | Payback [y] | NPV [EUR] | Gas reduction vs existing |
 |---|---|---|---|---|---|---|
 | N1: condensate into tank | 10.4847 | none | 55,972 | 1.11 | 333,235 | 7.2 % |
-| N0 + both heat pumps (Padulles config. 2) | 11.3 | CO2 HP (warm water) 8.30 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81) | 1,887,500 | 7.37 | 90,195 | 100.0 % |
-| N1 + both heat pumps | 10.4847 | CO2 HP (warm water) 7.48 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81) | 1,882,325 | 6.54 | 341,578 | 100.0 % |
-| N1 + warm-water heat pump only | 10.4847 | CO2 HP (warm water) 7.48 (COP 3.22) | 1,137,325 | 3.76 | 1,198,981 | 73.5 % |
-| N1 + both heat pumps, cycle-based COP | 10.4847 | CO2 HP (warm water) 7.48 (COP 3.11), HTHP (wort boiling) 3.00 (COP 1.96) | 1,882,325 | 6.44 | 375,737 | 100.0 % |
+| N0 + both heat pumps (Padulles config. 2) | 11.3 | Warm-water HP 8.30 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81) | 1,887,500 | 7.37 | 90,195 | 100.0 % |
+| N1 + both heat pumps | 10.4847 | Warm-water HP 7.48 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81) | 1,882,325 | 6.54 | 341,578 | 100.0 % |
+| N1 + warm-water heat pump only | 10.4847 | Warm-water HP 7.48 (COP 3.22) | 1,137,325 | 3.76 | 1,198,981 | 73.5 % |
+| N1 + both heat pumps, cycle-based COP | 10.4847 | Warm-water HP 7.48 (COP 3.11), HTHP (wort boiling) 3.00 (COP 1.96) | 1,882,325 | 6.44 | 375,737 | 100.0 % |
 
 ## Cycle-based design (step 4b: η_L from the working-fluid cycle model)
 
 | Unit | Fluid | Layout | COP | η_L |
 |---|---|---|---|---|
-| CO2 HP (warm water) | n-Propane | single stage, SLHX | 3.109 | 0.4821 |
+| Warm-water HP | n-Propane | single stage, SLHX | 3.109 | 0.4821 |
 | HTHP (wort boiling) | n-Propane / n-Butane | cascade (SLHX top) | 1.956 | 0.5408 |
 
 System COP 2.676; full-design payback 7.54 y, NPV 42,454 EUR; RQ1 72.5 %; RQ3 break-even ratio 2.252.
@@ -127,3 +127,4 @@ Hot utility 484.73 EUR/kW-year; cold utility 204.04494382022472 EUR/kW-year; CRF
 - **area_targeting**: film coefficients: Stampfli et al. (2018) Table 1, mapping assumed; cost laws: Sinnott and Towler (2020) Table 6.6 plate and frame (primary) and Stampfli et al. (2018) Table 2, bare and x3.5 (Hand factor, Towler Table 6.3); cold utility cost from chiller COP
 - **cycle_screening**: step 4b: cycle model with Andersen et al. (2024) Table 3 assumptions; validated against their Appendix A (see tests/test_cycle.py)
 - **retrofit**: step 5, option (a): existing network = Padullés et al. (2026) Sec. 4.2 (Pfaduko + wort-cooling HR tank), data/brewery_networks.json
+- **warm-water heat pump name**: 'Warm-water HP' = the CO2 heat pump of Padullés et al. (2026, config. 2); our cycle screening selects propane with SLHX as the practical fluid (step 4b), so the unit is named by its duty

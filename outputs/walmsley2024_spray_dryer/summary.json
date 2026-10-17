@@ -88,7 +88,8 @@
       "grid_EF_kg_per_kWh": "APA, 'Fator de Emissão da Eletricidade - 2025', Table T1: Portugal 2023, 0.107 t CO2eq/MWh (annual, production-based, direct emissions). Sensitivities: mainland 2023 0.092; 5-year moving average 0.167 (Table T2); Electricity Maps 2025 flow-traced 0.1172",
       "co2_price_EUR_per_t": "0 by default (site may be outside the EU ETS); sensitivity uses the EUA price",
       "pef_electricity": "published: Commission Delegated Regulation (EU) 2023/807 (EED default)",
-      "pef_gas": "convention: primary energy of a fuel = its final energy",
+      "pef_gas": "convention: primary energy of a fuel = its final energy, on the net calorific value (NCV) basis of energy statistics",
+      "gas_ncv_over_gcv": "IPCC (1996) Revised Guidelines, Reference Manual, Ch. 1, Table 1-4 note a: GCV-NCV 10 % for natural gas. Gas is bought on GCV (Regulation (EU) 2016/1952); primary energy is counted on NCV, the basis of the EU primary-energy factors (Directive 2012/27/EU Annex IV; supervisor review B5)",
       "refrigeration_credit_fraction": "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)",
       "boiler_variable_om_EUR_per_MWh": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up",
       "chiller_cop": "no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles)"
@@ -126,8 +127,8 @@
         "electricity_MWh": 14678.2511,
         "co2_t": 2741.0117,
         "co2_avoided_t": 3252.9698,
-        "primary_energy_MWh": 34319.6597,
-        "primary_energy_reduction": -0.0421,
+        "primary_energy_MWh": 33676.5614,
+        "primary_energy_reduction": -0.1362,
         "gas_reduction": 0.8047
       }
     },
@@ -145,7 +146,7 @@
         "full_payback_years": Infinity,
         "full_npv_EUR": -7840359.0,
         "full_co2_avoided_t": 3253.0,
-        "full_primary_energy_reduction": -0.0421,
+        "full_primary_energy_reduction": -0.1362,
         "RQ1_max_fraction_payback_ok": 0.0,
         "RQ1_fraction_max_NPV": 0.0,
         "RQ3_break_even_ratio_NPV": 0.461,
@@ -169,7 +170,7 @@
       "full_payback_years": Infinity,
       "full_npv_EUR": -8805944.0,
       "full_co2_avoided_t": 3078.0,
-      "full_primary_energy_reduction": -0.1362,
+      "full_primary_energy_reduction": -0.2407,
       "RQ1_max_fraction_payback_ok": 0.0,
       "RQ1_fraction_max_NPV": 0.0,
       "RQ3_break_even_ratio_NPV": 0.444,
@@ -190,7 +191,7 @@
       "full_payback_years": Infinity,
       "full_npv_EUR": -7285278.0,
       "full_co2_avoided_t": 3313.0,
-      "full_primary_energy_reduction": -0.0095,
+      "full_primary_energy_reduction": -0.1,
       "RQ1_max_fraction_payback_ok": 0.0,
       "RQ1_fraction_max_NPV": 0.0,
       "RQ3_break_even_ratio_NPV": 0.514,
@@ -301,7 +302,16 @@
         "TAC_min_EUR": 1365575.0,
         "area_m2": 17481.5,
         "Qh_min_kW": 4142.6,
-        "at_grid_edge": true
+        "at_grid_edge": true,
+        "dTmin_within_1pct_K": [
+          2.0,
+          6.0
+        ],
+        "dTmin_within_2pct_K": [
+          2.0,
+          6.0
+        ],
+        "energy_share_of_TAC": 0.959
       },
       {
         "cost_law": "sweep: 50 EUR/m2 installed, linear (not a sourced estimate)",
@@ -312,7 +322,16 @@
         "TAC_min_EUR": 1408658.0,
         "area_m2": 12518.0,
         "Qh_min_kW": 4201.6,
-        "at_grid_edge": false
+        "at_grid_edge": false,
+        "dTmin_within_1pct_K": [
+          2.0,
+          8.0
+        ],
+        "dTmin_within_2pct_K": [
+          2.0,
+          10.0
+        ],
+        "energy_share_of_TAC": 0.942
       },
       {
         "cost_law": "sweep: 100 EUR/m2 installed, linear (not a sourced estimate)",
@@ -323,7 +342,16 @@
         "TAC_min_EUR": 1469677.0,
         "area_m2": 7869.5,
         "Qh_min_kW": 4328.7,
-        "at_grid_edge": false
+        "at_grid_edge": false,
+        "dTmin_within_1pct_K": [
+          6.0,
+          10.0
+        ],
+        "dTmin_within_2pct_K": [
+          4.0,
+          14.0
+        ],
+        "energy_share_of_TAC": 0.931
       },
       {
         "cost_law": "sweep: 250 EUR/m2 installed, linear (not a sourced estimate)",
@@ -334,7 +362,16 @@
         "TAC_min_EUR": 1584848.0,
         "area_m2": 4439.6,
         "Qh_min_kW": 4560.8,
-        "at_grid_edge": false
+        "at_grid_edge": false,
+        "dTmin_within_1pct_K": [
+          10.0,
+          16.0
+        ],
+        "dTmin_within_2pct_K": [
+          10.0,
+          20.0
+        ],
+        "energy_share_of_TAC": 0.909
       }
     ]
   }

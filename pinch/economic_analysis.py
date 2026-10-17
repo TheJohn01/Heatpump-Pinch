@@ -35,7 +35,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from pinch.case import Case, to_MWh_per_year
+from pinch.case import Case, display_name, to_MWh_per_year
 from pinch.results import Outputs
 from pinch.design import HeatPumpDesign
 from pinch.economics import (DEFAULTS, EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment,
@@ -69,13 +69,25 @@ def refrigeration_duty(streams, T_amb_C: float | None, heat_recovery: bool = Tru
 
 
 _REPLACED_CACHE: dict = {}
+_REPLACED_CACHE_MAX = 64
+
+
+def _design_key(design: HeatPumpDesign, streams, n_points: int) -> tuple:
+    """Cache key by value. (Keys by id() were reused after garbage collection, so a later design could
+    receive an earlier design's curve: supervisor review C1.)"""
+    units = tuple((u.name, u.Q_sink, u.T_sink_in_C, u.T_sink_out_C, u.T_source_in_C, u.T_source_out_C, u.COP)
+                  for u in design.units)
+    ss = tuple((s.name, s.kind, s.T_in_C, s.T_out_C, s.Q, s.dT_shift_K) for s in streams.streams)
+    return units, ss, n_points
 
 
 def cold_utility_replaced_curve(design: HeatPumpDesign, streams, n_points: int = 201) -> list[float]:
     """Process cooling taken over by the heat pump sources at each point of the electrification curve."""
     from pinch.heat_pump import integrate
-    key = (id(design), id(streams), n_points)
+    key = _design_key(design, streams, n_points)
     if key not in _REPLACED_CACHE:
+        if len(_REPLACED_CACHE) >= _REPLACED_CACHE_MAX:
+            _REPLACED_CACHE.clear()
         units = sorted(design.units, key=lambda u: -u.COP)
         total = sum(u.Q_sink for u in units)
         out = []
@@ -340,7 +352,7 @@ def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, e
     ax2.plot(f, curve_df["npv_EUR"] / 1e6, color="#D62728", lw=2, label=f"NPV{params.horizon_years}")
     ax2.axhline(0, color="#D62728", ls=":", lw=1)
     ax2.set_ylabel(f"NPV{params.horizon_years} at {100 * params.discount_rate:.0f} % [M EUR]", color="#D62728")
-    ax1.set_title(f"Electrification curve: {case.name} (ratio {params.price_ratio:.2f})")
+    ax1.set_title(f"Electrification curve: {display_name(case.name)} (ratio {params.price_ratio:.2f})")
     ax1.grid(alpha=0.3)
     fig.tight_layout()
     figures["electrification_curve"] = fig
@@ -358,7 +370,7 @@ def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, e
     ax1.axvline(params.price_ratio, color="grey", ls="--", lw=1)
     ax1.annotate(f"case ratio {params.price_ratio:.2f}", xy=(params.price_ratio, 0.5), xytext=(4, 0),
                  textcoords="offset points", fontsize=8, color="grey")
-    ax1.set_title(f"Full design vs price ratio: {case.name}")
+    ax1.set_title(f"Full design vs price ratio: {display_name(case.name)}")
     ax1.grid(alpha=0.3)
     fig.tight_layout()
     figures["price_ratio_sweep"] = fig

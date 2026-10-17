@@ -20,7 +20,7 @@
   "heat_pump_design": {
     "eta_lorenz": 0.5,
     "units": [
-      "CO2 HP (warm water)",
+      "Warm-water HP",
       "HTHP (wort boiling)"
     ],
     "levels_skipped_no_useful_duty": [],
@@ -53,7 +53,8 @@
     "ambient_T_C": "published: Sec. 4.3.1",
     "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1, mapping assumed; cost laws: Sinnott and Towler (2020) Table 6.6 plate and frame (primary) and Stampfli et al. (2018) Table 2, bare and x3.5 (Hand factor, Towler Table 6.3); cold utility cost from chiller COP",
     "cycle_screening": "step 4b: cycle model with Andersen et al. (2024) Table 3 assumptions; validated against their Appendix A (see tests/test_cycle.py)",
-    "retrofit": "step 5, option (a): existing network = Padullés et al. (2026) Sec. 4.2 (Pfaduko + wort-cooling HR tank), data/brewery_networks.json"
+    "retrofit": "step 5, option (a): existing network = Padullés et al. (2026) Sec. 4.2 (Pfaduko + wort-cooling HR tank), data/brewery_networks.json",
+    "warm-water heat pump name": "'Warm-water HP' = the CO2 heat pump of Padullés et al. (2026, config. 2); our cycle screening selects propane with SLHX as the practical fluid (step 4b), so the unit is named by its duty"
   },
   "economics": {
     "parameters": {
@@ -76,7 +77,8 @@
     "default_sources": {
       "electricity_to_gas_ratio": "published: Padullés et al. (2026), Sec. 5.2, 'current European ratios of around 2'",
       "pef_electricity": "published: Commission Delegated Regulation (EU) 2023/807 (EED default)",
-      "pef_gas": "convention: primary energy of a fuel = its final energy",
+      "pef_gas": "convention: primary energy of a fuel = its final energy, on the net calorific value (NCV) basis of energy statistics",
+      "gas_ncv_over_gcv": "IPCC (1996) Revised Guidelines, Reference Manual, Ch. 1, Table 1-4 note a: GCV-NCV 10 % for natural gas. Gas is bought on GCV (Regulation (EU) 2016/1952); primary energy is counted on NCV, the basis of the EU primary-energy factors (Directive 2012/27/EU Annex IV; supervisor review B5)",
       "refrigeration_credit_fraction": "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)",
       "boiler_variable_om_EUR_per_MWh": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up"
     },
@@ -94,7 +96,7 @@
       "chiller_cop": "Sinnott and Towler (2020), Chemical Engineering Design, 6th ed. (Elsevier, ISBN 978-0-08-102599-4), Sec. 6.4.4, Eq. 6.20: real COP about 0.6 x Carnot for a simple cycle. Evaporator at cold utility -1 °C minus 5 K (refrigerated-brine approach 3-5 K, Sec. 12.7.3), condenser at ambient 15 °C + 10 K cooling-water rise + 5 K approach = 30 °C: 0.6 x 267.15/36 = 4.45. Check: CoolProp ammonia cycle (Andersen et al. 2024 assumptions, sink 15->25 °C) gives 4.52. Padullés et al. (2026) give no chiller credit"
     },
     "heat_pump_cost_class": {
-      "CO2 HP (warm water)": "heat_pump",
+      "Warm-water HP": "heat_pump",
       "HTHP (wort boiling)": "heat_pump"
     },
     "RQ1": {
@@ -125,7 +127,7 @@
         "co2_t": 404.9406,
         "co2_avoided_t": 1835.4808,
         "primary_energy_MWh": 7190.5335,
-        "primary_energy_reduction": 0.4577,
+        "primary_energy_reduction": 0.4043,
         "gas_reduction": 1.0
       },
       "heat recovery only (vs no HR)": {
@@ -139,8 +141,8 @@
         "electricity_MWh": 723.8599,
         "co2_t": 2240.4213,
         "co2_avoided_t": 2446.2624,
-        "primary_energy_MWh": 13259.7751,
-        "primary_energy_reduction": 0.5034,
+        "primary_energy_MWh": 12071.331,
+        "primary_energy_reduction": 0.5005,
         "gas_reduction": 0.5307
       },
       "heat recovery + heat pumps (vs no HR)": {
@@ -155,7 +157,7 @@
         "co2_t": 404.9406,
         "co2_avoided_t": 4281.7432,
         "primary_energy_MWh": 7190.5335,
-        "primary_energy_reduction": 0.7307,
+        "primary_energy_reduction": 0.7025,
         "gas_reduction": 1.0
       }
     },
@@ -173,7 +175,7 @@
         "full_payback_years": 10.39,
         "full_npv_EUR": -460886.0,
         "full_co2_avoided_t": 1835.0,
-        "full_primary_energy_reduction": 0.4577,
+        "full_primary_energy_reduction": 0.4043,
         "RQ1_max_fraction_payback_ok": 0.0,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.123,
@@ -192,7 +194,7 @@
         "full_payback_years": 7.3,
         "full_npv_EUR": 102523.0,
         "full_co2_avoided_t": 1835.0,
-        "full_primary_energy_reduction": 0.4577,
+        "full_primary_energy_reduction": 0.4043,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.332,
@@ -211,7 +213,7 @@
         "full_payback_years": 5.84,
         "full_npv_EUR": 577502.0,
         "full_co2_avoided_t": 1835.0,
-        "full_primary_energy_reduction": 0.4577,
+        "full_primary_energy_reduction": 0.4043,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.229,
@@ -230,7 +232,7 @@
         "full_payback_years": 8.05,
         "full_npv_EUR": -73470.0,
         "full_co2_avoided_t": 1835.0,
-        "full_primary_energy_reduction": 0.4577,
+        "full_primary_energy_reduction": 0.4043,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.343,
@@ -249,7 +251,7 @@
         "full_payback_years": 7.03,
         "full_npv_EUR": 176055.0,
         "full_co2_avoided_t": 1910.0,
-        "full_primary_energy_reduction": 0.4739,
+        "full_primary_energy_reduction": 0.4219,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.362,
@@ -268,7 +270,7 @@
         "full_payback_years": 10.01,
         "full_npv_EUR": -409815.0,
         "full_co2_avoided_t": 1640.0,
-        "full_primary_energy_reduction": 0.4099,
+        "full_primary_energy_reduction": 0.3524,
         "RQ1_max_fraction_payback_ok": 0.0,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 1.878,
@@ -287,7 +289,7 @@
         "full_payback_years": 12.82,
         "full_npv_EUR": -713248.0,
         "full_co2_avoided_t": 1500.0,
-        "full_primary_energy_reduction": 0.3702,
+        "full_primary_energy_reduction": 0.3095,
         "RQ1_max_fraction_payback_ok": 0.0,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 1.627,
@@ -306,7 +308,7 @@
         "full_payback_years": 4.35,
         "full_npv_EUR": 1391261.0,
         "full_co2_avoided_t": 1835.0,
-        "full_primary_energy_reduction": 0.4577,
+        "full_primary_energy_reduction": 0.4043,
         "RQ1_max_fraction_payback_ok": 1.0,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 3.367,
@@ -325,7 +327,7 @@
         "full_payback_years": 7.66,
         "full_npv_EUR": 15027.0,
         "full_co2_avoided_t": 2275.0,
-        "full_primary_energy_reduction": 0.4577,
+        "full_primary_energy_reduction": 0.4043,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.229,
@@ -344,7 +346,7 @@
         "full_payback_years": 7.66,
         "full_npv_EUR": 15027.0,
         "full_co2_avoided_t": 1881.0,
-        "full_primary_energy_reduction": 0.4577,
+        "full_primary_energy_reduction": 0.4043,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.229,
@@ -363,7 +365,7 @@
         "full_payback_years": 7.66,
         "full_npv_EUR": 15027.0,
         "full_co2_avoided_t": 1652.0,
-        "full_primary_energy_reduction": 0.4577,
+        "full_primary_energy_reduction": 0.4043,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.229,
@@ -382,7 +384,7 @@
         "full_payback_years": 7.66,
         "full_npv_EUR": 15027.0,
         "full_co2_avoided_t": 1804.0,
-        "full_primary_energy_reduction": 0.4577,
+        "full_primary_energy_reduction": 0.4043,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.229,
@@ -401,7 +403,7 @@
         "full_payback_years": 11.8,
         "full_npv_EUR": -619376.0,
         "full_co2_avoided_t": 1758.0,
-        "full_primary_energy_reduction": 0.395,
+        "full_primary_energy_reduction": 0.3277,
         "RQ1_max_fraction_payback_ok": 0.0,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 1.803,
@@ -420,7 +422,7 @@
         "full_payback_years": 8.67,
         "full_npv_EUR": -196757.0,
         "full_co2_avoided_t": 1810.0,
-        "full_primary_energy_reduction": 0.4383,
+        "full_primary_energy_reduction": 0.3808,
         "RQ1_max_fraction_payback_ok": 0.725,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 2.066,
@@ -439,7 +441,7 @@
         "full_payback_years": 9.29,
         "full_npv_EUR": -302174.0,
         "full_co2_avoided_t": 1797.0,
-        "full_primary_energy_reduction": 0.4059,
+        "full_primary_energy_reduction": 0.3474,
         "RQ1_max_fraction_payback_ok": 0.0,
         "RQ1_fraction_max_NPV": 0.725,
         "RQ3_break_even_ratio_NPV": 1.993,
@@ -463,7 +465,7 @@
       "full_payback_years": 9.62,
       "full_npv_EUR": -353505.0,
       "full_co2_avoided_t": 1790.0,
-      "full_primary_energy_reduction": 0.3975,
+      "full_primary_energy_reduction": 0.3381,
       "RQ1_max_fraction_payback_ok": 0.725,
       "RQ1_fraction_max_NPV": 0.725,
       "RQ3_break_even_ratio_NPV": 1.96,
@@ -484,7 +486,7 @@
       "full_payback_years": 6.56,
       "full_npv_EUR": 316554.0,
       "full_co2_avoided_t": 1872.0,
-      "full_primary_energy_reduction": 0.507,
+      "full_primary_energy_reduction": 0.4585,
       "RQ1_max_fraction_payback_ok": 0.725,
       "RQ1_fraction_max_NPV": 0.725,
       "RQ3_break_even_ratio_NPV": 2.512,
@@ -505,7 +507,7 @@
       "full_payback_years": 5.55,
       "full_npv_EUR": 699445.0,
       "full_co2_avoided_t": 1919.0,
-      "full_primary_energy_reduction": 0.5696,
+      "full_primary_energy_reduction": 0.5272,
       "RQ1_max_fraction_payback_ok": 0.725,
       "RQ1_fraction_max_NPV": 0.725,
       "RQ3_break_even_ratio_NPV": 2.993,
@@ -514,7 +516,7 @@
   ],
   "cycle_based_design": {
     "units": {
-      "CO2 HP (warm water)": {
+      "Warm-water HP": {
         "COP": 3.109,
         "eta_lorenz": 0.4821,
         "fluid": "n-Propane",
@@ -542,7 +544,7 @@
       "full_payback_years": 7.54,
       "full_npv_EUR": 42454.0,
       "full_co2_avoided_t": 1839.0,
-      "full_primary_energy_reduction": 0.4622,
+      "full_primary_energy_reduction": 0.4093,
       "RQ1_max_fraction_payback_ok": 0.725,
       "RQ1_fraction_max_NPV": 0.725,
       "RQ3_break_even_ratio_NPV": 2.252,
@@ -600,6 +602,8 @@
         "network": "N1 condensate into tank",
         "Qh_network": 10.4847,
         "heat_pumps": "none",
+        "units": [],
+        "refrigeration": 3.2211764705882353,
         "Qh_residual": 10.4847,
         "W_heat_pumps": 0.0,
         "refrigeration_taken_over": 0.0,
@@ -609,14 +613,29 @@
         "npv_EUR": 333235.0,
         "gas_reduction_vs_baseline": 0.0722,
         "co2_avoided_t": 176.0,
-        "primary_energy_reduction": 0.0654,
+        "primary_energy_reduction": 0.0648,
         "break_even_ratio_NPV": Infinity
       },
       {
         "option": "N0 + both heat pumps (Padulles config. 2)",
         "network": "N0 existing",
         "Qh_network": 11.3,
-        "heat_pumps": "CO2 HP (warm water) 8.30 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81)",
+        "heat_pumps": "Warm-water HP 8.30 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81)",
+        "units": [
+          {
+            "name": "Warm-water HP",
+            "Q_sink": 8.3000000113,
+            "COP": 3.2247176391216175,
+            "Q_source": 5.726131245053278
+          },
+          {
+            "name": "HTHP (wort boiling)",
+            "Q_sink": 3.0,
+            "COP": 1.8084134615384615,
+            "Q_source": 1.3410873321813106
+          }
+        ],
+        "refrigeration": 3.2211764705882353,
         "Qh_residual": 0.0,
         "W_heat_pumps": 4.2328,
         "refrigeration_taken_over": 3.2212,
@@ -626,14 +645,29 @@
         "npv_EUR": 90195.0,
         "gas_reduction_vs_baseline": 1.0,
         "co2_avoided_t": 2058.0,
-        "primary_energy_reduction": 0.4547,
+        "primary_energy_reduction": 0.4003,
         "break_even_ratio_NPV": 2.282
       },
       {
         "option": "N1 + both heat pumps",
         "network": "N1 condensate into tank",
         "Qh_network": 10.4847,
-        "heat_pumps": "CO2 HP (warm water) 7.48 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81)",
+        "heat_pumps": "Warm-water HP 7.48 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81)",
+        "units": [
+          {
+            "name": "Warm-water HP",
+            "Q_sink": 7.484705892837646,
+            "COP": 3.2247176391216175,
+            "Q_source": 5.1636636403208005
+          },
+          {
+            "name": "HTHP (wort boiling)",
+            "Q_sink": 3.0,
+            "COP": 1.8084134615384615,
+            "Q_source": 1.3410873321813106
+          }
+        ],
+        "refrigeration": 3.2211764705882353,
         "Qh_residual": 0.0,
         "W_heat_pumps": 3.98,
         "refrigeration_taken_over": 3.2212,
@@ -643,14 +677,23 @@
         "npv_EUR": 341578.0,
         "gas_reduction_vs_baseline": 1.0,
         "co2_avoided_t": 2085.0,
-        "primary_energy_reduction": 0.4873,
+        "primary_energy_reduction": 0.4361,
         "break_even_ratio_NPV": 2.482
       },
       {
         "option": "N1 + warm-water heat pump only",
         "network": "N1 condensate into tank",
         "Qh_network": 10.4847,
-        "heat_pumps": "CO2 HP (warm water) 7.48 (COP 3.22)",
+        "heat_pumps": "Warm-water HP 7.48 (COP 3.22)",
+        "units": [
+          {
+            "name": "Warm-water HP",
+            "Q_sink": 7.484705892837646,
+            "COP": 3.2247176391216175,
+            "Q_source": 5.1636636403208005
+          }
+        ],
+        "refrigeration": 3.2211764705882353,
         "Qh_residual": 3.0,
         "W_heat_pumps": 2.321,
         "refrigeration_taken_over": 3.2212,
@@ -660,14 +703,29 @@
         "npv_EUR": 1198981.0,
         "gas_reduction_vs_baseline": 0.7345,
         "co2_avoided_t": 1617.0,
-        "primary_energy_reduction": 0.4603,
+        "primary_energy_reduction": 0.4329,
         "break_even_ratio_NPV": 4.116
       },
       {
         "option": "N1 + both heat pumps, cycle-based COP",
         "network": "N1 condensate into tank",
         "Qh_network": 10.4847,
-        "heat_pumps": "CO2 HP (warm water) 7.48 (COP 3.11), HTHP (wort boiling) 3.00 (COP 1.96)",
+        "heat_pumps": "Warm-water HP 7.48 (COP 3.11), HTHP (wort boiling) 3.00 (COP 1.96)",
+        "units": [
+          {
+            "name": "Warm-water HP",
+            "Q_sink": 7.484705892837646,
+            "COP": 3.1092727476410635,
+            "Q_source": 5.077485137271533
+          },
+          {
+            "name": "HTHP (wort boiling)",
+            "Q_sink": 3.0,
+            "COP": 1.9559799999999998,
+            "Q_source": 1.4662419861143774
+          }
+        ],
+        "refrigeration": 3.2211764705882353,
         "Qh_residual": 0.0,
         "W_heat_pumps": 3.941,
         "refrigeration_taken_over": 3.2212,
@@ -677,7 +735,7 @@
         "npv_EUR": 375737.0,
         "gas_reduction_vs_baseline": 1.0,
         "co2_avoided_t": 2090.0,
-        "primary_energy_reduction": 0.4923,
+        "primary_energy_reduction": 0.4417,
         "break_even_ratio_NPV": 2.512
       }
     ],
@@ -691,6 +749,7 @@
         "delta_savings_EUR": 252158.0,
         "payback_years": 4.29,
         "delta_npv_EUR": 865746.0,
+        "co2_avoided_t": 1441.0,
         "gas_share_of_today": 0.6624,
         "break_even_ratio_NPV": 3.588
       },
@@ -702,6 +761,7 @@
         "delta_savings_EUR": -14557.0,
         "payback_years": Infinity,
         "delta_npv_EUR": -857403.0,
+        "co2_avoided_t": 469.0,
         "gas_share_of_today": 0.2655,
         "break_even_ratio_NPV": 0.909
       }

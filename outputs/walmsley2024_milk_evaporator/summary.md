@@ -38,3 +38,8 @@ Economics skipped: no annual basis in the case file.
 - **sink levels**: 105 °C published (simple design, Sec. 4.2.3); the 15-55 °C level is assumed (illustrative, follows the low-temperature part of the GCC)
 - **basis**: none: operating hours not given
 - **ambient_T_C**: published: dead state 15 °C (Sec. 2)
+- **economics**: assumed: no economic data in the source (see economics.sources)
+- **film coefficients**: Stampfli et al. (2018) dairy values, stream mapping assumed
+- **eta_lorenz_sensitivity**: 0.45-0.52: Lorenz (Carnot) efficiencies implied by the DEA catalogue HTHP sheets 2.a/2.b (COP 4.45/2.75/2.4/2.05 at lifts of 40/65/80/100 K), as for the brewery
+- **COP check**: HTHP 105 °C (steam, 90 K lift): COP 2.10 vs DEA sheet 2.a 2.22 at 90 K minus 0.15 for steam = 2.07 (+1.5 %). Warm-water heat pump 15 -> 55 °C: Lorenz COP 7.86 vs DEA sheet 1.1 'up to 60 °C, lift 40 K' 5.33 (+47 %; the Lorenz model credits the full 40 K sink glide, which needs a glide-matched cycle such as transcritical CO2); with COP 5.33 RQ1 falls from 26 % to 23 %
+- **steam sink**: verified: the 105 °C level supplies the Direct Steam Injection that follows the 8 -> 95 °C preheat (Walmsley et al. 2024, Sec. 3.2), so the DEA steam-generation add-on applies

@@ -13,7 +13,16 @@
       "TAC_min_EUR": 1365575.0,
       "area_m2": 17481.5,
       "Qh_min_kW": 4142.6,
-      "at_grid_edge": true
+      "at_grid_edge": true,
+      "dTmin_within_1pct_K": [
+        2.0,
+        6.0
+      ],
+      "dTmin_within_2pct_K": [
+        2.0,
+        6.0
+      ],
+      "energy_share_of_TAC": 0.959
     },
     {
       "cost_law": "sweep: 50 EUR/m2 installed, linear (not a sourced estimate)",
@@ -24,7 +33,16 @@
       "TAC_min_EUR": 1408658.0,
       "area_m2": 12518.0,
       "Qh_min_kW": 4201.6,
-      "at_grid_edge": false
+      "at_grid_edge": false,
+      "dTmin_within_1pct_K": [
+        2.0,
+        8.0
+      ],
+      "dTmin_within_2pct_K": [
+        2.0,
+        10.0
+      ],
+      "energy_share_of_TAC": 0.942
     },
     {
       "cost_law": "sweep: 100 EUR/m2 installed, linear (not a sourced estimate)",
@@ -35,7 +53,16 @@
       "TAC_min_EUR": 1469677.0,
       "area_m2": 7869.5,
       "Qh_min_kW": 4328.7,
-      "at_grid_edge": false
+      "at_grid_edge": false,
+      "dTmin_within_1pct_K": [
+        6.0,
+        10.0
+      ],
+      "dTmin_within_2pct_K": [
+        4.0,
+        14.0
+      ],
+      "energy_share_of_TAC": 0.931
     },
     {
       "cost_law": "sweep: 250 EUR/m2 installed, linear (not a sourced estimate)",
@@ -46,7 +73,16 @@
       "TAC_min_EUR": 1584848.0,
       "area_m2": 4439.6,
       "Qh_min_kW": 4560.8,
-      "at_grid_edge": false
+      "at_grid_edge": false,
+      "dTmin_within_1pct_K": [
+        10.0,
+        16.0
+      ],
+      "dTmin_within_2pct_K": [
+        10.0,
+        20.0
+      ],
+      "energy_share_of_TAC": 0.909
     }
   ]
 }

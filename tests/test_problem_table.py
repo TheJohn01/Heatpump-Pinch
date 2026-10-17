@@ -110,3 +110,20 @@ def test_rejects_negative_extra_shift():
     streams = load_streams(ROOT / "data" / "fourstream_example.csv")
     with pytest.raises(ValueError):
         with_extra_shift(streams, -1)
+
+
+def test_brewery_reproduced_targets_pinned():
+    """Supervisor review C4: reproduced values pinned exactly (the published comparison, with its known
+    rounding gap in Q̇c, is reported separately by validate_targets.py)."""
+    from pinch import load_streams, with_extra_shift, problem_table
+    from pinch.validation import ROOT
+    s = load_streams(ROOT / "data" / "brewery_streams.csv")
+    t0, t2 = problem_table(s), problem_table(with_extra_shift(s, 2.0))
+    assert t0.Qh_min == pytest.approx(10.042352941176471, abs=1e-9)
+    assert t0.Qc_min == pytest.approx(3.4423529411764715, abs=1e-9)
+    assert t0.pinch_T_star_C == (17.0,)
+    assert t2.Qh_min == pytest.approx(10.48470588235294, abs=1e-9)
+    assert t2.Qc_min == pytest.approx(3.8847058823529412, abs=1e-9)
+    assert t2.pinch_T_star_C == (19.0,)
+    # deviations from the published values (Sec. 4.1), reported, not hidden
+    assert t0.Qc_min - 3.2 == pytest.approx(0.2424, abs=1e-4)

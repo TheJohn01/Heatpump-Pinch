@@ -24,7 +24,7 @@ import pandas as pd
 
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
 from pinch.area_analysis import area_targeting_outputs
-from pinch.case import Case, load_case, to_MWh_per_year
+from pinch.case import Case, display_name, load_case, to_MWh_per_year
 from pinch.cycle_analysis import load_selected
 from pinch.economic_analysis import cycle_based_design, economics_outputs, eta_lorenz_sensitivity
 from pinch.results import Outputs
@@ -66,8 +66,8 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
 
     tables = {"problem_table": table.to_frame()}
     figures = {
-        "composite_curves": composite_curves_figure(streams, table, title=f"Shifted composite curves: {case.name}"),
-        "gcc": gcc_figure(table, title=f"Grand Composite Curve: {case.name}"),
+        "composite_curves": composite_curves_figure(streams, table, title=f"Shifted composite curves: {display_name(case.name)}"),
+        "gcc": gcc_figure(table, title=f"Grand Composite Curve: {display_name(case.name)}"),
     }
 
     design: HeatPumpDesign = design_from_gcc(streams, case.sink_levels, case.eta_lorenz, case.source_T_C)
@@ -94,7 +94,7 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
         })
     tables["heat_pump_design"] = pd.DataFrame(rows)
     figures["gcc_heat_pumps"] = gcc_with_units_figure(table, list(design.units),
-                                                      title=f"Heat pumps sized from the GCC: {case.name}")
+                                                      title=f"Heat pumps sized from the GCC: {display_name(case.name)}")
 
     def annual(x):
         v = to_MWh_per_year(x, unit, case.basis)

@@ -1,0 +1,5 @@
+option,baseline,heat_pumps,Qh_baseline,Qh_after,capex_EUR,savings_EUR,payback_years,npv_EUR,gas_reduction_vs_baseline,co2_avoided_t,break_even_ratio_NPV
+Heat pumps only,no heat recovery,"HP warm (milk preheat) 1.251e+04 (COP 7.86), HTHP 105 °C 1.174e+04 (COP 2.10)",24249.7,0.0,30078366.0,4029301.0,7.46,1034831.0,1.0,35640.0,2.191
+New heat recovery at target,no heat recovery,none,24249.7,3542.2,3280246.0,8565409.0,0.38,62859570.0,0.8539,35833.0,inf
+New heat recovery at target + heat pumps,no heat recovery,"HP warm (milk preheat) 643.1 (COP 7.86), HTHP 105 °C 2899 (COP 2.10)",24249.7,0.0,8384814.0,8851905.0,0.95,59967251.0,1.0,40685.0,20.138
+"Lower bound: plant already at target, heat pumps only",heat recovery at target,"HP warm (milk preheat) 643.1 (COP 7.86), HTHP 105 °C 2899 (COP 2.10)",3542.2,0.0,5104568.0,286496.0,17.82,-2892318.0,1.0,4852.0,1.373

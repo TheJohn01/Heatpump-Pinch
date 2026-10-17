@@ -26,3 +26,20 @@ jobs:
         env:
           MPLBACKEND: Agg
         run: python -m pytest -q
+
+  outputs-reproducible:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements*.txt
+      - name: Install exact tested versions
+        run: pip install -r requirements-dev.txt
+      - name: Regenerate outputs and compare with the committed ones (PNG excluded)
+        env:
+          MPLBACKEND: Agg
+        run: python regenerate_outputs.py --check

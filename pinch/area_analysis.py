@@ -30,7 +30,7 @@ import numpy as np
 import pandas as pd
 
 from pinch.area import CostLaw, supertarget
-from pinch.case import Case, to_MWh_per_year
+from pinch.case import Case, display_name, to_MWh_per_year
 from pinch.economics import load_economics
 from pinch.results import Outputs
 from pinch.streams import StreamSet
@@ -110,7 +110,7 @@ def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
         ax.plot(r["dTmin_opt_K"], r["TAC_min_EUR"] / 1e3, "o", color=ax.lines[-1].get_color())
     ax.set_xlabel("ΔTmin [K]")
     ax.set_ylabel("Total annual cost [k EUR/year]")
-    ax.set_title(f"ΔTmin supertargeting: {case.name}")
+    ax.set_title(f"ΔTmin supertargeting: {display_name(case.name)}")
     ax.grid(alpha=0.3)
     ax.legend(fontsize=7)
     fig.tight_layout()

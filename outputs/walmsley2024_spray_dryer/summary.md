@@ -43,11 +43,13 @@ Price ratio 2.016 (electricity 0.0897 EUR/kWh, gas 0.0445 EUR/kWh); boiler effic
 | Full design: simple payback [years] | inf |
 | Full design: NPV [EUR] | -7,676,306 |
 | Full design: CO2 avoided [t/year] | 3,253 |
-| Full design: primary-energy reduction | -4.2 % |
-| RQ1: largest share of Q̇h,min with payback ≤ 5 y | 0.0 % |
-| RQ1: share with maximum NPV | 0.0 % |
-| RQ3: break-even ratio, NPV = 0 | 0.494 |
-| RQ3: break-even ratio, payback = threshold | -0.168 |
+| Full design: primary-energy reduction | -13.6 % |
+| Grass-roots variant (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ 5 y | 0.0 % |
+| Grass-roots variant: share with maximum NPV | 0.0 % |
+| Grass-roots variant: break-even ratio of the full design, NPV = 0 | 0.494 |
+| Grass-roots variant: break-even ratio, payback = threshold | -0.168 |
+
+RQ1-RQ3 answers for a site with an existing network (share of today's gas, incremental payback, break-even ratio per unit) are in the retrofit section and in rq_consolidated.md.
 
 ### Scenarios (parameter overrides)
 

@@ -26,9 +26,13 @@ Table 3, so that their published cycle COPs serve as the test case):
 * Pressures are optimised for maximum COP subject to the pinch constraints;
   wet compression (two-phase discharge) is infeasible.
 
-Not modelled: two-stage cycles with separator (Andersen's "Two-stg"),
-pressure drops, compressor maps and part load. Pressure ratio and discharge
-temperature are reported, not screened: no sourced limits are applied.
+* Two-stage cycles with a liquid separator (Andersen's "Two-stg"; variant
+  "two-stg2" with an open intercooler), validated against Andersen et al.
+  (2024) Appendix A (-0.1 % and -5.0 %).
+
+Practical limits are applied in ``pinch.cycle_analysis`` (IEA HPT Annex 58
+Task 1: pressure ratio per stage <= 10; ammonia <= 76 bar and 110 °C).
+Not modelled: pressure drops, compressor maps and part load.
 """
 
 from __future__ import annotations

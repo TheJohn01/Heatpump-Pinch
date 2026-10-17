@@ -42,3 +42,8 @@ Economics skipped: no annual basis in the case file.
 - **sink levels**: assumed, illustrative: 160 °C (commercial range) and 200 °C (upper end of IEA HPT Annex 58 scope)
 - **basis**: none: the source gives no operating hours
 - **ambient_T_C**: assumed: not given by the source
+- **economics**: assumed: no economic data in the source (see economics.sources)
+- **film coefficients**: from the overall U of the University of Oklahoma notes (equal split)
+- **eta_lorenz_sensitivity**: 0.45-0.52: Lorenz (Carnot) efficiencies implied by the DEA catalogue HTHP sheets 2.a/2.b (COP 4.45/2.75/2.4/2.05 at lifts of 40/65/80/100 K), as for the brewery
+- **COP check**: eta_lorenz 0.55 (copied from the brewery) is above the 0.45-0.52 implied by the DEA catalogue: COP 7.94 at 30 K lift vs about 5.5-6 extrapolated from DEA (4.45 at 40 K); at 0.45 the NPV10 turns from +0.07 to -1.17 M€
+- **steam sink**: assumed: the isothermal sink levels stand for steam mains (conventional for a chemical site; not stated by the source), so the DEA steam add-on applies

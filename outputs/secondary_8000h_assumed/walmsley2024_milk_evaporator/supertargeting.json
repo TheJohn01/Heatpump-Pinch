@@ -1,0 +1,48 @@
+{
+  "hot_utility_cost_EUR_per_kW_year": 397.63,
+  "cold_utility_cost_EUR_per_kW_year": 136.16698292220116,
+  "crf_per_year": 0.1295,
+  "film_coefficients_source": "Stampfli et al. (2018), CET 70, 901-906, Table 1 (dairy plant): liquid product 500, water 2,000, evaporation/condensation 5,000 W/(m2 K). Mapping to these streams is our assumption: water for chiller water, CIP, direct-use water and cow water (milk condensate); product for raw milk and concentrate; condensation for vapour bleed, condenser and flash vapours",
+  "RQ2": [
+    {
+      "cost_law": "Towler 2020 plate and frame (304 SS), bare (F = 1)",
+      "a": 1953.9,
+      "b": 260.52,
+      "c": 0.95,
+      "dTmin_opt_K": 5.0,
+      "TAC_min_EUR": 1591962.0,
+      "area_m2": 4698.6,
+      "Qh_min_kW": 3542.2,
+      "at_grid_edge": false,
+      "dTmin_within_1pct_K": [
+        1.0,
+        5.0
+      ],
+      "dTmin_within_2pct_K": [
+        1.0,
+        5.0
+      ],
+      "energy_share_of_TAC": 0.924
+    },
+    {
+      "cost_law": "Towler 2020 plate and frame (304 SS) x 3.5 (Hand factor, installed)",
+      "a": 6838.6,
+      "b": 911.82,
+      "c": 0.95,
+      "dTmin_opt_K": 5.0,
+      "TAC_min_EUR": 1895395.0,
+      "area_m2": 4698.6,
+      "Qh_min_kW": 3542.2,
+      "at_grid_edge": false,
+      "dTmin_within_1pct_K": [
+        1.0,
+        5.0
+      ],
+      "dTmin_within_2pct_K": [
+        1.0,
+        5.0
+      ],
+      "energy_share_of_TAC": 0.776
+    }
+  ]
+}

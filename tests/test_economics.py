@@ -44,7 +44,7 @@ def test_evaluate_hand_calculation():
     assert e.payback_years == pytest.approx(capex / savings)
     assert e.npv_EUR == pytest.approx(-capex + savings * P.annuity_factor)
     assert e.co2_avoided_t == pytest.approx(1000 * 0.182 - 400 * 0.1)  # default gas EF (IPCC, GCV)
-    assert e.primary_energy_reduction == pytest.approx(1 - 400 * 1.9 / 1000)
+    assert e.primary_energy_reduction == pytest.approx(1 - 400 * 1.9 / (1000 * 0.90))   # gas on NCV (B5)
 
 
 def test_boiler_efficiency_scales_fuel():
@@ -231,3 +231,37 @@ def test_spray_dryer_steam_add_on_only_for_steam_heat_pump():
     cls = compute(c).summary["economics"]["heat_pump_cost_class"]
     assert "steam" not in cls["HTHP 120 °C (fluid beds)"]
     assert "dea_steam" in cls["HTHP 200 °C (main air)"]
+
+
+def test_replaced_curve_cache_is_keyed_by_value():
+    """Supervisor review C1: an id()-keyed cache gave a new design the curve of a collected one."""
+    import gc
+    from pinch.case import load_case
+    from pinch.design import design_from_gcc
+    from pinch.economic_analysis import cold_utility_replaced_curve
+    from pinch.validation import ROOT
+    from pinch import load_streams, with_extra_shift
+    c = load_case(ROOT / "cases" / "brewery_padulles2026.json")
+    st = with_extra_shift(load_streams(c.stream_file), c.extra_shift_K)
+    results = {}
+    for eta in (0.52, 0.63, 0.52):
+        d = design_from_gcc(st, c.sink_levels, eta, c.source_T_C)
+        fresh = []
+        from pinch.heat_pump import integrate
+        units = sorted(d.units, key=lambda u: -u.COP)
+        total = sum(u.Q_sink for u in units)
+        import numpy as np
+        for target in np.linspace(0.0, total, 11):
+            rem, part = target, []
+            for u in units:
+                q = min(u.Q_sink, rem)
+                if q <= 0:
+                    break
+                rem -= q
+                part.append(u.with_sink_duty(q))
+            fresh.append(integrate(st, part).Q_cold_utility_replaced if part else 0.0)
+        assert cold_utility_replaced_curve(d, st, 11) == pytest.approx(fresh)   # cached value = fresh value
+        results.setdefault(eta, []).append(cold_utility_replaced_curve(d, st, 11))
+        del d
+        gc.collect()
+    assert results[0.52][0] == results[0.52][1]

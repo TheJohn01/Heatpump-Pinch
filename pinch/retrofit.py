@@ -46,7 +46,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from pinch.case import Case, to_MWh_per_year
+from pinch.case import Case, display_name, to_MWh_per_year
 from pinch.design import design_from_gcc
 from pinch.economics import Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment
 from pinch.network import NetworkResult, constrained_streams, evaluate_network, load_networks
@@ -162,6 +162,8 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
         rows.append({"option": opt["name"], "network": net.name,
                      "Qh_network": round(res.Qh, 4), "heat_pumps": ", ".join(f"{u.name} {u.Q_sink:.2f} (COP {u.COP:.2f})"
                                                                          for u in units) or "none",
+                     "units": [{"name": u.name, "Q_sink": u.Q_sink, "COP": u.COP, "Q_source": u.Q_source} for u in units],
+                     "refrigeration": res.refrigeration,
                      "Qh_residual": round(Qh_after, 4), "W_heat_pumps": round(W, 4),
                      "refrigeration_taken_over": round(replaced, 4),
                      "capex_EUR": round(ev.capex_EUR, 0), "savings_EUR": round(ev.savings_EUR, 0),
@@ -187,14 +189,14 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
         inc_rows.append({"increment": inc["name"], "option": inc["option"], "over": inc["over"],
                          "delta_capex_EUR": round(ev.capex_EUR, 0), "delta_savings_EUR": round(ev.savings_EUR, 0),
                          "payback_years": round(ev.payback_years, 2) if math.isfinite(ev.payback_years) else ev.payback_years,
-                         "delta_npv_EUR": round(ev.npv_EUR, 0),
+                         "delta_npv_EUR": round(ev.npv_EUR, 0), "co2_avoided_t": round(ev.co2_avoided_t, 0),
                          "gas_share_of_today": round(_evaluate(o, baseline, params).gas_reduction
                                                      - _evaluate(over, baseline, params).gas_reduction, 4),
                          "break_even_ratio_NPV": round(_be(o, over, params), 3)})
     if inc_rows:
         tables["retrofit_increments"] = pd.DataFrame(inc_rows)
 
-    table = pd.DataFrame(rows)
+    table = pd.DataFrame(rows).drop(columns=["units", "refrigeration"])
     tables["retrofit_options"] = table
     rq1 = {}
     for name, cv in curves.items():
@@ -282,7 +284,7 @@ def _figure(table: pd.DataFrame, case_name: str):
         if np.isfinite(p):
             a2.annotate(f"NPV {npv / 1e6:+.2f} M€", (p, i), xytext=(3, 0), textcoords="offset points",
                         va="center", fontsize=7)
-    fig.suptitle(f"Retrofit options against the existing network: {case_name}")
+    fig.suptitle(f"Retrofit options against the existing network: {display_name(case_name)}")
     fig.tight_layout()
     return fig
 

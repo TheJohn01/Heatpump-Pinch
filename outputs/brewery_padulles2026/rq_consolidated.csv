@@ -1,35 +1,40 @@
-sensitivity,basis,RQ1_HP_gas_share,WW_HP_incremental_payback_y,WW_HP_incremental_NPV_MEUR,HTHP_incremental_payback_y,HTHP_incremental_NPV_MEUR,HR_retrofit_gas_share,HR_retrofit_payback_y,RQ2_dTmin_opt_K,RQ2_dTmin_within_1pct_K,RQ3_ratio_WW_HP,RQ3_ratio_HTHP,RQ3_ratio_full_electrification_info,full_electrification_payback_y,full_electrification_NPV_MEUR,price_ratio
-Base case,sourced inputs (see sources_case_studies.md),0.6624,4.29,0.866,inf,-0.857,0.0722,1.11,0.6,0.08-2,3.588,0.909,2.482,6.54,0.342,2.217
-Prices 2025-S1 (0.1230 / 0.0546; ratio 2.25),"Eurostat, bands ID / I3, excl. VAT",0.6624,4.05,0.981,inf,-0.886,0.0722,1.04,0.6,0.08-2,3.71,0.986,2.583,6.22,0.454,2.253
-Prices 2025-S2 (0.1216 / 0.0481; ratio 2.53),"Eurostat, bands ID / I3, excl. VAT",0.0,5.11,0.554,inf,-1.046,0.0722,1.18,0.6,0.08-2,3.462,0.83,2.377,8.55,-0.182,2.528
-Electricity band IE (0.0897; ratio 1.75),Eurostat 2026-S1; IE applies above 20 GWh/year,0.6624,3.73,1.159,29.89,-0.553,0.0722,1.11,0.6,0.08-2,3.588,0.909,2.482,5.15,0.94,1.752
-Boiler efficiency 0.817,US DOE Steam Tip Sheet #15,0.6624,4.04,0.986,inf,-0.809,0.0722,1.07,0.6,0.08-2,3.778,0.983,2.623,6.04,0.523,2.217
-Boiler efficiency 0.929,implied by Padullés App. B (DK1),0.0,5.12,0.549,inf,-0.984,0.0722,1.22,0.6,0.1-2,3.086,0.716,2.111,8.33,-0.136,2.217
-Boiler efficiency 1.0 (bound),as in Padullés Sec. 5,0.0,5.95,0.323,inf,-1.075,0.0722,1.31,0.7,0.1-2,2.728,0.578,1.846,10.35,-0.478,2.217
-No refrigeration credit,as in Padullés et al. (2026),0.0,6.36,0.231,inf,-0.857,0.0722,1.11,0.9,0.2-2.5,2.469,0.909,2.031,9.14,-0.293,2.217
-Refrigeration credit 50 % (batch mismatch),advisory bound: heat pump and cooling loads not simultaneous; also covers the paper's lower Q̇c (3.2 vs 3.44),0.0,5.12,0.549,inf,-0.857,0.0722,1.11,0.6,0.08-2,2.925,0.909,2.234,7.62,0.024,2.217
-Chiller COP 3.14,Sinnott & Towler Example 6.7 (cooling water 40 °C),0.6624,3.78,1.13,inf,-0.857,0.0722,1.11,0.5,0.08-1.9,4.424,0.909,2.736,5.84,0.606,2.217
-Chiller COP 6.68,Sinnott & Towler: 0.9 x Carnot (complex cycles),0.6624,4.81,0.654,inf,-0.857,0.0722,1.11,0.7,0.1-2,3.116,0.909,2.311,7.22,0.13,2.217
-CO2 price 82.4 EUR/t,"EUA, 5 Oct 2026",0.6624,2.81,1.891,19.26,-0.446,0.0722,0.86,0.6,0.08-2,5.212,1.536,3.685,3.85,1.89,2.217
-Portuguese CO2 addition 67.4 EUR/t,"CIEC Art. 92.º-A, 2025 rate (Observador, 1 Jan 2025); applies to natural gas outside the EU ETS (ERSE 2020); upper value: up to 3.8 EUR/MWh of non-recoverable taxes (about 21 EUR/t) may already be in the Eurostat price, and energy-intensive consumers (SGCIE) may be exempt",0.6624,3.0,1.705,25.7,-0.521,0.0722,0.9,0.6,0.08-2,4.916,1.422,3.466,4.16,1.608,2.217
-Horizon 20 years,DEA sheet 2.a: HTHP technical lifetime 20 y,0.6624,4.29,2.061,inf,-0.926,0.0722,1.11,0.4,0.02-1.6,4.239,1.342,3.038,6.54,1.707,2.217
-Lorenz efficiency 0.45,"DEA HTHP data, implied 0.45-0.52",0.6624,4.85,0.64,inf,-1.019,0.0722,1.11,0.6,0.08-2,3.089,0.819,2.185,7.92,-0.046,2.217
-Lorenz efficiency 0.55 (Padullés et al.),published value used by Padullés et al. (2026),0.6624,3.92,1.051,290.98,-0.725,0.0722,1.11,0.6,0.08-2,4.134,1.0,2.792,5.72,0.659,2.217
-Lorenz efficiency 0.63,"Andersen et al. (2024) polynomial, HTHP",0.6624,3.53,1.286,30.66,-0.557,0.0722,1.11,0.6,0.08-2,5.125,1.146,3.319,4.94,1.061,2.217
-Cycle-based COP per unit,"CoolProp screening (step 4b), practical options only",0.6624,4.46,0.79,inf,-0.748,0.0722,1.11,0.6,0.08-2,3.404,0.984,2.512,6.44,0.376,2.217
-Cycle-based COP -17 %,advisory: our model is 17 % above Andersen et al. (2024) Fig. 2 at one point,0.0,5.8,0.358,inf,-1.023,0.0722,1.11,0.6,0.08-2,2.633,0.816,2.008,9.37,-0.332,2.217
-Heat pump CAPEX -25 %,DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW,0.6624,3.22,1.136,inf,-0.671,0.0722,1.11,0.6,0.08-2,4.016,1.193,2.622,5.53,0.562,2.217
-Heat pump CAPEX +25 %,DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW,0.0,5.36,0.595,inf,-1.044,0.0722,1.11,0.6,0.08-2,3.16,0.626,2.127,8.12,-0.115,2.217
-Retrofit exchanger CAPEX x3,stress test,0.6624,4.29,0.866,inf,-0.857,0.0722,2.17,0.6,0.08-2,3.588,0.909,2.282,7.37,0.09,2.217
-"Batch: HTHP sized for the boil window, F = 1.14",14 brews/day x 90 min (most continuous): installed = 24 h / (brews x boil time) x average,0.6624,4.29,0.866,inf,-0.89,0.0722,1.11,0.6,0.08-2,3.588,0.86,2.457,6.65,0.309,2.217
-"Batch: HTHP sized for the boil window, F = 1.75","11 brews/day x 75 min (central); 8-14 brews/day (Briggs of Burton 2017, industry), 60-90 min boil (assumed)",0.6624,4.29,0.866,inf,-1.025,0.0722,1.11,0.6,0.08-2,3.588,0.654,2.352,7.12,0.174,2.217
-"Batch: HTHP sized for the boil window, F = 3.0",8 brews/day x 60 min (least continuous); no high-temperature storage,0.6624,4.29,0.866,inf,-1.307,0.0722,1.11,0.6,0.08-2,3.588,0.223,2.133,8.1,-0.108,2.217
-RQ2 with heat-pump heat as hot utility,after electrification the marginal hot utility is HTHP heat: hours x (p_el / COP + variable O&M) + CRF x 600 EUR/kW + fixed O&M (supervisor review A4): 611 EUR/(kW year),0.6624,4.29,0.866,inf,-0.857,0.0722,1.11,0.5,0.05-1.9,3.588,0.909,2.482,6.54,0.342,2.217
-Film coefficients x5 (gasketed plates),"Sinnott & Towler Table 12.1: plate, water-water U 5,000-7,500 W/m2K vs 1,000 implied by Stampfli",0.6624,4.29,0.866,inf,-0.857,0.0722,0.96,0.1,0.02-1.1,3.588,0.909,2.488,6.51,0.349,2.217
-Production 0.25 Mhl/year,Padullés Table 1 range (UK case),0.0,10.47,-0.174,inf,-0.604,0.0722,1.91,0.6,0.08-2,1.117,-1.469,0.033,19.55,-0.757,2.217
-Production 0.5 Mhl/year,Padullés Table 1 range,0.0,6.35,0.173,inf,-0.689,0.0722,1.42,0.6,0.08-2,2.764,0.117,1.532,11.43,-0.475,2.217
-Production 1.5 Mhl/year,Padullés Table 1 range (TH case),0.6624,3.6,1.559,inf,-1.026,0.0722,0.98,0.6,0.08-2,3.862,1.174,2.757,5.31,1.042,2.217
-No O&M (as Padullés et al.),Padullés et al. (2026) include no O&M; base uses DEA O&M,0.6624,3.97,1.021,inf,-0.795,0.0722,1.13,0.6,0.08-2,3.833,1.004,2.645,5.97,0.551,2.217
-"Combined: Padullés conventions (boiler 1.0, no refrigeration credit, no O&M)","Padullés et al. (2026), Sec. 5",0.0,9.03,-0.156,inf,-1.013,0.0722,1.34,1.0,0.2-3,2.046,0.672,1.643,14.84,-0.903,2.217
-"Combined pessimistic: no credit, cycle-based COP, HP CAPEX +25 %","one-at-a-time ranges above, together",0.0,8.44,-0.115,inf,-0.934,0.0722,1.11,0.9,0.2-2.5,2.096,0.677,1.758,11.12,-0.715,2.217
-"Combined conservative: credit 50 %, cycle COP -17 %, HP CAPEX +25 %, boiler 0.929",advisory envelope for the items that cannot be verified,0.0,12.96,-0.546,inf,-1.336,0.0722,1.22,0.6,0.1-2,1.673,0.388,1.304,23.91,-1.584,2.217
+sensitivity,basis,RQ1_HP_gas_share,WW_HP_incremental_payback_y,WW_HP_incremental_NPV_MEUR,WW_HP_CO2_avoided_t,HTHP_incremental_payback_y,HTHP_incremental_NPV_MEUR,HR_retrofit_gas_share,HR_retrofit_payback_y,RQ2_dTmin_opt_K,RQ2_dTmin_within_1pct_K,RQ3_ratio_WW_HP,RQ3_ratio_HTHP,RQ3_ratio_full_electrification_info,full_electrification_payback_y,full_electrification_NPV_MEUR,price_ratio
+Base case,sourced inputs (see sources_case_studies.md),0.6624,4.29,0.866,1441.0,inf,-0.857,0.0722,1.11,0.6,0.08-2,3.588,0.909,2.482,6.54,0.342,2.217
+No ambient source: heat pumps limited to the refrigeration heat,"the base case draws part of the heat pumps' source from ambient air evaporating at -1 °C (frosting, defrost and air-coil costs not included); here only the refrigeration duty is a source (supervisor review B2)",0.4107,4.64,0.576,,,,0.0722,1.11,0.6,0.08-2,,,2.482,6.54,0.342,2.217
+Prices 2025-S1 (0.1230 / 0.0546; ratio 2.25),"Eurostat, bands ID / I3, excl. VAT",0.6624,4.05,0.981,1441.0,inf,-0.886,0.0722,1.04,0.6,0.08-2,3.71,0.986,2.583,6.22,0.454,2.253
+Prices 2025-S2 (0.1216 / 0.0481; ratio 2.53),"Eurostat, bands ID / I3, excl. VAT",0.0,5.11,0.554,1441.0,inf,-1.046,0.0722,1.18,0.6,0.08-2,3.462,0.83,2.377,8.55,-0.182,2.528
+Electricity band IE (0.0897; ratio 1.75),Eurostat 2026-S1; IE applies above 20 GWh/year,0.6624,3.73,1.159,1441.0,29.89,-0.553,0.0722,1.11,0.6,0.08-2,3.588,0.909,2.482,5.15,0.94,1.752
+Boiler efficiency 0.817,US DOE Steam Tip Sheet #15,0.6624,4.04,0.986,1496.0,inf,-0.809,0.0722,1.07,0.6,0.08-2,3.778,0.983,2.623,6.04,0.523,2.217
+Boiler efficiency 0.929,implied by Padullés App. B (DK1),0.0,5.12,0.549,1295.0,inf,-0.984,0.0722,1.22,0.6,0.1-2,3.086,0.716,2.111,8.33,-0.136,2.217
+Boiler efficiency 1.0 (bound),as in Padullés Sec. 5,0.0,5.95,0.323,1191.0,inf,-1.075,0.0722,1.31,0.7,0.1-2,2.728,0.578,1.846,10.35,-0.478,2.217
+No refrigeration credit,as in Padullés et al. (2026),0.0,6.36,0.231,1364.0,inf,-0.857,0.0722,1.11,0.9,0.2-2.5,2.469,0.909,2.031,9.14,-0.293,2.217
+Refrigeration credit 50 % (batch mismatch),advisory bound: heat pump and cooling loads not simultaneous; also covers the paper's lower Q̇c (3.2 vs 3.44),0.0,5.12,0.549,1402.0,inf,-0.857,0.0722,1.11,0.6,0.08-2,2.925,0.909,2.234,7.62,0.024,2.217
+Chiller COP 3.14,Sinnott & Towler Example 6.7 (cooling water 40 °C),0.6624,3.78,1.13,1474.0,inf,-0.857,0.0722,1.11,0.5,0.08-1.9,4.424,0.909,2.736,5.84,0.606,2.217
+Chiller COP 6.68,Sinnott & Towler: 0.9 x Carnot (complex cycles),0.6624,4.81,0.654,1415.0,inf,-0.857,0.0722,1.11,0.7,0.1-2,3.116,0.909,2.311,7.22,0.13,2.217
+CO2 price 82.4 EUR/t,"EUA, 5 Oct 2026",0.6624,2.81,1.891,1441.0,19.26,-0.446,0.0722,0.86,0.6,0.08-2,5.212,1.536,3.685,3.85,1.89,2.217
+Portuguese CO2 addition 67.4 EUR/t,"CIEC Art. 92.º-A; 2025 rate set by Portaria n.º 355-A/2024/1, Art. 2.º (Diário da República, 27 Dec 2024); applies to natural gas outside the EU ETS (ERSE 2020); upper value: up to 3.8 EUR/MWh of non-recoverable taxes (about 21 EUR/t) may already be in the Eurostat price, and energy-intensive consumers (SGCIE) may be exempt",0.6624,3.0,1.705,1441.0,25.7,-0.521,0.0722,0.9,0.6,0.08-2,4.916,1.422,3.466,4.16,1.608,2.217
+Horizon 20 years,DEA sheet 2.a: HTHP technical lifetime 20 y,0.6624,4.29,2.061,1441.0,inf,-0.926,0.0722,1.11,0.4,0.02-1.6,4.239,1.342,3.038,6.54,1.707,2.217
+Lorenz efficiency 0.45,"DEA HTHP data, implied 0.45-0.52",0.6624,4.85,0.64,1414.0,inf,-1.019,0.0722,1.11,0.6,0.08-2,3.089,0.819,2.185,7.92,-0.046,2.217
+Lorenz efficiency 0.55 (Padullés et al.),published value used by Padullés et al. (2026),0.6624,3.92,1.051,1464.0,290.98,-0.725,0.0722,1.11,0.6,0.08-2,4.134,1.0,2.792,5.72,0.659,2.217
+Lorenz efficiency 0.63,"Andersen et al. (2024) polynomial, HTHP",0.6624,3.53,1.286,1492.0,30.66,-0.557,0.0722,1.11,0.6,0.08-2,5.125,1.146,3.319,4.94,1.061,2.217
+Cycle-based COP per unit,"CoolProp screening (step 4b), practical options only",0.6624,4.46,0.79,1432.0,inf,-0.748,0.0722,1.11,0.6,0.08-2,3.404,0.984,2.512,6.44,0.376,2.217
+Cycle-based COP -17 %,advisory: our model is 17 % above Andersen et al. (2024) Fig. 2 at one point,0.0,5.8,0.358,1379.0,inf,-1.023,0.0722,1.11,0.6,0.08-2,2.633,0.816,2.008,9.37,-0.332,2.217
+Heat pump CAPEX -25 %,DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW,0.6624,3.22,1.136,1441.0,inf,-0.671,0.0722,1.11,0.6,0.08-2,4.016,1.193,2.622,5.53,0.562,2.217
+Heat pump CAPEX +25 %,DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW,0.0,5.36,0.595,1441.0,inf,-1.044,0.0722,1.11,0.6,0.08-2,3.16,0.626,2.127,8.12,-0.115,2.217
+Retrofit exchanger CAPEX x3,stress test,0.6624,4.29,0.866,1441.0,inf,-0.857,0.0722,2.17,0.6,0.08-2,3.588,0.909,2.282,7.37,0.09,2.217
+HTHP sink 110 °C (boiling driving force),103 °C leaves 2 K to boiling wort; nucleate boiling needs some K of wall superheat plus hydrostatic boiling-point rise (no sourced value); Padullés Fig. 11 spans 100-180 °C (supervisor review B1),0.6624,4.29,0.866,1441.0,inf,-0.927,0.0722,1.11,0.6,0.08-2,3.588,0.868,2.423,6.75,0.272,2.217
+HTHP sink 120 °C (boiling driving force),as above,0.6624,4.29,0.866,1441.0,inf,-1.022,0.0722,1.11,0.6,0.08-2,3.588,0.817,2.347,7.06,0.177,2.217
+Grid emission factor 0.167 (5-year average),"APA 2025, Table T2 (5-year moving average); affects CO2 avoided only",0.6624,4.29,0.866,1345.0,inf,-0.857,0.0722,1.11,0.6,0.08-2,3.588,0.909,2.482,6.54,0.342,2.217
+"Grid emission factor 0.367 (marginal gas CCGT, assumed)","marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 55 % efficiency (assumed, not sourced); affects CO2 avoided only (supervisor review B5)",0.6624,4.29,0.866,1026.0,inf,-0.857,0.0722,1.11,0.6,0.08-2,3.588,0.909,2.482,6.54,0.342,2.217
+"Batch: HTHP sized for the boil window, F = 1.14",14 brews/day x 90 min (most continuous): installed = 24 h / (brews x boil time) x average,0.6624,4.29,0.866,1441.0,inf,-0.89,0.0722,1.11,0.6,0.08-2,3.588,0.86,2.457,6.65,0.309,2.217
+"Batch: HTHP sized for the boil window, F = 1.75","11 brews/day x 75 min (central); 8-14 brews/day (Briggs of Burton 2017, industry), 60-90 min boil (assumed)",0.6624,4.29,0.866,1441.0,inf,-1.025,0.0722,1.11,0.6,0.08-2,3.588,0.654,2.352,7.12,0.174,2.217
+"Batch: HTHP sized for the boil window, F = 3.0",8 brews/day x 60 min (least continuous); no high-temperature storage,0.6624,4.29,0.866,1441.0,inf,-1.307,0.0722,1.11,0.6,0.08-2,3.588,0.223,2.133,8.1,-0.108,2.217
+RQ2 with heat-pump heat as hot utility,after electrification the marginal hot utility is HTHP heat: hours x (p_el / COP + variable O&M) + CRF x 600 EUR/kW + fixed O&M (supervisor review A4): 611 EUR/(kW year),0.6624,4.29,0.866,1441.0,inf,-0.857,0.0722,1.11,0.5,0.05-1.9,3.588,0.909,2.482,6.54,0.342,2.217
+Film coefficients x5 (gasketed plates),"Sinnott & Towler Table 12.1: plate, water-water U 5,000-7,500 W/m2K vs 1,000 implied by Stampfli",0.6624,4.29,0.866,1441.0,inf,-0.857,0.0722,0.96,0.1,0.02-1.1,3.588,0.909,2.488,6.51,0.349,2.217
+Production 0.25 Mhl/year,Padullés Table 1 range (UK case),0.0,10.47,-0.174,360.0,inf,-0.604,0.0722,1.91,0.6,0.08-2,1.117,-1.469,0.033,19.55,-0.757,2.217
+Production 0.5 Mhl/year,Padullés Table 1 range,0.0,6.35,0.173,721.0,inf,-0.689,0.0722,1.42,0.6,0.08-2,2.764,0.117,1.532,11.43,-0.475,2.217
+Production 1.5 Mhl/year,Padullés Table 1 range (TH case),0.6624,3.6,1.559,2162.0,inf,-1.026,0.0722,0.98,0.6,0.08-2,3.862,1.174,2.757,5.31,1.042,2.217
+No O&M (as Padullés et al.),Padullés et al. (2026) include no O&M; base uses DEA O&M,0.6624,3.97,1.021,1441.0,inf,-0.795,0.0722,1.13,0.6,0.08-2,3.833,1.004,2.645,5.97,0.551,2.217
+"Combined: Padullés conventions (boiler 1.0, no refrigeration credit, no O&M)","Padullés et al. (2026), Sec. 5",0.0,9.03,-0.156,1114.0,inf,-1.013,0.0722,1.34,1.0,0.2-3,2.046,0.672,1.643,14.84,-0.903,2.217
+"Combined pessimistic: no credit, cycle-based COP, HP CAPEX +25 %","one-at-a-time ranges above, together",0.0,8.44,-0.115,1355.0,inf,-0.934,0.0722,1.11,0.9,0.2-2.5,2.096,0.677,1.758,11.12,-0.715,2.217
+"Combined conservative: credit 50 %, cycle COP -17 %, HP CAPEX +25 %, boiler 0.929",advisory envelope for the items that cannot be verified,0.0,12.96,-0.546,1195.0,inf,-1.336,0.0722,1.22,0.6,0.1-2,1.673,0.388,1.304,23.91,-1.584,2.217

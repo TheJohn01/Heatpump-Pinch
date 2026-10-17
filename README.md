@@ -30,7 +30,8 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 148 tests (about 3 min)
+python -m pytest                                  # 155 tests (about 3 min)
+python regenerate_outputs.py                      # rebuild every output (about 3.5 min; --check compares with Git)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -89,7 +90,7 @@ for confidential plant data, run the app locally (`streamlit run app.py`).
 |---|---|
 | 1. Stream data, checks, energy-balance closure | Done, tested |
 | 2. Problem table, composite curves, GCC | Done, validated (four-stream example; Padullés et al. 2026) |
-| 3. ΔTmin / cost trade-off | Done: Bath area target, units target, supertargeting; validated on the OU area example (published error found and corrected). Brewery RQ2 with the Stampfli et al. (2018) plate-HEX cost law (bare and ×3.5 installed) plus a sweep |
+| 3. ΔTmin / cost trade-off | Done: Bath area target, units target, supertargeting; validated on the OU area example (published error found and corrected). Brewery RQ2 with the Sinnott and Towler (2020) Table 6.6 plate-and-frame law (bare and ×3.5 installed; Stampfli et al. 2018 as a cross-check only) plus a sweep; flat optimum reported as the 1 % range |
 | 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b done: CoolProp cycle model (single stage, SLHX, expander, two-stage, cascade), practical limits (Annex 58), working-fluid screening, cycle-based η_L and economics; validated on Andersen et al. (2024) Appendix A |
 | 5. HEN retrofit | Done: existing-network evaluation (direct and storage-based matches), pinch diagnostics (energy gap = cross-pinch + heaters below + coolers above), network-constrained heat pump sizing, retrofit options with exchanger and storage costs; brewery: paper's Pfaduko + HR tank reproduced (11.3 kWh/hl) |
 | 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; RQ1 electrification curve; RQ3 break-even ratio; named scenarios and Lorenz-efficiency sensitivity; paper Sec. 5.2 statements and Appendix B (Case DK1) NPV/payback reproduced |
@@ -135,11 +136,14 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       148 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       155 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
 
 ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
 batch_check.py               Batch brewhouse check: HTHP capacity for the boil window (8-14 brews/day x 60-90 min)
+mvr_check.py                 Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
+reproduce_secondary_economics.py  Milk evaporator and four-stream example at an ASSUMED 8000 h/year
+regenerate_outputs.py        Rebuild every output in dependency order; --check fails on stale outputs (CI)
 consolidate_rq.py            RQ1-RQ3 answers with one-at-a-time and combined sensitivities
                              (outputs/<case>/rq_consolidated.csv/.md, rq_tornado.png)
 screen_cycles.py             Step 4b: screen the fluids listed in a case file (minutes); analyse.py then
@@ -215,7 +219,7 @@ Every default in `pinch/economics.py` (`DEFAULTS`) carries its source:
 | Primary energy factor, electricity | 1.9 | Delegated Regulation (EU) 2023/807 |
 | Chiller COP (refrigeration credit) | none by default; brewery 4.45 | Sinnott and Towler (2020), Sec. 6.4.4: 0.6 × Carnot (−6 °C / 30 °C); CoolProp ammonia cycle check 4.52 |
 | O&M | heat pump 2,494 €/MW·y + 3.6 €/MWh; boiler 1.23 €/MWh avoided | DEA Technology Data, Industrial Process Heat, sheets 2.a and 6.1 (2025); `NO_OM` reproduces Padullés et al. (no O&M) |
-| Heat-exchanger cost (brewery) | 6,841 + 912 A^0.95 EUR | Sinnott and Towler (2020), Table 6.6 plate and frame × 3.5 (Hand, Table 6.3), CEPCI 2023, ECB 2023 |
+| Heat-exchanger cost (brewery) | 6,838.6 + 911.8 A^0.95 EUR | Sinnott and Towler (2020), Table 6.6 plate and frame × 3.5 (Hand, Table 6.3), CEPCI 2023, ECB 2023 |
 
 Cases without published economics (dairy, four-stream) carry their own `economics` block with
 assumed, sourced inputs: Eurostat Portugal 2026-S1 prices for their consumption band at 8000 h/year

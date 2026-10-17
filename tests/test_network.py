@@ -67,7 +67,7 @@ def test_paper_config2_heat_pump_duty(tmp_path):
     from pinch.case import load_case
     s = compute(load_case(ROOT / "cases" / "brewery_padulles2026.json")).summary["retrofit"]
     row = next(o for o in s["options"] if o["network"] == "N0 existing")
-    assert "CO2 HP (warm water) 8.30" in row["heat_pumps"]
+    assert "Warm-water HP 8.30" in row["heat_pumps"]
     assert row["Qh_residual"] == pytest.approx(0.0, abs=1e-6)
 
 

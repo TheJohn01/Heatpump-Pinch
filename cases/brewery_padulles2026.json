@@ -10,7 +10,7 @@
     "source_T_C": -1,
     "sink_levels": [
       {
-        "name": "CO2 HP (warm water)",
+        "name": "Warm-water HP",
         "T_sink_in_C": 18,
         "T_sink_out_C": 82
       },
@@ -104,7 +104,8 @@
     "ambient_T_C": "published: Sec. 4.3.1",
     "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1, mapping assumed; cost laws: Sinnott and Towler (2020) Table 6.6 plate and frame (primary) and Stampfli et al. (2018) Table 2, bare and x3.5 (Hand factor, Towler Table 6.3); cold utility cost from chiller COP",
     "cycle_screening": "step 4b: cycle model with Andersen et al. (2024) Table 3 assumptions; validated against their Appendix A (see tests/test_cycle.py)",
-    "retrofit": "step 5, option (a): existing network = Padullés et al. (2026) Sec. 4.2 (Pfaduko + wort-cooling HR tank), data/brewery_networks.json"
+    "retrofit": "step 5, option (a): existing network = Padullés et al. (2026) Sec. 4.2 (Pfaduko + wort-cooling HR tank), data/brewery_networks.json",
+    "warm-water heat pump name": "'Warm-water HP' = the CO2 heat pump of Padullés et al. (2026, config. 2); our cycle screening selects propane with SLHX as the practical fluid (step 4b), so the unit is named by its duty"
   },
   "economics": {
     "gas_price_EUR_per_kWh": 0.0512,
@@ -319,7 +320,7 @@
         "name": "N1 + warm-water heat pump only",
         "network": "N1 condensate into tank",
         "heat_pumps": [
-          "CO2 HP (warm water)"
+          "Warm-water HP"
         ]
       },
       {

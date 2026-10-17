@@ -60,7 +60,8 @@ DEFAULTS = {
     "grid_EF_kg_per_kWh": (0.107, "APA, 'Fator de Emissão da Eletricidade - 2025', Table T1: Portugal 2023, 0.107 t CO2eq/MWh (annual, production-based, direct emissions). Sensitivities: mainland 2023 0.092; 5-year moving average 0.167 (Table T2); Electricity Maps 2025 flow-traced 0.1172"),
     "co2_price_EUR_per_t": (0.0, "0 by default (site may be outside the EU ETS); sensitivity uses the EUA price"),
     "pef_electricity": (1.9, "published: Commission Delegated Regulation (EU) 2023/807 (EED default)"),
-    "pef_gas": (1.0, "convention: primary energy of a fuel = its final energy"),
+    "pef_gas": (1.0, "convention: primary energy of a fuel = its final energy, on the net calorific value (NCV) basis of energy statistics"),
+    "gas_ncv_over_gcv": (0.90, "IPCC (1996) Revised Guidelines, Reference Manual, Ch. 1, Table 1-4 note a: GCV-NCV 10 % for natural gas. Gas is bought on GCV (Regulation (EU) 2016/1952); primary energy is counted on NCV, the basis of the EU primary-energy factors (Directive 2012/27/EU Annex IV; supervisor review B5)"),
     "refrigeration_credit_fraction": (1.0, "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)"),
     "boiler_variable_om_EUR_per_MWh": (1.23, "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up"),
     "chiller_cop": (None, "no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles)"),
@@ -106,6 +107,7 @@ class EconomicParameters:
     chiller_cop: float | None = None   # refrigeration COP; None = no credit for avoided chiller electricity
     refrigeration_credit_fraction: float = 1.0
     boiler_variable_om_EUR_per_MWh: float = 0.0
+    gas_ncv_over_gcv: float = 1.0
     #: {heat pump unit name: installed / average capacity}: > 1 for a unit that runs only part of the time
     #: without storage (e.g. a batch duty); the extra capacity is added as investment only
     capacity_factors: dict = field(default_factory=dict)
@@ -228,6 +230,7 @@ def load_economics(block: dict | None) -> EconomicParameters:
         refrigeration_credit_fraction=float(values["refrigeration_credit_fraction"]),
         heat_pump_cost_classes=classes,
         boiler_variable_om_EUR_per_MWh=float(values["boiler_variable_om_EUR_per_MWh"]),
+        gas_ncv_over_gcv=float(values["gas_ncv_over_gcv"]),
         capacity_factors={str(k): float(v) for k, v in (block.get("heat_pump_capacity_factors") or {}).items()},
         heat_pump_cost_adders=adders,
     )
@@ -308,7 +311,7 @@ def _annual(option: Option, p: EconomicParameters) -> tuple[float, float, float,
     opex = (fuel * p.gas_price_EUR_per_kWh + option.electricity_MWh * p.electricity_price_EUR_per_kWh) * 1000 \
         + co2_gas_t * p.co2_price_EUR_per_t + om(option, p)
     co2 = co2_gas_t + option.electricity_MWh * p.grid_EF_kg_per_kWh
-    pe = fuel * p.pef_gas + option.electricity_MWh * p.pef_electricity
+    pe = fuel * p.gas_ncv_over_gcv * p.pef_gas + option.electricity_MWh * p.pef_electricity
     return fuel, opex, co2, pe
 
 

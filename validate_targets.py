@@ -11,6 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from pinch.case import display_name
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
 from pinch.plotting import plot_composite_curves, plot_gcc
 from pinch.validation import ROOT, load_references, validation_report
@@ -35,8 +36,8 @@ def main(config: Config = Config()) -> None:
 
         table.to_frame().to_csv(config.output_dir / f"{name}_problem_table.csv", index=False)
         plot_composite_curves(streams, table, config.output_dir / f"{name}_composite_curves.png",
-                              title=f"Shifted composite curves: {name}")
-        plot_gcc(table, config.output_dir / f"{name}_gcc.png", title=f"Grand Composite Curve: {name}")
+                              title=f"Shifted composite curves: {display_name(name)}")
+        plot_gcc(table, config.output_dir / f"{name}_gcc.png", title=f"Grand Composite Curve: {display_name(name)}")
 
         print(f"\n== {name} (extra shift {case['extra_shift_K']} K)")
         print(f"   Hot / cold totals : {balance['Q_hot_total']:.2f} / {balance['Q_cold_total']:.2f} {unit}")

@@ -1,3 +1,3 @@
 unit,T_sink_in_C,T_sink_out_C,T_source_C,Q_sink_kWh/hl,COP,W_kWh/hl,Q_source_kWh/hl,source_from_process_kWh/hl,source_external_kWh/hl,placement,eta_lorenz_Andersen2024_check,Andersen2024_validity,warnings
-CO2 HP (warm water),18.0,82.0,-1.0,7.2824,3.225,2.2583,5.0241,3.4424,1.5817,across pinch,0.573,"T_source_in_C = -1 outside fitted range (0.0, 100.0); source_glide_K = 0 outside fitted range (-50.0, -10.0)",
+Warm-water HP,18.0,82.0,-1.0,7.2824,3.225,2.2583,5.0241,3.4424,1.5817,across pinch,0.573,"T_source_in_C = -1 outside fitted range (0.0, 100.0); source_glide_K = 0 outside fitted range (-50.0, -10.0)",
 HTHP (wort boiling),103.0,103.0,-1.0,2.76,1.808,1.5262,1.2338,0.0,1.2338,sink above pinch; external source,0.634,"T_source_in_C = -1 outside fitted range (0.0, 100.0); source_glide_K = 0 outside fitted range (-50.0, -10.0)",

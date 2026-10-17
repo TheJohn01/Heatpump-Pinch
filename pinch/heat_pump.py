@@ -320,7 +320,7 @@ class IntegrationResult:
         return sum(self.Q_source_process.values()) - self.Q_cold_utility_replaced
 
 
-def _max_process_source(base: StreamSet, sinks: StreamSet, unit: HeatPump, Q_cap: float) -> float:
+def _max_process_source(sinks: StreamSet, unit: HeatPump, Q_cap: float) -> float:
     """Largest source duty the process can give a unit without raising Qh.
 
     Found by bisection on the cascade, so it works for gliding sources too.
@@ -372,7 +372,7 @@ def integrate(stream_set: StreamSet, units: list[HeatPump]) -> IntegrationResult
     for unit in units:
         if not unit.has_source:
             continue
-        Q = _max_process_source(stream_set, current, unit, unit.Q_source)
+        Q = _max_process_source(current, unit, unit.Q_source)
         Q_proc[unit.name] = Q
         if Q > 0:
             current = replace(current, streams=current.streams + (_source_stream(unit, Q),))

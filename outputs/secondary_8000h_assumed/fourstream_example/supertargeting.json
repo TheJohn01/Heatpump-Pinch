@@ -1,0 +1,48 @@
+{
+  "hot_utility_cost_EUR_per_kW_year": 421.3,
+  "cold_utility_cost_EUR_per_kW_year": 34.3308,
+  "crf_per_year": 0.1295,
+  "film_coefficients_source": "University of Oklahoma ChE design notes 'Units and Area Targeting' (same example): overall U = 0.001 MW/(m2 K) = 1 kW/(m2 K) for every match; split into equal film coefficients of 2 kW/(m2 K) so that 1/U = 1/h_hot + 1/h_cold (lecture notes, not peer-reviewed). Utility-side coefficients take the same value",
+  "RQ2": [
+    {
+      "cost_law": "Towler 2020 U-tube shell and tube (carbon steel), bare (F = 1)",
+      "a": 34735.9,
+      "b": 66.58,
+      "c": 1.2,
+      "dTmin_opt_K": 1.0,
+      "TAC_min_EUR": 2153236.0,
+      "area_m2": 7247.4,
+      "Qh_min_kW": 3900.0,
+      "at_grid_edge": true,
+      "dTmin_within_1pct_K": [
+        1.0,
+        1.0
+      ],
+      "dTmin_within_2pct_K": [
+        1.0,
+        1.0
+      ],
+      "energy_share_of_TAC": 0.865
+    },
+    {
+      "cost_law": "Towler 2020 U-tube shell and tube (carbon steel) x 3.5 (Hand factor, installed)",
+      "a": 121575.6,
+      "b": 233.02,
+      "c": 1.2,
+      "dTmin_opt_K": 2.0,
+      "TAC_min_EUR": 2819261.0,
+      "area_m2": 5649.4,
+      "Qh_min_kW": 4300.0,
+      "at_grid_edge": false,
+      "dTmin_within_1pct_K": [
+        2.0,
+        2.0
+      ],
+      "dTmin_within_2pct_K": [
+        2.0,
+        3.0
+      ],
+      "energy_share_of_TAC": 0.725
+    }
+  ]
+}
