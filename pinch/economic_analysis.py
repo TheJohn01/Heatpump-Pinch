@@ -32,7 +32,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from pinch.case import Case, display_name, to_MWh_per_year
+from pinch.case import Case, to_MWh_per_year
 from pinch.plotting import electrification_curve_figure, price_ratio_figure
 from pinch.problem_table_algorithm import problem_table
 from pinch.refrigeration import CoolingCascade, refrigeration_taken_over
@@ -269,9 +269,9 @@ def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, e
     # figures (pinch.plotting)
     figures["electrification_curve"] = electrification_curve_figure(
         curve_df, threshold, params.horizon_years, params.discount_rate,
-        f"Electrification curve: {display_name(case.name)} (ratio {params.price_ratio:.2f})")
+        f"Electrification curve: {case.plant} (ratio {params.price_ratio:.2f})")
     figures["price_ratio_sweep"] = price_ratio_figure(sweep, threshold, params.horizon_years, params.price_ratio,
-                                                      f"Full design vs price ratio: {display_name(case.name)}")
+                                                      f"Full design vs price ratio: {case.plant}")
 
     summary = {
         "parameters": {k: getattr(params, k, None) for k in (

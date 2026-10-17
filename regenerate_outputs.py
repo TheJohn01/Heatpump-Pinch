@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-BREWERY = "cases/brewery_padulles2026.json"
+BREWERY = "cases/brewery.json"
 STEPS: tuple[tuple[str, ...], ...] = (
     ("validate_targets.py",),
     ("reproduce_padulles2026.py",),
@@ -32,6 +32,7 @@ STEPS: tuple[tuple[str, ...], ...] = (
     ("screen_cycles.py", BREWERY),
     ("analyse.py", "--all"),
     ("consolidate_rq.py", BREWERY),
+    ("consolidate_rq.py", "cases/spray_dryer.json"),
     ("batch_check.py", BREWERY),
     ("mvr_check.py", BREWERY),
     ("reproduce_secondary_economics.py",),

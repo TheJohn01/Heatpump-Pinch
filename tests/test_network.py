@@ -64,7 +64,7 @@ def test_paper_config2_heat_pump_duty(tmp_path):
     """Heat pumps on the existing network: warm-water HP 8.3 kWh/hl as in Fig. 14."""
     from analyse import compute
     from pinch.case import load_case
-    s = compute(load_case(ROOT / "cases" / "brewery_padulles2026.json")).summary["retrofit"]
+    s = compute(load_case(ROOT / "cases" / "brewery.json")).summary["retrofit"]
     row = next(o for o in s["options"] if o["network"] == "N0 existing")
     assert "Warm-water HP 8.30" in row["heat_pumps"]
     assert row["Qh_residual"] == pytest.approx(0.0, abs=1e-6)
@@ -73,7 +73,7 @@ def test_paper_config2_heat_pump_duty(tmp_path):
 # ------------------------------------------------------------------ general behaviour
 def test_cross_pinch_match_is_counted():
     """Four-stream example: a hot stream above the pinch heating a cold stream below it."""
-    streams = load_streams(ROOT / "data" / "fourstream_example.csv")
+    streams = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
     pinch = problem_table(streams).pinch_T_star_C[0]
     assert pinch == 145
     bad = Network("cross", (Match("X", (Segment("Reactor 1 product", 250, 190),),
@@ -89,14 +89,14 @@ def test_cross_pinch_match_is_counted():
 
 
 def test_no_matches_gap_equals_hot_above_plus_cold_below():
-    streams = load_streams(ROOT / "data" / "fourstream_example.csv")
+    streams = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
     r = evaluate_network(streams, Network("none", ()))
     assert r.Qh == pytest.approx(sum(s.Q for s in streams.cold))
     assert r.energy_gap == pytest.approx(_identity(r), abs=1e-6)
 
 
 def test_infeasible_and_unbalanced_matches_are_rejected():
-    streams = load_streams(ROOT / "data" / "fourstream_example.csv")
+    streams = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
     with pytest.raises(ValueError, match="infeasible"):     # 5 K approach < 10 K required
         evaluate_network(streams, Network("n", (Match("Z", (Segment("Reactor 1 product", 100, 40),),
                                                           (Segment("Reactor 1 feed", 50, 95),)),)))
@@ -114,7 +114,7 @@ def test_retrofit_bounds_spray_dryer_published_no_recovery():
     from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
-    s = compute(load_case(ROOT / "cases" / "walmsley2024_spray_dryer.json")).summary["retrofit_bounds"]
+    s = compute(load_case(ROOT / "cases" / "spray_dryer.json")).summary["retrofit_bounds"]
     assert s["baseline_status"] == "published"
     b0 = s["no_heat_recovery"]
     assert b0["Qh"] == pytest.approx(6031.0)                       # sum of the cold streams, Table 1
@@ -130,7 +130,7 @@ def test_retrofit_bounds_lower_bound_equals_step6():
     from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
-    c = load_case(ROOT / "cases" / "walmsley2024_milk_evaporator.json")
+    c = load_case(ROOT / "cases" / "milk_evaporator.json")
     s = compute(replace(c, basis={"type": "power", "operating_hours_per_year": 8000.0})).summary
     low = next(r for r in s["retrofit_bounds"]["options"] if r["option"].startswith("Lower bound"))
     full = s["economics"]["results"]["full design (heat recovery installed)"]

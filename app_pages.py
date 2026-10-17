@@ -32,10 +32,12 @@ from pinch import charts, problem_table, with_extra_shift
 from pinch.case import POWER_TO_MW, SinkLevelSpec, load_case
 from pinch.cycle_analysis import load_selected
 from pinch.economics import DEFAULTS
+from pinch.research_questions import unit_names
 from pinch.streams import streams_from_frame
 
 ROOT = Path(__file__).resolve().parent
 CASES = {p.stem: p for p in sorted((ROOT / "cases").glob("*.json")) if p.stem != "TEMPLATE"}
+PLANTS = {k: load_case(p).plant for k, p in CASES.items()}
 UPLOAD = "Upload my own stream table"
 H_COLUMN = "h_kW_per_m2K"
 STEPS = ["1 Streams", "2 Targets", "3 ΔTmin", "4 Heat pumps", "5 Retrofit", "6 Economics"]
@@ -71,12 +73,18 @@ def _levels_frame(levels) -> pd.DataFrame:
                           "T_source_C": lv.T_source_C} for lv in levels])
 
 
+def _case_label(choice: str) -> str:
+    """Selector label: the type of plant (the data source is on the Sources page)."""
+    return choice if choice == UPLOAD else PLANTS[choice]
+
+
 def load_inputs(choice: str, uploaded: pd.DataFrame | None = None, upload_name: str = "my_site") -> None:
     """(Re)initialise every input from a published case or from an uploaded table."""
     if choice == UPLOAD:
         case = load_case(ROOT / "cases" / "TEMPLATE.json")
-        case = replace(case, name=Path(upload_name).stem, description="User-supplied stream table.",
-                       reference="User upload", screening={}, provenance={"stream data": "user upload (not verified)"},
+        case = replace(case, name=Path(upload_name).stem, plant="My plant (uploaded stream table)",
+                       description="User-supplied stream table.", screening={},
+                       provenance={"data source": "user upload (not verified)"},
                        retrofit=None, cycle_screening=None, eta_lorenz_sensitivity=())
         streams_df = uploaded.copy()
         basis = None                     # proposed below from the stream unit
@@ -145,7 +153,7 @@ def _scalars() -> dict:
 
 def init_state() -> None:
     if "choice" not in ss:
-        load_inputs("brewery_padulles2026" if "brewery_padulles2026" in CASES else next(iter(CASES)))
+        load_inputs("brewery" if "brewery" in CASES else next(iter(CASES)))
     ss.setdefault("step", STEPS[0])
     if "step_ctl" not in ss:
         ss.step_ctl = ss.step
@@ -322,7 +330,7 @@ def _chart(ch) -> None:
 def workflow_page() -> None:
     init_state()
     st.title("Process-heat electrification")
-    st.caption(f"Case: **{ss.base_case.name}** · {ss.base_case.reference}")
+    st.caption(f"Case: **{ss.base_case.plant}** · data sources on the Sources page")
     st.segmented_control("Step", STEPS, key="step_ctl", on_change=_step_changed, label_visibility="collapsed")
     st.progress((STEPS.index(ss.step) + 1) / len(STEPS))
     {STEPS[0]: _step_streams, STEPS[1]: _step_targets, STEPS[2]: _step_dtmin, STEPS[3]: _step_heat_pumps,
@@ -335,12 +343,41 @@ def workflow_page() -> None:
         c[2].button("Next →", type="primary", width="stretch", on_click=_goto, args=(STEPS[i + 1],))
 
 
+def _basis_inputs() -> None:
+    """Annual-basis inputs (step 1 and the Dashboard share the same state)."""
+    st.subheader("Annual basis")
+    unit = ss.energy_unit
+    if not unit:
+        st.caption("Fix the stream table first.")
+        return
+    bind(st.toggle, "Convert to annual figures", "basis_on",
+         help="Needed for ΔTmin supertargeting (step 3), the economics (step 6) and the Dashboard.")
+    if ss.basis_on:
+        if unit in POWER_TO_MW:
+            bind(st.number_input, "Operating hours [h/year]", "basis_value", 1.0, 8784.0, step=100.0)
+        else:
+            bind(st.number_input, f"Production [{unit.split('/', 1)[1]}/year]", "basis_value",
+                 min_value=1.0, step=1.0e5, format="%.0f")
+    ss.basis = _basis()
+    pub = ss.basis_published
+    if pub is None and ss.basis_on:
+        st.caption("⚠️ The source publishes no annual basis for this case: this value is **your "
+                   "assumption** and is recorded as such on the Sources page."
+                   + (" Default 8000 h/year." if unit in POWER_TO_MW else ""))
+        if ss.get("basis_hint"):
+            st.caption(ss.basis_hint)
+    elif pub is None:
+        st.caption(f"No annual basis: results stay in {unit}. Supertargeting, economics and the Dashboard need one.")
+    elif ss.basis != pub:
+        st.caption("Changed from the published value (recorded on the Sources page).")
+
+
 def _step_streams() -> None:
     left, right = st.columns([1, 2.4], gap="large")
     with left, st.container(border=True):
         st.subheader("Process")
         options = list(CASES) + [UPLOAD]
-        choice = st.selectbox("Case", options, index=options.index(ss.choice))
+        choice = st.selectbox("Case", options, index=options.index(ss.choice), format_func=_case_label)
         if choice != ss.choice and choice != UPLOAD:
             load_inputs(choice)
             st.rerun()
@@ -359,31 +396,7 @@ def _step_streams() -> None:
                 st.rerun()
             if ss.choice != UPLOAD:
                 st.info("Upload a CSV to replace the published case.")
-        st.subheader("Annual basis")
-        unit = ss.energy_unit
-        if not unit:
-            st.caption("Fix the stream table first.")
-        else:
-            bind(st.toggle, "Convert to annual figures", "basis_on",
-                 help="Needed for ΔTmin supertargeting (step 3) and the economics (step 6).")
-            if ss.basis_on:
-                if unit in POWER_TO_MW:
-                    bind(st.number_input, "Operating hours [h/year]", "basis_value", 1.0, 8784.0, step=100.0)
-                else:
-                    bind(st.number_input, f"Production [{unit.split('/', 1)[1]}/year]", "basis_value",
-                         min_value=1.0, step=1.0e5, format="%.0f")
-            ss.basis = _basis()
-            pub = ss.basis_published
-            if pub is None and ss.basis_on:
-                st.caption("⚠️ The source publishes no annual basis for this case: this value is **your "
-                           "assumption** and is recorded as such on the Sources page."
-                           + (" Default 8000 h/year (Padullés et al., 2026)." if unit in POWER_TO_MW else ""))
-                if ss.get("basis_hint"):
-                    st.caption(ss.basis_hint)
-            elif pub is None:
-                st.caption(f"No annual basis: results stay in {unit}. Supertargeting and economics need one.")
-            elif ss.basis != pub:
-                st.caption("Changed from the published value (recorded on the Sources page).")
+        _basis_inputs()
     with right:
         st.subheader("Stream table (editable)")
         st.caption("Each change recomputes every step. Latent loads over 1 K. 'Amb.' streams use 15 °C. "
@@ -507,7 +520,7 @@ RETROFIT_NEEDS = (
     "`data/brewery_networks.json`): every existing exchanger (which hot stream heats which cold stream, between "
     "which temperatures), and which streams are on heaters and coolers. The site's measured hot and cold utility "
     "use is the check that the description is complete. Then add a `retrofit` block to the case file (see "
-    "`cases/brewery_padulles2026.json`).")
+    "`cases/brewery.json`).")
 
 
 def _retrofit_bounds(r) -> None:
@@ -659,65 +672,107 @@ def _consolidate(key: str, _case, _streams, _selected) -> pd.DataFrame:
     return consolidate_case(_case, _streams, _selected)
 
 
+def _num(x, fmt: str = "{:.2f}", never: str = "never") -> str:
+    """Number for a metric: 'never' for an infinite payback, 'n/a' for a missing value."""
+    try:
+        x = float(x)
+    except (TypeError, ValueError):
+        return "n/a"
+    if math.isinf(x):
+        return never
+    return "n/a" if x != x else fmt.format(x)
+
+
+def _years(x) -> str:
+    text = _num(x, "{:.1f}")
+    return text if text in ("never", "n/a") else f"{text} y"
+
+
 def dashboard_page() -> None:
+    """RQ1-RQ3 for the selected case (any case with an annual basis; ``pinch.research_questions``)."""
     init_state()
     st.title("Research questions at a glance")
+    st.caption(f"Case: **{ss.base_case.plant}**")
+    if _basis() is None:
+        st.info("RQ1-RQ3 are annual figures (gas, electricity, payback, NPV). This case has no published annual "
+                "basis: set one here (it is recorded as your assumption on the Sources page).")
+        with st.container(border=True):
+            _basis_inputs()
+        if _basis() is None:
+            return
     r = results()
     if not r:
         return
     case, streams, s, tables, *_ = r
+    key = _key(case, ss.streams_df)
     saved = ROOT / "outputs" / case.name / "rq_consolidated.csv"
     head = st.columns([4, 1.4], vertical_alignment="center")
-    if ss.rq_table is not None and ss.rq_table[0] == _key(case, ss.streams_df):
+    if ss.rq_table is not None and ss.rq_table[0] == key:
         rq, origin = ss.rq_table[1], "current inputs"
     elif _all_defaults() and saved.exists():
         rq, origin = pd.read_csv(saved), "published case, saved run"
     else:
         rq, origin = None, ""
-    if case.retrofit and case.basis is not None:
-        if head[1].button("Recompute table (≈15 s)", type="primary", width="stretch"):
-            selected = load_selected(ROOT / "outputs" / case.name / "cycle_screening.json") if _unedited() else None
+    recompute = head[1].button("Recompute table", type="primary", width="stretch",
+                               help="Every sensitivity row of the case, for the current inputs (a few seconds to "
+                                    "about 15 s for the brewery).")
+    if rq is None or recompute:
+        selected = load_selected(ROOT / "outputs" / case.name / "cycle_screening.json") if _unedited() else None
+        try:
             with st.spinner("Running every sensitivity..."):
-                rq = _consolidate(_key(case, ss.streams_df), case, streams, selected)
-            ss.rq_table = (_key(case, ss.streams_df), rq)
-            origin = "current inputs"
-    head[0].caption(f"Consolidated sensitivities: {origin or 'not computed for these inputs'}")
-    if rq is None:
-        st.info("The consolidated table needs an existing-network (retrofit) block; press the button to compute it "
-                "for the current inputs." if case.retrofit else "The consolidated RQ table is built around the "
-                "existing-site retrofit, and this case has no published existing network (step 5). RQ1 and RQ3 "
-                "for this case are in Workflow → 6 Economics once an annual basis is set.")
-        return
+                rq = _consolidate(key, case, streams, selected)
+        except Exception as exc:     # e.g. edited streams no longer fit the case's network file
+            st.error(f"The research-question table could not be computed: {type(exc).__name__}: {exc}")
+            return
+        ss.rq_table = (key, rq)
+        origin = "current inputs"
     b = rq.iloc[0]
+    names = unit_names(b)
+    head[0].caption(f"Consolidated sensitivities: {origin}. Today's site: {b['todays_site']}.")
+    if not names:
+        st.warning("No heat pump has a useful duty at the case's sink levels (Workflow, step 4): nothing to evaluate.")
+        return
+    thr = float(ss["econ_payback_threshold_years"])
+    hp = [f"HP{i}" for i in range(1, len(names) + 1)]
+    legend = "; ".join(f"{h} = {n}" for h, n in zip(hp, names))
+    hr_help = (f"Heat-recovery step alone: {100 * b['HR_retrofit_gas_share']:.1f} % of today's gas, payback "
+               f"{_num(b['HR_retrofit_payback_y'])} y." if b["HR_retrofit_gas_share"] == b["HR_retrofit_gas_share"]
+               else "Today's site is taken at its energy target: there is no separate heat-recovery step.")
     c = st.columns(4)
-    def _ratio(x):
-        return "none" if not (x == x) or x <= 0 else f"{x:.2f}"
     c[0].metric("RQ1: heat pumps' share of today's gas", f"{100 * b['RQ1_HP_gas_share']:.1f} %", border=True,
-                help=f"Incremental payback ≤ 5 y over the heat-recovery retrofit, stacked per unit. Heat-recovery "
-                     f"retrofit alone: {100 * b['HR_retrofit_gas_share']:.1f} % of today's gas, payback "
-                     f"{b['HR_retrofit_payback_y']} y.")
-    c[1].metric("Payback per unit: WW HP / HTHP",
-                f"{b['WW_HP_incremental_payback_y']} y / "
-                + ("never" if b['HTHP_incremental_payback_y'] == float('inf') else f"{b['HTHP_incremental_payback_y']:.0f} y"),
-                border=True, help="Incremental: warm-water heat pump over the heat-recovery retrofit; HTHP over the "
-                                  "warm-water heat pump.")
-    c[2].metric("RQ2: ΔTmin (TAC within 1 %)", f"{b['RQ2_dTmin_within_1pct_K']} K", border=True,
-                help=f"Minimum at {b['RQ2_dTmin_opt_K']:g} K; the optimum is flat, so a practical value in this range "
-                     "costs less than 1 % more.")
-    c[3].metric("RQ3 per unit: WW HP / HTHP", f"{_ratio(b['RQ3_ratio_WW_HP'])} / {_ratio(b['RQ3_ratio_HTHP'])}",
-                delta=f"today {b['price_ratio']:.2f}", delta_color="off", border=True)
+                help=f"Incremental payback ≤ {thr:g} y, HP1 at partial duty and further units whole, each over the "
+                     f"previous ones. {hr_help}")
+    c[1].metric("Payback per unit: " + " / ".join(hp),
+                " / ".join(_years(b[f"{h}_incremental_payback_y"]) for h in hp),
+                border=True, help=f"Incremental payback of each unit over the previous ones. {legend}.")
+    c[2].metric("RQ2: ΔTmin (TAC within 1 %)",
+                f"{b['RQ2_dTmin_within_1pct_K']} K" if isinstance(b["RQ2_dTmin_within_1pct_K"], str)
+                and b["RQ2_dTmin_within_1pct_K"] else "n/a", border=True,
+                help=(f"Minimum at {b['RQ2_dTmin_opt_K']:g} K; the optimum is flat, so a practical value in this range "
+                      "costs less than 1 % more." if b["RQ2_dTmin_opt_K"] == b["RQ2_dTmin_opt_K"] else
+                      "Needs film coefficients and a sourced exchanger cost law (Workflow, step 3)."))
+    c[3].metric("RQ3 per unit: " + " / ".join(hp),
+                " / ".join(_num(b[f"RQ3_ratio_{h}"]) if float(b[f"RQ3_ratio_{h}"]) > 0 else "none" for h in hp),
+                delta=f"today {b['price_ratio']:.2f}", delta_color="off", border=True,
+                help=f"Electricity-to-gas price ratio at which each unit's increment has NPV = 0. {legend}.")
+    st.caption(f"Heat pumps, in order of decreasing COP: {legend}.")
     prod = ROOT / "outputs" / case.name / "rq1_production_threshold.json"
     if origin.startswith("published") and prod.exists():
         t = json.loads(prod.read_text()).get("threshold")
         if t:
-            st.caption(f"RQ1 holds above about {t / 1e6:.2f} Mhl/year (warm-water heat pump incremental payback ≤ 5 y); "
-                       "the HTHP pays back nowhere in 0.1-3x the production.")
-    left, right = st.columns([1.25, 1], gap="large")
+            st.caption(f"RQ1 holds above about {t:,.0f} {case.basis.get('production_unit', 'units')}/year "
+                       f"(HP1 incremental payback ≤ {thr:g} y).")
+    rf = s.get("retrofit")                  # options against the existing network (cases with one)
+    has_rf = bool(rf) and "skipped" not in rf
+    left, right = st.columns([1.25, 1], gap="large") if has_rf else (st.container(), None)
     with left:
-        _chart(charts.tornado_chart(rq))
-    with right:
-        rf = s.get("retrofit")
-        if rf and "skipped" not in rf:
+        if rq.iloc[1:]["RQ3_ratio_HP1"].notna().any():
+            _chart(charts.tornado_chart(rq))
+        else:
+            st.caption("No sensitivity rows with a break-even ratio for HP1 (add rows to the case's "
+                       "`sensitivities` list).")
+    if has_rf:
+        with right:
             g, pb = charts.retrofit_charts(pd.DataFrame(rf["options"]), band_px=26)
             _chart(g)
             _chart(pb)
@@ -734,8 +789,12 @@ def sources_page() -> None:
     case, _, s, _, key, res = r
     a, b = st.columns(2, gap="large")
     with a:
+        st.subheader(f"Data source: {case.plant}")
+        st.markdown(case.data_source or "_not given_")
         st.subheader("Provenance (case file)")
         for k, v in s["provenance"].items():
+            if k == "data source":
+                continue
             st.markdown(f"- **{k}**: {v}")
         ec = s.get("economics", {})
         if ec and "skipped" not in ec:

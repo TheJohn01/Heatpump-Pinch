@@ -16,7 +16,7 @@ from pinch.design import design_from_gcc, plausibility_warnings, source_warnings
 from pinch.heat_pump import HeatPump
 from pinch.validation import ROOT
 
-FOURSTREAM = load_streams(ROOT / "data" / "fourstream_example.csv")
+FOURSTREAM = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
 
 
 # ---------------------------------------------------------------- design
@@ -50,7 +50,7 @@ def test_gcc_max_level_electrifies_everything():
 
 def test_brewery_case_reproduces_step_by_step_design():
     """General tool on the brewery case = minimum-energy design of reproduce_padulles2026.py (3.4404)."""
-    case = load_case(ROOT / "cases" / "brewery_padulles2026.json")
+    case = load_case(ROOT / "cases" / "brewery.json")
     # at the published eta_L 0.55 of Padullés et al. (the case now uses 0.50, an educated approximation)
     d = design_from_gcc(load_streams(case.stream_file), case.sink_levels, 0.55, case.source_T_C)
     assert d.W_total == pytest.approx(3.4404, abs=1e-4)
@@ -59,7 +59,7 @@ def test_brewery_case_reproduces_step_by_step_design():
 
 def test_external_source_is_labelled():
     """Milk evaporator: sources at 15 °C sit above the pinch, so all source heat is ambient."""
-    case = load_case(ROOT / "cases" / "walmsley2024_milk_evaporator.json")
+    case = load_case(ROOT / "cases" / "milk_evaporator.json")
     d = design_from_gcc(load_streams(case.stream_file), case.sink_levels, case.eta_lorenz, case.source_T_C)
     assert all(v == "sink above pinch; external source" for v in d.integration.placement.values())
     assert sum(d.integration.Q_source_process.values()) == 0.0
@@ -116,8 +116,8 @@ def test_template_loads():
     assert case.basis["type"] == "power" and len(case.sink_levels) == 2
 
 
-@pytest.mark.parametrize("case_file", ["brewery_padulles2026.json", "fourstream_example.json",
-                                       "walmsley2024_milk_evaporator.json", "walmsley2024_spray_dryer.json"])
+@pytest.mark.parametrize("case_file", ["brewery.json", "four_stream_process.json",
+                                       "milk_evaporator.json", "spray_dryer.json"])
 def test_cli_writes_all_outputs(case_file, tmp_path: Path):
     summary = analyse(load_case(ROOT / "cases" / case_file), output_root=tmp_path)
     folder = tmp_path / summary["case"]
@@ -130,7 +130,7 @@ def test_cli_writes_all_outputs(case_file, tmp_path: Path):
 
 def test_external_source_above_ambient_is_flagged():
     """Spray dryer with a 35 °C source: the shortfall cannot come from 15 °C ambient air."""
-    case = load_case(ROOT / "cases" / "walmsley2024_spray_dryer.json")
+    case = load_case(ROOT / "cases" / "spray_dryer.json")
     streams = load_streams(case.stream_file)
     hot_source = design_from_gcc(streams, case.sink_levels, case.eta_lorenz, 35.0)
     assert source_warnings(hot_source, case.ambient_T_C)            # flagged
@@ -157,3 +157,22 @@ def test_problem_table_name_is_unambiguous():
     assert callable(pinch.problem_table)
     assert importlib.util.find_spec("pinch.problem_table") is None
     assert importlib.import_module("pinch.problem_table_algorithm").problem_table is pinch.problem_table
+
+
+def test_cases_name_only_the_type_of_plant():
+    """Case names, plant labels and descriptions carry no citation; the data source is in the provenance and in
+    README's 'Data sources' table."""
+    import re
+    from pinch.case import load_case
+    from pinch.validation import ROOT
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    cite = re.compile(r"et al|\(\d{4}\)|\b(19|20)\d{2}\b|University|Table \d")
+    for f in sorted((ROOT / "cases").glob("*.json")):
+        if f.stem == "TEMPLATE":
+            continue
+        c = load_case(f)
+        for text in (c.name, c.plant, c.description):
+            assert not cite.search(text), f"{f.name}: '{text}' cites a source"
+        assert c.data_source, f"{f.name}: provenance['data source'] missing"
+        row = next(line for line in readme.splitlines() if line.startswith(f"| `{c.name}` |"))
+        assert c.plant in row

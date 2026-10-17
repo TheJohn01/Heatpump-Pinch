@@ -84,7 +84,7 @@ def test_cascade_of_hot_streams_equals_hot_stream_builder():
 
 
 # ---------------------------------------------------------- 3. brewery
-CASE = load_case(ROOT / "cases" / "brewery_padulles2026.json")
+CASE = load_case(ROOT / "cases" / "brewery.json")
 BREWERY = with_extra_shift(load_streams(CASE.stream_file), CASE.extra_shift_K)
 
 
@@ -131,7 +131,7 @@ def test_source_at_ambient_takes_no_refrigeration():
     """Spray dryer (sources at T* = 15 °C = ambient): the previous step-6 model credited the cascade's Q̇c
     reduction, which here is heat cooling water takes anyway. Correct credit: 0. (No effect on the published
     outputs: the spray-dryer case sets no chiller COP.)"""
-    c = load_case(ROOT / "cases" / "walmsley2024_spray_dryer.json")
+    c = load_case(ROOT / "cases" / "spray_dryer.json")
     s = with_extra_shift(load_streams(c.stream_file), c.extra_shift_K)
     d = design_from_gcc(s, c.sink_levels, c.eta_lorenz, c.source_T_C)
     cooling = CoolingCascade.from_table(problem_table(s), c.ambient_T_C)

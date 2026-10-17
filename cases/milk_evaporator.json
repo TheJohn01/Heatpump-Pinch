@@ -1,0 +1,254 @@
+{
+  "name": "milk_evaporator",
+  "plant": "Milk evaporator",
+  "description": "Dairy milk evaporator: two-effect MVR evaporation with milk heat treatment, 247 t/h raw milk (30 t/h milk powder); evaporation system in isolation. Loads in kW.",
+  "stream_file": "../data/milk_evaporator_streams.csv",
+  "extra_shift_K": 0,
+  "ambient_T_C": 15,
+  "heat_pumps": {
+    "eta_lorenz": 0.5,
+    "source_T_C": 15,
+    "sink_levels": [
+      {
+        "name": "HP warm (milk preheat)",
+        "T_sink_in_C": 15,
+        "T_sink_out_C": 55
+      },
+      {
+        "name": "HTHP 105 °C",
+        "T_sink_C": 105
+      }
+    ],
+    "eta_lorenz_sensitivity": [
+      0.45,
+      0.52
+    ]
+  },
+  "basis": null,
+  "provenance": {
+    "data source": "Walmsley, Lincoln, Padullés, Cleland (2024), Energies 17, 2838, Table 2.",
+    "stream data": "published (Table 2); Table 2 dT_cont used (chiller water 0.5 K; the text's pinch range implies 2.5 K, which leaves the targets unchanged)",
+    "eta_lorenz": "published: 50 % exergetic (Carnot) efficiency (Sec. 4.2); reproduces the paper's simple-design COP 2.1",
+    "source_T_C": "published: ambient / dead state 15 °C (Sec. 2), the source of the paper's simple design",
+    "sink levels": "105 °C published (simple design, Sec. 4.2.3); the 15-55 °C level is assumed (illustrative, follows the low-temperature part of the GCC)",
+    "basis": "none: operating hours not given",
+    "ambient_T_C": "published: dead state 15 °C (Sec. 2)",
+    "economics": "assumed: no economic data in the source (see economics.sources)",
+    "film coefficients": "Stampfli et al. (2018) dairy values, stream mapping assumed",
+    "eta_lorenz_sensitivity": "0.45-0.52: Lorenz (Carnot) efficiencies implied by the DEA catalogue HTHP sheets 2.a/2.b (COP 4.45/2.75/2.4/2.05 at lifts of 40/65/80/100 K), as for the brewery",
+    "COP check": "HTHP 105 °C (steam, 90 K lift): COP 2.10 vs DEA sheet 2.a 2.22 at 90 K minus 0.15 for steam = 2.07 (+1.5 %). Warm-water heat pump 15 -> 55 °C: Lorenz COP 7.86 vs DEA sheet 1.1 'up to 60 °C, lift 40 K' 5.33 (+47 %; the Lorenz model credits the full 40 K sink glide, which needs a glide-matched cycle such as transcritical CO2); with COP 5.33 RQ1 falls from 26 % to 23 %",
+    "steam sink": "verified: the 105 °C level supplies the Direct Steam Injection that follows the 8 -> 95 °C preheat (Walmsley et al. 2024, Sec. 3.2), so the DEA steam-generation add-on applies"
+  },
+  "economics": {
+    "_note": "No economic data in the source. Prices: Eurostat Portugal 2026-S1 for the site's consumption band at 8000 h/year; heat pump investment: Danish Energy Agency catalogue by sink temperature with its lift and steam add-ons; other parameters: tool defaults (Sources page). All are assumptions for this case.",
+    "gas_price_EUR_per_kWh": 0.042,
+    "electricity_price_EUR_per_kWh": 0.0897,
+    "cost_functions": {
+      "hp_dea_1_1": {
+        "alpha": 950.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 1.1 'Heat pump, up to 60 °C, temp. lift 40 K': 0.95 M€/MW (0.91-0.95), unit size 0.5-5 MW. O&M (DEA 2025) sheet 1.1: fixed 2,127 EUR/MW/y, variable 3.07 EUR/MWh",
+        "fixed_om_EUR_per_unit_year": 2.127,
+        "variable_om_EUR_per_MWh": 3.07
+      },
+      "hp_dea_2a": {
+        "alpha": 1200.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.a 'High-temperature heat pumps up to 125 °C': 1.2 M€/MW (0.9-1.5), unit size 0.3-25 MW. O&M (DEA 2025) sheet 2.a: fixed 2,494 EUR/MW/y, variable 3.6 EUR/MWh",
+        "fixed_om_EUR_per_unit_year": 2.494,
+        "variable_om_EUR_per_MWh": 3.6
+      },
+      "hp_dea_2b": {
+        "alpha": 1550.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.b 'High-temperature heat pumps up to 150 °C': 1.55 M€/MW (1.25-1.8), unit size 0.5-80 MW. No catalogue sheet above 150 °C: units with hotter sinks are costed with this sheet as an extrapolation (flagged). O&M (DEA 2025) sheet 2.b: fixed 2,494 EUR/MW/y, variable 3.6 EUR/MWh",
+        "fixed_om_EUR_per_unit_year": 2.494,
+        "variable_om_EUR_per_MWh": 3.6
+      },
+      "dea_lift_2a": {
+        "alpha": 150.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheet 2.a: 'Additional equipment cost for temperature lift above 75 K' 0.15 M€/MW (0.05-0.25)"
+      },
+      "dea_lift_2b": {
+        "alpha": 200.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheet 2.b: 'Additional equipment cost for temperature lift above 75 K' 0.2 M€/MW (0.1-0.3)"
+      },
+      "dea_steam": {
+        "alpha": 200.0,
+        "beta": 0.0,
+        "gamma": 1.0,
+        "size_unit": "kW",
+        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheets 2.a and 2.b: 'Steam generation increases equipment cost by' 0.2 M€/MW (0.05-0.3); applied to isothermal sinks (steam). The sheets' COP penalty for steam (-0.15) is not applied: COP comes from the Lorenz model"
+      }
+    },
+    "heat_pump_cost_classes": [
+      {
+        "max_sink_T_C": 60,
+        "cost_function": "hp_dea_1_1"
+      },
+      {
+        "max_sink_T_C": 125,
+        "cost_function": "hp_dea_2a"
+      },
+      {
+        "max_sink_T_C": 150,
+        "cost_function": "hp_dea_2b"
+      }
+    ],
+    "sources": {
+      "prices": "Eurostat nrg_pc_203 (gas) and nrg_pc_205 (electricity), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh, gas on GCV (data/sources/eurostat_portugal_prices.csv). The plant is not in Portugal: these prices place it in the dissertation's context. Bands: gas I3 0.0512, I4 0.0445, I5 0.0420; electricity ID 0.1135, IE 0.0897, IF 0.0789. Band check at 8000 h/year, site level (the site buys the energy): Walmsley et al. (2016), 'Total Site Utility Systems Optimisation for Milk Powder Production', CET 52, 235-240, DOI 10.3303/CET1652040: 30 t/h milk powder plant, electricity 210-220 kWh/t powder (literature 150-400), fuel 5,200 MJ/t powder (base case), and Walmsley et al. (2024): this evaporator belongs to a 30 t/h plant. Gas 5.2 GJ/t x 30 t/h x 8000 h = 1.25 million GJ (I5); electricity 220 kWh/t x 30 x 8000 = 52.8 GWh + heat pumps 11.7 GWh (IE). I4 below 6,400 h/year. Borderline gas band: the 5.2 GJ/t is the base-case fuel use; the improved design in the same paper (Table 1, design 1.0: 3.66 GJ/t thermal) gives 0.88 million GJ at 8000 h, band I4 (0.0445)",
+      "heat_pump_cost": "Danish Energy Agency catalogue (2025) by sink temperature, linear in capacity, plus the catalogue's add-ons for lift above 75 K (sink outlet minus source outlet) and steam generation (isothermal sinks). Replaces Padullés et al. (2026, Table 3), which is fitted to brewery heat pumps and gives 0.75-0.88 M€/MW for 2-3 MW units, below the catalogue range 0.9-1.5 M€/MW for sinks up to 125 °C. Indirect cost of new hot-water piping (0.23 M€/MW, 'relevant when needing to install new hot water piping instead of existing steam piping') is a scenario, not in the base",
+      "chiller_cop": "Sinnott and Towler (2020), Sec. 6.4.4, Eq. 6.20: real COP about 0.6 x Carnot (as for the brewery). Evaporator: chilled water leaves at 4 °C (Walmsley et al. 2024, Table 2) minus 5 K refrigerated-brine approach (Sec. 12.7.3: 3-5 K) = -1 °C; condenser 30 °C (ambient 15 °C + 10 K cooling-water rise + 5 K approach): 0.6 x 272.15/31 = 5.27. Q̇c,min (456 kW) is entirely this chilled-water load"
+    },
+    "heat_pump_cost_adders": [
+      {
+        "cost_function": "dea_lift_2a",
+        "applies_to": [
+          "hp_dea_2a"
+        ],
+        "min_lift_K": 75
+      },
+      {
+        "cost_function": "dea_lift_2b",
+        "applies_to": [
+          "hp_dea_2b"
+        ],
+        "min_lift_K": 75
+      },
+      {
+        "cost_function": "dea_steam",
+        "applies_to": [
+          "hp_dea_2a",
+          "hp_dea_2b"
+        ],
+        "isothermal_sink": true
+      }
+    ],
+    "chiller_cop": 5.27
+  },
+  "sensitivities": [
+    {
+      "label": "with hot-water piping (indirect cost)",
+      "kind": "econ",
+      "value": {
+        "cost_functions": {
+          "hp_dea_1_1": {
+            "alpha": 1140.0,
+            "beta": 0.0,
+            "gamma": 1.0,
+            "size_unit": "kW",
+            "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 1.1 'Heat pump, up to 60 °C, temp. lift 40 K': 0.95 M€/MW (0.91-0.95), unit size 0.5-5 MW + 0.19 M€/MW indirect (sheet 1.1)"
+          },
+          "hp_dea_2a": {
+            "alpha": 1430.0,
+            "beta": 0.0,
+            "gamma": 1.0,
+            "size_unit": "kW",
+            "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.a 'High-temperature heat pumps up to 125 °C': 1.2 M€/MW (0.9-1.5), unit size 0.3-25 MW + 0.23 M€/MW indirect (new hot-water piping)"
+          },
+          "hp_dea_2b": {
+            "alpha": 1780.0,
+            "beta": 0.0,
+            "gamma": 1.0,
+            "size_unit": "kW",
+            "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.b 'High-temperature heat pumps up to 150 °C': 1.55 M€/MW (1.25-1.8), unit size 0.5-80 MW. No catalogue sheet above 150 °C: units with hotter sinks are costed with this sheet as an extrapolation (flagged) + 0.23 M€/MW indirect (new hot-water piping)"
+          },
+          "dea_lift_2a": {
+            "alpha": 150.0,
+            "beta": 0.0,
+            "gamma": 1.0,
+            "size_unit": "kW",
+            "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheet 2.a: 'Additional equipment cost for temperature lift above 75 K' 0.15 M€/MW (0.05-0.25)"
+          },
+          "dea_lift_2b": {
+            "alpha": 200.0,
+            "beta": 0.0,
+            "gamma": 1.0,
+            "size_unit": "kW",
+            "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheet 2.b: 'Additional equipment cost for temperature lift above 75 K' 0.2 M€/MW (0.1-0.3)"
+          },
+          "dea_steam": {
+            "alpha": 200.0,
+            "beta": 0.0,
+            "gamma": 1.0,
+            "size_unit": "kW",
+            "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheets 2.a and 2.b: 'Steam generation increases equipment cost by' 0.2 M€/MW (0.05-0.3); applied to isothermal sinks (steam). The sheets' COP penalty for steam (-0.15) is not applied: COP comes from the Lorenz model"
+          }
+        }
+      },
+      "basis": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025): indirect cost of new hot-water piping added to each heat pump class (scenario)"
+    }
+  ],
+  "area_targeting": {
+    "film_coefficients_kW_per_m2K": {
+      "Chiller Water": 2.0,
+      "CIP Water": 2.0,
+      "Cow Heat": 2.0,
+      "Direct Use": 2.0,
+      "Preheat COW 1": 2.0,
+      "Preheat COW 2": 2.0,
+      "Preheat COW 3": 2.0,
+      "Preheat COW 4": 2.0,
+      "Preheat COW 5": 2.0,
+      "E1 Vapour Bleed": 5.0,
+      "E2 Condenser": 5.0,
+      "HT Flash": 5.0,
+      "HT Flash 2": 5.0,
+      "Milk Concentrate": 0.5,
+      "Raw Milk": 0.5
+    },
+    "film_coefficients_source": "Stampfli et al. (2018), CET 70, 901-906, Table 1 (dairy plant): liquid product 500, water 2,000, evaporation/condensation 5,000 W/(m2 K). Mapping to these streams is our assumption: water for chiller water, CIP, direct-use water and cow water (milk condensate); product for raw milk and concentrate; condensation for vapour bleed, condenser and flash vapours",
+    "dTmin_grid_K": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      15,
+      20,
+      25,
+      30
+    ],
+    "cost_law": [
+      {
+        "a": 1953.9,
+        "b": 260.52,
+        "c": 0.95,
+        "label": "Towler 2020 plate and frame (304 SS), bare (F = 1)",
+        "source": "Sinnott and Towler (2020), Table 6.6, plate and frame (304 SS), Ce = 1,350 + 180 S^0.95 USD (USGC, Jan 2007, CEPCI 509.7), valid 1-500 m2; x CEPCI 797.9/509.7 (2023; Chem. Eng. Sept 2024 p. 45) / 1.0816 USD/EUR (ECB, 2023)"
+      },
+      {
+        "a": 6838.6,
+        "b": 911.82,
+        "c": 0.95,
+        "label": "Towler 2020 plate and frame (304 SS) x 3.5 (Hand factor, installed)",
+        "source": "Sinnott and Towler (2020), Table 6.6, plate and frame (304 SS), Ce = 1,350 + 180 S^0.95 USD (USGC, Jan 2007, CEPCI 509.7), valid 1-500 m2; x CEPCI 797.9/509.7 (2023; Chem. Eng. Sept 2024 p. 45) / 1.0816 USD/EUR (ECB, 2023); x 3.5 Hand installation factor for heat exchangers (Table 6.3)"
+      }
+    ],
+    "specific_area_cost_sweep_EUR_per_m2": [],
+    "_cold_utility": "cold utility = chilled water: cost from the economics chiller_cop and electricity price"
+  },
+  "basis_hint": "No operating hours are published for this plant. Milk supply varies considerably during the year (Atkins et al., 2009), so New Zealand milk-powder plants do not run all year: 8000 h/year is an upper bound. Price bands for this 30 t/h plant (Walmsley et al., 2016): gas I5 (0.0420 €/kWh) above 6,400 h/year, I4 (0.0445) below; electricity IE (0.0897) between 2,500 and 8,680 h/year. Change the prices in step 6 if you change the hours.",
+  "retrofit_bounds": {
+    "baseline_status": "likely_at_target",
+    "note": "Walmsley et al. (2024), Sec. 3.2 and Fig. 4: the base case derives from the heat-integrated 'ultra-low energy' design of Walmsley et al. (2018, Energy 146, 67-81) and the raw milk is preheated 8 -> 95 °C by heat recovery, but the exchangers are not listed. Use the lower bound; the exact existing network may be in Walmsley et al. (2018)"
+  }
+}

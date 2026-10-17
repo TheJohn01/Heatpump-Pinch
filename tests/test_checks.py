@@ -11,7 +11,7 @@ from mvr_check import check, mvr_cop
 from regenerate_outputs import STEPS
 
 ROOT = Path(__file__).resolve().parents[1]
-BREWERY = ROOT / "cases" / "brewery_padulles2026.json"
+BREWERY = ROOT / "cases" / "brewery.json"
 
 
 @pytest.mark.parametrize("lift_K", [5.0, 10.0, 15.0])
@@ -29,7 +29,7 @@ def test_mvr_check_config2_matches_retrofit_increment() -> None:
     """Config. 2 in mvr_check.py must equal the HTHP increment of the retrofit table (same model, F = 1)."""
     df = check(BREWERY)
     row = df[(df["option"].str.startswith("config. 2")) & (df["capacity_factor_F"] == 1.0)].iloc[0]
-    inc = pd.read_csv(ROOT / "outputs" / "brewery_padulles2026" / "retrofit_increments.csv")
+    inc = pd.read_csv(ROOT / "outputs" / "brewery" / "retrofit_increments.csv")
     hthp = inc[inc["increment"].str.startswith("HTHP")].iloc[0]
     assert row["capex_EUR"] == pytest.approx(hthp["delta_capex_EUR"], rel=1e-6)
     assert row["savings_EUR"] == pytest.approx(hthp["delta_savings_EUR"], abs=2.0)

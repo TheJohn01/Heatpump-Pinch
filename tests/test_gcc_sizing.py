@@ -41,7 +41,7 @@ def _oracle_source(streams, unit, cap) -> float:
 
 def _cases():
     out = []
-    for name in ("brewery_padulles2026", "walmsley2024_milk_evaporator", "fourstream_example"):
+    for name in ("brewery", "milk_evaporator", "four_stream_process"):
         c = load_case(ROOT / "cases" / f"{name}.json")
         out.append((name, with_extra_shift(load_streams(c.stream_file), c.extra_shift_K)))
     return out

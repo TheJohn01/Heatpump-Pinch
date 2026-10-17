@@ -87,7 +87,7 @@ def test_brewery_full_design_hand_check(tmp_path):
     from analyse import analyse
     from pinch.case import load_case
     from pinch.validation import ROOT
-    path = ROOT / "cases" / "brewery_padulles2026.json"
+    path = ROOT / "cases" / "brewery.json"
     ec = json.loads(path.read_text(encoding="utf-8"))["economics"]
     p_gas, p_el, eta_b = ec["gas_price_EUR_per_kWh"], ec["electricity_price_EUR_per_kWh"], ec["boiler_efficiency"]
     s = analyse(load_case(path), output_root=tmp_path)
@@ -183,7 +183,7 @@ def test_milk_evaporator_capex_uses_dea_sheets():
     from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
-    c = load_case(ROOT / "cases" / "walmsley2024_milk_evaporator.json")
+    c = load_case(ROOT / "cases" / "milk_evaporator.json")
     res = compute(replace(c, basis={"type": "power", "operating_hours_per_year": 8000.0}))
     t = res.tables["heat_pump_design"]
     expected = sum(q * (950.0 if T <= 60 else 1550.0) for q, T in zip(t["Q_sink_kW"], t["T_sink_out_C"]))
@@ -213,7 +213,7 @@ def test_cooling_water_cost_follows_price_and_hours():
     from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
-    c = load_case(ROOT / "cases" / "fourstream_example.json")
+    c = load_case(ROOT / "cases" / "four_stream_process.json")
     for hours, p_el in [(8000.0, 0.1135), (6000.0, 0.0897)]:
         eco = {**c.economics, "operating_hours_per_year": hours, "electricity_price_EUR_per_kWh": p_el}
         at = compute(replace(c, basis={"type": "power", "operating_hours_per_year": hours}, economics=eco)).summary["area_targeting"]
@@ -225,7 +225,7 @@ def test_spray_dryer_steam_add_on_only_for_steam_heat_pump():
     from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
-    c = load_case(ROOT / "cases" / "walmsley2024_spray_dryer.json")
+    c = load_case(ROOT / "cases" / "spray_dryer.json")
     assert c.basis == {"type": "power", "operating_hours_per_year": 6000}        # published by Liang et al. (2022)
     cls = compute(c).summary["economics"]["heat_pump_cost_class"]
     assert "steam" not in cls["HTHP 120 °C (fluid beds)"]
