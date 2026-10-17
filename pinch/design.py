@@ -19,6 +19,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import numpy as np
+
 from pinch.case import SinkLevelSpec
 from pinch.heat_pump import HeatPump, IntegrationResult, add_units, integrate, max_useful_sink_duty
 from pinch.problem_table import ProblemTable, problem_table
@@ -120,6 +122,40 @@ def design_from_gcc(
         Qh_residual=residual,
         integration=integrate(stream_set, units),
     )
+
+
+def partial_designs(units, n_points: int = 201) -> list[tuple[float, tuple[HeatPump, ...]]]:
+    """Electrification curve: partial designs from no heat pump to the full design.
+
+    Heat-pump duty is added in order of decreasing COP (cheapest heat first); the last
+    unit at each point runs at part of its design duty. The only implementation of this
+    loop (redundancy audit, item 1.3): step 6 and the retrofit evaluate these points.
+
+    Parameters
+    ----------
+    units : iterable of HeatPump
+        Units of the full design.
+    n_points : int
+        Points from zero to the full duty, inclusive.
+
+    Returns
+    -------
+    list of (Q_sink_total, partial units)
+        Total sink duty at the point [energy unit] and the units at their partial duties.
+    """
+    ordered = sorted(units, key=lambda u: -u.COP)
+    total = sum(u.Q_sink for u in ordered)
+    points = []
+    for target in np.linspace(0.0, total, n_points):
+        remaining, partial = float(target), []
+        for u in ordered:
+            q = min(u.Q_sink, remaining)
+            if q <= 0:
+                break
+            remaining -= q
+            partial.append(u.with_sink_duty(q))
+        points.append((float(target), tuple(partial)))
+    return points
 
 
 # ------------------------------------------------------------ plausibility
