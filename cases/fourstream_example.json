@@ -132,9 +132,13 @@
         ],
         "isothermal_sink": true
       }
-    ],
-    "scenarios": {
-      "with hot-water piping (DEA indirect cost)": {
+    ]
+  },
+  "sensitivities": [
+    {
+      "label": "with hot-water piping (DEA indirect cost)",
+      "kind": "econ",
+      "value": {
         "cost_functions": {
           "hp_dea_1_1": {
             "alpha": 1140.0,
@@ -179,9 +183,10 @@
             "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheets 2.a and 2.b: 'Steam generation increases equipment cost by' 0.2 M€/MW (0.05-0.3); applied to isothermal sinks (steam). The sheets' COP penalty for steam (-0.15) is not applied: COP comes from the Lorenz model"
           }
         }
-      }
+      },
+      "basis": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025): indirect cost of new hot-water piping added to each heat pump class (scenario)"
     }
-  },
+  ],
   "area_targeting": {
     "film_coefficients_kW_per_m2K": {
       "Reactor 1 feed": 2.0,

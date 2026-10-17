@@ -105,10 +105,10 @@ def test_brewery_full_design_hand_check(tmp_path):
         savings += (3.4424 - 0.2212) / ec["chiller_cop"] * p_el * 1e6
     assert full["capex_EUR"] == pytest.approx(capex, rel=1e-3)
     assert full["savings_EUR"] == pytest.approx(savings, rel=1e-3)
-    assert s["economics"]["RQ3"]["ratio_used"] == pytest.approx(p_el / p_gas, abs=1e-3)
-    # every scenario changes only what it names: the base scenario values reappear when nothing is overridden
-    names = [r["scenario"] for r in s["economics"]["scenarios"]]
-    assert len(names) == len(ec["scenarios"])
+    assert s["economics"]["grass_roots_reference"]["ratio_used"] == pytest.approx(p_el / p_gas, abs=1e-3)
+    # the grass-roots table holds exactly the economics rows of the case's single sensitivity list (audit 1.1)
+    econ_labels = [r.label for r in load_case(path).sensitivities if r.kind == "econ"]
+    assert [r["sensitivity"] for r in s["economics"]["grass_roots_sensitivities"]] == econ_labels
     eta_rows = s["eta_lorenz_sensitivity"]
     cops = [r["COP_system"] for r in eta_rows]
     assert cops == sorted(cops)                              # higher Lorenz efficiency, higher COP

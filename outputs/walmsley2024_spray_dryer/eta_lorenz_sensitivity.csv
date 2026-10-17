@@ -1,3 +1,3 @@
-eta_lorenz,COP_system,W_total_kW,price_ratio,boiler_efficiency,gas_EF_kg_per_kWh,grid_EF_kg_per_kWh,co2_price_EUR_per_t,chiller_cop,full_capex_EUR,full_savings_EUR,full_payback_years,full_npv_EUR,full_co2_avoided_t,full_primary_energy_reduction,RQ1_max_fraction_payback_ok,RQ1_fraction_max_NPV,RQ3_break_even_ratio_NPV,RQ3_break_even_ratio_payback
+eta_lorenz,COP_system,W_total_kW,price_ratio,boiler_efficiency,gas_EF_kg_per_kWh,grid_EF_kg_per_kWh,co2_price_EUR_per_t,chiller_cop,full_capex_EUR,full_savings_EUR,full_payback_years,full_npv_EUR,full_co2_avoided_t,full_primary_energy_reduction,grass_roots_hp_share_payback_ok,grass_roots_hp_share_max_NPV,full_design_break_even_ratio_NPV,full_design_break_even_ratio_payback
 0.45,1.373,2718.1946,2.016,0.845,0.182,0.107,0.0,,6134727.0,-345935.0,inf,-8805944.0,3078.0,-0.2407,0.0,0.0,0.444,-0.151
 0.52,1.587,2352.2838,2.016,0.845,0.182,0.107,0.0,,6134727.0,-149002.0,inf,-7285278.0,3313.0,-0.1,0.0,0.0,0.514,-0.175

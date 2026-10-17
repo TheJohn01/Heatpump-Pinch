@@ -93,7 +93,7 @@ for confidential plant data, run the app locally (`streamlit run app.py`).
 | 3. ΔTmin / cost trade-off | Done: Bath area target, units target, supertargeting; validated on the OU area example (published error found and corrected). Brewery RQ2 with the Sinnott and Towler (2020) Table 6.6 plate-and-frame law (bare and ×3.5 installed; Stampfli et al. 2018 as a cross-check only) plus a sweep; flat optimum reported as the 1 % range |
 | 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b done: CoolProp cycle model (single stage, SLHX, expander, two-stage, cascade), practical limits (Annex 58), working-fluid screening, cycle-based η_L and economics; validated on Andersen et al. (2024) Appendix A |
 | 5. HEN retrofit | Done: existing-network evaluation (direct and storage-based matches), pinch diagnostics (energy gap = cross-pinch + heaters below + coolers above), network-constrained heat pump sizing, retrofit options with exchanger and storage costs; brewery: paper's Pfaduko + HR tank reproduced (11.3 kWh/hl) |
-| 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; RQ1 electrification curve; RQ3 break-even ratio; named scenarios and Lorenz-efficiency sensitivity; paper Sec. 5.2 statements and Appendix B (Case DK1) NPV/payback reproduced |
+| 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; electrification curve and break-even ratio (grass-roots reference); one sensitivity list per case and Lorenz-efficiency sensitivity; paper Sec. 5.2 statements and Appendix B (Case DK1) NPV/payback reproduced |
 
 ## Layout
 
@@ -231,8 +231,10 @@ the new hot-water piping cost. Price bands are checked at site level where the s
 30 t/h milk-powder plant, Walmsley et al. 2016); the case notes say how the bands move with the hours. Padullés et al.'s single function
 (Table 3) stays for the brewery, whose results it reproduces.
 
-A case lists further values under `economics.scenarios` (each scenario overrides named
-parameters and reports the full design, RQ1 and RQ3 again) and further Lorenz efficiencies under
+A case has one sensitivity list, `sensitivities` (`{label, kind, value, basis}` rows; kinds in
+`pinch/sensitivity.py`). `consolidate_rq.py` evaluates every row for RQ1-RQ3 against today's site;
+the grass-roots reference of step 6 (a site already at the energy target, not the RQ1 answer)
+evaluates its `econ` rows, under the same labels. Further Lorenz efficiencies go under
 `heat_pumps.eta_lorenz_sensitivity` (heat pumps re-sized and re-costed). `heat_pump_design.csv`
 also gives the Lorenz efficiency predicted by the Andersen et al. (2024) correlation for each unit,
 with its validity-range flags, as a check on the assumed value.

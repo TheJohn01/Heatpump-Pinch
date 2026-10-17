@@ -99,16 +99,14 @@
       "HP warm (milk preheat)": "hp_dea_1_1",
       "HTHP 105 °C": "hp_dea_2a + dea_lift_2a + dea_steam"
     },
-    "RQ1": {
-      "max_fraction_with_payback_below_threshold": 0.245,
-      "_definition": "fraction = heat pump heat / Q̇h,min of the site with heat recovery installed",
+    "grass_roots_reference": {
+      "_definition": "grass-roots reference, not the answer to RQ1 or RQ3: heat pump heat / Q̇h,min for a site already recovering heat at the energy target. RQ1-RQ3 against today's site: consolidate_rq.py",
       "threshold_years": 5.0,
-      "fraction_with_max_NPV": 0.18,
-      "max_NPV_EUR": 819720.0
-    },
-    "RQ3": {
-      "break_even_ratio_NPV": 1.373,
-      "break_even_ratio_payback": 0.64,
+      "hp_share_of_Qh_min_payback_ok": 0.245,
+      "hp_share_of_Qh_min_max_NPV": 0.18,
+      "max_NPV_EUR": 819720.0,
+      "full_design_break_even_ratio_NPV": 1.373,
+      "full_design_break_even_ratio_payback": 0.64,
       "ratio_used": 2.136
     },
     "results": {
@@ -128,9 +126,9 @@
         "gas_reduction": 1.0
       }
     },
-    "scenarios": [
+    "grass_roots_sensitivities": [
       {
-        "scenario": "with hot-water piping (DEA indirect cost)",
+        "sensitivity": "with hot-water piping (DEA indirect cost)",
         "price_ratio": 2.136,
         "boiler_efficiency": 0.845,
         "gas_EF_kg_per_kWh": 0.182,
@@ -143,10 +141,11 @@
         "full_npv_EUR": -2848227.0,
         "full_co2_avoided_t": 4852.0,
         "full_primary_energy_reduction": 0.2528,
-        "RQ1_max_fraction_payback_ok": 0.235,
-        "RQ1_fraction_max_NPV": 0.18,
-        "RQ3_break_even_ratio_NPV": 1.385,
-        "RQ3_break_even_ratio_payback": 0.539
+        "grass_roots_hp_share_payback_ok": 0.235,
+        "grass_roots_hp_share_max_NPV": 0.18,
+        "full_design_break_even_ratio_NPV": 1.385,
+        "full_design_break_even_ratio_payback": 0.539,
+        "basis": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025): indirect cost of new hot-water piping added to each heat pump class (scenario)"
       }
     ]
   },
@@ -167,10 +166,10 @@
       "full_npv_EUR": -3792302.0,
       "full_co2_avoided_t": 4713.0,
       "full_primary_energy_reduction": 0.1744,
-      "RQ1_max_fraction_payback_ok": 0.23,
-      "RQ1_fraction_max_NPV": 0.18,
-      "RQ3_break_even_ratio_NPV": 1.236,
-      "RQ3_break_even_ratio_payback": 0.576
+      "grass_roots_hp_share_payback_ok": 0.23,
+      "grass_roots_hp_share_max_NPV": 0.18,
+      "full_design_break_even_ratio_NPV": 1.236,
+      "full_design_break_even_ratio_payback": 0.576
     },
     {
       "eta_lorenz": 0.52,
@@ -188,10 +187,10 @@
       "full_npv_EUR": -2580785.0,
       "full_co2_avoided_t": 4900.0,
       "full_primary_energy_reduction": 0.28,
-      "RQ1_max_fraction_payback_ok": 0.25,
-      "RQ1_fraction_max_NPV": 0.18,
-      "RQ3_break_even_ratio_NPV": 1.428,
-      "RQ3_break_even_ratio_payback": 0.666
+      "grass_roots_hp_share_payback_ok": 0.25,
+      "grass_roots_hp_share_max_NPV": 0.18,
+      "full_design_break_even_ratio_NPV": 1.428,
+      "full_design_break_even_ratio_payback": 0.666
     }
   ],
   "cycle_based_design": {},
