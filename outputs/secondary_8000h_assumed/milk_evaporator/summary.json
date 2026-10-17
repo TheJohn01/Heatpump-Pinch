@@ -1,0 +1,334 @@
+{
+  "case": "milk_evaporator",
+  "plant": "Milk evaporator",
+  "description": "Dairy milk evaporator: two-effect MVR evaporation with milk heat treatment, 247 t/h raw milk (30 t/h milk powder); evaporation system in isolation. Loads in kW.",
+  "energy_unit": "kW",
+  "targets": {
+    "Q_hot_total": 21163.5,
+    "Q_cold_total": 24249.7,
+    "Qh_min": 3542.2,
+    "Qc_min": 456.0,
+    "heat_recovery": 20707.5,
+    "pinch_T_star_C": [
+      10.5,
+      7.5
+    ],
+    "T_star_range_C": [
+      97.5,
+      3.5
+    ]
+  },
+  "heat_pump_design": {
+    "eta_lorenz": 0.5,
+    "units": [
+      "HP warm (milk preheat)",
+      "HTHP 105 °C"
+    ],
+    "levels_skipped_no_useful_duty": [],
+    "Q_sink_total": 3542.2,
+    "W_total": 1461.7724,
+    "COP_system": 2.423,
+    "Qh_residual": 0.0,
+    "fraction_of_Qh_min_electrified": 1.0,
+    "cold_utility_replaced": -0.0,
+    "source_external_total": 2080.4276
+  },
+  "annual_MWh_per_year": {
+    "basis": {
+      "type": "power",
+      "operating_hours_per_year": 8000
+    },
+    "Qh_min": 28337.6,
+    "Qc_min": 3648.0,
+    "heat_pump_electricity": 11694.2,
+    "residual_hot_utility": 0.0
+  },
+  "warnings": {},
+  "provenance": {
+    "data source": "Walmsley, Lincoln, Padullés, Cleland (2024), Energies 17, 2838, Table 2.",
+    "stream data": "published (Table 2); Table 2 dT_cont used (chiller water 0.5 K; the text's pinch range implies 2.5 K, which leaves the targets unchanged)",
+    "eta_lorenz": "published: 50 % exergetic (Carnot) efficiency (Sec. 4.2); reproduces the paper's simple-design COP 2.1",
+    "source_T_C": "published: ambient / dead state 15 °C (Sec. 2), the source of the paper's simple design",
+    "sink levels": "105 °C published (simple design, Sec. 4.2.3); the 15-55 °C level is assumed (illustrative, follows the low-temperature part of the GCC)",
+    "basis": "ASSUMED for reproduce_secondary_economics.py: 8000 h/year (case basis_hint). Original: none: operating hours not given",
+    "ambient_T_C": "published: dead state 15 °C (Sec. 2)",
+    "economics": "assumed: no economic data in the source (see economics.sources)",
+    "film coefficients": "Stampfli et al. (2018) dairy values, stream mapping assumed",
+    "eta_lorenz_sensitivity": "0.45-0.52: Lorenz (Carnot) efficiencies implied by the DEA catalogue HTHP sheets 2.a/2.b (COP 4.45/2.75/2.4/2.05 at lifts of 40/65/80/100 K), as for the brewery",
+    "COP check": "HTHP 105 °C (steam, 90 K lift): COP 2.10 vs DEA sheet 2.a 2.22 at 90 K minus 0.15 for steam = 2.07 (+1.5 %). Warm-water heat pump 15 -> 55 °C: Lorenz COP 7.86 vs DEA sheet 1.1 'up to 60 °C, lift 40 K' 5.33 (+47 %; the Lorenz model credits the full 40 K sink glide, which needs a glide-matched cycle such as transcritical CO2); with COP 5.33 RQ1 falls from 26 % to 23 %",
+    "steam sink": "verified: the 105 °C level supplies the Direct Steam Injection that follows the 8 -> 95 °C preheat (Walmsley et al. 2024, Sec. 3.2), so the DEA steam-generation add-on applies"
+  },
+  "economics": {
+    "parameters": {
+      "gas_price_EUR_per_kWh": 0.042,
+      "electricity_price_EUR_per_kWh": 0.0897,
+      "boiler_efficiency": 0.845,
+      "operating_hours_per_year": 8000.0,
+      "discount_rate": 0.05,
+      "horizon_years": 10,
+      "payback_threshold_years": 5.0,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.107,
+      "co2_price_EUR_per_t": 0.0,
+      "pef_electricity": 1.9,
+      "pef_gas": 1.0,
+      "chiller_cop": 5.27
+    },
+    "price_ratio": 2.136,
+    "refrigeration_duty": 456.0,
+    "default_sources": {
+      "electricity_to_gas_ratio": "published: Padullés et al. (2026), Sec. 5.2, 'current European ratios of around 2'",
+      "boiler_efficiency": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): total efficiency, net, annual average 93.9 % (range 91.9-94.9 %), steam boiler with economiser; converted to the gross (GCV) basis of Eurostat gas prices with NCV/GCV = 0.90: 0.939 x 0.90 = 0.845. Earlier default 0.817 (US DOE Steam Tip Sheet #15, HHV) kept as sensitivity",
+      "discount_rate": "published: Padullés et al. (2026), Sec. 5.2",
+      "horizon_years": "published: Padullés et al. (2026), Sec. 5.2 (NPV10)",
+      "payback_threshold_years": "research question 1 (industry practice 3-5 years: Cooremans, cited in Padullés et al. 2026)",
+      "gas_EF_kg_per_kWh": "IPCC 2006 Guidelines, Vol. 2, Ch. 2, Table 2.2: natural gas, stationary combustion, 56,100 kg CO2/TJ (NCV) = 0.202 kg/kWh NCV = 0.182 kg/kWh GCV (NCV/GCV = 0.90), direct combustion only, matching the scope of production-based grid factors. Padullés et al. (2026, Sec. 5.3) use 0.219 (scope not stated); report it as a sensitivity",
+      "grid_EF_kg_per_kWh": "APA, 'Fator de Emissão da Eletricidade - 2025', Table T1: Portugal 2023, 0.107 t CO2eq/MWh (annual, production-based, direct emissions). Sensitivities: mainland 2023 0.092; 5-year moving average 0.167 (Table T2); Electricity Maps 2025 flow-traced 0.1172",
+      "co2_price_EUR_per_t": "0 by default (site may be outside the EU ETS); sensitivity uses the EUA price",
+      "pef_electricity": "published: Commission Delegated Regulation (EU) 2023/807 (EED default)",
+      "pef_gas": "convention: primary energy of a fuel = its final energy, on the net calorific value (NCV) basis of energy statistics",
+      "gas_ncv_over_gcv": "IPCC (1996) Revised Guidelines, Reference Manual, Ch. 1, Table 1-4 note a: GCV-NCV 10 % for natural gas. Gas is bought on GCV (Regulation (EU) 2016/1952); primary energy is counted on NCV, the basis of the EU primary-energy factors (Directive 2012/27/EU Annex IV; supervisor review B5)",
+      "refrigeration_credit_fraction": "share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads)",
+      "boiler_variable_om_EUR_per_MWh": "Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up"
+    },
+    "case_sources": {
+      "prices": "Eurostat nrg_pc_203 (gas) and nrg_pc_205 (electricity), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh, gas on GCV (data/sources/eurostat_portugal_prices.csv). The plant is not in Portugal: these prices place it in the dissertation's context. Bands: gas I3 0.0512, I4 0.0445, I5 0.0420; electricity ID 0.1135, IE 0.0897, IF 0.0789. Band check at 8000 h/year, site level (the site buys the energy): Walmsley et al. (2016), 'Total Site Utility Systems Optimisation for Milk Powder Production', CET 52, 235-240, DOI 10.3303/CET1652040: 30 t/h milk powder plant, electricity 210-220 kWh/t powder (literature 150-400), fuel 5,200 MJ/t powder (base case), and Walmsley et al. (2024): this evaporator belongs to a 30 t/h plant. Gas 5.2 GJ/t x 30 t/h x 8000 h = 1.25 million GJ (I5); electricity 220 kWh/t x 30 x 8000 = 52.8 GWh + heat pumps 11.7 GWh (IE). I4 below 6,400 h/year. Borderline gas band: the 5.2 GJ/t is the base-case fuel use; the improved design in the same paper (Table 1, design 1.0: 3.66 GJ/t thermal) gives 0.88 million GJ at 8000 h, band I4 (0.0445)",
+      "heat_pump_cost": "Danish Energy Agency catalogue (2025) by sink temperature, linear in capacity, plus the catalogue's add-ons for lift above 75 K (sink outlet minus source outlet) and steam generation (isothermal sinks). Replaces Padullés et al. (2026, Table 3), which is fitted to brewery heat pumps and gives 0.75-0.88 M€/MW for 2-3 MW units, below the catalogue range 0.9-1.5 M€/MW for sinks up to 125 °C. Indirect cost of new hot-water piping (0.23 M€/MW, 'relevant when needing to install new hot water piping instead of existing steam piping') is a scenario, not in the base",
+      "chiller_cop": "Sinnott and Towler (2020), Sec. 6.4.4, Eq. 6.20: real COP about 0.6 x Carnot (as for the brewery). Evaporator: chilled water leaves at 4 °C (Walmsley et al. 2024, Table 2) minus 5 K refrigerated-brine approach (Sec. 12.7.3: 3-5 K) = -1 °C; condenser 30 °C (ambient 15 °C + 10 K cooling-water rise + 5 K approach): 0.6 x 272.15/31 = 5.27. Q̇c,min (456 kW) is entirely this chilled-water load"
+    },
+    "heat_pump_cost_class": {
+      "HP warm (milk preheat)": "hp_dea_1_1",
+      "HTHP 105 °C": "hp_dea_2a + dea_lift_2a + dea_steam"
+    },
+    "grass_roots_reference": {
+      "_definition": "grass-roots reference, not the answer to RQ1 or RQ3: heat pump heat / Q̇h,min for a site already recovering heat at the energy target. RQ1-RQ3 against today's site: consolidate_rq.py",
+      "threshold_years": 5.0,
+      "hp_share_of_Qh_min_payback_ok": 0.245,
+      "hp_share_of_Qh_min_max_NPV": 0.18,
+      "max_NPV_EUR": 819720.0,
+      "full_design_break_even_ratio_NPV": 1.373,
+      "full_design_break_even_ratio_payback": 0.64,
+      "ratio_used": 2.136
+    },
+    "results": {
+      "full design (heat recovery installed)": {
+        "option": "100.0 %",
+        "capex_EUR": 5104568.0121,
+        "opex_EUR": 1218947.01,
+        "savings_EUR": 286496.4769,
+        "payback_years": 17.8172,
+        "npv_EUR": -2892318.1596,
+        "gas_fuel_MWh": 0.0,
+        "electricity_MWh": 12386.3994,
+        "co2_t": 1325.3447,
+        "co2_avoided_t": 4852.2059,
+        "primary_energy_MWh": 23534.1589,
+        "primary_energy_reduction": 0.2528,
+        "gas_reduction": 1.0
+      }
+    },
+    "grass_roots_sensitivities": [
+      {
+        "sensitivity": "with hot-water piping (indirect cost)",
+        "price_ratio": 2.136,
+        "boiler_efficiency": 0.845,
+        "gas_EF_kg_per_kWh": 0.182,
+        "grid_EF_kg_per_kWh": 0.107,
+        "co2_price_EUR_per_t": 0.0,
+        "chiller_cop": 5.27,
+        "full_capex_EUR": 5893551.0,
+        "full_savings_EUR": 394383.0,
+        "full_payback_years": 14.94,
+        "full_npv_EUR": -2848227.0,
+        "full_co2_avoided_t": 4852.0,
+        "full_primary_energy_reduction": 0.2528,
+        "grass_roots_hp_share_payback_ok": 0.235,
+        "grass_roots_hp_share_max_NPV": 0.18,
+        "full_design_break_even_ratio_NPV": 1.385,
+        "full_design_break_even_ratio_payback": 0.539,
+        "basis": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025): indirect cost of new hot-water piping added to each heat pump class (scenario)"
+      }
+    ]
+  },
+  "eta_lorenz_sensitivity": [
+    {
+      "eta_lorenz": 0.45,
+      "COP_system": 2.181,
+      "W_total_kW": 1624.1916,
+      "price_ratio": 2.136,
+      "boiler_efficiency": 0.845,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.107,
+      "co2_price_EUR_per_t": 0.0,
+      "chiller_cop": 5.27,
+      "full_capex_EUR": 5104568.0,
+      "full_savings_EUR": 169944.0,
+      "full_payback_years": 30.04,
+      "full_npv_EUR": -3792302.0,
+      "full_co2_avoided_t": 4713.0,
+      "full_primary_energy_reduction": 0.1744,
+      "grass_roots_hp_share_payback_ok": 0.23,
+      "grass_roots_hp_share_max_NPV": 0.18,
+      "full_design_break_even_ratio_NPV": 1.236,
+      "full_design_break_even_ratio_payback": 0.576
+    },
+    {
+      "eta_lorenz": 0.52,
+      "COP_system": 2.52,
+      "W_total_kW": 1405.5504,
+      "price_ratio": 2.136,
+      "boiler_efficiency": 0.845,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.107,
+      "co2_price_EUR_per_t": 0.0,
+      "chiller_cop": 5.27,
+      "full_capex_EUR": 5104568.0,
+      "full_savings_EUR": 326841.0,
+      "full_payback_years": 15.62,
+      "full_npv_EUR": -2580785.0,
+      "full_co2_avoided_t": 4900.0,
+      "full_primary_energy_reduction": 0.28,
+      "grass_roots_hp_share_payback_ok": 0.25,
+      "grass_roots_hp_share_max_NPV": 0.18,
+      "full_design_break_even_ratio_NPV": 1.428,
+      "full_design_break_even_ratio_payback": 0.666
+    }
+  ],
+  "cycle_based_design": {},
+  "retrofit_bounds": {
+    "baseline_status": "likely_at_target",
+    "baseline_meaning": "the source describes a heat-integrated plant whose exchangers are not published: the lower bound ('already at target') is the realistic estimate; 'no heat recovery' greatly overstates the savings",
+    "note": "Walmsley et al. (2024), Sec. 3.2 and Fig. 4: the base case derives from the heat-integrated 'ultra-low energy' design of Walmsley et al. (2018, Energy 146, 67-81) and the raw milk is preheated 8 -> 95 °C by heat recovery, but the exchangers are not listed. Use the lower bound; the exact existing network may be in Walmsley et al. (2018)",
+    "no_heat_recovery": {
+      "network": "no heat recovery (all utilities)",
+      "Qh": 24249.7,
+      "Qc": 21163.5,
+      "Qh_min": 3542.2,
+      "Qc_min": 456.0,
+      "energy_gap": 20707.5,
+      "heat_recovered": 0.0,
+      "cross_pinch_in_matches": 0.0,
+      "heaters_below_pinch": 0.0,
+      "coolers_above_pinch": 20707.5,
+      "refrigeration_below_ambient": 1393.5163,
+      "pinch_T_star_C": 10.5
+    },
+    "Qh_min": 3542.2,
+    "new_heat_recovery_network": {
+      "cost_law": "Towler 2020 plate and frame (304 SS) x 3.5 (Hand factor, installed)",
+      "area_m2": 4698.6,
+      "units": 13,
+      "capex_EUR": 3280246.0
+    },
+    "options": [
+      {
+        "option": "Heat pumps only",
+        "baseline": "no heat recovery",
+        "heat_pumps": "HP warm (milk preheat) 1.251e+04 (COP 7.86), HTHP 105 °C 1.174e+04 (COP 2.10)",
+        "Qh_baseline": 24249.7,
+        "Qh_after": 0.0,
+        "capex_EUR": 30078366.0,
+        "savings_EUR": 4029301.0,
+        "payback_years": 7.46,
+        "npv_EUR": 1034831.0,
+        "gas_reduction_vs_baseline": 1.0,
+        "co2_avoided_t": 35640.0,
+        "break_even_ratio_NPV": 2.191
+      },
+      {
+        "option": "New heat recovery at target",
+        "baseline": "no heat recovery",
+        "heat_pumps": "none",
+        "Qh_baseline": 24249.7,
+        "Qh_after": 3542.2,
+        "capex_EUR": 3280246.0,
+        "savings_EUR": 8565409.0,
+        "payback_years": 0.38,
+        "npv_EUR": 62859570.0,
+        "gas_reduction_vs_baseline": 0.8539,
+        "co2_avoided_t": 35833.0,
+        "break_even_ratio_NPV": Infinity
+      },
+      {
+        "option": "New heat recovery at target + heat pumps",
+        "baseline": "no heat recovery",
+        "heat_pumps": "HP warm (milk preheat) 643.1 (COP 7.86), HTHP 105 °C 2899 (COP 2.10)",
+        "Qh_baseline": 24249.7,
+        "Qh_after": 0.0,
+        "capex_EUR": 8384814.0,
+        "savings_EUR": 8851905.0,
+        "payback_years": 0.95,
+        "npv_EUR": 59967251.0,
+        "gas_reduction_vs_baseline": 1.0,
+        "co2_avoided_t": 40685.0,
+        "break_even_ratio_NPV": 20.138
+      },
+      {
+        "option": "Lower bound: plant already at target, heat pumps only",
+        "baseline": "heat recovery at target",
+        "heat_pumps": "HP warm (milk preheat) 643.1 (COP 7.86), HTHP 105 °C 2899 (COP 2.10)",
+        "Qh_baseline": 3542.2,
+        "Qh_after": 0.0,
+        "capex_EUR": 5104568.0,
+        "savings_EUR": 286496.0,
+        "payback_years": 17.82,
+        "npv_EUR": -2892318.0,
+        "gas_reduction_vs_baseline": 1.0,
+        "co2_avoided_t": 4852.0,
+        "break_even_ratio_NPV": 1.373
+      }
+    ],
+    "assumptions": {
+      "new network": "area target (Bath formula, case film coefficients) and units target at the case's temperature shifts, costed per unit with the cost law",
+      "heat pumps": "case sink levels; on the no-recovery plant they are sized on the network-constrained stream set (no process-to-process transfer)"
+    }
+  },
+  "area_targeting": {
+    "hot_utility_cost_EUR_per_kW_year": 397.63,
+    "cold_utility_cost_EUR_per_kW_year": 136.16698292220116,
+    "crf_per_year": 0.1295,
+    "film_coefficients_source": "Stampfli et al. (2018), CET 70, 901-906, Table 1 (dairy plant): liquid product 500, water 2,000, evaporation/condensation 5,000 W/(m2 K). Mapping to these streams is our assumption: water for chiller water, CIP, direct-use water and cow water (milk condensate); product for raw milk and concentrate; condensation for vapour bleed, condenser and flash vapours",
+    "RQ2": [
+      {
+        "cost_law": "Towler 2020 plate and frame (304 SS), bare (F = 1)",
+        "a": 1953.9,
+        "b": 260.52,
+        "c": 0.95,
+        "dTmin_opt_K": 5.0,
+        "TAC_min_EUR": 1591962.0,
+        "area_m2": 4698.6,
+        "Qh_min_kW": 3542.2,
+        "at_grid_edge": false,
+        "dTmin_within_1pct_K": [
+          1.0,
+          5.0
+        ],
+        "dTmin_within_2pct_K": [
+          1.0,
+          5.0
+        ],
+        "energy_share_of_TAC": 0.924
+      },
+      {
+        "cost_law": "Towler 2020 plate and frame (304 SS) x 3.5 (Hand factor, installed)",
+        "a": 6838.6,
+        "b": 911.82,
+        "c": 0.95,
+        "dTmin_opt_K": 5.0,
+        "TAC_min_EUR": 1895395.0,
+        "area_m2": 4698.6,
+        "Qh_min_kW": 3542.2,
+        "at_grid_edge": false,
+        "dTmin_within_1pct_K": [
+          1.0,
+          5.0
+        ],
+        "dTmin_within_2pct_K": [
+          1.0,
+          5.0
+        ],
+        "energy_share_of_TAC": 0.776
+      }
+    ]
+  }
+}

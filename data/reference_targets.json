@@ -1,7 +1,7 @@
 {
-  "fourstream_example": {
+  "four_stream_process": {
     "source": "University of Oklahoma, ChE design course notes 'Minimum Utility', Example 1.1 (https://ou.edu/class/che-design/a-design/Minimum%20Utility.pdf). Classic example also in Kemp (2007), Ch. 2 (not consulted).",
-    "data_file": "data/fourstream_example.csv",
+    "data_file": "data/four_stream_process_streams.csv",
     "extra_shift_K": 0,
     "energy_unit": "MW",
     "targets": {
@@ -108,9 +108,9 @@
       }
     }
   },
-  "walmsley2024_milk_evaporator": {
+  "milk_evaporator": {
     "source": "Walmsley et al. (2024), Energies 17, 2838, Table 2 and Fig. 8 (Q_D = 3.54 MW, Q_S = 0.46 MW). Values published to 0.01 MW.",
-    "data_file": "data/walmsley2024_milk_evaporator.csv",
+    "data_file": "data/milk_evaporator_streams.csv",
     "extra_shift_K": 0,
     "energy_unit": "kW",
     "targets": {

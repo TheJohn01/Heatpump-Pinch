@@ -1,0 +1,644 @@
+{
+  "name": "brewery",
+  "plant": "Brewery",
+  "description": "Brewery: 12 process streams, loads per hectolitre of beer.",
+  "stream_file": "../data/brewery_streams.csv",
+  "extra_shift_K": 0,
+  "ambient_T_C": 15,
+  "heat_pumps": {
+    "eta_lorenz": 0.5,
+    "source_T_C": -1,
+    "sink_levels": [
+      {
+        "name": "Warm-water HP",
+        "T_sink_in_C": 18,
+        "T_sink_out_C": 82
+      },
+      {
+        "name": "HTHP (wort boiling)",
+        "T_sink_C": "gcc_max"
+      }
+    ],
+    "eta_lorenz_sensitivity": [
+      0.45,
+      0.55,
+      0.63
+    ],
+    "cycle_screening": {
+      "fluids": [
+        "CarbonDioxide",
+        "Ammonia",
+        "n-Propane",
+        "Propylene",
+        "IsoButane",
+        "n-Butane",
+        "n-Pentane",
+        "DimethylEther",
+        "R1234ze(E)",
+        "R1233zd(E)"
+      ],
+      "layouts": [
+        "std",
+        "slhx",
+        "two-stg",
+        "two-stg2"
+      ],
+      "cascades": [
+        [
+          "Ammonia",
+          "n-Butane"
+        ],
+        [
+          "Ammonia",
+          "IsoButane"
+        ],
+        [
+          "Ammonia",
+          "n-Pentane"
+        ],
+        [
+          "Ammonia",
+          "R1233zd(E)"
+        ],
+        [
+          "n-Propane",
+          "n-Butane"
+        ],
+        [
+          "n-Propane",
+          "n-Pentane"
+        ],
+        [
+          "R1234ze(E)",
+          "R1233zd(E)"
+        ],
+        [
+          "CarbonDioxide",
+          "n-Butane"
+        ]
+      ],
+      "units": [
+        "HTHP (wort boiling)"
+      ],
+      "_note": "Candidates from Andersen et al. (2024), Table 2, available in CoolProp. R1234ze(Z) omitted: outside CoolProp's range at the -7 °C evaporation needed. Cascades and two-stage cycles only for the HTHP (lift 104 K).",
+      "limits": {
+        "max_pressure_ratio_per_stage": 10.0,
+        "ammonia_max_pressure_bar": 76.0,
+        "ammonia_max_discharge_C": 110.0,
+        "_source": "IEA HPT Annex 58 Task 1 report (2023): Table 1-3 (single-stage pressure ratio up to 10 for piston/scroll; conservative, screw allows > 20) and Sec. 1.2.1 (ammonia compressors about 76 bar, 110 °C)"
+      }
+    },
+    "_eta_lorenz": "educated approximation, see provenance.eta_lorenz"
+  },
+  "basis": {
+    "type": "per_product",
+    "production_per_year": 1000000.0,
+    "production_unit": "hl"
+  },
+  "provenance": {
+    "data source": "Padullés et al. (2026), Energy Conversion and Management 357, 121292, Table 2.",
+    "stream data": "published (Table 2); 'Amb.' taken as 15 °C (Sec. 4.3.1), an inference",
+    "eta_lorenz": "EDUCATED APPROXIMATION (author decision, 2026-10-17): 0.50, not a published or measured value. It lies inside the range implied by the Danish Energy Agency HTHP sheets (0.45-0.52) and between our cycle model's warm-water heat pump (0.48-0.49) and high-temperature cascade (0.54-0.56). Padullés et al. (2026, Sec. 4.3.1) use 0.55 (kept for the paper reproduction and as a sensitivity row)",
+    "source_T_C": "published cold-utility temperature (Sec. 4.1); used for all sources, which bounds W from above",
+    "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
+    "basis": "assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)",
+    "ambient_T_C": "published: Sec. 4.3.1",
+    "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1, mapping assumed; cost laws: Sinnott and Towler (2020) Table 6.6 plate and frame (primary) and Stampfli et al. (2018) Table 2, bare and x3.5 (Hand factor, Towler Table 6.3); cold utility cost from chiller COP",
+    "cycle_screening": "step 4b: cycle model with Andersen et al. (2024) Table 3 assumptions; validated against their Appendix A (see tests/test_cycle.py)",
+    "retrofit": "step 5, option (a): existing network = Padullés et al. (2026) Sec. 4.2 (Pfaduko + wort-cooling HR tank), data/brewery_networks.json",
+    "warm-water heat pump name": "'Warm-water HP' = the CO2 heat pump of Padullés et al. (2026, config. 2); our cycle screening selects propane with SLHX as the practical fluid (step 4b), so the unit is named by its duty"
+  },
+  "economics": {
+    "gas_price_EUR_per_kWh": 0.0512,
+    "electricity_price_EUR_per_kWh": 0.1135,
+    "boiler_efficiency": 0.845,
+    "operating_hours_per_year": 8000,
+    "discount_rate": 0.05,
+    "horizon_years": 10,
+    "payback_threshold_years": 5,
+    "grid_EF_kg_per_kWh": 0.107,
+    "co2_price_EUR_per_t": 0,
+    "heat_recovery_equipment": [
+      [
+        "hr_tank",
+        520.8
+      ]
+    ],
+    "sources": {
+      "prices": "Eurostat nrg_pc_205 (electricity, band ID 2,000-19,999 MWh) and nrg_pc_203 (gas, band I3 10,000-99,999 GJ), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh (gas on GCV). Parsed copy: data/sources/eurostat_portugal_prices.csv. Band check: gas fuel ~ 1.2e7 kWh/year = 43,000 GJ (I3); heat pump electricity alone 3.4 GWh/year (ID); site electricity 7.5-11.5 kWh/hl for breweries above 1 Mhl/y (IFC EHS Guidelines for Breweries 2007, Table 3) + heat pumps 3.4-3.9 kWh/hl = 11-15 GWh/year: band ID. ID is also the conservative choice (dearer than IE)",
+      "boiler_efficiency": "DEA Technology Data - Industrial Process Heat, sheet 6.1 (2025): 93.9 % net (NCV) annual average, steam boiler with economiser; x 0.90 (NCV/GCV) = 0.845 on the GCV basis of the gas price. Gas prices are on GCV: Regulation (EU) 2016/1952, Annex I, point 4; NCV/GCV = 0.90: IPCC (1996) Reference Manual, Ch. 1, Table 1-4 note a (10 % for natural gas)",
+      "operating_hours_per_year": "published: Padullés et al. (2026), Sec. 5.1",
+      "discount_rate, horizon_years": "published: Padullés et al. (2026), Sec. 5.2",
+      "payback_threshold_years": "research question 1 (5 years)",
+      "grid_EF_kg_per_kWh": "APA, Fator de Emissao da Eletricidade - 2025, Table T1: Portugal 2023 = 0.107 t CO2eq/MWh (production-based)",
+      "heat_recovery_equipment": "tank 520.8 m3 = 375 m3 x (1.0e6 / 720,000 hl/year), scaled from Padullés et al. (2026), Sec. 5.1",
+      "gas_EF_kg_per_kWh": "IPCC 2006 Guidelines Vol. 2 Table 2.2, 56,100 kg CO2/TJ NCV -> 0.182 kg/kWh GCV, direct combustion (same scope as the APA grid factor)",
+      "eta_lorenz_sensitivity": "0.45-0.52: Carnot efficiencies implied by DEA HTHP sheets (COP 2.05 at 100 K lift); 0.63: Andersen et al. (2024) polynomial for the HTHP unit (upper envelope, extrapolated: source below 0 °C and isothermal)",
+      "co2_price_scenario": "EUA Dec contract 82.40 EUR/t on 5 Oct 2026 (S&P Global Commodity Insights)",
+      "chiller_cop": "Sinnott and Towler (2020), Chemical Engineering Design, 6th ed. (Elsevier, ISBN 978-0-08-102599-4), Sec. 6.4.4, Eq. 6.20: real COP about 0.6 x Carnot for a simple cycle. Evaporator at cold utility -1 °C minus 5 K (refrigerated-brine approach 3-5 K, Sec. 12.7.3), condenser at ambient 15 °C + 10 K cooling-water rise + 5 K approach = 30 °C: 0.6 x 267.15/36 = 4.45. Check: CoolProp ammonia cycle (Andersen et al. 2024 assumptions, sink 15->25 °C) gives 4.52. Padullés et al. (2026) give no chiller credit"
+    },
+    "gas_EF_kg_per_kWh": 0.182,
+    "chiller_cop": 4.45,
+    "cost_functions": {
+      "plate_hex": {
+        "alpha": 911.8,
+        "beta": 6838.6,
+        "gamma": 0.95,
+        "size_unit": "m2",
+        "source": "Sinnott and Towler (2020), Table 6.6, plate and frame (304 SS), Ce = 1,350 + 180 S^0.95 USD Jan 2007; x 3.5 Hand installation factor (Table 6.3); x CEPCI 797.9/509.7; / 1.0816 USD/EUR (ECB, 2023 mean of monthly averages); CEPCI 2017 = 567.5 and 2023 = 797.9 confirmed in Chem. Eng. Sept. 2024, p. 45 (latest monthly: May 2024 final 800.2). Valid 1-500 m2"
+      }
+    }
+  },
+  "_sensitivities": "One list for every sensitivity table (pinch/sensitivity.py): consolidate_rq.py uses every row; the grass-roots economics (step 6) uses the 'econ' rows.",
+  "sensitivities": [
+    {
+      "label": "Prices 2025-S1 (0.1230 / 0.0546; ratio 2.25)",
+      "kind": "econ",
+      "value": {
+        "electricity_price_EUR_per_kWh": 0.123,
+        "gas_price_EUR_per_kWh": 0.0546
+      },
+      "basis": "Eurostat, bands ID / I3, excl. VAT"
+    },
+    {
+      "label": "Prices 2025-S2 (0.1216 / 0.0481; ratio 2.53)",
+      "kind": "econ",
+      "value": {
+        "electricity_price_EUR_per_kWh": 0.1216,
+        "gas_price_EUR_per_kWh": 0.0481
+      },
+      "basis": "Eurostat, bands ID / I3, excl. VAT"
+    },
+    {
+      "label": "Electricity band IE (0.0897; ratio 1.75)",
+      "kind": "econ",
+      "value": {
+        "electricity_price_EUR_per_kWh": 0.0897
+      },
+      "basis": "Eurostat 2026-S1; IE applies above 20 GWh/year"
+    },
+    {
+      "label": "Previous price inputs (2025-S1: 0.132 / 0.055; ratio 2.40)",
+      "kind": "econ",
+      "value": {
+        "electricity_price_EUR_per_kWh": 0.132,
+        "gas_price_EUR_per_kWh": 0.055
+      },
+      "basis": "values used before the Eurostat inputs were sourced (2026-10-13); kept for traceability"
+    },
+    {
+      "label": "Boiler efficiency 0.817",
+      "kind": "econ",
+      "value": {
+        "boiler_efficiency": 0.817
+      },
+      "basis": "US DOE Steam Tip Sheet #15"
+    },
+    {
+      "label": "Boiler efficiency 0.929",
+      "kind": "econ",
+      "value": {
+        "boiler_efficiency": 0.929
+      },
+      "basis": "implied by Padullés App. B (DK1)"
+    },
+    {
+      "label": "Boiler efficiency 1.0 (bound)",
+      "kind": "econ",
+      "value": {
+        "boiler_efficiency": 1.0
+      },
+      "basis": "as in Padullés Sec. 5"
+    },
+    {
+      "label": "No refrigeration credit",
+      "kind": "econ",
+      "value": {
+        "chiller_cop": null
+      },
+      "basis": "as in Padullés et al. (2026)"
+    },
+    {
+      "label": "Refrigeration credit 50 % (batch mismatch)",
+      "kind": "econ",
+      "value": {
+        "refrigeration_credit_fraction": 0.5
+      },
+      "basis": "advisory bound: heat pump and cooling loads not simultaneous; also covers the paper's lower Q̇c (3.2 vs 3.44)"
+    },
+    {
+      "label": "Chiller COP 3.14",
+      "kind": "econ",
+      "value": {
+        "chiller_cop": 3.14
+      },
+      "basis": "Sinnott & Towler Example 6.7 (cooling water 40 °C)"
+    },
+    {
+      "label": "Chiller COP 6.68",
+      "kind": "econ",
+      "value": {
+        "chiller_cop": 6.68
+      },
+      "basis": "Sinnott & Towler: 0.9 x Carnot (complex cycles)"
+    },
+    {
+      "label": "CO2 price 82.4 EUR/t",
+      "kind": "econ",
+      "value": {
+        "co2_price_EUR_per_t": 82.4
+      },
+      "basis": "EUA, 5 Oct 2026"
+    },
+    {
+      "label": "Portuguese CO2 addition 67.4 EUR/t",
+      "kind": "econ",
+      "value": {
+        "co2_price_EUR_per_t": 67.395
+      },
+      "basis": "CIEC Art. 92.º-A; 2025 rate set by Portaria n.º 355-A/2024/1, Art. 2.º (Diário da República, 27 Dec 2024); applies to natural gas outside the EU ETS (ERSE 2020); upper value: up to 3.8 EUR/MWh of non-recoverable taxes (about 21 EUR/t) may already be in the Eurostat price, and energy-intensive consumers (SGCIE) may be exempt"
+    },
+    {
+      "label": "Gas emission factor 0.219 (paper's value)",
+      "kind": "econ",
+      "value": {
+        "gas_EF_kg_per_kWh": 0.219
+      },
+      "basis": "Padullés et al. (2026), Sec. 5.3; scope not stated (base: IPCC 2006 combustion, 0.182 on GCV); affects CO2 avoided only"
+    },
+    {
+      "label": "Grid emission factor 0.092 (mainland 2023)",
+      "kind": "econ",
+      "value": {
+        "grid_EF_kg_per_kWh": 0.092
+      },
+      "basis": "APA 2025, mainland Portugal, 2023; affects CO2 avoided only"
+    },
+    {
+      "label": "Horizon 20 years",
+      "kind": "econ",
+      "value": {
+        "horizon_years": 20
+      },
+      "basis": "DEA sheet 2.a: HTHP technical lifetime 20 y"
+    },
+    {
+      "label": "Lorenz efficiency 0.45",
+      "kind": "eta",
+      "value": 0.45,
+      "basis": "DEA HTHP data, implied 0.45-0.52"
+    },
+    {
+      "label": "Lorenz efficiency 0.55 (paper's value)",
+      "kind": "eta",
+      "value": 0.55,
+      "basis": "published value used by Padullés et al. (2026)"
+    },
+    {
+      "label": "Lorenz efficiency 0.63",
+      "kind": "eta",
+      "value": 0.63,
+      "basis": "Andersen et al. (2024) polynomial, HTHP"
+    },
+    {
+      "label": "Cycle-based COP per unit",
+      "kind": "cycle",
+      "value": null,
+      "basis": "CoolProp screening (step 4b), practical options only"
+    },
+    {
+      "label": "Cycle-based COP -17 %",
+      "kind": "cycle_scaled",
+      "value": 0.83,
+      "basis": "advisory: our model is 17 % above Andersen et al. (2024) Fig. 2 at one point"
+    },
+    {
+      "label": "Heat pump CAPEX -25 %",
+      "kind": "hp_capex",
+      "value": 0.75,
+      "basis": "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"
+    },
+    {
+      "label": "Heat pump CAPEX +25 %",
+      "kind": "hp_capex",
+      "value": 1.25,
+      "basis": "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"
+    },
+    {
+      "label": "Retrofit exchanger CAPEX x3",
+      "kind": "hx_capex",
+      "value": 3.0,
+      "basis": "stress test"
+    },
+    {
+      "label": "HTHP sink 110 °C (boiling driving force)",
+      "kind": "hthp_sink",
+      "value": 110.0,
+      "basis": "103 °C leaves 2 K to boiling wort; nucleate boiling needs some K of wall superheat plus hydrostatic boiling-point rise (no sourced value); Padullés Fig. 11 spans 100-180 °C (supervisor review B1)"
+    },
+    {
+      "label": "HTHP sink 120 °C (boiling driving force)",
+      "kind": "hthp_sink",
+      "value": 120.0,
+      "basis": "as above"
+    },
+    {
+      "label": "Grid emission factor 0.167 (5-year average)",
+      "kind": "econ",
+      "value": {
+        "grid_EF_kg_per_kWh": 0.167
+      },
+      "basis": "APA 2025, Table T2 (5-year moving average); affects CO2 avoided only"
+    },
+    {
+      "label": "Grid emission factor 0.1172 (2025 estimate)",
+      "kind": "econ",
+      "value": {
+        "grid_EF_kg_per_kWh": 0.1172
+      },
+      "basis": "Electricity Maps, Portugal, 2025 (as in the previous scenario list); affects CO2 avoided only"
+    },
+    {
+      "label": "Grid emission factor 0.367 (marginal gas CCGT, assumed)",
+      "kind": "econ",
+      "value": {
+        "grid_EF_kg_per_kWh": 0.367
+      },
+      "basis": "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 55 % efficiency (assumed, not sourced); affects CO2 avoided only (supervisor review B5)"
+    },
+    {
+      "label": "Batch: HTHP sized for the boil window, F = 1.14",
+      "kind": "econ",
+      "value": {
+        "heat_pump_capacity_factors": {
+          "HTHP (wort boiling)": 1.1428571428571428
+        }
+      },
+      "basis": "14 brews/day x 90 min (most continuous): installed = 24 h / (brews x boil time) x average"
+    },
+    {
+      "label": "Batch: HTHP sized for the boil window, F = 1.75",
+      "kind": "econ",
+      "value": {
+        "heat_pump_capacity_factors": {
+          "HTHP (wort boiling)": 1.7454545454545454
+        }
+      },
+      "basis": "11 brews/day x 75 min (central); 8-14 brews/day (Briggs of Burton 2017, industry), 60-90 min boil (assumed)"
+    },
+    {
+      "label": "Batch: HTHP sized for the boil window, F = 3.0",
+      "kind": "econ",
+      "value": {
+        "heat_pump_capacity_factors": {
+          "HTHP (wort boiling)": 3.0
+        }
+      },
+      "basis": "8 brews/day x 60 min (least continuous); no high-temperature storage"
+    },
+    {
+      "label": "RQ2 with heat-pump heat as hot utility",
+      "kind": "hp_hot_utility",
+      "value": null,
+      "basis": "after electrification the marginal hot utility is HTHP heat: hours x (p_el / COP + variable O&M) + CRF x 600 EUR/kW + fixed O&M (supervisor review A4)"
+    },
+    {
+      "label": "Film coefficients x5 (gasketed plates)",
+      "kind": "film",
+      "value": 5.0,
+      "basis": "Sinnott & Towler Table 12.1: plate, water-water U 5,000-7,500 W/m2K vs 1,000 implied by Stampfli"
+    },
+    {
+      "label": "Production 0.25 Mhl/year",
+      "kind": "scale",
+      "value": 250000.0,
+      "basis": "Padullés Table 1 range (UK case)"
+    },
+    {
+      "label": "Production 0.5 Mhl/year",
+      "kind": "scale",
+      "value": 500000.0,
+      "basis": "Padullés Table 1 range"
+    },
+    {
+      "label": "Production 1.5 Mhl/year",
+      "kind": "scale",
+      "value": 1500000.0,
+      "basis": "Padullés Table 1 range (TH case)"
+    },
+    {
+      "label": "No O&M (paper's convention)",
+      "kind": "no_om",
+      "value": null,
+      "basis": "Padullés et al. (2026) include no O&M; base uses DEA O&M"
+    },
+    {
+      "label": "Combined: paper's conventions (boiler 1.0, no refrigeration credit, no O&M)",
+      "kind": "combo",
+      "value": [
+        {
+          "kind": "econ",
+          "value": {
+            "boiler_efficiency": 1.0,
+            "chiller_cop": null
+          }
+        },
+        {
+          "kind": "no_om",
+          "value": null
+        }
+      ],
+      "basis": "Padullés et al. (2026), Sec. 5"
+    },
+    {
+      "label": "Combined pessimistic: no credit, cycle-based COP, HP CAPEX +25 %",
+      "kind": "combo",
+      "value": [
+        {
+          "kind": "econ",
+          "value": {
+            "chiller_cop": null
+          }
+        },
+        {
+          "kind": "cycle",
+          "value": null
+        },
+        {
+          "kind": "hp_capex",
+          "value": 1.25
+        }
+      ],
+      "basis": "one-at-a-time ranges above, together"
+    },
+    {
+      "label": "Combined conservative: credit 50 %, cycle COP -17 %, HP CAPEX +25 %, boiler 0.929",
+      "kind": "combo",
+      "value": [
+        {
+          "kind": "econ",
+          "value": {
+            "refrigeration_credit_fraction": 0.5,
+            "boiler_efficiency": 0.929
+          }
+        },
+        {
+          "kind": "cycle_scaled",
+          "value": 0.83
+        },
+        {
+          "kind": "hp_capex",
+          "value": 1.25
+        }
+      ],
+      "basis": "advisory envelope for the items that cannot be verified"
+    }
+  ],
+  "area_targeting": {
+    "film_coefficients_kW_per_m2K": {
+      "Pre-mashing": 2.0,
+      "Mashing": 0.5,
+      "Lautering/Filtering": 2.0,
+      "Wortboiling (preheating)": 0.5,
+      "Wortboiling (boiling)": 5.0,
+      "Wortcooling": 0.5,
+      "Boiloff condensation": 5.0,
+      "Condensate cooling": 2.0,
+      "Fermentation": 0.5,
+      "Beer cooling": 0.5,
+      "Filtration/centrifugation": 0.5,
+      "CIP": 2.0
+    },
+    "film_coefficients_source": "Stampfli et al. (2018), CET 70, 901-906, Table 1 (dairy streams): product 500, water 2,000, evaporation/condensation 5,000 W/(m2 K); checked against the PDF. Mapping to brewery streams is our assumption: water for brewing-water, CIP and condensate; product for mash, wort and beer; latent for boiling and boil-off condensation.",
+    "dTmin_grid_K": [
+      0.02,
+      0.05,
+      0.08,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0,
+      1.1,
+      1.2,
+      1.3,
+      1.4,
+      1.5,
+      1.6,
+      1.7,
+      1.8,
+      1.9,
+      2.0,
+      2.5,
+      3,
+      4,
+      5,
+      6,
+      8,
+      10,
+      15,
+      20,
+      30
+    ],
+    "cost_law": [
+      {
+        "a": 1953.9,
+        "b": 260.5,
+        "c": 0.95,
+        "label": "Towler 2020 plate & frame, bare (F = 1)",
+        "source": "Sinnott and Towler (2020), Table 6.6: plate and frame exchanger, 304 SS, Ce = 1,350 + 180 S^0.95 USD (USGC, Jan 2007, CEPCI 509.7), valid 1-500 m2; x CEPCI 797.9/509.7 (2023) / 1.0816 USD/EUR (ECB Data Portal EXR.M.USD.EUR.SP00.A, mean of the 2023 monthly averages). No location factor (Portugal not in Table 6.7)"
+      },
+      {
+        "a": 6838.6,
+        "b": 911.8,
+        "c": 0.95,
+        "label": "Towler 2020 x 3.5 (Hand factor, installed)",
+        "source": "As above x 3.5: Hand (1958) installation factor for heat exchangers, Sinnott and Towler (2020) Table 6.3 (includes home-office costs, not offsites or contingency)"
+      },
+      {
+        "a": 3847.0,
+        "b": 583.7,
+        "c": 1.0,
+        "label": "Stampfli 2018 (cross-check only), bare (F = 1)",
+        "source": "Stampfli et al. (2018), Table 2: stainless-steel plate HEX, MPIC = 4,350 + 660 A NZD (assumed 2017 NZD, from Bouman et al. 2005 indexed with Stats NZ 2017); / 1.5897 NZD/EUR (ECB Data Portal EXR.A.NZD.EUR.SP00.A, 2017) x CEPCI 797.9/567.5 (2023/2017). Bare equipment cost: lower bound"
+      },
+      {
+        "a": 13466.0,
+        "b": 2043.1,
+        "c": 1.0,
+        "label": "Stampfli 2018 (cross-check only) x 3.5 (Hand factor)",
+        "source": "As above x 3.5, Hand (1958) installation factor for heat exchangers, verified in Sinnott and Towler (2020) Table 6.3. Note: Stampfli's coefficients do not match Bouman et al. (2005) gasketed plate HEX (MPIC = 270 A + 2,540 NZD, Dec 2004, 0.7-3 MW), so their base is unverified"
+      }
+    ],
+    "specific_area_cost_sweep_EUR_per_m2": [
+      100,
+      250,
+      500,
+      1000,
+      2000
+    ],
+    "cold_utility_cost_EUR_per_kW_year": null
+  },
+  "retrofit": {
+    "network_file": "../data/brewery_networks.json",
+    "baseline": "N0 existing",
+    "storage": {
+      "kind": "hr_tank",
+      "size_baseline": 520.8
+    },
+    "new_exchanger": {
+      "kind": "plate_hex",
+      "medium_h_kW_per_m2K": 2.0,
+      "_medium_h": "tank water: Stampfli et al. (2018) water category"
+    },
+    "options": [
+      {
+        "name": "N1: condensate into tank",
+        "network": "N1 condensate into tank",
+        "heat_pumps": false
+      },
+      {
+        "name": "N0 + both heat pumps (Padulles config. 2)",
+        "network": "N0 existing",
+        "heat_pumps": true
+      },
+      {
+        "name": "N1 + both heat pumps",
+        "network": "N1 condensate into tank",
+        "heat_pumps": true
+      },
+      {
+        "name": "N1 + warm-water heat pump only",
+        "network": "N1 condensate into tank",
+        "heat_pumps": [
+          "Warm-water HP"
+        ]
+      },
+      {
+        "name": "N1 + both heat pumps, cycle-based COP",
+        "network": "N1 condensate into tank",
+        "heat_pumps": true,
+        "cycle_based": true
+      }
+    ],
+    "heat_pump_reference": "N1: condensate into tank",
+    "_heat_pump_reference": "RQ1 and RQ3 per unit judge the heat pumps as increments over the heat-recovery-only retrofit, so the cheap recovery measure does not carry them (supervisor review, item A1)",
+    "heat_pump_increments": [
+      {
+        "name": "Warm-water heat pump",
+        "option": "N1 + warm-water heat pump only",
+        "over": "N1: condensate into tank"
+      },
+      {
+        "name": "HTHP (wort boiling)",
+        "option": "N1 + both heat pumps",
+        "over": "N1 + warm-water heat pump only"
+      }
+    ]
+  }
+}

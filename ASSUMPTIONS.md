@@ -2,7 +2,7 @@
 
 Status: **V** verified against a source or a known answer · **D** decision taken by the author ·
 **C** conservative choice or advisory bound (cannot be verified; authors cannot be contacted) ·
-**L** documented limitation of a source. Closed 2026-10-14. Sensitivities: `outputs/brewery_padulles2026/rq_consolidated.md`.
+**L** documented limitation of a source. Closed 2026-10-14. Sensitivities: `outputs/brewery/rq_consolidated.md`.
 
 | # | Item | Status | Basis / effect |
 |---|---|---|---|
@@ -24,7 +24,7 @@ Status: **V** verified against a source or a known answer · **D** decision take
 | 16 | Location factor for Portugal | L | Not in Sinnott & Towler Table 6.7; none applied |
 | 17 | Chiller COP 4.45 | V | 0.6 × Carnot (Sinnott & Towler Sec. 6.4.4); CoolProp NH₃ 4.52. Range 3.14 (Example 6.7, 40 °C cooling water) to 6.68 |
 | 18 | Refrigeration credit simultaneity | C | Paper's continuous operation (8000 h) gives full credit; advisory rows: 50 % and none |
-| 19 | Heat pump capex | V | Padullés Table 3 (1.12 M€/MW at 1 MW) vs DEA sheet 2.a 1.2 (0.9–1.5) M€/MW: ±25 % rows. O&M now included (DEA 2025): heat pumps 2,494 €/MW·y + 3.6 €/MWh of heat (sheet 2.a), gas boiler variable O&M 1.23 €/MWh avoided (sheet 6.1; fixed not credited, boiler kept as back-up). Effect: RQ1 84 → 73.5 %, RQ3 2.98 → 2.79; row 'No O&M (as Padullés et al.)' reproduces the previous base |
+| 19 | Heat pump capex | V | Padullés Table 3 (1.12 M€/MW at 1 MW) vs DEA sheet 2.a 1.2 (0.9–1.5) M€/MW: ±25 % rows. O&M now included (DEA 2025): heat pumps 2,494 €/MW·y + 3.6 €/MWh of heat (sheet 2.a), gas boiler variable O&M 1.23 €/MWh avoided (sheet 6.1; fixed not credited, boiler kept as back-up). Effect: RQ1 84 → 73.5 %, RQ3 2.98 → 2.79; row 'No O&M (paper's convention)' reproduces the previous base |
 | 20 | Production 1 Mhl/y | C | Within Padullés Table 1; rows at 0.25, 0.5, 1.5 Mhl/y |
 | 21 | New condensate exchanger (4 K, U = 1.0) and tank ∝ heat | C | Stress test: exchanger capex ×3 |
 | 22 | ΔTmin,opt (RQ2) | C | Flat optimum: installed law minimum 0.6 K, total annual cost within 1 % from 0.08 to 2.0 K (energy ≈ 95 % of TAC); report the range and choose a practical value (≈ 2 K, < 1 % penalty). With heat-pump heat as hot utility (611 €/kW·y) 0.5 K (0.05–1.9). Pumping, fouling and batch timing not modelled |

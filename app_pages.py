@@ -36,6 +36,7 @@ from pinch.streams import streams_from_frame
 
 ROOT = Path(__file__).resolve().parent
 CASES = {p.stem: p for p in sorted((ROOT / "cases").glob("*.json")) if p.stem != "TEMPLATE"}
+PLANTS = {k: load_case(p).plant for k, p in CASES.items()}
 UPLOAD = "Upload my own stream table"
 H_COLUMN = "h_kW_per_m2K"
 STEPS = ["1 Streams", "2 Targets", "3 ΔTmin", "4 Heat pumps", "5 Retrofit", "6 Economics"]
@@ -71,12 +72,18 @@ def _levels_frame(levels) -> pd.DataFrame:
                           "T_source_C": lv.T_source_C} for lv in levels])
 
 
+def _case_label(choice: str) -> str:
+    """Selector label: the type of plant (the data source is on the Sources page)."""
+    return choice if choice == UPLOAD else PLANTS[choice]
+
+
 def load_inputs(choice: str, uploaded: pd.DataFrame | None = None, upload_name: str = "my_site") -> None:
     """(Re)initialise every input from a published case or from an uploaded table."""
     if choice == UPLOAD:
         case = load_case(ROOT / "cases" / "TEMPLATE.json")
-        case = replace(case, name=Path(upload_name).stem, description="User-supplied stream table.",
-                       reference="User upload", screening={}, provenance={"stream data": "user upload (not verified)"},
+        case = replace(case, name=Path(upload_name).stem, plant="My plant (uploaded stream table)",
+                       description="User-supplied stream table.", screening={},
+                       provenance={"data source": "user upload (not verified)"},
                        retrofit=None, cycle_screening=None, eta_lorenz_sensitivity=())
         streams_df = uploaded.copy()
         basis = None                     # proposed below from the stream unit
@@ -145,7 +152,7 @@ def _scalars() -> dict:
 
 def init_state() -> None:
     if "choice" not in ss:
-        load_inputs("brewery_padulles2026" if "brewery_padulles2026" in CASES else next(iter(CASES)))
+        load_inputs("brewery" if "brewery" in CASES else next(iter(CASES)))
     ss.setdefault("step", STEPS[0])
     if "step_ctl" not in ss:
         ss.step_ctl = ss.step
@@ -322,7 +329,7 @@ def _chart(ch) -> None:
 def workflow_page() -> None:
     init_state()
     st.title("Process-heat electrification")
-    st.caption(f"Case: **{ss.base_case.name}** · {ss.base_case.reference}")
+    st.caption(f"Case: **{ss.base_case.plant}** · data sources on the Sources page")
     st.segmented_control("Step", STEPS, key="step_ctl", on_change=_step_changed, label_visibility="collapsed")
     st.progress((STEPS.index(ss.step) + 1) / len(STEPS))
     {STEPS[0]: _step_streams, STEPS[1]: _step_targets, STEPS[2]: _step_dtmin, STEPS[3]: _step_heat_pumps,
@@ -340,7 +347,7 @@ def _step_streams() -> None:
     with left, st.container(border=True):
         st.subheader("Process")
         options = list(CASES) + [UPLOAD]
-        choice = st.selectbox("Case", options, index=options.index(ss.choice))
+        choice = st.selectbox("Case", options, index=options.index(ss.choice), format_func=_case_label)
         if choice != ss.choice and choice != UPLOAD:
             load_inputs(choice)
             st.rerun()
@@ -507,7 +514,7 @@ RETROFIT_NEEDS = (
     "`data/brewery_networks.json`): every existing exchanger (which hot stream heats which cold stream, between "
     "which temperatures), and which streams are on heaters and coolers. The site's measured hot and cold utility "
     "use is the check that the description is complete. Then add a `retrofit` block to the case file (see "
-    "`cases/brewery_padulles2026.json`).")
+    "`cases/brewery.json`).")
 
 
 def _retrofit_bounds(r) -> None:
@@ -734,8 +741,12 @@ def sources_page() -> None:
     case, _, s, _, key, res = r
     a, b = st.columns(2, gap="large")
     with a:
+        st.subheader(f"Data source: {case.plant}")
+        st.markdown(case.data_source or "_not given_")
         st.subheader("Provenance (case file)")
         for k, v in s["provenance"].items():
+            if k == "data source":
+                continue
             st.markdown(f"- **{k}**: {v}")
         ec = s.get("economics", {})
         if ec and "skipped" not in ec:

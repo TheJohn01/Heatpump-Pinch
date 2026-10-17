@@ -1,7 +1,7 @@
 """Consolidated answers to the three research questions, with sensitivities.
 
 Usage:
-    python consolidate_rq.py cases/brewery_padulles2026.json
+    python consolidate_rq.py cases/brewery.json
 
 Definitions (against the site as it is today, i.e. the case's baseline network, step 5; supervisor
 review 2026-10-17, items A1-A4):
@@ -36,7 +36,7 @@ import pandas as pd
 
 from pinch import load_streams, with_extra_shift
 from pinch.area_analysis import area_targeting_outputs
-from pinch.case import Case, display_name, load_case
+from pinch.case import Case, load_case
 from pinch.cycle_analysis import load_selected
 from pinch.economic_analysis import _params_and_converter
 from pinch.plotting import save_figure, tornado_figure
@@ -232,7 +232,7 @@ def main() -> None:
     df.to_csv(out / "rq_consolidated.csv", index=False)
     (out / "rq1_production_threshold.json").write_text(json.dumps(prod, indent=2), encoding="utf-8")
     (out / "rq_consolidated.md").write_text(_markdown(df, 5.0, prod), encoding="utf-8")
-    _tornado(df, out / "rq_tornado.png", f"RQ3, warm-water heat pump: {display_name(case.name)} (base {df.iloc[0]['RQ3_ratio_WW_HP']:.2f})")
+    _tornado(df, out / "rq_tornado.png", f"RQ3, warm-water heat pump: {case.plant} (base {df.iloc[0]['RQ3_ratio_WW_HP']:.2f})")
     print(_markdown(df, 5.0, prod))
 
 

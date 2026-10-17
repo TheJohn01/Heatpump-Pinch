@@ -25,7 +25,7 @@ from pinch.heat_pump import (
 )
 from pinch.validation import ROOT
 
-FOURSTREAM = load_streams(ROOT / "data" / "fourstream_example.csv")
+FOURSTREAM = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
 BREWERY = load_streams(ROOT / "data" / "brewery_streams.csv")
 
 

@@ -8,7 +8,7 @@ from pinch.validation import ROOT
 @pytest.fixture(scope="module")
 def table():
     import consolidate_rq
-    return consolidate_rq.consolidate(ROOT / "cases" / "brewery_padulles2026.json").set_index("sensitivity")
+    return consolidate_rq.consolidate(ROOT / "cases" / "brewery.json").set_index("sensitivity")
 
 
 def test_base_row_matches_retrofit_and_hand_check(table):
@@ -27,7 +27,7 @@ def test_base_row_matches_retrofit_and_hand_check(table):
     # A4: flat optimum reported as a range
     assert b["RQ2_dTmin_within_1pct_K"] == "0.08-2"
     # the published eta_L 0.55 reproduces the supervisor's decomposition (HTHP 291 y, NPV -0.73 M€)
-    p = table.loc["Lorenz efficiency 0.55 (Padullés et al.)"]
+    p = table.loc["Lorenz efficiency 0.55 (paper's value)"]
     assert p["HTHP_incremental_payback_y"] == pytest.approx(291, abs=1)
     assert p["WW_HP_incremental_payback_y"] == pytest.approx(3.92, abs=0.01)
 
@@ -52,7 +52,7 @@ def test_one_sensitivity_list(table):
     """Audit 1.1: the consolidated table and the grass-roots table read the same list in the case file,
     so a label means one change everywhere (the grass-roots table uses its 'econ' rows)."""
     from pinch.case import load_case
-    case = load_case(ROOT / "cases" / "brewery_padulles2026.json")
+    case = load_case(ROOT / "cases" / "brewery.json")
     labels = [s.label for s in case.sensitivities]
     rows = [r for r in table.index if r not in ("Base case", "No ambient source: heat pumps limited to the refrigeration heat")]
     assert rows == labels                                   # every row, in the case-file order, nothing else
@@ -61,8 +61,8 @@ def test_one_sensitivity_list(table):
 def test_old_scenario_block_is_rejected(tmp_path):
     import json
     from pinch.case import load_case
-    raw = json.loads((ROOT / "cases" / "fourstream_example.json").read_text(encoding="utf-8"))
-    raw["stream_file"] = str(ROOT / "data" / "fourstream_example.csv")
+    raw = json.loads((ROOT / "cases" / "four_stream_process.json").read_text(encoding="utf-8"))
+    raw["stream_file"] = str(ROOT / "data" / "four_stream_process_streams.csv")
     raw["economics"]["scenarios"] = {"x": {"boiler_efficiency": 1.0}}
     f = tmp_path / "old.json"
     f.write_text(json.dumps(raw), encoding="utf-8")

@@ -1,7 +1,7 @@
 """Batch-operation check of the time-average heat pump design (brewery case).
 
 Usage:
-    python batch_check.py cases/brewery_padulles2026.json
+    python batch_check.py cases/brewery.json
 
 Pinch targets and heat pump sizing use time-averaged loads (MWh/year over the operating hours). A
 brewhouse is a batch process. This script checks which results survive the batch timing:

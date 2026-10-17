@@ -42,7 +42,7 @@ from dataclasses import replace
 
 import pandas as pd
 
-from pinch.case import Case, display_name, to_MWh_per_year
+from pinch.case import Case, to_MWh_per_year
 from pinch.design import design_from_gcc, partial_designs
 from pinch.economics import Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment
 from pinch.network import NetworkResult, constrained_streams, evaluate_network, load_networks
@@ -202,7 +202,7 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
                                "storage": "volume proportional to the heat charged (same temperature range)",
                                "heat pump sources": "take over refrigeration first; remainder from ambient"}}
     return Outputs(summary, tables, {"retrofit_options": retrofit_options_figure(
-        table, f"Retrofit options against the existing network: {display_name(case.name)}")})
+        table, f"Retrofit options against the existing network: {case.plant}")})
 
 
 def network_cooling(streams: StreamSet, res: NetworkResult, T_amb_C: float | None) -> CoolingCascade | None:

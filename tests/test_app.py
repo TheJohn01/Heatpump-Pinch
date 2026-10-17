@@ -48,7 +48,7 @@ def test_targets_match_command_line(brewery):
     from pinch.case import load_case
     at = _goto(brewery, STEPS[1])
     shown = {m.label: m.value for m in at.metric}
-    s = compute(load_case(ROOT / "cases" / "brewery_padulles2026.json")).summary
+    s = compute(load_case(ROOT / "cases" / "brewery.json")).summary
     assert shown["Q̇h,min [kWh/hl]"] == f"{s['targets']['Qh_min']:.4g}"
 
 
@@ -106,7 +106,7 @@ def test_dashboard_shows_saved_consolidated_table():
     at.run()
     _ok(at)
     rq1 = next(m for m in at.metric if m.label.startswith("RQ1"))
-    saved = pd.read_csv(ROOT / "outputs" / "brewery_padulles2026" / "rq_consolidated.csv").iloc[0]
+    saved = pd.read_csv(ROOT / "outputs" / "brewery" / "rq_consolidated.csv").iloc[0]
     assert rq1.value == f"{100 * saved['RQ1_HP_gas_share']:.1f} %"
     assert any("Mhl/year" in c.value for c in at.caption)          # A3: production condition shown
 
@@ -143,16 +143,16 @@ def _texts(at):
 
 
 def test_case_without_basis_explains_what_is_missing():
-    at = _case_app("walmsley2024_milk_evaporator", "6 Economics")
+    at = _case_app("milk_evaporator", "6 Economics")
     assert "Switch on the annual basis in step 1" in _texts(at)
-    at = _case_app("walmsley2024_milk_evaporator", "3 ΔTmin", h=float("nan"))   # coefficients cleared
+    at = _case_app("milk_evaporator", "3 ΔTmin", h=float("nan"))   # coefficients cleared
     assert "film coefficient for every stream" in _texts(at)
-    at = _case_app("walmsley2024_milk_evaporator", "5 Retrofit")
+    at = _case_app("milk_evaporator", "5 Retrofit")
     assert "No existing heat-exchanger network" in _texts(at)
 
 
 def test_assumed_basis_runs_economics_and_is_labelled():
-    at = _case_app("walmsley2024_milk_evaporator", "6 Economics", basis_on=True)
+    at = _case_app("milk_evaporator", "6 Economics", basis_on=True)
     assert any(m.label.startswith("Full design: break-even") for m in at.metric), [m.label for m in at.metric]
     assert "No economic data in the source" in _texts(at)
     case = at.session_state["base_case"]
@@ -161,7 +161,7 @@ def test_assumed_basis_runs_economics_and_is_labelled():
 
 
 def test_assumed_film_coefficients_run_supertargeting():
-    at = _case_app("walmsley2024_spray_dryer", "3 ΔTmin", basis_on=True, h=0.05)
+    at = _case_app("spray_dryer", "3 ΔTmin", basis_on=True, h=0.05)
     assert not any("film coefficient for every stream" in i.value for i in at.info)
     assert len(at.dataframe) >= 1                  # RQ2 table shown
 
@@ -173,7 +173,7 @@ def test_assumed_basis_recorded_in_provenance():
         import app_pages
         import streamlit as st
         app_pages.init_state()
-        app_pages.load_inputs("fourstream_example")
+        app_pages.load_inputs("four_stream_process")
         st.session_state.basis_on = True
         case, _ = app_pages.build_case()
         st.write(case.provenance.get("annual basis", "missing"))
@@ -184,12 +184,12 @@ def test_assumed_basis_recorded_in_provenance():
 
 
 def test_operating_hours_note_shown_for_dairy():
-    at = _case_app("walmsley2024_milk_evaporator", "1 Streams", basis_on=True)
+    at = _case_app("milk_evaporator", "1 Streams", basis_on=True)
     assert "upper bound" in _texts(at)
 
 
 def test_extrapolated_heat_pump_cost_is_flagged():
-    at = _case_app("fourstream_example", "6 Economics", basis_on=True)
+    at = _case_app("four_stream_process", "6 Economics", basis_on=True)
     assert any("extrapolated beyond the catalogue" in w.value for w in at.warning), [w.value for w in at.warning]
 
 
@@ -198,8 +198,8 @@ def test_break_even_ratio_never_reached_is_shown_as_none():
         import app_pages
         import streamlit as st
         app_pages.init_state()
-        if st.session_state.choice != "walmsley2024_spray_dryer":
-            app_pages.load_inputs("walmsley2024_spray_dryer")
+        if st.session_state.choice != "spray_dryer":
+            app_pages.load_inputs("spray_dryer")
             st.session_state.basis_on = True
             st.session_state.basis_value = 2000.0
             st.session_state.econ_electricity_price_EUR_per_kWh = 0.1135
@@ -212,7 +212,7 @@ def test_break_even_ratio_never_reached_is_shown_as_none():
 
 
 def test_retrofit_tab_shows_bracket_for_spray_dryer():
-    at = _case_app("walmsley2024_spray_dryer", "5 Retrofit")
+    at = _case_app("spray_dryer", "5 Retrofit")
     assert any("no heat recovery (published)" in h.value for h in at.subheader), [h.value for h in at.subheader]
     assert len(at.dataframe) >= 1
 
@@ -229,5 +229,5 @@ def test_upload_uses_catalogue_heat_pump_costs():
 
 
 def test_educated_approximation_warning_shown():
-    at = _case_app("brewery_padulles2026", "4 Heat pumps")
+    at = _case_app("brewery", "4 Heat pumps")
     assert any("educated approximation" in w.value for w in at.warning), [w.value for w in at.warning]

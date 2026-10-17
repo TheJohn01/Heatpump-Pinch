@@ -24,7 +24,7 @@ from pinch.case import load_case
 
 ROOT = Path(__file__).resolve().parent
 HOURS = 8000
-CASES = ("walmsley2024_milk_evaporator", "fourstream_example")
+CASES = ("milk_evaporator", "four_stream_process")
 OUT = ROOT / "outputs" / f"secondary_{HOURS}h_assumed"
 
 
