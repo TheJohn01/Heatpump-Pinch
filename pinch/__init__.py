@@ -16,7 +16,7 @@ _mpl.rcParams["font.family"] = "DejaVu Sans"
 
 from pinch.streams import Stream, StreamSet, load_streams, with_extra_shift, energy_balance
 from pinch.problem_table import ProblemTable, problem_table
-from pinch.curves import composite_curve, grand_composite_curve
+from pinch.curves import composite_curve
 
 __all__ = [
     "Stream",
@@ -27,5 +27,4 @@ __all__ = [
     "ProblemTable",
     "problem_table",
     "composite_curve",
-    "grand_composite_curve",
 ]

@@ -37,6 +37,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from pinch.curves import piecewise_composite
 from pinch.problem_table import problem_table
 from pinch.streams import Stream, StreamSet
 
@@ -117,11 +118,8 @@ def _profile(streams: StreamSet, segs: tuple[Segment, ...], extra_K: float, sign
         lo, hi = sorted((seg.T_from_C, seg.T_to_C))
         shift = s.dT_shift_K + (extra_K if sign < 0 else 0.0)
         pieces.append((lo + sign * shift, hi + sign * shift, s.CP))
-    T = sorted({t for lo, hi, _ in pieces for t in (lo, hi)}, reverse=True)
-    H = [0.0]
-    for a, b in zip(T[:-1], T[1:]):
-        H.append(H[-1] + sum(cp for lo, hi, cp in pieces if lo <= b and hi >= a) * (a - b))
-    return np.array(H), np.array(T)
+    T, H = piecewise_composite(pieces, descending=True)
+    return H, T
 
 
 def _T_at(H_prof, T_prof, H):

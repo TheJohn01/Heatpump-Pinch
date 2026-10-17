@@ -32,7 +32,8 @@ from dataclasses import dataclass, replace
 
 import numpy as np
 
-from pinch.problem_table import problem_table
+from pinch.curves import piecewise_composite, stream_pieces
+from pinch.problem_table import ProblemTable, problem_table
 from pinch.streams import Stream, StreamSet
 
 
@@ -47,12 +48,7 @@ def log_mean(dT_a_K: float, dT_b_K: float) -> float:
 
 def _segments(streams: tuple[Stream, ...]) -> tuple[np.ndarray, np.ndarray]:
     """Composite curve in real temperatures: (T ascending, H ascending from 0)."""
-    T = np.array(sorted({t for s in streams for t in (s.T_in_C, s.T_out_C)}))
-    H = [0.0]
-    for lo, hi in zip(T[:-1], T[1:]):
-        H.append(H[-1] + sum(s.CP for s in streams if min(s.T_in_C, s.T_out_C) <= lo and max(s.T_in_C, s.T_out_C) >= hi)
-                 * (hi - lo))
-    return T, np.array(H)
+    return piecewise_composite(stream_pieces(streams, shifted=False))
 
 
 def _heat_by_stream(streams: tuple[Stream, ...], T_lo: float, T_hi: float) -> dict[str, float]:
@@ -85,7 +81,8 @@ class AreaTarget:
     heat_recovered: float
 
 
-def area_target(stream_set: StreamSet, h: dict[str, float], include_utilities: bool = False) -> AreaTarget:
+def area_target(stream_set: StreamSet, h: dict[str, float], include_utilities: bool = False,
+                table: ProblemTable | None = None) -> AreaTarget:
     """Bath-formula area target and units target.
 
     Parameters
@@ -99,11 +96,13 @@ def area_target(stream_set: StreamSet, h: dict[str, float], include_utilities: b
         False: area of the process heat-recovery region only (composite overlap).
         True: the stream set already contains utility streams and is balanced
         (Q̇h,min = Q̇c,min = 0); the whole curve is used.
+    table : ProblemTable, optional
+        The stream set's Problem Table, if already computed (supertargeting passes it).
     """
     missing = [s.name for s in stream_set.streams if s.name not in h]
     if missing:
         raise ValueError(f"film coefficient missing for {missing}")
-    table = problem_table(stream_set)
+    table = problem_table(stream_set) if table is None else table
     if include_utilities and (table.Qh_min > 1e-9 or table.Qc_min > 1e-9):
         raise ValueError("include_utilities=True needs a balanced stream set (utilities included)")
 
@@ -127,12 +126,12 @@ def area_target(stream_set: StreamSet, h: dict[str, float], include_utilities: b
         q_cold = _heat_by_stream(cold, Tc_a, Tc_b)
         area += (sum(q / h[n] for n, q in q_hot.items()) + sum(q / h[n] for n, q in q_cold.items())) / dTlm
 
-    return AreaTarget(area=area, units=units_target(stream_set), heat_recovered=H_hi - H_lo)
+    return AreaTarget(area=area, units=units_target(stream_set, table), heat_recovered=H_hi - H_lo)
 
 
-def units_target(stream_set: StreamSet) -> int:
+def units_target(stream_set: StreamSet, table: ProblemTable | None = None) -> int:
     """(S - 1) above plus (S - 1) below the pinch, counting process streams present on each side."""
-    table = problem_table(stream_set)
+    table = problem_table(stream_set) if table is None else table
     top, bottom = float(table.T_star_C[0]), float(table.T_star_C[-1])
     # zero flow at the top or bottom boundary means a utility is zero (balanced or
     # threshold problem), not a pinch that splits the problem
@@ -181,8 +180,8 @@ def supertarget(stream_set: StreamSet, h: dict[str, float], dTmin_grid_K, cost_l
     rows = []
     for dT in dTmin_grid_K:
         s = with_uniform_dTmin(stream_set, float(dT))
-        t = problem_table(s)
-        at = area_target(s, h)
+        t = problem_table(s)          # once per ΔTmin: the area and units targets reuse it
+        at = area_target(s, h, table=t)
         capital = cost_law.network_cost(at.area, at.units)
         energy = t.Qh_min * hot_utility_cost + t.Qc_min * cold_utility_cost
         rows.append({"dTmin_K": float(dT), "Qh_min": t.Qh_min, "Qc_min": t.Qc_min, "area_m2": at.area,

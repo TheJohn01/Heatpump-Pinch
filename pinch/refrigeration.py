@@ -52,6 +52,7 @@ from typing import Iterable
 import numpy as np
 import pandas as pd
 
+from pinch.curves import piecewise_composite
 from pinch.heat_pump import HeatPump
 from pinch.problem_table import ProblemTable
 from pinch.streams import StreamSet
@@ -92,11 +93,8 @@ class CoolingCascade:
         parts = [(lo, hi, cp) for lo, hi, cp in pieces if hi > lo and cp > 0]
         if not parts:
             return cls(np.array([T_amb_C]), np.array([0.0]), T_amb_C)
-        T = np.array(sorted({t for lo, hi, _ in parts for t in (lo, hi)}, reverse=True))
-        H = [0.0]
-        for a, b in zip(T[:-1], T[1:]):
-            H.append(H[-1] + sum(cp for lo, hi, cp in parts if lo <= b and hi >= a) * (a - b))
-        return cls(T, np.array(H), min(T_amb_C, float(T[0])))
+        T, H = piecewise_composite(parts, descending=True)
+        return cls(T, H, min(T_amb_C, float(T[0])))
 
     @classmethod
     def from_hot_streams(cls, streams: StreamSet, T_amb_C: float | None) -> "CoolingCascade | None":

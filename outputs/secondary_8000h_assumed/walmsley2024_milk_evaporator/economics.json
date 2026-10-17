@@ -53,16 +53,16 @@
   "results": {
     "full design (heat recovery installed)": {
       "option": "100.0 %",
-      "capex_EUR": 5104568.0155,
-      "opex_EUR": 1218947.009,
-      "savings_EUR": 286496.4779,
+      "capex_EUR": 5104568.0121,
+      "opex_EUR": 1218947.01,
+      "savings_EUR": 286496.4769,
       "payback_years": 17.8172,
-      "npv_EUR": -2892318.155,
-      "gas_fuel_MWh": -0.0,
+      "npv_EUR": -2892318.1596,
+      "gas_fuel_MWh": 0.0,
       "electricity_MWh": 12386.3994,
       "co2_t": 1325.3447,
       "co2_avoided_t": 4852.2059,
-      "primary_energy_MWh": 23534.1588,
+      "primary_energy_MWh": 23534.1589,
       "primary_energy_reduction": 0.2528,
       "gas_reduction": 1.0
     }

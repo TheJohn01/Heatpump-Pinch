@@ -14,7 +14,7 @@ matplotlib.use("Agg")  # no display needed; deterministic output
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
-from pinch.curves import composite_curve, grand_composite_curve
+from pinch.curves import composite_curve
 from pinch.problem_table import ProblemTable
 from pinch.streams import StreamSet
 
@@ -62,7 +62,7 @@ def composite_curves_figure(stream_set: StreamSet, table: ProblemTable, title: s
 
 def gcc_figure(table: ProblemTable, title: str = "") -> Figure:
     """Grand Composite Curve."""
-    H, T_star = grand_composite_curve(table)
+    H, T_star = table.cascade_feasible, table.T_star_C
     unit = table.energy_unit
 
     fig, ax = plt.subplots(figsize=(6, 4.8))
@@ -87,7 +87,7 @@ def gcc_with_units_figure(table: ProblemTable, units, title: str = "") -> Figure
     likewise. Isothermal profiles are drawn as horizontal lines. Utility
     temperatures are plotted on the T* axis (dT_shift = 0 for utilities).
     """
-    H, T_star = grand_composite_curve(table)
+    H, T_star = table.cascade_feasible, table.T_star_C
     unit_label = table.energy_unit
     fig, ax = plt.subplots(figsize=(7, 5))
     ax.plot(H, T_star, color=GCC_COLOUR, lw=2, label="GCC")

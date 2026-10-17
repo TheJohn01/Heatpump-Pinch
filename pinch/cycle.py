@@ -44,7 +44,7 @@ from typing import Callable
 import CoolProp.CoolProp as CP
 from scipy.optimize import minimize_scalar
 
-from pinch.heat_pump import KELVIN, thermodynamic_mean_temperature_K
+from pinch.heat_pump import KELVIN, lorenz_cop
 
 ANDERSEN2024_TABLE3 = "Andersen et al. (2024), Applied Energy 376, 124312, Table 3"
 EXPANDER_CREDIT = lambda a: a.eta_motor  # noqa: E731
@@ -406,9 +406,11 @@ def _solve_single(fluid: str, source: SecondaryStream | None, sink_T: Callable[[
 
 
 def _lorenz(source: SecondaryStream, sink: SecondaryStream) -> float:
-    T_si = thermodynamic_mean_temperature_K(sink.T_in_C, sink.T_out_C)
-    T_so = thermodynamic_mean_temperature_K(source.T_in_C, source.T_out_C)
-    return T_si / (T_si - T_so) if T_si > T_so else math.inf
+    """Reversible (Lorenz) heating COP of the secondary streams: ``pinch.heat_pump.lorenz_cop`` with η_L = 1."""
+    try:
+        return lorenz_cop(sink.T_in_C, sink.T_out_C, source.T_in_C, source.T_out_C, 1.0)
+    except ValueError:            # no lift: any COP is reversible
+        return math.inf
 
 
 def _result(fluid: str, layout: str, s: _State, source: SecondaryStream, sink: SecondaryStream) -> CycleResult:

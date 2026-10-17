@@ -115,12 +115,12 @@
     "results": {
       "full design (heat recovery installed)": {
         "option": "100.0 %",
-        "capex_EUR": 1793176.4713,
-        "opex_EUR": 468822.9378,
-        "savings_EUR": 234170.65,
+        "capex_EUR": 1793176.4706,
+        "opex_EUR": 468822.938,
+        "savings_EUR": 234170.6498,
         "payback_years": 7.6576,
-        "npv_EUR": 15027.2162,
-        "gas_fuel_MWh": -0.0,
+        "npv_EUR": 15027.2152,
+        "gas_fuel_MWh": 0.0,
         "electricity_MWh": 3784.4913,
         "co2_t": 404.9406,
         "co2_avoided_t": 1835.4808,
@@ -145,12 +145,12 @@
       },
       "heat recovery + heat pumps (vs no HR)": {
         "option": "heat recovery + heat pumps",
-        "capex_EUR": 2227679.0987,
-        "opex_EUR": 468822.9378,
-        "savings_EUR": 936319.8806,
+        "capex_EUR": 2227679.0979,
+        "opex_EUR": 468822.938,
+        "savings_EUR": 936319.8804,
         "payback_years": 2.3792,
-        "npv_EUR": 5002334.8285,
-        "gas_fuel_MWh": -0.0,
+        "npv_EUR": 5002334.8275,
+        "gas_fuel_MWh": 0.0,
         "electricity_MWh": 3784.4913,
         "co2_t": 404.9406,
         "co2_avoided_t": 4281.7432,
@@ -777,9 +777,9 @@
         "units": [
           {
             "name": "Warm-water HP",
-            "Q_sink": 8.3000000113,
+            "Q_sink": 8.3,
             "COP": 3.2247176391216175,
-            "Q_source": 5.726131245053278
+            "Q_source": 5.726131237257461
           },
           {
             "name": "HTHP (wort boiling)",
@@ -809,9 +809,9 @@
         "units": [
           {
             "name": "Warm-water HP",
-            "Q_sink": 7.484705892837646,
+            "Q_sink": 7.484705882352941,
             "COP": 3.2247176391216175,
-            "Q_source": 5.1636636403208005
+            "Q_source": 5.163663633087451
           },
           {
             "name": "HTHP (wort boiling)",
@@ -841,9 +841,9 @@
         "units": [
           {
             "name": "Warm-water HP",
-            "Q_sink": 7.484705892837646,
+            "Q_sink": 7.484705882352941,
             "COP": 3.2247176391216175,
-            "Q_source": 5.1636636403208005
+            "Q_source": 5.163663633087451
           }
         ],
         "refrigeration": 3.2211764705882353,
@@ -867,9 +867,9 @@
         "units": [
           {
             "name": "Warm-water HP",
-            "Q_sink": 7.484705892837646,
+            "Q_sink": 7.484705882352941,
             "COP": 3.1092727476410635,
-            "Q_source": 5.077485137271533
+            "Q_source": 5.0774851301589035
           },
           {
             "name": "HTHP (wort boiling)",
