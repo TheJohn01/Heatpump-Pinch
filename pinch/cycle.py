@@ -38,13 +38,13 @@ Not modelled: pressure drops, compressor maps and part load.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 from typing import Callable
 
 import CoolProp.CoolProp as CP
 from scipy.optimize import minimize_scalar
 
-from pinch.heat_pump import KELVIN, thermodynamic_mean_temperature_K
+from pinch.heat_pump import KELVIN, lorenz_cop
 
 ANDERSEN2024_TABLE3 = "Andersen et al. (2024), Applied Energy 376, 124312, Table 3"
 EXPANDER_CREDIT = lambda a: a.eta_motor  # noqa: E731
@@ -140,10 +140,6 @@ class _Fluid:
     def h_pt(self, P: float, T: float) -> float:
         self.AS.update(CP.PT_INPUTS, P, T)
         return self.AS.hmass()
-
-    def s_pt(self, P: float, T: float) -> float:
-        self.AS.update(CP.PT_INPUTS, P, T)
-        return self.AS.smass()
 
     def h_ps(self, P: float, s: float) -> float:
         self.AS.update(CP.PSmass_INPUTS, P, s)
@@ -406,9 +402,11 @@ def _solve_single(fluid: str, source: SecondaryStream | None, sink_T: Callable[[
 
 
 def _lorenz(source: SecondaryStream, sink: SecondaryStream) -> float:
-    T_si = thermodynamic_mean_temperature_K(sink.T_in_C, sink.T_out_C)
-    T_so = thermodynamic_mean_temperature_K(source.T_in_C, source.T_out_C)
-    return T_si / (T_si - T_so) if T_si > T_so else math.inf
+    """Reversible (Lorenz) heating COP of the secondary streams: ``pinch.heat_pump.lorenz_cop`` with η_L = 1."""
+    try:
+        return lorenz_cop(sink.T_in_C, sink.T_out_C, source.T_in_C, source.T_out_C, 1.0)
+    except ValueError:            # no lift: any COP is reversible
+        return math.inf
 
 
 def _result(fluid: str, layout: str, s: _State, source: SecondaryStream, sink: SecondaryStream) -> CycleResult:
@@ -548,17 +546,3 @@ def cascade(fluid_low: str, fluid_high: str, source: SecondaryStream, sink: Seco
                        eta_lorenz=cop / cop_L, pressure_ratio=max(s.pressure_ratio for s in stages),
                        T_discharge_C=max(s.T_discharge_C for s in stages), stages=stages,
                        note=f"intermediate (top evaporation) {top.T_e - KELVIN:.1f} °C")
-
-
-def screen_fluids(fluids: list[str], source: SecondaryStream, sink: SecondaryStream,
-                  assumptions: CycleAssumptions = CycleAssumptions(),
-                  layouts: tuple[str, ...] = ("std", "slhx")) -> list[CycleResult]:
-    """Best single-stage cycle per fluid and layout, sorted by COP (feasible first)."""
-    out = []
-    for fl in fluids:
-        for lay in layouts:
-            try:
-                out.append(single_stage(fl, source, sink, assumptions, slhx="slhx" in lay, expander="exp" in lay))
-            except ValueError as exc:  # CoolProp out of range
-                out.append(CycleResult(fl, lay, False, note=f"CoolProp: {exc}"[:120]))
-    return sorted(out, key=lambda r: (not r.feasible, -(r.COP if r.feasible else 0)))

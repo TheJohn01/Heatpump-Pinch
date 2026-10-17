@@ -36,7 +36,9 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, replace
 
-from pinch.problem_table import problem_table
+import numpy as np
+
+from pinch.problem_table_algorithm import ProblemTable, problem_table
 from pinch.streams import Stream, StreamSet
 
 KELVIN = 273.15
@@ -320,28 +322,73 @@ class IntegrationResult:
         return sum(self.Q_source_process.values()) - self.Q_cold_utility_replaced
 
 
-def _max_process_source(sinks: StreamSet, unit: HeatPump, Q_cap: float) -> float:
-    """Largest source duty the process can give a unit without raising Qh.
+def gcc_duty_limit(table: ProblemTable, T_lo_C: float, T_hi_C: float, side: str) -> float:
+    """Largest duty of a utility profile over [T_lo, T_hi] (on the T* axis) that the GCC accepts.
 
-    Found by bisection on the cascade, so it works for gliding sources too.
+    This is "sizing from the GCC" read off the curve, with no iteration (redundancy audit, item 3).
+    H(T*) is the feasible cascade (GCC heat flow); it equals Q̇h,min above the top of the GCC and
+    Q̇c,min below its bottom. The utility exchanges its duty Q linearly over [T_lo, T_hi].
+
+    * ``side="sink"`` (condenser, a hot utility): the duty is fully used, i.e. Q̇h falls by Q, as long
+      as at every T* the heat flow covers the sink heat released below T*:
+          Q f(T*) <= H(T*),  f = clip((T* - T_lo) / (T_hi - T_lo), 0, 1);
+    * ``side="source"`` (evaporator, a cold utility): the duty is taken without raising Q̇h as long as
+      the heat flow covers the source heat absorbed above T*:
+          Q g(T*) <= H(T*),  g = clip((T_hi - T*) / (T_hi - T_lo), 0, 1).
+
+    Hence Q_max = min H / f (or H / g) over T*. Between breakpoints H and f are linear, so H / f is
+    linear-fractional and monotone: the minimum lies at a GCC breakpoint or at T_lo / T_hi.
+
+    Parameters
+    ----------
+    table : ProblemTable
+        Cascade of the process (with any utilities already placed).
+    T_lo_C, T_hi_C : float
+        Utility temperature range on the T* axis [°C], T_lo < T_hi.
+    side : str
+        "sink" or "source".
+
+    Returns
+    -------
+    float
+        Largest duty [energy unit]; for a sink at most Q̇h,min.
     """
-    Qh_ref = problem_table(sinks).Qh_min
-    tol = 1e-9 * max(1.0, Qh_ref)
+    if not T_hi_C > T_lo_C:
+        raise ValueError("utility profile needs T_hi > T_lo")
+    T_desc, H = table.T_star_C, table.cascade_feasible
+    T = np.unique(np.concatenate([T_desc, [T_lo_C, T_hi_C]]))
+    H_at = np.interp(T, T_desc[::-1], H[::-1])           # clamped: Q̇h,min above the top, Q̇c,min below the bottom
+    width = T_hi_C - T_lo_C
+    if side == "sink":
+        share = np.clip((T - T_lo_C) / width, 0.0, 1.0)
+    elif side == "source":
+        share = np.clip((T_hi_C - T) / width, 0.0, 1.0)
+    else:
+        raise ValueError("side must be 'sink' or 'source'")
+    used = share > 0
+    return max(0.0, float(np.min(H_at[used] / share[used])))
 
-    def feasible(Q: float) -> bool:
-        trial = replace(sinks, streams=sinks.streams + (_source_stream(unit, Q),))
-        return problem_table(trial).Qh_min <= Qh_ref + tol
 
+def _sink_range(unit: HeatPump) -> tuple[float, float]:
+    """(T_lo, T_hi) of the unit's sink stream on the T* axis (see ``_sink_stream``)."""
+    s = _sink_stream(unit)
+    return s.T_out_C, s.T_in_C
+
+
+def _source_range(unit: HeatPump) -> tuple[float, float]:
+    """(T_lo, T_hi) of the unit's source stream on the T* axis (see ``_source_stream``)."""
+    s = _source_stream(unit, 1.0)
+    return s.T_in_C, s.T_out_C
+
+
+def _max_process_source(stream_set: StreamSet, unit: HeatPump, Q_cap: float) -> float:
+    """Largest source duty the process can give a unit without raising Qh (read from its GCC)."""
     if Q_cap <= 0:
         return 0.0
-    if feasible(Q_cap):
-        return Q_cap
-    lo, hi = 0.0, Q_cap
-    for _ in range(60):
-        mid = 0.5 * (lo + hi)
-        lo, hi = (mid, hi) if feasible(mid) else (lo, mid)
-    # Duties within the solver tolerance are numerical noise, not process heat.
-    return lo if lo > MIN_DUTY_FRACTION * max(Q_cap, Qh_ref) else 0.0
+    table = problem_table(stream_set)
+    Q = min(Q_cap, gcc_duty_limit(table, *_source_range(unit), side="source"))
+    # Duties within round-off of zero are numerical noise, not process heat.
+    return Q if Q > MIN_DUTY_FRACTION * max(Q_cap, table.Qh_min) else 0.0
 
 
 def integrate(stream_set: StreamSet, units: list[HeatPump]) -> IntegrationResult:
@@ -396,24 +443,11 @@ def integrate(stream_set: StreamSet, units: list[HeatPump]) -> IntegrationResult
 def max_useful_sink_duty(stream_set: StreamSet, unit: HeatPump) -> float:
     """Size a unit from the GCC: largest sink duty the process can fully use.
 
-    A sink duty is fully used when it lowers the hot utility by the same
-    amount. Found by bisection on the cascade, so it works for gliding sinks.
-    The upper bound is the process's current minimum hot utility.
+    A sink duty is fully used when it lowers the hot utility by the same amount. Read directly
+    from the GCC (``gcc_duty_limit``); for an isothermal sink this is the GCC heat flow at the
+    sink temperature (within the ``isothermal_width_K`` convention). At most Q̇h,min.
     """
-    Qh_ref = problem_table(stream_set).Qh_min
-    tol = 1e-9 * max(1.0, Qh_ref)
-
-    def fully_used(Q: float) -> bool:
-        trial = add_units(stream_set, [unit.with_sink_duty(Q)], {})
-        return problem_table(trial).Qh_min <= Qh_ref - Q + tol
-
-    if Qh_ref <= tol:
-        return 0.0
-    if fully_used(Qh_ref):
-        return Qh_ref
-    lo, hi = 0.0, Qh_ref
-    for _ in range(60):
-        mid = 0.5 * (lo + hi)
-        lo, hi = (mid, hi) if fully_used(mid) else (lo, mid)
-    # Duties within the solver tolerance are numerical noise, not a design.
-    return lo if lo > MIN_DUTY_FRACTION * Qh_ref else 0.0
+    table = problem_table(stream_set)
+    Q = gcc_duty_limit(table, *_sink_range(unit), side="sink")
+    # Duties within round-off of zero are numerical noise, not a design.
+    return Q if Q > MIN_DUTY_FRACTION * table.Qh_min else 0.0

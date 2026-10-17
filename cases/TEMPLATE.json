@@ -52,11 +52,6 @@
       "prices": "cite the price source, period, band and tax basis (example values: Eurostat Portugal 2026-S1, electricity band ID, gas band I3, excl. VAT)",
       "heat_pump_cost": "Danish Energy Agency catalogue (2025) by sink temperature (sheets 1.1 / 2.a / 2.b), with its add-ons for lift above 75 K and steam generation (isothermal sinks); remove the steam add-on if the heat pump heats air or water directly. Padullés et al. (2026, Table 3) is fitted to brewery heat pumps (below the catalogue above about 1.7 MW)"
     },
-    "scenarios": {
-      "EU ETS CO2 price": {
-        "co2_price_EUR_per_t": 82.4
-      }
-    },
     "cost_functions": {
       "hp_dea_1_1": {
         "alpha": 950.0,
@@ -146,7 +141,18 @@
       }
     ]
   },
-  "_economics": "Optional; needs 'basis'. Any key left out takes the default in pinch/economics.py (DEFAULTS, each with its source). For a 'power' basis, operating_hours_per_year must match the basis. heat_recovery_equipment: list of [kind, size] (kinds: hr_tank [m3], heat_pump/mvr/electric_boiler [kW]) to evaluate a site without heat recovery. scenarios: {name: {parameter: value}} re-runs the full design, RQ1 and RQ3 with those overrides. Heat pumps: cost function chosen by sink temperature (heat_pump_cost_classes) plus add-ons (heat_pump_cost_adders); O&M per cost function (fixed_om_EUR_per_unit_year, variable_om_EUR_per_MWh).",
+  "_sensitivities": "Optional. One row per sensitivity: {label, kind, value, basis}. Kinds are listed in pinch/sensitivity.py; 'econ' overrides economics parameters.",
+  "sensitivities": [
+    {
+      "label": "EU ETS CO2 price",
+      "kind": "econ",
+      "value": {
+        "co2_price_EUR_per_t": 82.4
+      },
+      "basis": "EU ETS"
+    }
+  ],
+  "_economics": "Optional; needs 'basis'. Any key left out takes the default in pinch/economics.py (DEFAULTS, each with its source). For a 'power' basis, operating_hours_per_year must match the basis. heat_recovery_equipment: list of [kind, size] (kinds: hr_tank [m3], heat_pump/mvr/electric_boiler [kW]) to evaluate a site without heat recovery. Heat pumps: cost function chosen by sink temperature (heat_pump_cost_classes) plus add-ons (heat_pump_cost_adders); O&M per cost function (fixed_om_EUR_per_unit_year, variable_om_EUR_per_MWh).",
   "screening": {
     "sink_warn_C": 120,
     "sink_max_C": 200,

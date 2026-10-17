@@ -1,6 +1,8 @@
 """Verification of the step-4a assumptions (Padullés et al., 2026, brewery case).
 
-Each check prints a verdict and writes outputs/step4_assumption_checks.csv.
+Each check prints a verdict and writes outputs/step4_assumption_checks.csv. ``checks()`` returns the
+table; tests/test_reproductions.py asserts every verdict, so the test suite is the single place where
+these comparisons are checked (redundancy audit, item 6) and this script only writes the table.
 
 A1  Source temperature -1 °C for all units: compare the published COPs with
     the COPs implied by the temperatures drawn in Fig. 12 (digitised), and
@@ -18,7 +20,6 @@ calibrated on the gridlines; resolution about 0.05 kWh/hl and 0.2 K):
 
 from __future__ import annotations
 
-from pathlib import Path
 
 import pandas as pd
 
@@ -41,8 +42,8 @@ FIG12 = {"HTHP_condenser_T": 107.1, "HTHP_condenser_Q": (7.94, 11.35),
 OUT = ROOT / "outputs"
 
 
-def main() -> None:
-    OUT.mkdir(exist_ok=True)
+def checks() -> pd.DataFrame:
+    """Every check as a row: check, quantity, value, reference, verdict."""
     streams = load_streams(ROOT / "data" / "brewery_streams.csv")
     base = problem_table(streams)
     rows = []
@@ -58,9 +59,9 @@ def main() -> None:
                          FIG12["cooling_source_T"], FIG12["cooling_source_T"], eta_lorenz=ETA)
     co2_ambient = HeatPump("CO2", 8.3, 18, 82, FIG12["ambient_source_T"], FIG12["ambient_source_T"], eta_lorenz=ETA)
     record("A1", "CO2 HP COP, source -1 °C (our assumption)", round(co2_pub.COP, 3), "3.5 published; 3.46 from Fig. 14",
-           "matches")
+           "matches" if abs(co2_pub.COP - 3.5) < 0.05 else "does not match")
     record("A1", "CO2 HP COP, temperatures drawn in Fig. 12", round(co2_fig12.COP, 3), "3.5 published",
-           "does not match: Fig. 12 is schematic")
+           "matches" if abs(co2_fig12.COP - 3.5) < 0.05 else "does not match: Fig. 12 is schematic")
     record("A1", "CO2 HP W, all source at -1 °C [kWh/hl]", round(co2_pub.W, 3), "2.4 (Fig. 14)", "upper bound")
     record("A1", "CO2 HP W, all source ambient at 10.9 °C [kWh/hl]", round(co2_ambient.W, 3), "-",
            "lower bound (needs a separate evaporator)")
@@ -104,7 +105,12 @@ def main() -> None:
     record("A5", "Cold utility replaced [kWh/hl]", round(r.Q_cold_utility_replaced, 4),
            f"Qc_min = {base.Qc_min:.4f}", "equal" if abs(r.Q_cold_utility_replaced - base.Qc_min) < 1e-6 else "differs")
 
-    pd.DataFrame(rows).to_csv(OUT / "step4_assumption_checks.csv", index=False)
+    return pd.DataFrame(rows)
+
+
+def main() -> None:
+    OUT.mkdir(exist_ok=True)
+    checks().to_csv(OUT / "step4_assumption_checks.csv", index=False)
 
 
 if __name__ == "__main__":

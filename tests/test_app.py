@@ -167,7 +167,6 @@ def test_assumed_film_coefficients_run_supertargeting():
 
 
 def test_assumed_basis_recorded_in_provenance():
-    import app_pages
     from streamlit.testing.v1 import AppTest
 
     def page():

@@ -5,7 +5,8 @@ Usage:
     python regenerate_outputs.py --check    # rerun, then fail if any committed CSV/JSON/MD output changed
 
 The CI workflow runs ``--check``: a result in outputs/ that no longer follows from the code and the case
-files fails the build. PNG files are regenerated but excluded from the comparison (font rasterisation
+files fails the build. The same holds for the generated blocks of README.md (the table of economic
+defaults, written from ``pinch.economics``). PNG files are regenerated but excluded from the comparison (font rasterisation
 differs between machines); their data are in the CSV files next to them.
 
 Order: step-1/2 validation and reproductions, cycle screening (read by analyse.py), all cases, then the
@@ -44,9 +45,22 @@ def run_all() -> None:
         subprocess.run([sys.executable, *step], cwd=ROOT, env=env, check=True, stdout=subprocess.DEVNULL)
 
 
+README = ROOT / "README.md"
+BEGIN, END = "<!-- BEGIN generated: pinch.economics.defaults_markdown() -->", "<!-- END generated -->"
+
+
+def update_readme() -> None:
+    """Rewrite README.md's generated block from the code."""
+    from pinch.economics import defaults_markdown
+    text = README.read_text(encoding="utf-8")
+    head, rest = text.split(BEGIN, 1)
+    _, tail = rest.split(END, 1)
+    README.write_text(f"{head}{BEGIN}\n{defaults_markdown()}{END}{tail}", encoding="utf-8")
+
+
 def changed_outputs() -> list[str]:
-    """Committed outputs (excluding PNG) that differ from HEAD, plus untracked new outputs."""
-    diff = subprocess.run(["git", "status", "--porcelain", "--", "outputs"], cwd=ROOT, check=True,
+    """Committed outputs (excluding PNG) and README.md that differ from HEAD, plus untracked new outputs."""
+    diff = subprocess.run(["git", "status", "--porcelain", "--", "outputs", "README.md"], cwd=ROOT, check=True,
                           capture_output=True, text=True).stdout.splitlines()
     return [line for line in diff if not line.rstrip().endswith(".png")]
 
@@ -56,6 +70,7 @@ def main() -> None:
     parser.add_argument("--check", action="store_true", help="fail if a committed non-PNG output changed")
     args = parser.parse_args()
     run_all()
+    update_readme()
     if args.check:
         changed = changed_outputs()
         if changed:

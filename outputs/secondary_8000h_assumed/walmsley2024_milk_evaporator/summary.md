@@ -44,22 +44,24 @@ Price ratio 2.136 (electricity 0.0897 EUR/kWh, gas 0.042 EUR/kWh); boiler effici
 | Full design: NPV [EUR] | -2,892,318 |
 | Full design: CO2 avoided [t/year] | 4,852 |
 | Full design: primary-energy reduction | 25.3 % |
-| Grass-roots variant (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ 5 y | 24.5 % |
-| Grass-roots variant: share with maximum NPV | 18.0 % |
-| Grass-roots variant: break-even ratio of the full design, NPV = 0 | 1.373 |
-| Grass-roots variant: break-even ratio, payback = threshold | 0.64 |
+| Grass-roots reference (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ 5 y | 24.5 % |
+| Grass-roots reference: share with maximum NPV | 18.0 % |
+| Grass-roots reference: break-even ratio of the full design, NPV = 0 | 1.373 |
+| Grass-roots reference: break-even ratio, payback = threshold | 0.64 |
 
 RQ1-RQ3 answers for a site with an existing network (share of today's gas, incremental payback, break-even ratio per unit) are in the retrofit section and in rq_consolidated.md.
 
-### Scenarios (parameter overrides)
+### Sensitivities, grass-roots reference (economics rows of the case's sensitivity list)
 
-| Scenario | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | RQ1 | RQ3 (NPV = 0) |
+Same rows and labels as rq_consolidated.md, which gives RQ1-RQ3 against today's site.
+
+| Sensitivity | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | HP share of Q̇h,min, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |
 |---|---|---|---|---|---|---|
 | with hot-water piping (DEA indirect cost) | 2.136 | 14.94 | -2,848,227 | 4,852 | 23.5 % | 1.385 |
 
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 
-| η_L | System COP | Full-design payback [y] | NPV [EUR] | RQ1 | RQ3 (NPV = 0) |
+| η_L | System COP | Full-design payback [y] | NPV [EUR] | Grass-roots HP share, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |
 |---|---|---|---|---|---|
 | 0.45 | 2.181 | 30.04 | -3,792,302 | 23.0 % | 1.236 |
 | 0.52 | 2.52 | 15.62 | -2,580,785 | 25.0 % | 1.428 |

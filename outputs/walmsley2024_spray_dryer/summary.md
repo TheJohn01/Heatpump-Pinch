@@ -44,22 +44,24 @@ Price ratio 2.016 (electricity 0.0897 EUR/kWh, gas 0.0445 EUR/kWh); boiler effic
 | Full design: NPV [EUR] | -7,676,306 |
 | Full design: CO2 avoided [t/year] | 3,253 |
 | Full design: primary-energy reduction | -13.6 % |
-| Grass-roots variant (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ 5 y | 0.0 % |
-| Grass-roots variant: share with maximum NPV | 0.0 % |
-| Grass-roots variant: break-even ratio of the full design, NPV = 0 | 0.494 |
-| Grass-roots variant: break-even ratio, payback = threshold | -0.168 |
+| Grass-roots reference (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ 5 y | 0.0 % |
+| Grass-roots reference: share with maximum NPV | 0.0 % |
+| Grass-roots reference: break-even ratio of the full design, NPV = 0 | 0.494 |
+| Grass-roots reference: break-even ratio, payback = threshold | -0.168 |
 
 RQ1-RQ3 answers for a site with an existing network (share of today's gas, incremental payback, break-even ratio per unit) are in the retrofit section and in rq_consolidated.md.
 
-### Scenarios (parameter overrides)
+### Sensitivities, grass-roots reference (economics rows of the case's sensitivity list)
 
-| Scenario | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | RQ1 | RQ3 (NPV = 0) |
+Same rows and labels as rq_consolidated.md, which gives RQ1-RQ3 against today's site.
+
+| Sensitivity | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | HP share of Q̇h,min, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |
 |---|---|---|---|---|---|---|
 | with hot-water piping (DEA indirect cost) | 2.016 | inf | -7,840,359 | 3,253 | 0.0 % | 0.461 |
 
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 
-| η_L | System COP | Full-design payback [y] | NPV [EUR] | RQ1 | RQ3 (NPV = 0) |
+| η_L | System COP | Full-design payback [y] | NPV [EUR] | Grass-roots HP share, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |
 |---|---|---|---|---|---|
 | 0.45 | 1.373 | inf | -8,805,944 | 0.0 % | 0.444 |
 | 0.52 | 1.587 | inf | -7,285,278 | 0.0 % | 0.514 |

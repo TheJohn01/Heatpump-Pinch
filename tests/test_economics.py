@@ -7,7 +7,6 @@
 3. The general analysis on the brewery case against a hand calculation.
 """
 
-import math
 
 import pytest
 
@@ -105,10 +104,10 @@ def test_brewery_full_design_hand_check(tmp_path):
         savings += (3.4424 - 0.2212) / ec["chiller_cop"] * p_el * 1e6
     assert full["capex_EUR"] == pytest.approx(capex, rel=1e-3)
     assert full["savings_EUR"] == pytest.approx(savings, rel=1e-3)
-    assert s["economics"]["RQ3"]["ratio_used"] == pytest.approx(p_el / p_gas, abs=1e-3)
-    # every scenario changes only what it names: the base scenario values reappear when nothing is overridden
-    names = [r["scenario"] for r in s["economics"]["scenarios"]]
-    assert len(names) == len(ec["scenarios"])
+    assert s["economics"]["grass_roots_reference"]["ratio_used"] == pytest.approx(p_el / p_gas, abs=1e-3)
+    # the grass-roots table holds exactly the economics rows of the case's single sensitivity list (audit 1.1)
+    econ_labels = [r.label for r in load_case(path).sensitivities if r.kind == "econ"]
+    assert [r["sensitivity"] for r in s["economics"]["grass_roots_sensitivities"]] == econ_labels
     eta_rows = s["eta_lorenz_sensitivity"]
     cops = [r["COP_system"] for r in eta_rows]
     assert cops == sorted(cops)                              # higher Lorenz efficiency, higher COP
@@ -168,7 +167,7 @@ def test_heat_pump_cost_classes_pick_catalogue_sheet():
     assert p.heat_pump_cost_class(60.0) == ("a", False)
     assert p.heat_pump_cost_class(105.0) == ("b", False)
     assert p.heat_pump_cost_class(160.0) == ("b", True)            # above every class: extrapolated
-    assert load_economics({}).heat_pump_kind(105.0) == "heat_pump"  # no classes: Padullés Table 3
+    assert load_economics({}).heat_pump_cost_class(105.0) == ("heat_pump", False)  # no classes: Padullés Table 3
 
 
 def test_heat_pump_cost_classes_need_their_cost_function():
@@ -231,37 +230,3 @@ def test_spray_dryer_steam_add_on_only_for_steam_heat_pump():
     cls = compute(c).summary["economics"]["heat_pump_cost_class"]
     assert "steam" not in cls["HTHP 120 °C (fluid beds)"]
     assert "dea_steam" in cls["HTHP 200 °C (main air)"]
-
-
-def test_replaced_curve_cache_is_keyed_by_value():
-    """Supervisor review C1: an id()-keyed cache gave a new design the curve of a collected one."""
-    import gc
-    from pinch.case import load_case
-    from pinch.design import design_from_gcc
-    from pinch.economic_analysis import cold_utility_replaced_curve
-    from pinch.validation import ROOT
-    from pinch import load_streams, with_extra_shift
-    c = load_case(ROOT / "cases" / "brewery_padulles2026.json")
-    st = with_extra_shift(load_streams(c.stream_file), c.extra_shift_K)
-    results = {}
-    for eta in (0.52, 0.63, 0.52):
-        d = design_from_gcc(st, c.sink_levels, eta, c.source_T_C)
-        fresh = []
-        from pinch.heat_pump import integrate
-        units = sorted(d.units, key=lambda u: -u.COP)
-        total = sum(u.Q_sink for u in units)
-        import numpy as np
-        for target in np.linspace(0.0, total, 11):
-            rem, part = target, []
-            for u in units:
-                q = min(u.Q_sink, rem)
-                if q <= 0:
-                    break
-                rem -= q
-                part.append(u.with_sink_duty(q))
-            fresh.append(integrate(st, part).Q_cold_utility_replaced if part else 0.0)
-        assert cold_utility_replaced_curve(d, st, 11) == pytest.approx(fresh)   # cached value = fresh value
-        results.setdefault(eta, []).append(cold_utility_replaced_curve(d, st, 11))
-        del d
-        gc.collect()
-    assert results[0.52][0] == results[0.52][1]

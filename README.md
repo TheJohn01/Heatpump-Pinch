@@ -30,7 +30,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 155 tests (about 3 min)
+python -m pytest                                  # full suite (about 2 min)
 python regenerate_outputs.py                      # rebuild every output (about 3.5 min; --check compares with Git)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
@@ -93,7 +93,7 @@ for confidential plant data, run the app locally (`streamlit run app.py`).
 | 3. ΔTmin / cost trade-off | Done: Bath area target, units target, supertargeting; validated on the OU area example (published error found and corrected). Brewery RQ2 with the Sinnott and Towler (2020) Table 6.6 plate-and-frame law (bare and ×3.5 installed; Stampfli et al. 2018 as a cross-check only) plus a sweep; flat optimum reported as the 1 % range |
 | 4. Heat pump placement | 4a done: Lorenz COP, placement rules, GCC sizing, screening, general design. 4b done: CoolProp cycle model (single stage, SLHX, expander, two-stage, cascade), practical limits (Annex 58), working-fluid screening, cycle-based η_L and economics; validated on Andersen et al. (2024) Appendix A |
 | 5. HEN retrofit | Done: existing-network evaluation (direct and storage-based matches), pinch diagnostics (energy gap = cross-pinch + heaters below + coolers above), network-constrained heat pump sizing, retrofit options with exchanger and storage costs; brewery: paper's Pfaduko + HR tank reproduced (11.3 kWh/hl) |
-| 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; RQ1 electrification curve; RQ3 break-even ratio; named scenarios and Lorenz-efficiency sensitivity; paper Sec. 5.2 statements and Appendix B (Case DK1) NPV/payback reproduced |
+| 6. Economics | Done: CAPEX (Padullés Table 3), OPEX, payback, NPV, CO2, primary energy; electrification curve and break-even ratio (grass-roots reference); one sensitivity list per case and Lorenz-efficiency sensitivity; paper Sec. 5.2 statements and Appendix B (Case DK1) NPV/payback reproduced |
 
 ## Layout
 
@@ -119,8 +119,8 @@ data/
   brewery_networks.json      Existing network (Pfaduko + HR tank, paper Sec. 4.2) and the condensate retrofit
 pinch/
   streams.py                 Load, validate, shift, energy balance
-  problem_table.py           Problem Table Algorithm (cascade, targets, pinch)
-  curves.py                  Composite curves and GCC data
+  problem_table_algorithm.py Problem Table Algorithm (cascade, targets, pinch; the GCC is its feasible cascade)
+  curves.py                  Composite curves (one piecewise composite sum, also used by area and network)
   heat_pump.py               Lorenz COP, heat pump units, integration, GCC sizing
   cycle.py                   Vapour-compression cycles with CoolProp (step 4b)
   cycle_analysis.py          Working-fluid screening of a design; selected fluid per unit
@@ -133,10 +133,13 @@ pinch/
   results.py                 Outputs container: summary, tables, figures; write to disk
   validation.py              Reference vs computed comparison
   economics.py               Cost functions, evaluation, break-even ratio (defaults with sources)
-  economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
+  economic_analysis.py       Per-case economics: grass-roots reference (site at the energy target), electrification curve
+  refrigeration.py           Refrigeration duty and the part heat pump sources take over (steps 5 and 6)
+  sensitivity.py             The case's single sensitivity list: row kinds, validation, apply()
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       155 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       pytest suite (validation cases first, then general behaviour; incl. app smoke tests,
+                             cycle model, network retrofit). Run `python -m pytest -q` for the current count
 
 ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
@@ -149,13 +152,13 @@ consolidate_rq.py            RQ1-RQ3 answers with one-at-a-time and combined sen
 screen_cycles.py             Step 4b: screen the fluids listed in a case file (minutes); analyse.py then
                              adds the cycle-based design to the summary
 
-Paper-specific scripts (brewery):
-validate_targets.py                 Steps 1-2 validation report
+Paper-specific scripts. They write tables and figures only; every comparison they report is
+asserted by a test (tests/test_problem_table.py, test_economics.py, test_reproductions.py):
+validate_targets.py                 Steps 1-2 validation report (problem tables and figures only for
+                                    reference cases no case file covers: brewery +2 K, Northwestern)
 reproduce_padulles2026.py           Reproduces the paper's three configurations (Sec. 4.3)
 reproduce_padulles2026_economics.py Reproduces the paper's economic statements (Sec. 5.2) and option maps
-verify_padulles2026_assumptions.py  Checks each modelling assumption against the paper
-
-Paper-specific script (dairy):
+verify_padulles2026_assumptions.py  Checks each modelling assumption against the paper (brewery)
 verify_walmsley2024.py              Targets, COP, inconsistencies and inferred variant (Walmsley et al., 2024)
 ```
 
@@ -209,17 +212,36 @@ verify_walmsley2024.py              Targets, COP, inconsistencies and inferred v
 
 ### Economic defaults
 
-Every default in `pinch/economics.py` (`DEFAULTS`) carries its source:
+The defaults and their sources are written once, in `pinch/economics.py` (`DEFAULTS`,
+`DEFAULT_COST_FUNCTIONS`); the table below is generated from them by `regenerate_outputs.py`, whose
+`--check` (CI) fails if it is stale. Each case file overrides values in its `economics` block and
+gives their sources in `economics.sources` (e.g. the brewery's chiller COP 4.45 and its
+heat-exchanger cost law); the reasoning behind each choice is in `ASSUMPTIONS.md`.
 
+<!-- BEGIN generated: pinch.economics.defaults_markdown() -->
 | Parameter | Default | Source |
 |---|---|---|
-| Boiler efficiency (GCV) | 0.845 | DEA Technology Data, Industrial Process Heat, sheet 6.1: 93.9 % net, × 0.90 (NCV/GCV) |
-| Gas emission factor | 0.182 kg/kWh (GCV) | IPCC 2006 Guidelines, Vol. 2, Table 2.2: 56,100 kg CO2/TJ NCV |
-| Grid emission factor | 0.107 kg/kWh | APA (2025), Portugal 2023, production-based |
-| Primary energy factor, electricity | 1.9 | Delegated Regulation (EU) 2023/807 |
-| Chiller COP (refrigeration credit) | none by default; brewery 4.45 | Sinnott and Towler (2020), Sec. 6.4.4: 0.6 × Carnot (−6 °C / 30 °C); CoolProp ammonia cycle check 4.52 |
-| O&M | heat pump 2,494 €/MW·y + 3.6 €/MWh; boiler 1.23 €/MWh avoided | DEA Technology Data, Industrial Process Heat, sheets 2.a and 6.1 (2025); `NO_OM` reproduces Padullés et al. (no O&M) |
-| Heat-exchanger cost (brewery) | 6,838.6 + 911.8 A^0.95 EUR | Sinnott and Towler (2020), Table 6.6 plate and frame × 3.5 (Hand, Table 6.3), CEPCI 2023, ECB 2023 |
+| `gas_price_EUR_per_kWh` | 0.06 | published: Padullés et al. (2026), Sec. 5.1 base price |
+| `electricity_to_gas_ratio` | 2.0 | published: Padullés et al. (2026), Sec. 5.2, 'current European ratios of around 2' |
+| `boiler_efficiency` | 0.845 | Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): total efficiency, net, annual average 93.9 % (range 91.9-94.9 %), steam boiler with economiser; converted to the gross (GCV) basis of Eurostat gas prices with NCV/GCV = 0.90: 0.939 x 0.90 = 0.845. Earlier default 0.817 (US DOE Steam Tip Sheet #15, HHV) kept as sensitivity |
+| `operating_hours_per_year` | 8000.0 | published: Padullés et al. (2026), Sec. 5.1 |
+| `discount_rate` | 0.05 | published: Padullés et al. (2026), Sec. 5.2 |
+| `horizon_years` | 10 | published: Padullés et al. (2026), Sec. 5.2 (NPV10) |
+| `payback_threshold_years` | 5.0 | research question 1 (industry practice 3-5 years: Cooremans, cited in Padullés et al. 2026) |
+| `gas_EF_kg_per_kWh` | 0.182 | IPCC 2006 Guidelines, Vol. 2, Ch. 2, Table 2.2: natural gas, stationary combustion, 56,100 kg CO2/TJ (NCV) = 0.202 kg/kWh NCV = 0.182 kg/kWh GCV (NCV/GCV = 0.90), direct combustion only, matching the scope of production-based grid factors. Padullés et al. (2026, Sec. 5.3) use 0.219 (scope not stated); report it as a sensitivity |
+| `grid_EF_kg_per_kWh` | 0.107 | APA, 'Fator de Emissão da Eletricidade - 2025', Table T1: Portugal 2023, 0.107 t CO2eq/MWh (annual, production-based, direct emissions). Sensitivities: mainland 2023 0.092; 5-year moving average 0.167 (Table T2); Electricity Maps 2025 flow-traced 0.1172 |
+| `co2_price_EUR_per_t` | 0.0 | 0 by default (site may be outside the EU ETS); sensitivity uses the EUA price |
+| `pef_electricity` | 1.9 | published: Commission Delegated Regulation (EU) 2023/807 (EED default) |
+| `pef_gas` | 1.0 | convention: primary energy of a fuel = its final energy, on the net calorific value (NCV) basis of energy statistics |
+| `gas_ncv_over_gcv` | 0.9 | IPCC (1996) Revised Guidelines, Reference Manual, Ch. 1, Table 1-4 note a: GCV-NCV 10 % for natural gas. Gas is bought on GCV (Regulation (EU) 2016/1952); primary energy is counted on NCV, the basis of the EU primary-energy factors (Directive 2012/27/EU Annex IV; supervisor review B5) |
+| `refrigeration_credit_fraction` | 1.0 | share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads) |
+| `boiler_variable_om_EUR_per_MWh` | 1.23 | Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up |
+| `chiller_cop` | none | no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles) |
+| cost function `hr_tank` | 0 + 7,450 X^0.65 EUR, X in m3 | Padullés et al. (2026), Table 3 |
+| cost function `heat_pump` | 520,000 + 600 X^1 EUR, X in kW; O&M 2,494 EUR/MW/y + 3.6 EUR/MWh | Padullés et al. (2026), Table 3; O&M: Danish Energy Agency, Industrial Process Heat (2025) |
+| cost function `mvr` | 280,000 + 350 X^1 EUR, X in kW; O&M 2,345 EUR/MW/y + 2.1 EUR/MWh | Padullés et al. (2026), Table 3; O&M: Danish Energy Agency, Industrial Process Heat (2025) |
+| cost function `electric_boiler` | 110,000 + 210 X^1 EUR, X in kW; O&M 1,442 EUR/MW/y + 0.674 EUR/MWh | Padullés et al. (2026), Table 3; O&M: Danish Energy Agency, Industrial Process Heat (2025) |
+<!-- END generated -->
 
 Cases without published economics (dairy, four-stream) carry their own `economics` block with
 assumed, sourced inputs: Eurostat Portugal 2026-S1 prices for their consumption band at 8000 h/year
@@ -231,8 +253,10 @@ the new hot-water piping cost. Price bands are checked at site level where the s
 30 t/h milk-powder plant, Walmsley et al. 2016); the case notes say how the bands move with the hours. Padullés et al.'s single function
 (Table 3) stays for the brewery, whose results it reproduces.
 
-A case lists further values under `economics.scenarios` (each scenario overrides named
-parameters and reports the full design, RQ1 and RQ3 again) and further Lorenz efficiencies under
+A case has one sensitivity list, `sensitivities` (`{label, kind, value, basis}` rows; kinds in
+`pinch/sensitivity.py`). `consolidate_rq.py` evaluates every row for RQ1-RQ3 against today's site;
+the grass-roots reference of step 6 (a site already at the energy target, not the RQ1 answer)
+evaluates its `econ` rows, under the same labels. Further Lorenz efficiencies go under
 `heat_pumps.eta_lorenz_sensitivity` (heat pumps re-sized and re-costed). `heat_pump_design.csv`
 also gives the Lorenz efficiency predicted by the Andersen et al. (2024) correlation for each unit,
 with its validity-range flags, as a check on the assumed value.

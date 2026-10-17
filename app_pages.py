@@ -617,15 +617,15 @@ def _step_economics() -> None:
             st.warning("Heat pump cost extrapolated beyond the catalogue (no data above 150 °C): "
                        + ", ".join(extrap) + ". Treat their investment and payback as indicative only.")
         tables = r[3]
-        r1, r3, full = ec["RQ1"], ec["RQ3"], ec["results"]["full design (heat recovery installed)"]
+        gr, full = ec["grass_roots_reference"], ec["results"]["full design (heat recovery installed)"]
         c = st.columns(4)
-        c[0].metric(f"Grass-roots: HP share of Q̇h,min, payback ≤ {r1['threshold_years']:g} y",
-                    f"{100 * r1['max_fraction_with_payback_below_threshold']:.1f} %", border=True,
+        c[0].metric(f"Grass-roots: HP share of Q̇h,min, payback ≤ {gr['threshold_years']:g} y",
+                    f"{100 * gr['hp_share_of_Qh_min_payback_ok']:.1f} %", border=True,
                     help="Share of the hot utility target, for a site already recovering heat at target. For a site "
                          "with an existing network, RQ1 (share of today's gas, incremental payback) is on the Dashboard.")
-        be = float(r3["break_even_ratio_NPV"])
+        be = float(gr["full_design_break_even_ratio_NPV"])
         if math.isfinite(be) and be > 0:
-            c[1].metric("Full design: break-even ratio", f"{be:.2f}", delta=f"{be - r3['ratio_used']:+.2f} vs today",
+            c[1].metric("Full design: break-even ratio", f"{be:.2f}", delta=f"{be - gr['ratio_used']:+.2f} vs today",
                         delta_color="off", border=True, help="A capacity-weighted mix of all heat pumps; RQ3 per unit "
                                                              "is on the Dashboard.")
         else:   # break_even_ratio: <= 0 or -inf = never pays off; +inf = pays off at any ratio
@@ -644,9 +644,9 @@ def _step_economics() -> None:
             _chart(charts.electrification_chart(tables["electrification_curve"], thr))
         with b:
             _chart(charts.price_ratio_chart(tables["price_ratio_sweep"], ec["price_ratio"], thr))
-        if "scenarios" in tables:
-            with st.expander("Scenarios from the case file"):
-                st.dataframe(tables["scenarios"], width="stretch")
+        if "grass_roots_sensitivities" in tables:
+            with st.expander("Sensitivities (economics rows of the case's list; RQ1-RQ3 for all rows on the Dashboard)"):
+                st.dataframe(tables["grass_roots_sensitivities"], width="stretch")
         if "eta_lorenz_sensitivity" in tables:
             with st.expander("Lorenz-efficiency sensitivity (heat pumps re-sized)"):
                 st.dataframe(tables["eta_lorenz_sensitivity"], width="stretch")

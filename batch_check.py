@@ -29,7 +29,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from consolidate_rq import _apply, answers
+from consolidate_rq import answers
+from pinch.sensitivity import apply
 from pinch import load_streams, with_extra_shift
 from pinch.case import load_case
 from pinch.cycle_analysis import load_selected
@@ -50,7 +51,7 @@ def check(case_file: Path) -> pd.DataFrame:
         for t in BOIL_WINDOW_H:
             util = n * t / 24
             F = 1 / util
-            a = answers(_apply(case, "econ", {"heat_pump_capacity_factors": {HTHP: F}}, selected), streams, unit, selected)
+            a = answers(apply(case, "econ", {"heat_pump_capacity_factors": {HTHP: F}}, selected), streams, unit, selected)
             rows.append({"brews_per_day": n, "boil_window_h": t, "HTHP_utilisation": round(util, 3),
                          "capacity_factor_F": round(F, 2), "HTHP_incremental_payback_y": a["HTHP_incremental_payback_y"],
                          "HTHP_incremental_NPV_MEUR": a["HTHP_incremental_NPV_MEUR"], "RQ3_ratio_HTHP": a["RQ3_ratio_HTHP"],

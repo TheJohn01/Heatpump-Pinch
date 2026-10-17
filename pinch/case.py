@@ -23,6 +23,8 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from pinch.sensitivity import Sensitivity, parse_sensitivities
+
 ENERGY_TO_MWH = {"Wh": 1e-6, "kWh": 1e-3, "MWh": 1.0, "GWh": 1e3, "kJ": 1 / 3.6e6, "MJ": 1 / 3600, "GJ": 1 / 3.6}
 POWER_TO_MW = {"W": 1e-6, "kW": 1e-3, "MW": 1.0}
 
@@ -83,6 +85,8 @@ class Case:
         (see ``pinch.area_analysis``).
     provenance : dict
         Free-form notes stating which values are published or assumed.
+    sensitivities : tuple of Sensitivity
+        The case's sensitivity list, read by every sensitivity table (``pinch.sensitivity``).
     """
 
     name: str
@@ -103,6 +107,7 @@ class Case:
     cycle_screening: dict | None = None
     retrofit: dict | None = None
     retrofit_bounds: dict | None = None   # used when no network is published: baseline status and note
+    sensitivities: tuple[Sensitivity, ...] = ()   # the case's only sensitivity list (pinch.sensitivity)
 
 
 def load_case(path: str | Path) -> Case:
@@ -137,6 +142,10 @@ def load_case(path: str | Path) -> Case:
         if lv.T_sink_in_C is None or lv.T_sink_out_C is None:
             raise ValueError(f"{path.name}: sink level '{lv.name}' needs T_sink_C or T_sink_in_C/T_sink_out_C")
 
+    if "scenarios" in (raw.get("economics") or {}):
+        raise ValueError(f"{path.name}: economics.scenarios has moved to the top-level 'sensitivities' list "
+                         "(one list for every table; see pinch/sensitivity.py)")
+
     basis = raw.get("basis")
     if basis is not None:
         _check_basis(basis, path.name)
@@ -164,6 +173,7 @@ def load_case(path: str | Path) -> Case:
         cycle_screening=hp.get("cycle_screening"),
         retrofit=_resolve_retrofit(raw.get("retrofit"), path),
         retrofit_bounds=raw.get("retrofit_bounds"),
+        sensitivities=parse_sensitivities(raw.get("sensitivities"), path.name),
     )
 
 

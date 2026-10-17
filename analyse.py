@@ -207,7 +207,7 @@ def markdown(s: dict) -> str:
         f"| Heat recovery | {t['heat_recovery']} |",
         f"| Pinch T* [°C] | {', '.join(str(p) for p in t['pinch_T_star_C']) or 'none (threshold)'} |", "",
         "## Heat pumps sized from the GCC", "",
-        f"| Quantity | Value |", "|---|---|",
+        "| Quantity | Value |", "|---|---|",
         f"| Units | {', '.join(d['units']) or 'none'} |",
         f"| Heat delivered [{u}] | {d['Q_sink_total']} |",
         f"| Electricity [{u}] | {d['W_total']} |",
@@ -228,7 +228,7 @@ def markdown(s: dict) -> str:
         lines += ["", "No annual basis given: results stay in the stream-data unit."]
     ec = s.get("economics", {})
     if ec and "skipped" not in ec:
-        r1, r3, full = ec["RQ1"], ec["RQ3"], ec["results"]["full design (heat recovery installed)"]
+        gr, full = ec["grass_roots_reference"], ec["results"]["full design (heat recovery installed)"]
         lines += ["", "## Economics (step 6)", "",
                   f"Price ratio {ec['price_ratio']} (electricity {ec['parameters']['electricity_price_EUR_per_kWh']} EUR/kWh, "
                   f"gas {ec['parameters']['gas_price_EUR_per_kWh']} EUR/kWh); boiler efficiency "
@@ -240,21 +240,25 @@ def markdown(s: dict) -> str:
                   f"| Full design: NPV [EUR] | {full['npv_EUR']:,.0f} |",
                   f"| Full design: CO2 avoided [t/year] | {full['co2_avoided_t']:,.0f} |",
                   f"| Full design: primary-energy reduction | {100 * full['primary_energy_reduction']:.1f} % |",
-                  f"| Grass-roots variant (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ "
-                  f"{r1['threshold_years']:g} y | {100 * r1['max_fraction_with_payback_below_threshold']:.1f} % |",
-                  f"| Grass-roots variant: share with maximum NPV | {100 * r1['fraction_with_max_NPV']:.1f} % |",
-                  f"| Grass-roots variant: break-even ratio of the full design, NPV = 0 | {r3['break_even_ratio_NPV']} |",
-                  f"| Grass-roots variant: break-even ratio, payback = threshold | {r3['break_even_ratio_payback']} |",
+                  f"| Grass-roots reference (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ "
+                  f"{gr['threshold_years']:g} y | {100 * gr['hp_share_of_Qh_min_payback_ok']:.1f} % |",
+                  f"| Grass-roots reference: share with maximum NPV | {100 * gr['hp_share_of_Qh_min_max_NPV']:.1f} % |",
+                  f"| Grass-roots reference: break-even ratio of the full design, NPV = 0 | "
+                  f"{gr['full_design_break_even_ratio_NPV']} |",
+                  f"| Grass-roots reference: break-even ratio, payback = threshold | "
+                  f"{gr['full_design_break_even_ratio_payback']} |",
                   "",
                   "RQ1-RQ3 answers for a site with an existing network (share of today's gas, incremental payback, "
                   "break-even ratio per unit) are in the retrofit section and in rq_consolidated.md."]
-        if ec.get("scenarios"):
-            lines += ["", "### Scenarios (parameter overrides)", "",
-                      "| Scenario | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | RQ1 | RQ3 (NPV = 0) |",
+        if ec.get("grass_roots_sensitivities"):
+            lines += ["", "### Sensitivities, grass-roots reference (economics rows of the case's sensitivity list)", "",
+                      "Same rows and labels as rq_consolidated.md, which gives RQ1-RQ3 against today's site.", "",
+                      "| Sensitivity | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | "
+                      "HP share of Q̇h,min, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |",
                       "|---|---|---|---|---|---|---|"]
-            lines += [f"| {r['scenario']} | {r['price_ratio']} | {r['full_payback_years']} | {r['full_npv_EUR']:,.0f} | "
-                      f"{r['full_co2_avoided_t']:,.0f} | {100 * r['RQ1_max_fraction_payback_ok']:.1f} % | "
-                      f"{r['RQ3_break_even_ratio_NPV']} |" for r in ec["scenarios"]]
+            lines += [f"| {r['sensitivity']} | {r['price_ratio']} | {r['full_payback_years']} | {r['full_npv_EUR']:,.0f} | "
+                      f"{r['full_co2_avoided_t']:,.0f} | {100 * r['grass_roots_hp_share_payback_ok']:.1f} % | "
+                      f"{r['full_design_break_even_ratio_NPV']} |" for r in ec["grass_roots_sensitivities"]]
     elif ec:
         lines += ["", f"Economics skipped: {ec['skipped']}."]
     rf = s.get("retrofit")
@@ -277,13 +281,15 @@ def markdown(s: dict) -> str:
         if "economics" in cb:
             e = cb["economics"]
             lines += ["", f"System COP {cb['COP_system']}; full-design payback {e['full_payback_years']} y, "
-                          f"NPV {e['full_npv_EUR']:,.0f} EUR; RQ1 {100 * e['RQ1_max_fraction_payback_ok']:.1f} %; "
-                          f"RQ3 break-even ratio {e['RQ3_break_even_ratio_NPV']}."]
+                          f"NPV {e['full_npv_EUR']:,.0f} EUR; grass-roots HP share of Q̇h,min with payback ≤ threshold "
+                          f"{100 * e['grass_roots_hp_share_payback_ok']:.1f} %; full-design break-even ratio "
+                          f"{e['full_design_break_even_ratio_NPV']}."]
     if s.get("eta_lorenz_sensitivity"):
         lines += ["", "### Lorenz-efficiency sensitivity (heat pumps re-sized)", "",
-                  "| η_L | System COP | Full-design payback [y] | NPV [EUR] | RQ1 | RQ3 (NPV = 0) |", "|---|---|---|---|---|---|"]
+                  "| η_L | System COP | Full-design payback [y] | NPV [EUR] | Grass-roots HP share, payback ≤ threshold | "
+                  "Full-design break-even ratio (NPV = 0) |", "|---|---|---|---|---|---|"]
         lines += [f"| {r['eta_lorenz']} | {r['COP_system']} | {r['full_payback_years']} | {r['full_npv_EUR']:,.0f} | "
-                  f"{100 * r['RQ1_max_fraction_payback_ok']:.1f} % | {r['RQ3_break_even_ratio_NPV']} |"
+                  f"{100 * r['grass_roots_hp_share_payback_ok']:.1f} % | {r['full_design_break_even_ratio_NPV']} |"
                   for r in s["eta_lorenz_sensitivity"]]
     at = s.get("area_targeting", {})
     if at and "skipped" not in at:

@@ -102,38 +102,36 @@
       "HTHP 160 °C": "hp_dea_2b + dea_steam (extrapolated: sink above every class)",
       "HTHP 200 °C": "hp_dea_2b + dea_steam (extrapolated: sink above every class)"
     },
-    "RQ1": {
-      "max_fraction_with_payback_below_threshold": 0.0,
-      "_definition": "fraction = heat pump heat / Q̇h,min of the site with heat recovery installed",
+    "grass_roots_reference": {
+      "_definition": "grass-roots reference, not the answer to RQ1 or RQ3: heat pump heat / Q̇h,min for a site already recovering heat at the energy target. RQ1-RQ3 against today's site: consolidate_rq.py",
       "threshold_years": 5.0,
-      "fraction_with_max_NPV": 0.2,
-      "max_NPV_EUR": 681899.0
-    },
-    "RQ3": {
-      "break_even_ratio_NPV": 2.298,
-      "break_even_ratio_payback": 0.661,
+      "hp_share_of_Qh_min_payback_ok": 0.0,
+      "hp_share_of_Qh_min_max_NPV": 0.2,
+      "max_NPV_EUR": 681899.0,
+      "full_design_break_even_ratio_NPV": 2.298,
+      "full_design_break_even_ratio_payback": 0.661,
       "ratio_used": 2.551
     },
     "results": {
       "full design (heat recovery installed)": {
         "option": "50.0 %",
-        "capex_EUR": 6562500.0236,
-        "opex_EUR": 2455194.3161,
-        "savings_EUR": 778368.9975,
+        "capex_EUR": 6562500.0,
+        "opex_EUR": 2455194.3192,
+        "savings_EUR": 778368.9945,
         "payback_years": 8.4311,
-        "npv_EUR": -552140.9476,
-        "gas_fuel_MWh": 35502.9585,
+        "npv_EUR": -552140.9477,
+        "gas_fuel_MWh": 35502.9586,
         "electricity_MWh": 6352.953,
         "co2_t": 7141.3044,
         "co2_avoided_t": 5781.7725,
-        "primary_energy_MWh": 44023.2733,
+        "primary_energy_MWh": 44023.2734,
         "primary_energy_reduction": 0.3111,
         "gas_reduction": 0.5
       }
     },
-    "scenarios": [
+    "grass_roots_sensitivities": [
       {
-        "scenario": "with hot-water piping (DEA indirect cost)",
+        "sensitivity": "with hot-water piping (DEA indirect cost)",
         "price_ratio": 2.551,
         "boiler_efficiency": 0.845,
         "gas_EF_kg_per_kWh": 0.182,
@@ -146,10 +144,11 @@
         "full_npv_EUR": -508476.0,
         "full_co2_avoided_t": 5782.0,
         "full_primary_energy_reduction": 0.3111,
-        "RQ1_max_fraction_payback_ok": 0.0,
-        "RQ1_fraction_max_NPV": 0.2,
-        "RQ3_break_even_ratio_NPV": 2.318,
-        "RQ3_break_even_ratio_payback": 0.466
+        "grass_roots_hp_share_payback_ok": 0.0,
+        "grass_roots_hp_share_max_NPV": 0.2,
+        "full_design_break_even_ratio_NPV": 2.318,
+        "full_design_break_even_ratio_payback": 0.466,
+        "basis": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025): indirect cost of new hot-water piping added to each heat pump class (scenario)"
       }
     ]
   },
@@ -170,10 +169,10 @@
       "full_npv_EUR": -1789438.0,
       "full_co2_avoided_t": 5631.0,
       "full_primary_energy_reduction": 0.2691,
-      "RQ1_max_fraction_payback_ok": 0.0,
-      "RQ1_fraction_max_NPV": 0.2,
-      "RQ3_break_even_ratio_NPV": 1.88,
-      "RQ3_break_even_ratio_payback": 0.541
+      "grass_roots_hp_share_payback_ok": 0.0,
+      "grass_roots_hp_share_max_NPV": 0.2,
+      "full_design_break_even_ratio_NPV": 1.88,
+      "full_design_break_even_ratio_payback": 0.541
     },
     {
       "eta_lorenz": 0.52,
@@ -191,10 +190,10 @@
       "full_npv_EUR": -873362.0,
       "full_co2_avoided_t": 5743.0,
       "full_primary_energy_reduction": 0.3002,
-      "RQ1_max_fraction_payback_ok": 0.0,
-      "RQ1_fraction_max_NPV": 0.2,
-      "RQ3_break_even_ratio_NPV": 2.172,
-      "RQ3_break_even_ratio_payback": 0.625
+      "grass_roots_hp_share_payback_ok": 0.0,
+      "grass_roots_hp_share_max_NPV": 0.2,
+      "full_design_break_even_ratio_NPV": 2.172,
+      "full_design_break_even_ratio_payback": 0.625
     }
   ],
   "cycle_based_design": {},
@@ -233,7 +232,7 @@
         "capex_EUR": 84875000.0,
         "savings_EUR": 11638708.0,
         "payback_years": 7.29,
-        "npv_EUR": 4996020.0,
+        "npv_EUR": 4996021.0,
         "gas_reduction_vs_baseline": 0.822,
         "co2_avoided_t": 76259.0,
         "break_even_ratio_NPV": 2.763

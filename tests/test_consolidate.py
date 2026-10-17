@@ -46,3 +46,37 @@ def test_directions_of_sensitivities(table):
     assert table.loc["Batch: HTHP sized for the boil window, F = 3.0", "RQ3_ratio_WW_HP"] == pytest.approx(base)
     # dearer area -> larger optimal dTmin is tested in test_area; here: no credit -> cheaper cold utility -> larger dTmin
     assert table.loc["No refrigeration credit", "RQ2_dTmin_opt_K"] >= table.loc["Base case", "RQ2_dTmin_opt_K"]
+
+
+def test_one_sensitivity_list(table):
+    """Audit 1.1: the consolidated table and the grass-roots table read the same list in the case file,
+    so a label means one change everywhere (the grass-roots table uses its 'econ' rows)."""
+    from pinch.case import load_case
+    case = load_case(ROOT / "cases" / "brewery_padulles2026.json")
+    labels = [s.label for s in case.sensitivities]
+    rows = [r for r in table.index if r not in ("Base case", "No ambient source: heat pumps limited to the refrigeration heat")]
+    assert rows == labels                                   # every row, in the case-file order, nothing else
+
+
+def test_old_scenario_block_is_rejected(tmp_path):
+    import json
+    from pinch.case import load_case
+    raw = json.loads((ROOT / "cases" / "fourstream_example.json").read_text(encoding="utf-8"))
+    raw["stream_file"] = str(ROOT / "data" / "fourstream_example.csv")
+    raw["economics"]["scenarios"] = {"x": {"boiler_efficiency": 1.0}}
+    f = tmp_path / "old.json"
+    f.write_text(json.dumps(raw), encoding="utf-8")
+    with pytest.raises(ValueError, match="sensitivities"):
+        load_case(f)
+
+
+@pytest.mark.parametrize("bad", [
+    [{"label": "a", "kind": "unknown", "value": 1}],
+    [{"label": "a", "kind": "eta", "value": "0.5"}],
+    [{"label": "a", "kind": "no_om", "value": 1}],
+    [{"label": "a", "kind": "econ", "value": {}}, {"label": "a", "kind": "eta", "value": 0.5}],
+])
+def test_sensitivity_rows_are_validated(bad):
+    from pinch.sensitivity import parse_sensitivities
+    with pytest.raises(ValueError):
+        parse_sensitivities(bad)

@@ -18,24 +18,20 @@ review 2026-10-17, items A1-A4):
   the warm-water heat pump. The "full electrification" ratio is a capacity-weighted mix of both and is
   kept for information only.
 
-Each sensitivity row changes one input from the base case; the source of each
-range is in the "basis" column. Writes outputs/<case>/rq_consolidated.csv,
-.md and rq_tornado.png.
+Each sensitivity row changes one input from the base case. The rows are the case file's
+``sensitivities`` list, the only sensitivity list of the case (``pinch.sensitivity``; the
+grass-roots table of step 6 reads its "econ" rows). The source of each value is in the
+"basis" column. Writes outputs/<case>/rq_consolidated.csv, .md and rq_tornado.png.
 """
 
 from __future__ import annotations
 
 import argparse
-import copy
 import json
 import math
 from dataclasses import replace
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import pandas as pd
 
 from pinch import load_streams, with_extra_shift
@@ -43,124 +39,11 @@ from pinch.area_analysis import area_targeting_outputs
 from pinch.case import Case, display_name, load_case
 from pinch.cycle_analysis import load_selected
 from pinch.economic_analysis import _params_and_converter
+from pinch.plotting import save_figure, tornado_figure
 from pinch.retrofit import run_retrofit
+from pinch.sensitivity import apply
 
 ROOT = Path(__file__).resolve().parent
-
-#: (row label, kind, value, basis). kind: "econ" = economics overrides; others handled in _apply.
-SENSITIVITIES = [
-    ("Prices 2025-S1 (0.1230 / 0.0546; ratio 2.25)", "econ",
-     {"electricity_price_EUR_per_kWh": 0.1230, "gas_price_EUR_per_kWh": 0.0546}, "Eurostat, bands ID / I3, excl. VAT"),
-    ("Prices 2025-S2 (0.1216 / 0.0481; ratio 2.53)", "econ",
-     {"electricity_price_EUR_per_kWh": 0.1216, "gas_price_EUR_per_kWh": 0.0481}, "Eurostat, bands ID / I3, excl. VAT"),
-    ("Electricity band IE (0.0897; ratio 1.75)", "econ", {"electricity_price_EUR_per_kWh": 0.0897},
-     "Eurostat 2026-S1; IE applies above 20 GWh/year"),
-    ("Boiler efficiency 0.817", "econ", {"boiler_efficiency": 0.817}, "US DOE Steam Tip Sheet #15"),
-    ("Boiler efficiency 0.929", "econ", {"boiler_efficiency": 0.929}, "implied by Padullés App. B (DK1)"),
-    ("Boiler efficiency 1.0 (bound)", "econ", {"boiler_efficiency": 1.0}, "as in Padullés Sec. 5"),
-    ("No refrigeration credit", "econ", {"chiller_cop": None}, "as in Padullés et al. (2026)"),
-    ("Refrigeration credit 50 % (batch mismatch)", "econ", {"refrigeration_credit_fraction": 0.5},
-     "advisory bound: heat pump and cooling loads not simultaneous; also covers the paper's lower Q̇c (3.2 vs 3.44)"),
-    ("Chiller COP 3.14", "econ", {"chiller_cop": 3.14}, "Sinnott & Towler Example 6.7 (cooling water 40 °C)"),
-    ("Chiller COP 6.68", "econ", {"chiller_cop": 6.68}, "Sinnott & Towler: 0.9 x Carnot (complex cycles)"),
-    ("CO2 price 82.4 EUR/t", "econ", {"co2_price_EUR_per_t": 82.4}, "EUA, 5 Oct 2026"),
-    ("Portuguese CO2 addition 67.4 EUR/t", "econ", {"co2_price_EUR_per_t": 67.395},
-     "CIEC Art. 92.º-A; 2025 rate set by Portaria n.º 355-A/2024/1, Art. 2.º (Diário da República, 27 Dec 2024); "
-     "applies to natural gas outside the EU ETS (ERSE 2020); "
-     "upper value: up to 3.8 EUR/MWh of non-recoverable taxes (about 21 EUR/t) may already be in the Eurostat price, "
-     "and energy-intensive consumers (SGCIE) may be exempt"),
-    ("Horizon 20 years", "econ", {"horizon_years": 20}, "DEA sheet 2.a: HTHP technical lifetime 20 y"),
-    ("Lorenz efficiency 0.45", "eta", 0.45, "DEA HTHP data, implied 0.45-0.52"),
-    ("Lorenz efficiency 0.55 (Padullés et al.)", "eta", 0.55, "published value used by Padullés et al. (2026)"),
-    ("Lorenz efficiency 0.63", "eta", 0.63, "Andersen et al. (2024) polynomial, HTHP"),
-    ("Cycle-based COP per unit", "cycle", None, "CoolProp screening (step 4b), practical options only"),
-    ("Cycle-based COP -17 %", "cycle_scaled", 0.83,
-     "advisory: our model is 17 % above Andersen et al. (2024) Fig. 2 at one point"),
-    ("Heat pump CAPEX -25 %", "hp_capex", 0.75, "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"),
-    ("Heat pump CAPEX +25 %", "hp_capex", 1.25, "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"),
-    ("Retrofit exchanger CAPEX x3", "hx_capex", 3.0, "stress test"),
-    ("HTHP sink 110 °C (boiling driving force)", "hthp_sink", 110.0,
-     "103 °C leaves 2 K to boiling wort; nucleate boiling needs some K of wall superheat plus hydrostatic "
-     "boiling-point rise (no sourced value); Padullés Fig. 11 spans 100-180 °C (supervisor review B1)"),
-    ("HTHP sink 120 °C (boiling driving force)", "hthp_sink", 120.0, "as above"),
-    ("Grid emission factor 0.167 (5-year average)", "econ", {"grid_EF_kg_per_kWh": 0.167},
-     "APA 2025, Table T2 (5-year moving average); affects CO2 avoided only"),
-    ("Grid emission factor 0.367 (marginal gas CCGT, assumed)", "econ", {"grid_EF_kg_per_kWh": 0.367},
-     "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 55 % efficiency (assumed, not "
-     "sourced); affects CO2 avoided only (supervisor review B5)"),
-    ("Batch: HTHP sized for the boil window, F = 1.14", "econ",
-     {"heat_pump_capacity_factors": {"HTHP (wort boiling)": 24 / (14 * 1.5)}},
-     "14 brews/day x 90 min (most continuous): installed = 24 h / (brews x boil time) x average"),
-    ("Batch: HTHP sized for the boil window, F = 1.75", "econ",
-     {"heat_pump_capacity_factors": {"HTHP (wort boiling)": 24 / (11 * 1.25)}},
-     "11 brews/day x 75 min (central); 8-14 brews/day (Briggs of Burton 2017, industry), 60-90 min boil (assumed)"),
-    ("Batch: HTHP sized for the boil window, F = 3.0", "econ",
-     {"heat_pump_capacity_factors": {"HTHP (wort boiling)": 24 / (8 * 1.0)}},
-     "8 brews/day x 60 min (least continuous); no high-temperature storage"),
-    ("RQ2 with heat-pump heat as hot utility", "hp_hot_utility", None,
-     "after electrification the marginal hot utility is HTHP heat: hours x (p_el / COP + variable O&M) "
-     "+ CRF x 600 EUR/kW + fixed O&M (supervisor review A4)"),
-    ("Film coefficients x5 (gasketed plates)", "film", 5.0,
-     "Sinnott & Towler Table 12.1: plate, water-water U 5,000-7,500 W/m2K vs 1,000 implied by Stampfli"),
-    ("Production 0.25 Mhl/year", "scale", 0.25e6, "Padullés Table 1 range (UK case)"),
-    ("Production 0.5 Mhl/year", "scale", 0.5e6, "Padullés Table 1 range"),
-    ("Production 1.5 Mhl/year", "scale", 1.5e6, "Padullés Table 1 range (TH case)"),
-    ("No O&M (as Padullés et al.)", "no_om", None, "Padullés et al. (2026) include no O&M; base uses DEA O&M"),
-    ("Combined: Padullés conventions (boiler 1.0, no refrigeration credit, no O&M)", "combo",
-     [("econ", {"boiler_efficiency": 1.0, "chiller_cop": None}), ("no_om", None)], "Padullés et al. (2026), Sec. 5"),
-    ("Combined pessimistic: no credit, cycle-based COP, HP CAPEX +25 %", "combo",
-     [("econ", {"chiller_cop": None}), ("cycle", None), ("hp_capex", 1.25)], "one-at-a-time ranges above, together"),
-    ("Combined conservative: credit 50 %, cycle COP -17 %, HP CAPEX +25 %, boiler 0.929", "combo",
-     [("econ", {"refrigeration_credit_fraction": 0.5, "boiler_efficiency": 0.929}), ("cycle_scaled", 0.83),
-      ("hp_capex", 1.25)], "advisory envelope for the items that cannot be verified"),
-]
-
-
-def _apply(case: Case, kind: str, value, selected: dict | None) -> Case:
-    if kind == "combo":
-        for k, v in value:
-            case = _apply(case, k, v, selected)
-        return case
-    if kind == "econ":
-        eco = {**case.economics, **value}
-        return replace(case, economics=eco)
-    if kind == "eta":
-        return replace(case, eta_lorenz=float(value),
-                       sink_levels=tuple(replace(lv, eta_lorenz=None) for lv in case.sink_levels))
-    if kind in ("cycle", "cycle_scaled"):
-        k = 1.0 if kind == "cycle" else float(value)
-        return replace(case, sink_levels=tuple(replace(lv, eta_lorenz=k * selected[lv.name]["eta_lorenz_cycle"])
-                                               if lv.name in selected else lv for lv in case.sink_levels))
-    if kind in ("hp_capex", "hx_capex"):
-        key = "heat_pump" if kind == "hp_capex" else "plate_hex"
-        cf = copy.deepcopy(case.economics.get("cost_functions", {}))
-        from pinch.economics import DEFAULT_COST_FUNCTIONS
-        base = {**DEFAULT_COST_FUNCTIONS.get(key, {}), **cf.get(key, {})}
-        cf[key] = {**base, "alpha": base["alpha"] * value, "beta": base["beta"] * value}
-        return replace(case, economics={**case.economics, "cost_functions": cf})
-    if kind == "no_om":
-        from pinch.economics import NO_OM
-        cf = copy.deepcopy(case.economics.get("cost_functions", {}))
-        for k, v in NO_OM["cost_functions"].items():
-            cf[k] = {**cf.get(k, {}), **v}
-        return replace(case, economics={**case.economics, "cost_functions": cf,
-                                        "boiler_variable_om_EUR_per_MWh": 0.0})
-    if kind == "hthp_sink":
-        return replace(case, sink_levels=tuple(replace(lv, T_sink_in_C=float(value), T_sink_out_C=float(value))
-                                               if "HTHP" in lv.name else lv for lv in case.sink_levels))
-    if kind == "area":
-        return replace(case, area_targeting={**case.area_targeting, **value})
-    if kind == "film":
-        at = dict(case.area_targeting)
-        at["film_coefficients_kW_per_m2K"] = {k: v * float(value) for k, v in at["film_coefficients_kW_per_m2K"].items()}
-        return replace(case, area_targeting=at)
-    if kind == "scale":
-        f = value / case.basis["production_per_year"]
-        retro = copy.deepcopy(case.retrofit)
-        retro["storage"]["size_baseline"] *= f          # tank scaled with production, as in Padullés Sec. 5.1
-        return replace(case, basis={**case.basis, "production_per_year": value}, retrofit=retro)
-    raise ValueError(kind)
-
 
 def answers(case: Case, streams, unit: str, selected: dict | None, source_limited: bool = False) -> dict:
     """RQ1, RQ2, RQ3 for one case variant (definitions in the module docstring).
@@ -248,7 +131,7 @@ def production_threshold(case: Case, streams, unit: str, selected: dict | None, 
     base = case.basis["production_per_year"]
 
     def pb(x):
-        a = answers(_apply(case, "scale", x, selected), streams, unit, selected)
+        a = answers(apply(case, "scale", x, selected), streams, unit, selected)
         return a["WW_HP_incremental_payback_y"], a["HTHP_incremental_payback_y"]
 
     lo, hi = 0.1 * base, 3.0 * base
@@ -285,13 +168,15 @@ def consolidate_case(case: Case, streams, selected: dict | None) -> pd.DataFrame
                           "(frosting, defrost and air-coil costs not included); here only the refrigeration duty is "
                           "a source (supervisor review B2)",
                  **answers(case, streams, unit, selected, source_limited=True)})
-    for label, kind, value, basis in SENSITIVITIES:
+    for sens in case.sensitivities:
+        kind, value, basis = sens.kind, sens.value, sens.basis
         if kind == "hp_hot_utility":
             kind, value = "area", {"hot_utility_cost_EUR_per_kW_year": c_hp}
             basis = f"{basis}: {c_hp:.0f} EUR/(kW year)"
-        if (kind.startswith("cycle") or (kind == "combo" and any(k.startswith("cycle") for k, _ in value))) and not selected:
+        if sens.uses_cycle_screening and not selected:
             continue
-        rows.append({"sensitivity": label, "basis": basis, **answers(_apply(case, kind, value, selected), streams, unit, selected)})
+        rows.append({"sensitivity": sens.label, "basis": basis,
+                     **answers(apply(case, kind, value, selected), streams, unit, selected)})
     return pd.DataFrame(rows)
 
 
@@ -330,24 +215,8 @@ def _markdown(df: pd.DataFrame, threshold: float, prod: dict | None = None) -> s
 
 def _tornado(df: pd.DataFrame, path: Path, title: str) -> None:
     """Break-even ratio of the warm-water heat pump's increment (the unit that answers RQ1)."""
-    col = "RQ3_ratio_WW_HP"
-    base = df.iloc[0]
-    d = df.iloc[1:].copy()
-    d["delta"] = d[col] - base[col]
-    d = d.reindex(d["delta"].abs().sort_values().index)
-    fig, ax = plt.subplots(figsize=(9, 7))
-    ax.barh(d["sensitivity"], d["delta"], left=base[col], color=["#2471A3" if v > 0 else "#C0392B" for v in d["delta"]])
-    ax.axvline(base[col], color="black", lw=1)
-    ax.axvline(base["price_ratio"], color="grey", ls="--", lw=1)
-    ax.annotate(f"today's ratio {base['price_ratio']:.2f}", (base["price_ratio"], 0), xytext=(3, -12),
-                textcoords="offset points", fontsize=7, color="grey")
-    ax.set_xlabel("Break-even price ratio, warm-water heat pump increment (NPV = 0) [-]")
-    ax.tick_params(axis="y", labelsize=7)
-    ax.set_title(title, fontsize=10)
-    ax.grid(axis="x", alpha=0.3)
-    fig.tight_layout()
-    fig.savefig(path, dpi=200)
-    plt.close(fig)
+    save_figure(tornado_figure(df, "RQ3_ratio_WW_HP", title,
+                               "Break-even price ratio, warm-water heat pump increment (NPV = 0) [-]"), path)
 
 
 def main() -> None:

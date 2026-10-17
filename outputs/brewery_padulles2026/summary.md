@@ -44,32 +44,41 @@ Price ratio 2.217 (electricity 0.1135 EUR/kWh, gas 0.0512 EUR/kWh); boiler effic
 | Full design: NPV [EUR] | 15,027 |
 | Full design: CO2 avoided [t/year] | 1,835 |
 | Full design: primary-energy reduction | 40.4 % |
-| Grass-roots variant (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ 5 y | 72.5 % |
-| Grass-roots variant: share with maximum NPV | 72.5 % |
-| Grass-roots variant: break-even ratio of the full design, NPV = 0 | 2.229 |
-| Grass-roots variant: break-even ratio, payback = threshold | 1.423 |
+| Grass-roots reference (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ 5 y | 72.5 % |
+| Grass-roots reference: share with maximum NPV | 72.5 % |
+| Grass-roots reference: break-even ratio of the full design, NPV = 0 | 2.229 |
+| Grass-roots reference: break-even ratio, payback = threshold | 1.423 |
 
 RQ1-RQ3 answers for a site with an existing network (share of today's gas, incremental payback, break-even ratio per unit) are in the retrofit section and in rq_consolidated.md.
 
-### Scenarios (parameter overrides)
+### Sensitivities, grass-roots reference (economics rows of the case's sensitivity list)
 
-| Scenario | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | RQ1 | RQ3 (NPV = 0) |
+Same rows and labels as rq_consolidated.md, which gives RQ1-RQ3 against today's site.
+
+| Sensitivity | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | HP share of Q̇h,min, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |
 |---|---|---|---|---|---|---|
-| Prices 2025-S2 (ID 0.1216 / I3 0.0481) | 2.528 | 10.39 | -460,886 | 1,835 | 0.0 % | 2.123 |
-| Prices 2025-S1 (ID 0.1230 / I3 0.0546) | 2.253 | 7.3 | 102,523 | 1,835 | 72.5 % | 2.332 |
-| Electricity band IE (0.0897), 2026-S1 | 1.752 | 5.84 | 577,502 | 1,835 | 72.5 % | 2.229 |
-| Previous inputs (ECO-reported 2025-S1: 0.132 / 0.055) | 2.4 | 8.05 | -73,470 | 1,835 | 72.5 % | 2.343 |
-| Boiler efficiency 0.817 (US DOE) | 2.217 | 7.03 | 176,055 | 1,910 | 72.5 % | 2.362 |
-| Boiler efficiency 0.929 (implied by Padulles App. B, DK1) | 2.217 | 10.01 | -409,815 | 1,640 | 0.0 % | 1.878 |
+| Prices 2025-S1 (0.1230 / 0.0546; ratio 2.25) | 2.253 | 7.3 | 102,523 | 1,835 | 72.5 % | 2.332 |
+| Prices 2025-S2 (0.1216 / 0.0481; ratio 2.53) | 2.528 | 10.39 | -460,886 | 1,835 | 0.0 % | 2.123 |
+| Electricity band IE (0.0897; ratio 1.75) | 1.752 | 5.84 | 577,502 | 1,835 | 72.5 % | 2.229 |
+| Previous inputs (ECO-reported 2025-S1: 0.132 / 0.055; ratio 2.40) | 2.4 | 8.05 | -73,470 | 1,835 | 72.5 % | 2.343 |
+| Boiler efficiency 0.817 | 2.217 | 7.03 | 176,055 | 1,910 | 72.5 % | 2.362 |
+| Boiler efficiency 0.929 | 2.217 | 10.01 | -409,815 | 1,640 | 0.0 % | 1.878 |
 | Boiler efficiency 1.0 (bound) | 2.217 | 12.82 | -713,248 | 1,500 | 0.0 % | 1.627 |
-| EU ETS CO2 price 82.4 EUR/t | 2.217 | 4.35 | 1,391,261 | 1,835 | 100.0 % | 3.367 |
-| Gas EF 0.219 (Padulles Sec. 5.3) | 2.217 | 7.66 | 15,027 | 2,275 | 72.5 % | 2.229 |
-| Grid EF 0.092 (APA mainland 2023) | 2.217 | 7.66 | 15,027 | 1,881 | 72.5 % | 2.229 |
-| Grid EF 0.167 (APA 5-year average 2019-2023) | 2.217 | 7.66 | 15,027 | 1,652 | 72.5 % | 2.229 |
-| Grid EF 0.1172 (Electricity Maps 2025) | 2.217 | 7.66 | 15,027 | 1,804 | 72.5 % | 2.229 |
-| No refrigeration credit (as Padulles et al. 2026) | 2.217 | 11.8 | -619,376 | 1,758 | 0.0 % | 1.803 |
-| Chiller COP 6.68 (0.9 x Carnot, Towler upper bound) | 2.217 | 8.67 | -196,757 | 1,810 | 72.5 % | 2.066 |
+| No refrigeration credit | 2.217 | 11.8 | -619,376 | 1,758 | 0.0 % | 1.803 |
 | Refrigeration credit 50 % (batch mismatch) | 2.217 | 9.29 | -302,174 | 1,797 | 0.0 % | 1.993 |
+| Chiller COP 3.14 | 2.217 | 6.68 | 279,699 | 1,868 | 72.5 % | 2.473 |
+| Chiller COP 6.68 | 2.217 | 8.67 | -196,757 | 1,810 | 72.5 % | 2.066 |
+| CO2 price 82.4 EUR/t | 2.217 | 4.35 | 1,391,261 | 1,835 | 100.0 % | 3.367 |
+| Portuguese CO2 addition 67.4 EUR/t | 2.217 | 4.72 | 1,140,650 | 1,835 | 100.0 % | 3.159 |
+| Gas emission factor 0.219 (Padullés Sec. 5.3) | 2.217 | 7.66 | 15,027 | 2,275 | 72.5 % | 2.229 |
+| Grid emission factor 0.092 (APA mainland 2023) | 2.217 | 7.66 | 15,027 | 1,881 | 72.5 % | 2.229 |
+| Horizon 20 years | 2.217 | 7.66 | 1,125,107 | 1,835 | 72.5 % | 2.793 |
+| Grid emission factor 0.167 (5-year average) | 2.217 | 7.66 | 15,027 | 1,652 | 72.5 % | 2.229 |
+| Grid emission factor 0.1172 (Electricity Maps 2025) | 2.217 | 7.66 | 15,027 | 1,804 | 72.5 % | 2.229 |
+| Grid emission factor 0.367 (marginal gas CCGT, assumed) | 2.217 | 7.66 | 15,027 | 1,040 | 72.5 % | 2.229 |
+| Batch: HTHP sized for the boil window, F = 1.14 | 2.217 | 7.78 | -14,544 | 1,835 | 72.5 % | 2.205 |
+| Batch: HTHP sized for the boil window, F = 1.75 | 2.217 | 8.32 | -139,282 | 1,835 | 72.5 % | 2.102 |
+| Batch: HTHP sized for the boil window, F = 3.0 | 2.217 | 9.43 | -398,973 | 1,835 | 72.5 % | 1.887 |
 
 ## Retrofit of the existing network (step 5)
 
@@ -90,11 +99,11 @@ Existing network 'N0 existing': Q̇h 11.3 (target 10.0424), energy gap 1.2577 = 
 | Warm-water HP | n-Propane | single stage, SLHX | 3.109 | 0.4821 |
 | HTHP (wort boiling) | n-Propane / n-Butane | cascade (SLHX top) | 1.956 | 0.5408 |
 
-System COP 2.676; full-design payback 7.54 y, NPV 42,454 EUR; RQ1 72.5 %; RQ3 break-even ratio 2.252.
+System COP 2.676; full-design payback 7.54 y, NPV 42,454 EUR; grass-roots HP share of Q̇h,min with payback ≤ threshold 72.5 %; full-design break-even ratio 2.252.
 
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 
-| η_L | System COP | Full-design payback [y] | NPV [EUR] | RQ1 | RQ3 (NPV = 0) |
+| η_L | System COP | Full-design payback [y] | NPV [EUR] | Grass-roots HP share, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |
 |---|---|---|---|---|---|
 | 0.45 | 2.388 | 9.62 | -353,505 | 72.5 % | 1.96 |
 | 0.55 | 2.919 | 6.56 | 316,554 | 72.5 % | 2.512 |

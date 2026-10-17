@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from pinch.problem_table import ProblemTable, problem_table
+from pinch.problem_table_algorithm import ProblemTable, problem_table
 from pinch.streams import load_streams, with_extra_shift
 
 ROOT = Path(__file__).resolve().parent.parent

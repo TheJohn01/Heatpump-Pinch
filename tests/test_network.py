@@ -7,7 +7,6 @@ pump 8.3 kWh/hl). General identity: energy gap = cross-pinch transfer in
 matches + heaters below the pinch + coolers above the pinch.
 """
 
-import json
 
 import pytest
 

@@ -13,8 +13,8 @@ import altair as alt
 import numpy as np
 import pandas as pd
 
-from pinch.curves import composite_curve, grand_composite_curve
-from pinch.problem_table import ProblemTable
+from pinch.curves import composite_curve
+from pinch.problem_table_algorithm import ProblemTable
 from pinch.streams import StreamSet
 
 HOT = "#C0392B"
@@ -49,7 +49,7 @@ def _pinch_rules(table: ProblemTable):
 def gcc_chart(table: ProblemTable, units=(), height: int = 340) -> alt.Chart:
     """Grand Composite Curve, optionally with heat pump sink (red) and source (blue) profiles."""
     u = table.energy_unit
-    H, T = grand_composite_curve(table)
+    H, T = table.cascade_feasible, table.T_star_C
     gcc = pd.DataFrame({"H": H, "T": T, "i": np.arange(len(H))})
     layers = [alt.Chart(gcc).mark_line(color=INK, point=alt.OverlayMarkDef(size=25, color=INK)).encode(
         x=alt.X("H:Q", title=f"Net heat flow, H [{u}]"), y=alt.Y("T:Q", title="Shifted temperature, T* [°C]"),

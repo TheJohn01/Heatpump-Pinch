@@ -14,17 +14,11 @@ Usage:  python reproduce_padulles2026_economics.py
 
 from __future__ import annotations
 
-import json
-from dataclasses import replace
-from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from pinch.plotting import option_maps_figure, save_figure
 from pinch.economics import NO_OM, Option, capacity_kW, evaluate, load_economics
 from pinch.heat_pump import HeatPump
 from pinch.validation import ROOT
@@ -127,10 +121,9 @@ def main() -> None:
     sizes = np.linspace(0.2e6, 1.6e6, 57)
     ratios = np.linspace(1.0, 3.5, 51)
     names = list(CONFIGS)
-    fig, axes = plt.subplots(2, 2, figsize=(11, 8), sharex=True, sharey=True)
-    for col, criterion in enumerate(("pbp", "npv")):
-        for row, hr in enumerate((False, True)):
-            ax = axes[row, col]
+    maps = {}
+    for criterion in ("pbp", "npv"):
+        for hr in (False, True):
             grid = np.zeros((len(ratios), len(sizes)))
             metric = np.zeros_like(grid)
             for i, r in enumerate(ratios):
@@ -139,26 +132,8 @@ def main() -> None:
                     ok = e.payback_years <= PAPER_PBP_THRESHOLD if criterion == "pbp" else e.npv_EUR > 0
                     grid[i, j] = names.index(e.option) if ok else -1
                     metric[i, j] = e.payback_years if criterion == "pbp" else e.npv_EUR / 1e6
-            cmap = plt.matplotlib.colors.ListedColormap(["#E6E6E6", "#1F77B4", "#2CA02C", "#FF7F0E", "#9467BD"])
-            ax.pcolormesh(sizes / 1e6, ratios, grid, cmap=cmap, vmin=-1.5, vmax=3.5, shading="auto")
-            levels = (2, 3, 4, 6, 8) if criterion == "pbp" else (-2, 0, 2, 5, 10)
-            cs = ax.contour(sizes / 1e6, ratios, np.clip(metric, -50, 50), levels=levels, colors="k", linewidths=0.7)
-            ax.clabel(cs, fmt="%g", fontsize=7)
-            ax.set_title(f"{'PBP' if criterion == 'pbp' else 'NPV10'}-optimal, "
-                         f"{'heat recovery installed' if hr else 'no heat recovery (tank included)'}", fontsize=9)
-            if row == 1:
-                ax.set_xlabel("Brewery size [million hl/year]")
-            if col == 0:
-                ax.set_ylabel("Electricity-to-gas price ratio [-]")
-    handles = [plt.matplotlib.patches.Patch(color=c, label=l) for c, l in
-               zip(["#E6E6E6", "#1F77B4", "#2CA02C", "#FF7F0E", "#9467BD"],
-                   ["not viable (PBP > 4 y / NPV10 < 0)"] + names)]
-    fig.legend(handles=handles, loc="lower center", ncol=5, fontsize=8)
-    fig.suptitle("Optimal electrification option (this work; compare Padullés et al. 2026, Figs. 18-19). "
-                 "Isolines: PBP [years] / NPV10 [M EUR]", fontsize=10)
-    fig.tight_layout(rect=(0, 0.05, 1, 0.96))
-    fig.savefig(OUT / "step6_padulles_option_maps.png", dpi=200)
-    plt.close(fig)
+            maps[(criterion, hr)] = (grid, metric)
+    save_figure(option_maps_figure(sizes, ratios, maps, names), OUT / "step6_padulles_option_maps.png")
 
 
 if __name__ == "__main__":
