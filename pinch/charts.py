@@ -140,21 +140,24 @@ def retrofit_charts(options: pd.DataFrame, band_px: int = 34) -> tuple[alt.Chart
 
 
 def tornado_chart(rq: pd.DataFrame, height: int | None = None) -> alt.Chart:
-    """Break-even ratio (full electrification) for every sensitivity row, against the base case."""
-    base = float(rq.iloc[0]["RQ3_ratio_WW_HP"])
+    """Break-even ratio of HP1's increment (the unit that answers RQ1) for every sensitivity row, against the
+    base case; rows without a value (e.g. no heat pump) are left out."""
+    col = "RQ3_ratio_HP1"
+    name = str(rq.iloc[0].get("HP1_name", "HP1"))
+    base = float(rq.iloc[0][col])
     today = float(rq.iloc[0]["price_ratio"])
-    d = rq.iloc[1:].reset_index(drop=True).copy()
-    d["delta"] = d["RQ3_ratio_WW_HP"] - base
+    d = rq.iloc[1:].dropna(subset=[col]).reset_index(drop=True).copy()
+    d["delta"] = d[col] - base
     d["direction"] = np.where(d["delta"] >= 0, "higher (more competitive)", "lower")
-    d["start"], d["end"] = base, d["RQ3_ratio_WW_HP"]
+    d["start"], d["end"] = base, d[col]
     order = d.reindex(d["delta"].abs().sort_values(ascending=False).index)["sensitivity"].tolist()
     bars = alt.Chart(d).mark_bar().encode(
         y=alt.Y("sensitivity:N", sort=order, title=None, axis=alt.Axis(labelLimit=380, labelOverlap=False)),
-        x=alt.X("start:Q", title="Break-even price ratio, warm-water heat pump increment (NPV = 0)"), x2="end:Q",
+        x=alt.X("start:Q", title=f"Break-even price ratio, {name} increment (NPV = 0)"), x2="end:Q",
         color=alt.Color("direction:N", scale=alt.Scale(domain=["higher (more competitive)", "lower"], range=[COLD, HOT]),
                         legend=alt.Legend(title=None, orient="bottom")),
-        tooltip=["sensitivity:N", alt.Tooltip("RQ3_ratio_WW_HP:Q", format=".2f", title="ratio"),
+        tooltip=["sensitivity:N", alt.Tooltip(f"{col}:Q", format=".2f", title="ratio"),
                  alt.Tooltip("RQ1_HP_gas_share:Q", format=".1%", title="RQ1"), "basis:N"])
     rules = alt.Chart(pd.DataFrame({"x": [base, today], "what": [f"base {base:.2f}", f"today's ratio {today:.2f}"]})).mark_rule(
         strokeDash=[5, 3]).encode(x="x:Q", color=alt.value(INK), tooltip=["what:N"])
-    return alt.layer(bars, rules).properties(height=height or 24 * len(d), title="RQ3 sensitivity (warm-water heat pump)")
+    return alt.layer(bars, rules).properties(height=height or alt.Step(24 if len(d) > 4 else 48), title=f"RQ3 sensitivity ({name})")

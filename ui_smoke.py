@@ -38,7 +38,7 @@ async def main() -> None:
         await case_box.click()
         await pg.get_by_text("Upload my own stream table").click()
         await pg.wait_for_timeout(3000)
-        await pg.locator('input[type="file"]').set_input_files(str(ROOT / "data" / "fourstream_example.csv"))
+        await pg.locator('input[type="file"]').set_input_files(str(ROOT / "data" / "four_stream_process_streams.csv"))
         await pg.wait_for_timeout(9000)
         await pg.get_by_text("2 Targets", exact=True).first.click()
         await pg.wait_for_timeout(7000)
@@ -53,9 +53,9 @@ async def main() -> None:
         assert "Input problem" in t and "missing columns" in t, "bad CSV not reported"
         # 3: published four-stream case, edit a cell, check the targets
         await case_box.click()
-        await pg.get_by_role("option", name="fourstream_example").click()
+        await pg.get_by_role("option", name="four_stream_process").click()
         await pg.wait_for_timeout(9000)
-        assert "fourstream_example" in await pg.inner_text("body")
+        assert "four_stream_process" in await pg.inner_text("body")
         grid = await pg.locator('[data-testid="stDataFrameResizable"]').first.bounding_box()
         await pg.mouse.click(grid["x"] + 80, grid["y"] + 54)          # first cell of the first row
         await pg.wait_for_timeout(500)

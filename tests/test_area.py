@@ -72,7 +72,7 @@ def test_bath_formula_single_match_analytic():
 
 
 def test_area_rises_as_dTmin_falls():
-    s = load_streams(ROOT / "data" / "fourstream_example.csv")
+    s = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
     h = {x.name: 0.002 for x in s.streams}
     areas = [area_target(with_uniform_dTmin(s, d), h).area for d in (5, 10, 20, 30)]
     assert areas == sorted(areas, reverse=True)
@@ -80,7 +80,7 @@ def test_area_rises_as_dTmin_falls():
 
 def test_units_target_fourstream():
     """Four streams with a pinch: 4 streams above (3 units) and 3 below (2 units)."""
-    s = load_streams(ROOT / "data" / "fourstream_example.csv")
+    s = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
     assert units_target(s) == 3 + 2
 
 
@@ -98,7 +98,7 @@ def test_missing_film_coefficient_is_an_error():
 
 def test_supertarget_trade_off():
     """Energy cost rises and capital falls with ΔTmin; TAC = annualised capital + energy."""
-    s = load_streams(ROOT / "data" / "fourstream_example.csv")
+    s = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
     h = {x.name: 0.002 for x in s.streams}
     law = CostLaw(a=0.0, b=1000.0, c=1.0, source="test values")
     rows = supertarget(s, h, [5, 10, 20, 40], law, crf_per_year=0.1, hot_utility_cost=1e5, cold_utility_cost=1e4)
@@ -115,7 +115,7 @@ def test_brewery_optimum_matches_marginal_analysis(tmp_path):
     energy cost gives ΔTmin,opt ≈ 62 b CRF / (13.82 (c_h + c_c)), linear in the area cost b."""
     from analyse import analyse
     from pinch.case import load_case
-    s = analyse(load_case(ROOT / "cases" / "brewery_padulles2026.json"), output_root=tmp_path)
+    s = analyse(load_case(ROOT / "cases" / "brewery.json"), output_root=tmp_path)
     rq2 = sorted(s["area_targeting"]["RQ2"], key=lambda r: r["b"])
     opts = [r["dTmin_opt_K"] for r in rq2]
     assert opts == sorted(opts)                                   # dearer area -> larger ΔTmin

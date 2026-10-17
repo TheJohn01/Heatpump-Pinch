@@ -4,7 +4,6 @@ The scripts compute the comparisons once (``checks()``) and only write the table
 every verdict, so a change in the code that alters a conclusion stated in the dissertation fails here.
 """
 
-import pytest
 
 
 def _verdicts(module) -> dict[tuple[str, str], str]:

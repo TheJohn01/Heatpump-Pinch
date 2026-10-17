@@ -17,20 +17,20 @@ REFS = load_references()
 
 # ------------------------------------------------- Four-stream textbook example
 def test_fourstream_targets():
-    case = REFS["fourstream_example"]
+    case = REFS["four_stream_process"]
     computed = computed_targets(run_case(case))
     for quantity, ref in case["targets"].items():
         assert computed[quantity] == pytest.approx(ref["value"], abs=ref["tolerance"]), quantity
 
 
 def test_fourstream_full_cascade():
-    case = REFS["fourstream_example"]
+    case = REFS["four_stream_process"]
     table = run_case(case)
     np.testing.assert_allclose(table.T_star_C, case["T_star_C"])
     np.testing.assert_allclose(table.cascade_feasible, case["cascade_feasible"])
 
 
-@pytest.mark.parametrize("case_name", ["northwestern_4stream", "walmsley2024_milk_evaporator"])
+@pytest.mark.parametrize("case_name", ["northwestern_4stream", "milk_evaporator"])
 def test_independent_published_targets(case_name):
     """Second textbook example and an industrial dairy case (Walmsley et al., 2024)."""
     case = REFS[case_name]
@@ -55,8 +55,8 @@ def test_brewery_pinch_at_ambient():
 
 
 # ---------------------------------------------------------------- Consistency
-@pytest.mark.parametrize("case_name", ["fourstream_example", "northwestern_4stream", "brewery_base",
-                                       "brewery_indirect", "walmsley2024_milk_evaporator"])
+@pytest.mark.parametrize("case_name", ["four_stream_process", "northwestern_4stream", "brewery_base",
+                                       "brewery_indirect", "milk_evaporator"])
 def test_first_law_closure(case_name):
     """Qc_min - Qh_min must equal total hot load - total cold load."""
     case = REFS[case_name]
@@ -74,7 +74,7 @@ def test_brewery_totals_match_table_2():
 
 def test_shifted_composites_touch_at_pinch():
     """Shifted hot and cold composites meet at the pinch (zero vertical gap)."""
-    streams = load_streams(ROOT / "data" / "fourstream_example.csv")
+    streams = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
     table = problem_table(streams)
     H_hot, T_hot = composite_curve(streams, "hot")
     H_cold, T_cold = composite_curve(streams, "cold", H_offset=table.Qc_min)
@@ -83,7 +83,7 @@ def test_shifted_composites_touch_at_pinch():
 
 
 def test_composite_end_enthalpies():
-    streams = load_streams(ROOT / "data" / "fourstream_example.csv")
+    streams = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
     table = problem_table(streams)
     H_hot, _ = composite_curve(streams, "hot")
     H_cold, _ = composite_curve(streams, "cold", H_offset=table.Qc_min)
@@ -107,7 +107,7 @@ def test_rejects_missing_load_column(tmp_path: Path):
 
 
 def test_rejects_negative_extra_shift():
-    streams = load_streams(ROOT / "data" / "fourstream_example.csv")
+    streams = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
     with pytest.raises(ValueError):
         with_extra_shift(streams, -1)
 

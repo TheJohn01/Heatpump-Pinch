@@ -51,9 +51,14 @@ class Case:
     Attributes
     ----------
     name : str
-        Short identifier, used for the output folder.
-    description, reference : str
-        What the case is and where its data come from.
+        Short identifier, used for the output folder (the type of plant, e.g. "brewery").
+    plant : str
+        Type of plant, as shown in the app and in figure titles (e.g. "Brewery"). Case names, titles and
+        descriptions name only the type of plant; where the data come from is in ``provenance``
+        ("data source" and one entry per input), shown on the app's Sources page and at the end of
+        summary.md.
+    description : str
+        What the plant is and what the stream loads represent.
     stream_file : Path
         Stream CSV (see ``pinch.streams``).
     extra_shift_K : float
@@ -90,8 +95,8 @@ class Case:
     """
 
     name: str
+    plant: str
     description: str
-    reference: str
     stream_file: Path
     eta_lorenz: float
     source_T_C: float
@@ -109,6 +114,11 @@ class Case:
     retrofit_bounds: dict | None = None   # used when no network is published: baseline status and note
     sensitivities: tuple[Sensitivity, ...] = ()   # the case's only sensitivity list (pinch.sensitivity)
 
+    @property
+    def data_source(self) -> str:
+        """Where the stream data come from (``provenance["data source"]``)."""
+        return str(self.provenance.get("data source", ""))
+
 
 def load_case(path: str | Path) -> Case:
     """Load and validate a case file. Relative paths resolve from the file's folder."""
@@ -117,6 +127,9 @@ def load_case(path: str | Path) -> Case:
     for key in ("name", "stream_file", "heat_pumps"):
         if key not in raw:
             raise ValueError(f"{path.name}: missing '{key}'")
+    if "reference" in raw:
+        raise ValueError(f"{path.name}: the top-level 'reference' has moved to provenance['data source'] "
+                         "(case names and descriptions give the type of plant only)")
     hp = raw["heat_pumps"]
     for key in ("eta_lorenz", "source_T_C"):
         if key not in hp:
@@ -156,8 +169,8 @@ def load_case(path: str | Path) -> Case:
 
     return Case(
         name=raw["name"],
+        plant=raw.get("plant") or raw["name"].replace("_", " ").capitalize(),
         description=raw.get("description", ""),
-        reference=raw.get("reference", ""),
         stream_file=stream_file,
         eta_lorenz=eta,
         source_T_C=float(hp["source_T_C"]),
@@ -222,19 +235,20 @@ def to_MWh_per_year(value: float, energy_unit: str, basis: dict | None) -> float
 
 
 #: Readable names for figure titles (internal identifiers stay in file names).
+#: Readable names of the validation reference sets (data/reference_targets.json), by type of process.
+#: Case files carry their own ``plant`` label.
 DISPLAY_NAMES = {
-    "brewery_padulles2026": "Brewery (Padullés et al., 2026)",
-    "brewery_base": "Brewery (Padullés et al., 2026)",
+    "brewery_base": "Brewery",
     "brewery_indirect": "Brewery, +2 K indirect-transfer shift",
-    "fourstream_example": "Four-stream example (OU notes)",
-    "fourstream_balanced_ou": "Four-stream example with utilities (OU notes)",
-    "northwestern_4stream": "Four-stream example (Northwestern)",
-    "walmsley2024_milk_evaporator": "Milk evaporator (Walmsley et al., 2024)",
-    "walmsley2024_spray_dryer": "Milk spray dryer (Walmsley et al., 2024)",
+    "four_stream_process": "Four-stream chemical process",
+    "fourstream_balanced_ou": "Four-stream chemical process with utilities",
+    "northwestern_4stream": "Four-stream process (second example)",
+    "milk_evaporator": "Milk evaporator",
+    "spray_dryer": "Milk powder spray dryer",
 }
 
 
 def display_name(name: str) -> str:
-    """Readable name for a case or reference identifier (the identifier itself if unknown)."""
+    """Readable name for a validation reference set (the identifier with spaces if unknown)."""
     return DISPLAY_NAMES.get(name, name.replace("_", " "))
 

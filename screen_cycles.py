@@ -1,7 +1,7 @@
 """Working-fluid screening for the heat pumps of a case (workflow step 4b).
 
 Usage:
-    python screen_cycles.py cases/brewery_padulles2026.json
+    python screen_cycles.py cases/brewery.json
 
 Sizes the heat pumps from the GCC (as analyse.py does), optimises every
 fluid/layout in the case's "heat_pumps.cycle_screening" block with the CoolProp

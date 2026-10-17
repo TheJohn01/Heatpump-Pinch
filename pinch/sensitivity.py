@@ -116,6 +116,16 @@ def parse_sensitivities(raw: list | None, file_name: str = "case file") -> tuple
     return tuple(out)
 
 
+def _merge(base: dict, override: dict) -> dict:
+    """Override merged into base key by key, recursing into dicts, so that a row that changes one field of one
+    cost function keeps the others (before 2026-10-17 a 'cost_functions' override replaced the whole block and
+    dropped the heat pumps' O&M terms)."""
+    out = dict(base)
+    for k, v in override.items():
+        out[k] = _merge(base[k], v) if isinstance(v, dict) and isinstance(base.get(k), dict) else v
+    return out
+
+
 def apply(case, kind: str, value: Any, selected: dict | None = None):
     """Return a copy of ``case`` with one sensitivity applied.
 
@@ -127,7 +137,7 @@ def apply(case, kind: str, value: Any, selected: dict | None = None):
             case = apply(case, k, v, selected)
         return case
     if kind == "econ":
-        eco = {**case.economics, **value}
+        eco = _merge(case.economics or {}, value)
         if "electricity_to_gas_ratio" in value:            # the ratio replaces the electricity price
             eco.pop("electricity_price_EUR_per_kWh", None)
         return replace(case, economics=eco)

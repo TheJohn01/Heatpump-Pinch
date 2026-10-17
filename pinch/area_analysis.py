@@ -24,7 +24,7 @@ import numpy as np
 import pandas as pd
 
 from pinch.area import CostLaw, supertarget
-from pinch.case import Case, display_name, to_MWh_per_year
+from pinch.case import Case, to_MWh_per_year
 from pinch.economics import load_economics
 from pinch.plotting import supertargeting_figure
 from pinch.results import Outputs
@@ -91,7 +91,7 @@ def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
                         "dTmin_within_1pct_K": list(flat[0.01]), "dTmin_within_2pct_K": list(flat[0.02]),
                         "energy_share_of_TAC": round(float(best["energy_cost_EUR"] / best["TAC_EUR"]), 3)})
 
-    fig = supertargeting_figure(frames, results, f"ΔTmin supertargeting: {display_name(case.name)}")
+    fig = supertargeting_figure(frames, results, f"ΔTmin supertargeting: {case.plant}")
 
     summary = {"hot_utility_cost_EUR_per_kW_year": round(c_hot, 2), "cold_utility_cost_EUR_per_kW_year": c_cold,
                "crf_per_year": round(crf, 4), "film_coefficients_source": block.get("film_coefficients_source", ""),

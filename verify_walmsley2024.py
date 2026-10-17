@@ -51,7 +51,7 @@ def checks() -> pd.DataFrame:
         rows.append({"check": check, "quantity": quantity, "value": value, "reference": reference, "verdict": verdict})
         print(f"[{check}] {quantity}: {value}  (reference: {reference})  -> {verdict}")
 
-    evap = load_streams(ROOT / "data" / "walmsley2024_milk_evaporator.csv")
+    evap = load_streams(ROOT / "data" / "milk_evaporator_streams.csv")
     t = problem_table(evap)
     record("W1", "Qh_min / Qc_min [MW]", f"{t.Qh_min / 1000:.3f} / {t.Qc_min / 1000:.3f}",
            f"{FIG8['Q_D_MW']} / {FIG8['Q_S_MW']} (Fig. 8)",
@@ -78,7 +78,7 @@ def checks() -> pd.DataFrame:
            f"{100 * (W_target - FIG11_SIMPLE_W_MW) / FIG11_SIMPLE_W_MW:+.0f} %: marker is a practical design "
            "(Lincoln et al.), not a target")
 
-    spray = load_streams(ROOT / "data" / "walmsley2024_spray_dryer.csv")
+    spray = load_streams(ROOT / "data" / "spray_dryer_streams.csv")
     ts = problem_table(spray)
     bal = energy_balance(spray)
     record("W5", "Qc - Qh from Table 1 (first law) [MW]", round(bal["net_surplus"] / 1000, 3),

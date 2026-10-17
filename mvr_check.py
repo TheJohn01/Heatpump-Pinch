@@ -1,7 +1,7 @@
 """Configuration 3 of Padullés et al. (2026): MVR for wort boiling (supervisor review B4).
 
 Usage:
-    python mvr_check.py cases/brewery_padulles2026.json
+    python mvr_check.py cases/brewery.json
 
 Compares, as increments over the site with the heat-recovery retrofit N1 and the warm-water heat pump
 (residual gas 3.0 kWh/hl: wort preheating 95 -> 100 °C, 0.6, and boiling, 2.4):

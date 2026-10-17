@@ -33,7 +33,7 @@ pip install -r requirements-dev.txt               # exact tested versions (Pytho
 python -m pytest                                  # full suite (about 2 min)
 python regenerate_outputs.py                      # rebuild every output (about 3.5 min; --check compares with Git)
 python analyse.py --all                           # every case in cases/
-python analyse.py cases/brewery_padulles2026.json # one case
+python analyse.py cases/brewery.json # one case
 streamlit run app.py                              # interactive front end
 ```
 
@@ -101,22 +101,20 @@ for confidential plant data, run the app locally (`streamlit run app.py`).
 analyse.py                   General entry point: compute() in memory, write() to outputs/<case>/
 app.py, app_pages.py         Streamlit front end (Workflow / Dashboard / Sources) over analyse.compute
 pyproject.toml, requirements*.txt  Packaging; exact tested versions
-cases/
+cases/                       One file per type of plant (names, titles and descriptions give the plant type only;
+                             each file's provenance['data source'] says where the data come from)
   TEMPLATE.json              Documented template for a new site
-  brewery_padulles2026.json  Main case (Padullés et al., 2026)
-  fourstream_example.json    Four-stream chemical process (non-food demonstration)
-  walmsley2024_milk_evaporator.json  Dairy: MVR milk evaporator, kW (Walmsley et al., 2024)
-  walmsley2024_spray_dryer.json      Dairy: milk powder spray dryer, kW (Table 1 as published; see warning);
-                                     6000 h/year and air-side U from Liang et al. (2022), the stream data's source
+  brewery.json               Brewery (main case), loads per hectolitre
+  milk_evaporator.json       Dairy milk evaporator (MVR), kW
+  spray_dryer.json           Dairy milk powder spray dryer, kW
+  four_stream_process.json   Four-stream chemical process (non-food demonstration), MW
 data/
-  brewery_streams.csv        Padullés et al. (2026), Table 2; 'Amb.' = 15 °C (inferred)
-  fourstream_example.csv     Univ. Oklahoma ChE notes, Example 1.1
-  fourstream_balanced_ou.csv Same example with the utilities of the OU area-targeting notes
-  northwestern_4stream.csv   Northwestern Univ. design wiki example (second algorithm check)
-  walmsley2024_*.csv         Walmsley et al. (2024), Tables 1 and 2
-  reference_targets.json     Published/textbook targets used by the validation tests
-  brewery_configurations.json  Paper's three configurations; values tagged published/figure/assumed
-  brewery_networks.json      Existing network (Pfaduko + HR tank, paper Sec. 4.2) and the condensate retrofit
+  <plant>_streams.csv        Stream table of each case (brewery, milk_evaporator, spray_dryer, four_stream_process)
+  brewery_networks.json      Existing brewery network and the condensate retrofit (step 5)
+  brewery_configurations.json  Heat pump configurations of the brewery source; values tagged published/figure/assumed
+  fourstream_balanced_ou.csv, northwestern_4stream.csv  Extra validation sets (area target; second algorithm check)
+  reference_targets.json     Published/textbook targets used by the validation tests, with their sources
+  sources/                   Price and exchange-rate tables behind the economic inputs
 pinch/
   streams.py                 Load, validate, shift, energy balance
   problem_table_algorithm.py Problem Table Algorithm (cascade, targets, pinch; the GCC is its feasible cascade)
@@ -134,6 +132,7 @@ pinch/
   validation.py              Reference vs computed comparison
   economics.py               Cost functions, evaluation, break-even ratio (defaults with sources)
   economic_analysis.py       Per-case economics: grass-roots reference (site at the energy target), electrification curve
+  research_questions.py      RQ1-RQ3 against today's site for any case: baseline, heat-recovery step, units HP1, HP2...
   refrigeration.py           Refrigeration duty and the part heat pump sources take over (steps 5 and 6)
   sensitivity.py             The case's single sensitivity list: row kinds, validation, apply()
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
@@ -147,7 +146,7 @@ batch_check.py               Batch brewhouse check: HTHP capacity for the boil w
 mvr_check.py                 Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
 reproduce_secondary_economics.py  Milk evaporator and four-stream example at an ASSUMED 8000 h/year
 regenerate_outputs.py        Rebuild every output in dependency order; --check fails on stale outputs (CI)
-consolidate_rq.py            RQ1-RQ3 answers with one-at-a-time and combined sensitivities
+consolidate_rq.py            RQ1-RQ3 answers for any case (cases/<plant>.json) with its sensitivities
                              (outputs/<case>/rq_consolidated.csv/.md, rq_tornado.png)
 screen_cycles.py             Step 4b: screen the fluids listed in a case file (minutes); analyse.py then
                              adds the cycle-based design to the summary
@@ -267,6 +266,21 @@ The University of Oklahoma "Units and Area Targeting" notes give a total area of
 four-stream example with utilities (U = 0.001 MW/m²K). Intervals I–V are reproduced exactly. Interval
 VI's printed ΔT_LM (81.9 K) uses the cold temperatures of interval V; with its own temperatures it is
 56.6 K, and the corrected total (2757.3 m²) equals our composite-curve area (2757.0 m²).
+
+## Data sources
+
+Case names, figure titles and the app show only the type of plant. The sources are kept here, in each
+case file's `provenance` (shown on the app's Sources page and at the end of every `summary.md`) and in
+`data/reference_targets.json`:
+
+| Case | Type of plant | Stream data |
+|---|---|---|
+| `brewery` | Brewery | Padullés et al. (2026), *Energy Conversion and Management* 357, 121292, Table 2 |
+| `milk_evaporator` | Milk evaporator | Walmsley, Lincoln, Padullés, Cleland (2024), *Energies* 17, 2838, Table 2 |
+| `spray_dryer` | Milk powder spray dryer | Walmsley et al. (2024), Table 1 (case first presented by Liang et al., 2022) |
+| `four_stream_process` | Four-stream chemical process | University of Oklahoma ChE design notes, 'Minimum Utility', Example 1.1 |
+
+A test checks that this table and the case files agree.
 
 ## Licence, data and citation
 

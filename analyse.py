@@ -2,7 +2,7 @@
 
 Usage
 -----
-    python analyse.py cases/brewery_padulles2026.json
+    python analyse.py cases/brewery.json
     python analyse.py --all            # every case file in cases/ (except TEMPLATE)
 
 For each case, writes to outputs/<case name>/:
@@ -24,7 +24,7 @@ import pandas as pd
 
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
 from pinch.area_analysis import area_targeting_outputs
-from pinch.case import Case, display_name, load_case, to_MWh_per_year
+from pinch.case import Case, load_case, to_MWh_per_year
 from pinch.cycle_analysis import load_selected
 from pinch.economic_analysis import cycle_based_design, economics_outputs, eta_lorenz_sensitivity
 from pinch.results import Outputs
@@ -66,8 +66,8 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
 
     tables = {"problem_table": table.to_frame()}
     figures = {
-        "composite_curves": composite_curves_figure(streams, table, title=f"Shifted composite curves: {display_name(case.name)}"),
-        "gcc": gcc_figure(table, title=f"Grand Composite Curve: {display_name(case.name)}"),
+        "composite_curves": composite_curves_figure(streams, table, title=f"Shifted composite curves: {case.plant}"),
+        "gcc": gcc_figure(table, title=f"Grand Composite Curve: {case.plant}"),
     }
 
     design: HeatPumpDesign = design_from_gcc(streams, case.sink_levels, case.eta_lorenz, case.source_T_C)
@@ -94,7 +94,7 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
         })
     tables["heat_pump_design"] = pd.DataFrame(rows)
     figures["gcc_heat_pumps"] = gcc_with_units_figure(table, list(design.units),
-                                                      title=f"Heat pumps sized from the GCC: {display_name(case.name)}")
+                                                      title=f"Heat pumps sized from the GCC: {case.plant}")
 
     def annual(x):
         v = to_MWh_per_year(x, unit, case.basis)
@@ -102,8 +102,8 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
 
     summary = {
         "case": case.name,
+        "plant": case.plant,
         "description": case.description,
-        "reference": case.reference,
         "energy_unit": unit,
         "targets": {
             "Q_hot_total": round(balance["Q_hot_total"], 4),
@@ -199,7 +199,7 @@ def markdown(s: dict) -> str:
     """Human-readable summary (Markdown)."""
     u, t, d = s["energy_unit"], s["targets"], s["heat_pump_design"]
     lines = [
-        f"# {s['case']}", "", s["description"], "", f"Source: {s['reference']}", "",
+        f"# {s['plant']}", "", s["description"], "",
         "## Energy targets", "",
         f"| Quantity | Value [{u}] |", "|---|---|",
         f"| Total hot / cold stream loads | {t['Q_hot_total']} / {t['Q_cold_total']} |",
@@ -303,7 +303,7 @@ def markdown(s: dict) -> str:
     if s["warnings"]:
         lines += ["", "## Plausibility warnings", ""] + [f"- **{k}**: {'; '.join(v)}" for k, v in s["warnings"].items()]
     if s["provenance"]:
-        lines += ["", "## Provenance", ""] + [f"- **{k}**: {v}" for k, v in s["provenance"].items()]
+        lines += ["", "## Sources and provenance", ""] + [f"- **{k}**: {v}" for k, v in s["provenance"].items()]
     return "\n".join(lines) + "\n"
 
 

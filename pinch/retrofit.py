@@ -42,7 +42,7 @@ from dataclasses import replace
 
 import pandas as pd
 
-from pinch.case import Case, display_name, to_MWh_per_year
+from pinch.case import Case, to_MWh_per_year
 from pinch.design import design_from_gcc, partial_designs
 from pinch.economics import Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment
 from pinch.network import NetworkResult, constrained_streams, evaluate_network, load_networks
@@ -70,6 +70,42 @@ def _indirect_duty(streams: StreamSet, net) -> float:
     return total
 
 
+def new_recovery_equipment(case: Case, streams: StreamSet, base_net, net, params, to_MWh,
+                           option_name: str = "") -> tuple[list[tuple[str, float]], list[dict]]:
+    """New heat-recovery equipment of a retrofit network against the baseline network.
+
+    Returns (equipment items for ``pinch.economics``, one table row per item). Each new hot segment of an
+    indirect match gets an exchanger to the storage medium (U from the film coefficients and the medium's h,
+    approach = stream shift + half the indirect extra approach); the storage grows in proportion to the heat
+    it receives. Used by ``run_retrofit`` and by ``pinch.research_questions``.
+    """
+    block = case.retrofit
+    h = (case.area_targeting or {}).get("film_coefficients_kW_per_m2K", {})
+    medium_h = float(block.get("new_exchanger", {}).get("medium_h_kW_per_m2K", 2.0))
+    hx_kind = block.get("new_exchanger", {}).get("kind", "plate_hex")
+    storage = block.get("storage")
+    base_indirect = _indirect_duty(streams, base_net)
+    equipment, hx_rows = [], []
+    for m, g, extra in _new_hot_segments(base_net, net):
+        s = next(x for x in streams.streams if x.name == g.stream)
+        Q_kW = to_MWh(s.CP * abs(g.T_from_C - g.T_to_C)) * 1000 / params.operating_hours_per_year
+        U = 1 / (1 / h[g.stream] + 1 / medium_h)
+        dT = s.dT_shift_K + extra / 2
+        A = Q_kW / (U * dT)
+        equipment.append((hx_kind, A))
+        hx_rows.append({"option": option_name, "segment": f"{g.stream} {g.T_from_C:g}->{g.T_to_C:g} °C",
+                        "Q_kW": round(Q_kW, 1), "U_kW_per_m2K": round(U, 3), "approach_K": dT, "area_m2": round(A, 1)})
+    if storage and _indirect_duty(streams, net) > base_indirect + 1e-9:
+        V0 = float(storage["size_baseline"])
+        V1 = V0 * _indirect_duty(streams, net) / base_indirect
+        dC = params.cost_functions[storage["kind"]].cost(V1) - params.cost_functions[storage["kind"]].cost(V0)
+        equipment.append(("lump_sum_EUR", dC))   # cost difference of the larger storage
+        hx_rows.append({"option": option_name, "segment": f"storage {V0:.1f} -> {V1:.1f} m3",
+                        "Q_kW": None, "U_kW_per_m2K": None, "approach_K": None, "area_m2": None,
+                        "cost_EUR": round(dC, 0)})
+    return equipment, hx_rows
+
+
 def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle_selected: dict | None = None) -> Outputs:
     """Evaluate every retrofit option in memory (summary, tables, figure)."""
     block = getattr(case, "retrofit", None) or {}
@@ -80,16 +116,13 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
     nets = load_networks(block["network_file_resolved"])
     base_net = nets[block["baseline"]]
     to_MWh = lambda x: to_MWh_per_year(x, energy_unit, case.basis)  # noqa: E731
-    h = (case.area_targeting or {}).get("film_coefficients_kW_per_m2K", {})
     medium_h = float(block.get("new_exchanger", {}).get("medium_h_kW_per_m2K", 2.0))
     hx_kind = block.get("new_exchanger", {}).get("kind", "plate_hex")
-    storage = block.get("storage")
     cop_ch = params.chiller_cop
 
     base_res = evaluate_network(streams, base_net, case.ambient_T_C)
     E_base = to_MWh(base_res.refrigeration) / cop_ch if cop_ch else 0.0
     baseline = Option(f"baseline: {base_net.name}", to_MWh(base_res.Qh), E_base)
-    base_indirect = _indirect_duty(streams, base_net)
 
     tables, rows, networks_out, curves = {}, [], {}, {}
     option_objs, option_net, curve_args = {}, {}, {}
@@ -101,24 +134,7 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
             tables[f"retrofit_{_slug(net.name)}_{part}"] = getattr(res, part)
 
         # new heat recovery equipment
-        equipment, hx_rows = [], []
-        for m, g, extra in _new_hot_segments(base_net, net):
-            s = next(x for x in streams.streams if x.name == g.stream)
-            Q_kW = to_MWh(s.CP * abs(g.T_from_C - g.T_to_C)) * 1000 / params.operating_hours_per_year
-            U = 1 / (1 / h[g.stream] + 1 / medium_h)
-            dT = s.dT_shift_K + extra / 2
-            A = Q_kW / (U * dT)
-            equipment.append((hx_kind, A))
-            hx_rows.append({"option": opt["name"], "segment": f"{g.stream} {g.T_from_C:g}->{g.T_to_C:g} °C",
-                            "Q_kW": round(Q_kW, 1), "U_kW_per_m2K": round(U, 3), "approach_K": dT, "area_m2": round(A, 1)})
-        if storage and _indirect_duty(streams, net) > base_indirect + 1e-9:
-            V0 = float(storage["size_baseline"])
-            V1 = V0 * _indirect_duty(streams, net) / base_indirect
-            dC = params.cost_functions[storage["kind"]].cost(V1) - params.cost_functions[storage["kind"]].cost(V0)
-            equipment.append(("lump_sum_EUR", dC))   # cost difference of the larger storage
-            hx_rows.append({"option": opt["name"], "segment": f"storage {V0:.1f} -> {V1:.1f} m3",
-                            "Q_kW": None, "U_kW_per_m2K": None, "approach_K": None, "area_m2": None,
-                            "cost_EUR": round(dC, 0)})
+        equipment, hx_rows = new_recovery_equipment(case, streams, base_net, net, params, to_MWh, opt["name"])
         if hx_rows:
             tables.setdefault("retrofit_new_equipment", pd.DataFrame())
             tables["retrofit_new_equipment"] = pd.concat([tables["retrofit_new_equipment"], pd.DataFrame(hx_rows)])
@@ -202,7 +218,7 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
                                "storage": "volume proportional to the heat charged (same temperature range)",
                                "heat pump sources": "take over refrigeration first; remainder from ambient"}}
     return Outputs(summary, tables, {"retrofit_options": retrofit_options_figure(
-        table, f"Retrofit options against the existing network: {display_name(case.name)}")})
+        table, f"Retrofit options against the existing network: {case.plant}")})
 
 
 def network_cooling(streams: StreamSet, res: NetworkResult, T_amb_C: float | None) -> CoolingCascade | None:
@@ -278,6 +294,30 @@ def _hen_cost_law(block: dict, override_EUR_per_m2: float | None = None, overrid
     return None, "no film coefficients or cost law: new-network cost not included"
 
 
+def new_network_at_target(case: Case, streams: StreamSet, params) -> tuple[dict, tuple]:
+    """Cost of a new heat-recovery network at the energy targets: (description, equipment items).
+
+    Area and units targets (``pinch.area``) with the case's film coefficients and the cost law of
+    ``_hen_cost_law``; no equipment if film coefficients or a cost law are missing. Used by
+    ``retrofit_bounds`` and by ``pinch.research_questions``.
+    """
+    from pinch.area import area_target
+    from pinch.area_analysis import to_kW
+    info = dict(getattr(case, "retrofit_bounds", None) or {})
+    block = case.area_targeting or {}
+    h = block.get("film_coefficients_kW_per_m2K", {})
+    law, law_note = _hen_cost_law(block, info.get("hen_cost_EUR_per_m2"), info.get("hen_cost_note", ""))
+    hen = {"cost_law": law_note}
+    if law is not None and h and all(s.name in h for s in streams.streams):
+        at = area_target(to_kW(streams, case, params.operating_hours_per_year), h)
+        capex_hen = law.network_cost(at.area, at.units)
+        hen.update({"area_m2": round(at.area, 1), "units": at.units, "capex_EUR": round(capex_hen, 0)})
+        return hen, (("lump_sum_EUR", capex_hen),)
+    hen.update({"area_m2": None, "units": None, "capex_EUR": None,
+                "cost_law": "film coefficients missing for some streams: new-network cost not included"})
+    return hen, ()
+
+
 def retrofit_bounds(case: Case, streams: StreamSet, energy_unit: str, params) -> Outputs:
     """Retrofit bracket for a case without a published existing network (step 5).
 
@@ -292,8 +332,6 @@ def retrofit_bounds(case: Case, streams: StreamSet, energy_unit: str, params) ->
     coefficients and cost law: ``pinch.area``), and both. The last row repeats the heat pumps against the
     second baseline.
     """
-    from pinch.area import area_target
-    from pinch.area_analysis import to_kW
     from pinch.economic_analysis import cooling_cascade
     from pinch.network import Network
 
@@ -315,19 +353,7 @@ def retrofit_bounds(case: Case, streams: StreamSet, energy_unit: str, params) ->
     baseT = Option("baseline: heat recovery at target", to_MWh(table.Qh_min), to_MWh(refrT) / cop_ch if cop_ch else 0.0)
 
     # new heat-recovery network at the targets
-    block = case.area_targeting or {}
-    h = block.get("film_coefficients_kW_per_m2K", {})
-    law, law_note = _hen_cost_law(block, info.get("hen_cost_EUR_per_m2"), info.get("hen_cost_note", ""))
-    hen = {"cost_law": law_note}
-    hen_equipment: tuple = ()
-    if law is not None and h and all(s.name in h for s in streams.streams):
-        at = area_target(to_kW(streams, case, params.operating_hours_per_year), h)
-        capex_hen = law.network_cost(at.area, at.units)
-        hen.update({"area_m2": round(at.area, 1), "units": at.units, "capex_EUR": round(capex_hen, 0)})
-        hen_equipment = (("lump_sum_EUR", capex_hen),)
-    else:
-        hen.update({"area_m2": None, "units": None, "capex_EUR": None,
-                    "cost_law": "film coefficients missing for some streams: new-network cost not included"})
+    hen, hen_equipment = new_network_at_target(case, streams, params)
 
     def heat_pumps(stream_set, cooling, refr):
         d = design_from_gcc(stream_set, case.sink_levels, case.eta_lorenz, case.source_T_C)

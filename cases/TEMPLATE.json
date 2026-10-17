@@ -1,8 +1,9 @@
 {
   "_how_to_use": "Copy this file, fill in every field, and run: python analyse.py cases/<your_file>.json. Keys starting with '_' are ignored. State in 'provenance' whether each value is published or assumed, and where it comes from.",
   "name": "my_site",
-  "description": "One sentence: what the site produces and what the stream loads represent.",
-  "reference": "Full citation of the source of the stream data.",
+  "plant": "My plant",
+  "_plant": "Type of plant, as shown in the app and in figure titles. No author, year or journal.",
+  "description": "Type of plant in one sentence: what it produces and what the stream loads represent. No citations here: the data source goes in provenance['data source'].",
   "stream_file": "../data/my_site_streams.csv",
   "_stream_file_format": "CSV columns: stream, type (hot/cold), T_in_C, T_out_C, dT_shift_K, and ONE of Q_<unit> (e.g. Q_kW, Q_kWh_per_t) or CP_<unit> (e.g. CP_kW_per_K). Latent loads: use a 1 K temperature interval.",
   "extra_shift_K": 0,
@@ -160,6 +161,7 @@
   },
   "_screening": "Optional plausibility thresholds; defaults and their sources are in pinch/design.py.",
   "provenance": {
+    "data source": "Full citation of the source of the stream data.",
     "stream data": "published / assumed, with source",
     "eta_lorenz": "published / assumed, with source",
     "source_T_C": "published / assumed, with source",
