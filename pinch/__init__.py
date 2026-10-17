@@ -16,6 +16,7 @@ retrofit                 Retrofit options and bounds against the existing plant 
 refrigeration            Refrigeration duty and the part heat pump sources take over (steps 5 and 6).
 economics                Cost functions, evaluation, break-even ratio, defaults with sources (step 6).
 economic_analysis        Grass-roots reference economics of a GCC design (step 6).
+research_questions       RQ1-RQ3 against today's site, for any case (step 6; Dashboard).
 sensitivity              The case's single sensitivity list (steps 3-6).
 case                     Case files and annual conversion.
 validation               Reference targets vs computed values.

@@ -1,13 +1,16 @@
-RQ1 condition (A3): the warm-water heat pump's incremental payback is ≤ 5 years above about 0.74 Mhl/year
-(HTHP increment at 3x production: payback never).
+Today's site: existing network 'N0 existing'.
+Heat pumps (decreasing COP): HP1 = Warm-water HP; HP2 = HTHP (wort boiling).
 
-| Sensitivity | RQ1: heat-pump share of today's gas, incremental payback ≤ 5 y | Warm-water HP: payback / NPV₁₀ | HTHP: payback / NPV₁₀ | Heat-recovery retrofit: share / payback | RQ2: ΔTmin,opt (within 1 %) [K] | RQ3 per unit: WW HP / HTHP | WW HP CO₂ avoided [t/y] | Current ratio | Basis |
+RQ1 condition (A3): HP1's incremental payback is ≤ 5 years above about 0.74 M units/year
+(HP2 increment at 3x production: payback never).
+
+| Sensitivity | RQ1: heat-pump share of today's gas, incremental payback ≤ 5 y | HP1: payback / NPV | HP2: payback / NPV | Heat-recovery step: share / payback | RQ2: ΔTmin,opt (within 1 %) [K] | RQ3 per unit | HP1 CO₂ avoided [t/y] | Current ratio | Basis |
 |---|---|---|---|---|---|---|---|---|---|
 | Base case | 66.2 % | 4.29 y / +0.87 M€ | never / -0.86 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 3.59 / 0.91 | 1,441 | 2.22 | sourced inputs (see sources_case_studies.md) |
-| No ambient source: heat pumps limited to the refrigeration heat | 41.1 % | 4.64 y / +0.58 M€ | n/a / n/a | 7.2 % / 1.11 y | 0.6 (0.08-2) | n/a / n/a | n/a | 2.22 | the base case draws part of the heat pumps' source from ambient air evaporating at -1 °C (frosting, defrost and air-coil costs not included); here only the refrigeration duty is a source (supervisor review B2) |
+| No ambient source: heat pumps limited to the refrigeration heat | 41.1 % | 4.64 y / +0.58 M€ | n/a / n/a | 7.2 % / 1.11 y | 0.6 (0.08-2) | n/a / n/a | n/a | 2.22 | the base case may draw part of the heat pumps' source from ambient air (frosting, defrost and air-coil costs not included); here HP1 takes only the refrigeration duty as its source and the other units are left out (supervisor review B2) |
 | Prices 2025-S1 (0.1230 / 0.0546; ratio 2.25) | 66.2 % | 4.05 y / +0.98 M€ | never / -0.89 M€ | 7.2 % / 1.04 y | 0.6 (0.08-2) | 3.71 / 0.99 | 1,441 | 2.25 | Eurostat, bands ID / I3, excl. VAT |
 | Prices 2025-S2 (0.1216 / 0.0481; ratio 2.53) | 0.0 % | 5.11 y / +0.55 M€ | never / -1.05 M€ | 7.2 % / 1.18 y | 0.6 (0.08-2) | 3.46 / 0.83 | 1,441 | 2.53 | Eurostat, bands ID / I3, excl. VAT |
-| Electricity band IE (0.0897; ratio 1.75) | 66.2 % | 3.73 y / +1.16 M€ | 30 y / -0.55 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 3.59 / 0.91 | 1,441 | 1.75 | Eurostat 2026-S1; IE applies above 20 GWh/year |
+| Electricity band IE (0.0897; ratio 1.75) | 66.2 % | 3.73 y / +1.16 M€ | 29.89 y / -0.55 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 3.59 / 0.91 | 1,441 | 1.75 | Eurostat 2026-S1; IE applies above 20 GWh/year |
 | Previous price inputs (2025-S1: 0.132 / 0.055; ratio 2.40) | 66.2 % | 4.22 y / +0.90 M€ | never / -0.99 M€ | 7.2 % / 1.04 y | 0.5 (0.08-1.9) | 3.72 / 0.99 | 1,441 | 2.40 | values used before the Eurostat inputs were sourced (2026-10-13); kept for traceability |
 | Boiler efficiency 0.817 | 66.2 % | 4.04 y / +0.99 M€ | never / -0.81 M€ | 7.2 % / 1.07 y | 0.6 (0.08-2) | 3.78 / 0.98 | 1,496 | 2.22 | US DOE Steam Tip Sheet #15 |
 | Boiler efficiency 0.929 | 0.0 % | 5.12 y / +0.55 M€ | never / -0.98 M€ | 7.2 % / 1.22 y | 0.6 (0.1-2) | 3.09 / 0.72 | 1,295 | 2.22 | implied by Padullés App. B (DK1) |
@@ -16,14 +19,14 @@ RQ1 condition (A3): the warm-water heat pump's incremental payback is ≤ 5 year
 | Refrigeration credit 50 % (batch mismatch) | 0.0 % | 5.12 y / +0.55 M€ | never / -0.86 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 2.92 / 0.91 | 1,402 | 2.22 | advisory bound: heat pump and cooling loads not simultaneous; also covers the paper's lower Q̇c (3.2 vs 3.44) |
 | Chiller COP 3.14 | 66.2 % | 3.78 y / +1.13 M€ | never / -0.86 M€ | 7.2 % / 1.11 y | 0.5 (0.08-1.9) | 4.42 / 0.91 | 1,474 | 2.22 | Sinnott & Towler Example 6.7 (cooling water 40 °C) |
 | Chiller COP 6.68 | 66.2 % | 4.81 y / +0.65 M€ | never / -0.86 M€ | 7.2 % / 1.11 y | 0.7 (0.1-2) | 3.12 / 0.91 | 1,415 | 2.22 | Sinnott & Towler: 0.9 x Carnot (complex cycles) |
-| CO2 price 82.4 EUR/t | 66.2 % | 2.81 y / +1.89 M€ | 19 y / -0.45 M€ | 7.2 % / 0.86 y | 0.6 (0.08-2) | 5.21 / 1.54 | 1,441 | 2.22 | EUA, 5 Oct 2026 |
-| Portuguese CO2 addition 67.4 EUR/t | 66.2 % | 3.00 y / +1.71 M€ | 26 y / -0.52 M€ | 7.2 % / 0.90 y | 0.6 (0.08-2) | 4.92 / 1.42 | 1,441 | 2.22 | CIEC Art. 92.º-A; 2025 rate set by Portaria n.º 355-A/2024/1, Art. 2.º (Diário da República, 27 Dec 2024); applies to natural gas outside the EU ETS (ERSE 2020); upper value: up to 3.8 EUR/MWh of non-recoverable taxes (about 21 EUR/t) may already be in the Eurostat price, and energy-intensive consumers (SGCIE) may be exempt |
+| CO2 price 82.4 EUR/t | 66.2 % | 2.81 y / +1.89 M€ | 19.26 y / -0.45 M€ | 7.2 % / 0.86 y | 0.6 (0.08-2) | 5.21 / 1.54 | 1,441 | 2.22 | EUA, 5 Oct 2026 |
+| Portuguese CO2 addition 67.4 EUR/t | 66.2 % | 3.00 y / +1.71 M€ | 25.70 y / -0.52 M€ | 7.2 % / 0.90 y | 0.6 (0.08-2) | 4.92 / 1.42 | 1,441 | 2.22 | CIEC Art. 92.º-A; 2025 rate set by Portaria n.º 355-A/2024/1, Art. 2.º (Diário da República, 27 Dec 2024); applies to natural gas outside the EU ETS (ERSE 2020); upper value: up to 3.8 EUR/MWh of non-recoverable taxes (about 21 EUR/t) may already be in the Eurostat price, and energy-intensive consumers (SGCIE) may be exempt |
 | Gas emission factor 0.219 (paper's value) | 66.2 % | 4.29 y / +0.87 M€ | never / -0.86 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 3.59 / 0.91 | 1,769 | 2.22 | Padullés et al. (2026), Sec. 5.3; scope not stated (base: IPCC 2006 combustion, 0.182 on GCV); affects CO2 avoided only |
 | Grid emission factor 0.092 (mainland 2023) | 66.2 % | 4.29 y / +0.87 M€ | never / -0.86 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 3.59 / 0.91 | 1,465 | 2.22 | APA 2025, mainland Portugal, 2023; affects CO2 avoided only |
 | Horizon 20 years | 66.2 % | 4.29 y / +2.06 M€ | never / -0.93 M€ | 7.2 % / 1.11 y | 0.4 (0.02-1.6) | 4.24 / 1.34 | 1,441 | 2.22 | DEA sheet 2.a: HTHP technical lifetime 20 y |
 | Lorenz efficiency 0.45 | 66.2 % | 4.85 y / +0.64 M€ | never / -1.02 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 3.09 / 0.82 | 1,414 | 2.22 | DEA HTHP data, implied 0.45-0.52 |
-| Lorenz efficiency 0.55 (paper's value) | 66.2 % | 3.92 y / +1.05 M€ | 291 y / -0.72 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 4.13 / 1.00 | 1,464 | 2.22 | published value used by Padullés et al. (2026) |
-| Lorenz efficiency 0.63 | 66.2 % | 3.53 y / +1.29 M€ | 31 y / -0.56 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 5.12 / 1.15 | 1,492 | 2.22 | Andersen et al. (2024) polynomial, HTHP |
+| Lorenz efficiency 0.55 (paper's value) | 66.2 % | 3.92 y / +1.05 M€ | 290.98 y / -0.72 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 4.13 / 1.00 | 1,464 | 2.22 | published value used by Padullés et al. (2026) |
+| Lorenz efficiency 0.63 | 66.2 % | 3.53 y / +1.29 M€ | 30.66 y / -0.56 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 5.12 / 1.15 | 1,492 | 2.22 | Andersen et al. (2024) polynomial, HTHP |
 | Cycle-based COP per unit | 66.2 % | 4.46 y / +0.79 M€ | never / -0.75 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 3.40 / 0.98 | 1,432 | 2.22 | CoolProp screening (step 4b), practical options only |
 | Cycle-based COP -17 % | 0.0 % | 5.80 y / +0.36 M€ | never / -1.02 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 2.63 / 0.82 | 1,379 | 2.22 | advisory: our model is 17 % above Andersen et al. (2024) Fig. 2 at one point |
 | Heat pump CAPEX -25 % | 66.2 % | 3.22 y / +1.14 M€ | never / -0.67 M€ | 7.2 % / 1.11 y | 0.6 (0.08-2) | 4.02 / 1.19 | 1,441 | 2.22 | DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW |

@@ -10,6 +10,8 @@ The milk evaporator (Walmsley et al. 2024) and the four-stream example publish n
 example), so that every step of the tool has been exercised on more than one case. The spray dryer
 already has a published basis (6000 h/year, Liang et al. 2022) and runs in ``analyse.py --all``.
 
+The RQ1-RQ3 table (consolidate_rq.py) is written next to them on the same assumed basis.
+
 These are ASSUMED-basis results, not reproductions: they are written to
 outputs/secondary_8000h_assumed/<case>/ so they cannot be mistaken for the published-basis outputs.
 """
@@ -20,6 +22,7 @@ from dataclasses import replace
 from pathlib import Path
 
 from analyse import analyse
+from consolidate_rq import write_consolidated
 from pinch.case import load_case
 
 ROOT = Path(__file__).resolve().parent
@@ -36,6 +39,7 @@ def main() -> None:
                          f"(case basis_hint). Original: {case.provenance.get('basis', 'none')}")
         case = replace(case, basis={"type": "power", "operating_hours_per_year": HOURS}, provenance=prov)
         s = analyse(case, output_root=OUT)
+        write_consolidated(case, OUT / name)          # RQ1-RQ3 (pinch.research_questions) on the same assumed basis
         eco = s.get("economics") or {}
         print(f"{name}: economics {'skipped' if not eco or 'skipped' in eco else 'computed'}; outputs in {OUT / name}")
 

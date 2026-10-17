@@ -132,6 +132,7 @@ pinch/
   validation.py              Reference vs computed comparison
   economics.py               Cost functions, evaluation, break-even ratio (defaults with sources)
   economic_analysis.py       Per-case economics: grass-roots reference (site at the energy target), electrification curve
+  research_questions.py      RQ1-RQ3 against today's site for any case: baseline, heat-recovery step, units HP1, HP2...
   refrigeration.py           Refrigeration duty and the part heat pump sources take over (steps 5 and 6)
   sensitivity.py             The case's single sensitivity list: row kinds, validation, apply()
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
@@ -145,7 +146,7 @@ batch_check.py               Batch brewhouse check: HTHP capacity for the boil w
 mvr_check.py                 Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
 reproduce_secondary_economics.py  Milk evaporator and four-stream example at an ASSUMED 8000 h/year
 regenerate_outputs.py        Rebuild every output in dependency order; --check fails on stale outputs (CI)
-consolidate_rq.py            RQ1-RQ3 answers with one-at-a-time and combined sensitivities
+consolidate_rq.py            RQ1-RQ3 answers for any case (cases/<plant>.json) with its sensitivities
                              (outputs/<case>/rq_consolidated.csv/.md, rq_tornado.png)
 screen_cycles.py             Step 4b: screen the fluids listed in a case file (minutes); analyse.py then
                              adds the cycle-based design to the summary
@@ -275,7 +276,7 @@ case file's `provenance` (shown on the app's Sources page and at the end of ever
 | Case | Type of plant | Stream data |
 |---|---|---|
 | `brewery` | Brewery | Padullés et al. (2026), *Energy Conversion and Management* 357, 121292, Table 2 |
-| `milk_evaporator` | Dairy milk evaporator | Walmsley, Lincoln, Padullés, Cleland (2024), *Energies* 17, 2838, Table 2 |
+| `milk_evaporator` | Milk evaporator | Walmsley, Lincoln, Padullés, Cleland (2024), *Energies* 17, 2838, Table 2 |
 | `spray_dryer` | Milk powder spray dryer | Walmsley et al. (2024), Table 1 (case first presented by Liang et al., 2022) |
 | `four_stream_process` | Four-stream chemical process | University of Oklahoma ChE design notes, 'Minimum Utility', Example 1.1 |
 

@@ -141,15 +141,15 @@
         "co2_price_EUR_per_t": 0.0,
         "chiller_cop": null,
         "full_capex_EUR": 6993203.0,
-        "full_savings_EUR": -109711.0,
+        "full_savings_EUR": -199641.0,
         "full_payback_years": Infinity,
-        "full_npv_EUR": -7840359.0,
+        "full_npv_EUR": -8534782.0,
         "full_co2_avoided_t": 3253.0,
         "full_primary_energy_reduction": -0.1362,
         "grass_roots_hp_share_payback_ok": 0.0,
         "grass_roots_hp_share_max_NPV": 0.0,
-        "full_design_break_even_ratio_NPV": 0.461,
-        "full_design_break_even_ratio_payback": -0.294,
+        "full_design_break_even_ratio_NPV": 0.324,
+        "full_design_break_even_ratio_payback": -0.431,
         "basis": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025): indirect cost of new hot-water piping added to each heat pump class (scenario)"
       }
     ]

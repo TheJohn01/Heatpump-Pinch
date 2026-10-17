@@ -32,6 +32,7 @@ STEPS: tuple[tuple[str, ...], ...] = (
     ("screen_cycles.py", BREWERY),
     ("analyse.py", "--all"),
     ("consolidate_rq.py", BREWERY),
+    ("consolidate_rq.py", "cases/spray_dryer.json"),
     ("batch_check.py", BREWERY),
     ("mvr_check.py", BREWERY),
     ("reproduce_secondary_economics.py",),

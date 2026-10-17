@@ -34,11 +34,13 @@ from pinch.sensitivity import apply
 from pinch import load_streams, with_extra_shift
 from pinch.case import load_case
 from pinch.cycle_analysis import load_selected
+from pinch.research_questions import unit_names
 
 ROOT = Path(__file__).resolve().parent
 BREWS_PER_DAY = (8, 10, 12, 14)
 BOIL_WINDOW_H = (1.0, 1.25, 1.5)
 HTHP = "HTHP (wort boiling)"
+WARM_WATER = "Warm-water HP"
 
 
 def check(case_file: Path) -> pd.DataFrame:
@@ -52,11 +54,13 @@ def check(case_file: Path) -> pd.DataFrame:
             util = n * t / 24
             F = 1 / util
             a = answers(apply(case, "econ", {"heat_pump_capacity_factors": {HTHP: F}}, selected), streams, unit, selected)
+            names = unit_names(a)
+            ht, ww = f"HP{names.index(HTHP) + 1}", f"HP{names.index(WARM_WATER) + 1}"
             rows.append({"brews_per_day": n, "boil_window_h": t, "HTHP_utilisation": round(util, 3),
-                         "capacity_factor_F": round(F, 2), "HTHP_incremental_payback_y": a["HTHP_incremental_payback_y"],
-                         "HTHP_incremental_NPV_MEUR": a["HTHP_incremental_NPV_MEUR"], "RQ3_ratio_HTHP": a["RQ3_ratio_HTHP"],
-                         "RQ1_HP_gas_share": a["RQ1_HP_gas_share"], "WW_HP_incremental_payback_y": a["WW_HP_incremental_payback_y"],
-                         "RQ3_ratio_WW_HP": a["RQ3_ratio_WW_HP"]})
+                         "capacity_factor_F": round(F, 2), "HTHP_incremental_payback_y": a[f"{ht}_incremental_payback_y"],
+                         "HTHP_incremental_NPV_MEUR": a[f"{ht}_incremental_NPV_MEUR"], "RQ3_ratio_HTHP": a[f"RQ3_ratio_{ht}"],
+                         "RQ1_HP_gas_share": a["RQ1_HP_gas_share"], "WW_HP_incremental_payback_y": a[f"{ww}_incremental_payback_y"],
+                         "RQ3_ratio_WW_HP": a[f"RQ3_ratio_{ww}"]})
     return pd.DataFrame(rows)
 
 

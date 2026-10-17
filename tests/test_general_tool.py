@@ -157,3 +157,22 @@ def test_problem_table_name_is_unambiguous():
     assert callable(pinch.problem_table)
     assert importlib.util.find_spec("pinch.problem_table") is None
     assert importlib.import_module("pinch.problem_table_algorithm").problem_table is pinch.problem_table
+
+
+def test_cases_name_only_the_type_of_plant():
+    """Case names, plant labels and descriptions carry no citation; the data source is in the provenance and in
+    README's 'Data sources' table."""
+    import re
+    from pinch.case import load_case
+    from pinch.validation import ROOT
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    cite = re.compile(r"et al|\(\d{4}\)|\b(19|20)\d{2}\b|University|Table \d")
+    for f in sorted((ROOT / "cases").glob("*.json")):
+        if f.stem == "TEMPLATE":
+            continue
+        c = load_case(f)
+        for text in (c.name, c.plant, c.description):
+            assert not cite.search(text), f"{f.name}: '{text}' cites a source"
+        assert c.data_source, f"{f.name}: provenance['data source'] missing"
+        row = next(line for line in readme.splitlines() if line.startswith(f"| `{c.name}` |"))
+        assert c.plant in row

@@ -55,7 +55,7 @@ Same rows and labels as rq_consolidated.md, which gives RQ1-RQ3 against today's 
 
 | Sensitivity | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | HP share of Q̇h,min, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |
 |---|---|---|---|---|---|---|
-| with hot-water piping (indirect cost) | 2.136 | 14.94 | -2,848,227 | 4,852 | 23.5 % | 1.385 |
+| with hot-water piping (indirect cost) | 2.136 | 20.57 | -3,681,301 | 4,852 | 21.5 % | 1.165 |
 
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 

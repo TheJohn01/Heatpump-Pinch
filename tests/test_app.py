@@ -108,7 +108,40 @@ def test_dashboard_shows_saved_consolidated_table():
     rq1 = next(m for m in at.metric if m.label.startswith("RQ1"))
     saved = pd.read_csv(ROOT / "outputs" / "brewery" / "rq_consolidated.csv").iloc[0]
     assert rq1.value == f"{100 * saved['RQ1_HP_gas_share']:.1f} %"
-    assert any("Mhl/year" in c.value for c in at.caption)          # A3: production condition shown
+    assert any("hl/year" in c.value for c in at.caption)           # A3: production condition shown
+    assert any("HP1 = Warm-water HP" in c.value for c in at.caption)
+
+
+def _dashboard_for(case, basis_on):
+    def page(case, basis_on):
+        import app_pages
+        import streamlit as st
+        app_pages.init_state()
+        if st.session_state.choice != case:
+            app_pages.load_inputs(case)
+            if basis_on:
+                st.session_state.basis_on = True
+        app_pages.dashboard_page()
+    at = st_testing.AppTest.from_function(page, args=(case, basis_on), default_timeout=300)
+    at.run()
+    _ok(at)
+    return at
+
+
+@pytest.mark.parametrize("case", ["spray_dryer", "milk_evaporator", "four_stream_process"])
+def test_dashboard_computes_for_every_case(case):
+    """Every case gets RQ1-RQ3 on the Dashboard (an assumed annual basis where none is published)."""
+    at = _dashboard_for(case, basis_on=True)
+    labels = [m.label for m in at.metric]
+    assert any(lbl.startswith("RQ1") for lbl in labels) and any(lbl.startswith("RQ3") for lbl in labels)
+    assert any("Today's site" in c.value for c in at.caption)
+    assert len(at.dataframe) == 1
+
+
+def test_dashboard_asks_for_a_basis_when_none_is_published():
+    at = _dashboard_for("milk_evaporator", basis_on=False)
+    assert any("annual basis" in i.value for i in at.info)
+    assert not [m for m in at.metric if m.label.startswith("RQ1")]
 
 
 def test_sources_page_runs():
