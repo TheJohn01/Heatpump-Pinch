@@ -106,6 +106,9 @@ class EconomicParameters:
     chiller_cop: float | None = None   # refrigeration COP; None = no credit for avoided chiller electricity
     refrigeration_credit_fraction: float = 1.0
     boiler_variable_om_EUR_per_MWh: float = 0.0
+    #: {heat pump unit name: installed / average capacity}: > 1 for a unit that runs only part of the time
+    #: without storage (e.g. a batch duty); the extra capacity is added as investment only
+    capacity_factors: dict = field(default_factory=dict)
     #: ((max sink temperature [°C], cost-function kind), ...) in ascending order; empty = one
     #: "heat_pump" cost function for every unit (Padullés et al. 2026, Table 3)
     heat_pump_cost_classes: tuple = ()
@@ -225,6 +228,7 @@ def load_economics(block: dict | None) -> EconomicParameters:
         refrigeration_credit_fraction=float(values["refrigeration_credit_fraction"]),
         heat_pump_cost_classes=classes,
         boiler_variable_om_EUR_per_MWh=float(values["boiler_variable_om_EUR_per_MWh"]),
+        capacity_factors={str(k): float(v) for k, v in (block.get("heat_pump_capacity_factors") or {}).items()},
         heat_pump_cost_adders=adders,
     )
 
@@ -368,4 +372,22 @@ def capacity_kW(heat_MWh_per_year: float, params: EconomicParameters) -> float:
 NO_OM = {"boiler_variable_om_EUR_per_MWh": 0.0,
          "cost_functions": {k: {"fixed_om_EUR_per_unit_year": 0.0, "variable_om_EUR_per_MWh": 0.0}
                             for k in ("heat_pump", "mvr", "electric_boiler")}}
+
+
+def heat_pump_equipment(params: EconomicParameters, unit, capacity_kW_avg: float) -> list[tuple[str, float]]:
+    """Investment items of one heat pump unit: its cost classes at the average capacity, plus, for a unit
+    with a capacity factor F > 1 (batch duty without storage), the extra investment of the larger unit
+    (cost at F x capacity minus cost at capacity) as a lump sum. O&M stays on the average capacity: the
+    variable part follows the heat delivered; the fixed part of the extra capacity (about 2.5 EUR/kW/y)
+    is neglected."""
+    kinds = params.heat_pump_cost_items(unit)[0]
+    items = [(k, capacity_kW_avg) for k in kinds]
+    F = params.capacity_factors.get(unit.name, 1.0)
+    if F < 1:
+        raise ValueError(f"{unit.name}: capacity factor must be >= 1")
+    if F > 1 and capacity_kW_avg > 0:
+        extra = sum(params.cost_functions[k].cost(capacity_kW_avg * F) - params.cost_functions[k].cost(capacity_kW_avg)
+                    for k in kinds)
+        items.append(("lump_sum_EUR", extra))
+    return items
 

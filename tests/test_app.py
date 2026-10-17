@@ -59,8 +59,8 @@ def test_price_change_moves_ratio_and_persists_across_steps(brewery):
     _goto(at, STEPS[1])
     at = _goto(at, STEPS[5])
     assert any("1.76" in c.value for c in at.caption), [c.value for c in at.caption]
-    delta = next(m for m in at.metric if m.label.startswith("RQ3")).delta
-    assert delta.startswith("+0.75"), delta          # 2.51 break-even (with DEA O&M) - 1.76 today
+    delta = next(m for m in at.metric if m.label.startswith("Full design: break-even")).delta
+    assert delta.startswith("+0.47"), delta          # 2.23 break-even (eta_L 0.50, DEA O&M) - 1.76 today
     at.session_state["econ_electricity_price_EUR_per_kWh"] = 0.1135
     at.run()
 
@@ -107,7 +107,8 @@ def test_dashboard_shows_saved_consolidated_table():
     _ok(at)
     rq1 = next(m for m in at.metric if m.label.startswith("RQ1"))
     saved = pd.read_csv(ROOT / "outputs" / "brewery_padulles2026" / "rq_consolidated.csv").iloc[0]
-    assert rq1.value == f"{100 * saved['RQ1_gas_share']:.1f} %"
+    assert rq1.value == f"{100 * saved['RQ1_HP_gas_share']:.1f} %"
+    assert any("Mhl/year" in c.value for c in at.caption)          # A3: production condition shown
 
 
 def test_sources_page_runs():
@@ -152,7 +153,7 @@ def test_case_without_basis_explains_what_is_missing():
 
 def test_assumed_basis_runs_economics_and_is_labelled():
     at = _case_app("walmsley2024_milk_evaporator", "6 Economics", basis_on=True)
-    assert any(m.label.startswith("RQ3") for m in at.metric), [m.label for m in at.metric]
+    assert any(m.label.startswith("Full design: break-even") for m in at.metric), [m.label for m in at.metric]
     assert "No economic data in the source" in _texts(at)
     case = at.session_state["base_case"]
     assert at.session_state["basis"] == {"type": "power", "operating_hours_per_year": 8000.0}
@@ -208,7 +209,7 @@ def test_break_even_ratio_never_reached_is_shown_as_none():
     at = st_testing.AppTest.from_function(page, default_timeout=300)
     at.run()
     _ok(at)
-    assert next(m for m in at.metric if m.label.startswith("RQ3")).value == "none"
+    assert next(m for m in at.metric if m.label.startswith("Full design: break-even")).value == "none"
 
 
 def test_retrofit_tab_shows_bracket_for_spray_dryer():
@@ -226,3 +227,8 @@ def test_upload_uses_catalogue_heat_pump_costs():
     p = load_economics(c.economics)
     assert p.heat_pump_cost_class(105.0) == ("hp_dea_2a", False)
     assert p.cost_functions["hp_dea_2a"].variable_om_EUR_per_MWh == 3.6
+
+
+def test_educated_approximation_warning_shown():
+    at = _case_app("brewery_padulles2026", "4 Heat pumps")
+    assert any("educated approximation" in w.value for w in at.warning), [w.value for w in at.warning]

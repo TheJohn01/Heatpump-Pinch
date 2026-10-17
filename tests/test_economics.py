@@ -93,7 +93,7 @@ def test_brewery_full_design_hand_check(tmp_path):
     p_gas, p_el, eta_b = ec["gas_price_EUR_per_kWh"], ec["electricity_price_EUR_per_kWh"], ec["boiler_efficiency"]
     s = analyse(load_case(path), output_root=tmp_path)
     full = s["economics"]["results"]["full design (heat recovery installed)"]
-    Q_co2, Q_hthp, W = 7.2819, 2.7605, 3.4404             # kWh/hl, from the step-4 design
+    Q_co2, Q_hthp, W = 7.2824, 2.7600, 3.7845             # kWh/hl, from the step-4 design at eta_L 0.50
     kW = lambda q: q * 1e3 * 1000 / 8000                   # kWh/hl -> MWh/year -> kW at 8000 h
     capex = (520_000 + 600 * kW(Q_co2)) + (520_000 + 600 * kW(Q_hthp))
     savings = (10.0424 / eta_b * p_gas - W * p_el) * 1e6   # kWh/hl x 1e6 hl/year x EUR/kWh

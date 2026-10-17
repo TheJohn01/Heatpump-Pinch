@@ -240,11 +240,14 @@ def markdown(s: dict) -> str:
                   f"| Full design: NPV [EUR] | {full['npv_EUR']:,.0f} |",
                   f"| Full design: CO2 avoided [t/year] | {full['co2_avoided_t']:,.0f} |",
                   f"| Full design: primary-energy reduction | {100 * full['primary_energy_reduction']:.1f} % |",
-                  f"| RQ1: largest share of Q̇h,min with payback ≤ {r1['threshold_years']:g} y | "
-                  f"{100 * r1['max_fraction_with_payback_below_threshold']:.1f} % |",
-                  f"| RQ1: share with maximum NPV | {100 * r1['fraction_with_max_NPV']:.1f} % |",
-                  f"| RQ3: break-even ratio, NPV = 0 | {r3['break_even_ratio_NPV']} |",
-                  f"| RQ3: break-even ratio, payback = threshold | {r3['break_even_ratio_payback']} |"]
+                  f"| Grass-roots variant (not the RQ1 answer): heat pumps' share of Q̇h,min at target, payback ≤ "
+                  f"{r1['threshold_years']:g} y | {100 * r1['max_fraction_with_payback_below_threshold']:.1f} % |",
+                  f"| Grass-roots variant: share with maximum NPV | {100 * r1['fraction_with_max_NPV']:.1f} % |",
+                  f"| Grass-roots variant: break-even ratio of the full design, NPV = 0 | {r3['break_even_ratio_NPV']} |",
+                  f"| Grass-roots variant: break-even ratio, payback = threshold | {r3['break_even_ratio_payback']} |",
+                  "",
+                  "RQ1-RQ3 answers for a site with an existing network (share of today's gas, incremental payback, "
+                  "break-even ratio per unit) are in the retrofit section and in rq_consolidated.md."]
         if ec.get("scenarios"):
             lines += ["", "### Scenarios (parameter overrides)", "",
                       "| Scenario | Ratio | Full-design payback [y] | NPV [EUR] | CO2 avoided [t/y] | RQ1 | RQ3 (NPV = 0) |",

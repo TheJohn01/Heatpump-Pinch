@@ -466,6 +466,9 @@ def _step_heat_pumps() -> None:
         st.subheader("Heat pumps")
         bind(st.slider, "Lorenz efficiency η_L [-]", "eta", 0.30, 0.80, step=0.01,
              help="Padullés et al. (2026): 0.55; DEA-implied 0.45-0.52; cycle model per unit on the right.")
+        if "EDUCATED APPROXIMATION" in str(ss.base_case.provenance.get("eta_lorenz", "")) and ss.eta == ss.base_case.eta_lorenz:
+            st.warning(f"η_L = {ss.eta:.2f} is an **educated approximation**, not a published or measured value "
+                       "(Sources page). Padullés et al. use 0.55; the Dashboard shows 0.45, 0.55 and 0.63.")
         bind(st.number_input, "Default source temperature [°C, T*]", "source_T", step=1.0)
         bind(st.number_input, "Ambient temperature [°C]", "ambient", step=1.0)
         st.markdown("**Sink levels**")
@@ -616,13 +619,17 @@ def _step_economics() -> None:
         tables = r[3]
         r1, r3, full = ec["RQ1"], ec["RQ3"], ec["results"]["full design (heat recovery installed)"]
         c = st.columns(4)
-        c[0].metric(f"RQ1: share, payback ≤ {r1['threshold_years']:g} y", f"{100 * r1['max_fraction_with_payback_below_threshold']:.1f} %", border=True)
+        c[0].metric(f"Grass-roots: HP share of Q̇h,min, payback ≤ {r1['threshold_years']:g} y",
+                    f"{100 * r1['max_fraction_with_payback_below_threshold']:.1f} %", border=True,
+                    help="Share of the hot utility target, for a site already recovering heat at target. For a site "
+                         "with an existing network, RQ1 (share of today's gas, incremental payback) is on the Dashboard.")
         be = float(r3["break_even_ratio_NPV"])
         if math.isfinite(be) and be > 0:
-            c[1].metric("RQ3: break-even ratio", f"{be:.2f}", delta=f"{be - r3['ratio_used']:+.2f} vs today",
-                        delta_color="off", border=True)
+            c[1].metric("Full design: break-even ratio", f"{be:.2f}", delta=f"{be - r3['ratio_used']:+.2f} vs today",
+                        delta_color="off", border=True, help="A capacity-weighted mix of all heat pumps; RQ3 per unit "
+                                                             "is on the Dashboard.")
         else:   # break_even_ratio: <= 0 or -inf = never pays off; +inf = pays off at any ratio
-            c[1].metric("RQ3: break-even ratio", "any" if be == math.inf else "none", border=True,
+            c[1].metric("Full design: break-even ratio", "any" if be == math.inf else "none", border=True,
                         help="Pays off at any electricity price." if be == math.inf else
                         "Does not pay off within the horizon even with free electricity.")
         c[2].metric("Full design: payback", f"{full['payback_years']:.1f} y", border=True)
@@ -683,14 +690,28 @@ def dashboard_page() -> None:
         return
     b = rq.iloc[0]
     c = st.columns(4)
-    c[0].metric("RQ1: gas share, payback ≤ 5 y", f"{100 * b['RQ1_gas_share']:.1f} %", border=True,
-                help=f"{b['RQ1_option']} · payback {b['RQ1_payback_y']} y")
-    c[1].metric("Warm-water heat pump alone", f"{b['warm_water_HP_incremental_payback_y']} y", border=True,
-                help="payback of its increment over the heat-recovery retrofit")
-    c[2].metric("RQ2: ΔTmin,opt", f"{b['RQ2_dTmin_opt_K']:g} K", border=True)
-    c[3].metric("RQ3: break-even ratio (full / WW HP)",
-                f"{b['RQ3_ratio_full_electrification']:.2f} / {b['RQ3_ratio_warm_water_HP_only']:.2f}",
+    def _ratio(x):
+        return "none" if not (x == x) or x <= 0 else f"{x:.2f}"
+    c[0].metric("RQ1: heat pumps' share of today's gas", f"{100 * b['RQ1_HP_gas_share']:.1f} %", border=True,
+                help=f"Incremental payback ≤ 5 y over the heat-recovery retrofit, stacked per unit. Heat-recovery "
+                     f"retrofit alone: {100 * b['HR_retrofit_gas_share']:.1f} % of today's gas, payback "
+                     f"{b['HR_retrofit_payback_y']} y.")
+    c[1].metric("Payback per unit: WW HP / HTHP",
+                f"{b['WW_HP_incremental_payback_y']} y / "
+                + ("never" if b['HTHP_incremental_payback_y'] == float('inf') else f"{b['HTHP_incremental_payback_y']:.0f} y"),
+                border=True, help="Incremental: warm-water heat pump over the heat-recovery retrofit; HTHP over the "
+                                  "warm-water heat pump.")
+    c[2].metric("RQ2: ΔTmin (TAC within 1 %)", f"{b['RQ2_dTmin_within_1pct_K']} K", border=True,
+                help=f"Minimum at {b['RQ2_dTmin_opt_K']:g} K; the optimum is flat, so a practical value in this range "
+                     "costs less than 1 % more.")
+    c[3].metric("RQ3 per unit: WW HP / HTHP", f"{_ratio(b['RQ3_ratio_WW_HP'])} / {_ratio(b['RQ3_ratio_HTHP'])}",
                 delta=f"today {b['price_ratio']:.2f}", delta_color="off", border=True)
+    prod = ROOT / "outputs" / case.name / "rq1_production_threshold.json"
+    if origin.startswith("published") and prod.exists():
+        t = json.loads(prod.read_text()).get("threshold")
+        if t:
+            st.caption(f"RQ1 holds above about {t / 1e6:.2f} Mhl/year (warm-water heat pump incremental payback ≤ 5 y); "
+                       "the HTHP pays back nowhere in 0.1-3x the production.")
     left, right = st.columns([1.25, 1], gap="large")
     with left:
         _chart(charts.tornado_chart(rq))

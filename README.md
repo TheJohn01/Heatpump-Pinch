@@ -30,7 +30,7 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 
 ```bash
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
-python -m pytest                                  # 147 tests (about 3 min)
+python -m pytest                                  # 148 tests (about 3 min)
 python analyse.py --all                           # every case in cases/
 python analyse.py cases/brewery_padulles2026.json # one case
 streamlit run app.py                              # interactive front end
@@ -135,10 +135,11 @@ pinch/
   economic_analysis.py       Per-case economics: RQ1 electrification curve, RQ3 break-even, sensitivities
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
-tests/                       147 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
+tests/                       148 tests (incl. app smoke tests, cycle model, network retrofit) (validation cases first, then general behaviour)
 
 ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
+batch_check.py               Batch brewhouse check: HTHP capacity for the boil window (8-14 brews/day x 60-90 min)
 consolidate_rq.py            RQ1-RQ3 answers with one-at-a-time and combined sensitivities
                              (outputs/<case>/rq_consolidated.csv/.md, rq_tornado.png)
 screen_cycles.py             Step 4b: screen the fluids listed in a case file (minutes); analyse.py then

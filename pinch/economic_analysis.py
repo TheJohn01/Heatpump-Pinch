@@ -38,7 +38,7 @@ import pandas as pd
 from pinch.case import Case, to_MWh_per_year
 from pinch.results import Outputs
 from pinch.design import HeatPumpDesign
-from pinch.economics import (DEFAULTS, EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate,
+from pinch.economics import (DEFAULTS, EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment,
                              load_economics)
 
 
@@ -129,7 +129,7 @@ def electrification_curve(design: HeatPumpDesign, Qh_base_MWh: float, to_MWh, pa
                 break
             remaining -= q
             W += q / u.COP
-            equipment.extend((k, capacity_kW(to_MWh(q), params)) for k in params.heat_pump_cost_items(u)[0])
+            equipment.extend(heat_pump_equipment(params, u, capacity_kW(to_MWh(q), params)))
         delivered = to_MWh(target)
         fraction = target / design.Qh_before if design.Qh_before > 0 else 0.0
         E = to_MWh(W)

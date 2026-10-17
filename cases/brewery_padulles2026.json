@@ -6,7 +6,7 @@
   "extra_shift_K": 0,
   "ambient_T_C": 15,
   "heat_pumps": {
-    "eta_lorenz": 0.55,
+    "eta_lorenz": 0.5,
     "source_T_C": -1,
     "sink_levels": [
       {
@@ -21,7 +21,7 @@
     ],
     "eta_lorenz_sensitivity": [
       0.45,
-      0.52,
+      0.55,
       0.63
     ],
     "cycle_screening": {
@@ -87,7 +87,8 @@
         "ammonia_max_discharge_C": 110.0,
         "_source": "IEA HPT Annex 58 Task 1 report (2023): Table 1-3 (single-stage pressure ratio up to 10 for piston/scroll; conservative, screw allows > 20) and Sec. 1.2.1 (ammonia compressors about 76 bar, 110 °C)"
       }
-    }
+    },
+    "_eta_lorenz": "educated approximation, see provenance.eta_lorenz"
   },
   "basis": {
     "type": "per_product",
@@ -96,7 +97,7 @@
   },
   "provenance": {
     "stream data": "published (Table 2); 'Amb.' taken as 15 °C (Sec. 4.3.1), an inference",
-    "eta_lorenz": "published (Sec. 4.3.1, citing Andersen et al.); sensitivity 0.45, 0.52, 0.63 (see economics.sources)",
+    "eta_lorenz": "EDUCATED APPROXIMATION (author decision, 2026-10-17): 0.50, not a published or measured value. It lies inside the range implied by the Danish Energy Agency HTHP sheets (0.45-0.52) and between our cycle model's warm-water heat pump (0.48-0.49) and high-temperature cascade (0.54-0.56). Padullés et al. (2026, Sec. 4.3.1) use 0.55 (kept for the paper reproduction and as a sensitivity row)",
     "source_T_C": "published cold-utility temperature (Sec. 4.1); used for all sources, which bounds W from above",
     "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
     "basis": "assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)",
@@ -326,6 +327,20 @@
         "network": "N1 condensate into tank",
         "heat_pumps": true,
         "cycle_based": true
+      }
+    ],
+    "heat_pump_reference": "N1: condensate into tank",
+    "_heat_pump_reference": "RQ1 and RQ3 per unit judge the heat pumps as increments over the heat-recovery-only retrofit, so the cheap recovery measure does not carry them (supervisor review, item A1)",
+    "heat_pump_increments": [
+      {
+        "name": "Warm-water heat pump",
+        "option": "N1 + warm-water heat pump only",
+        "over": "N1: condensate into tank"
+      },
+      {
+        "name": "HTHP (wort boiling)",
+        "option": "N1 + both heat pumps",
+        "over": "N1 + warm-water heat pump only"
       }
     ]
   }

@@ -1,0 +1,3 @@
+increment,option,over,delta_capex_EUR,delta_savings_EUR,payback_years,delta_npv_EUR,gas_share_of_today,break_even_ratio_NPV
+Warm-water heat pump,N1 + warm-water heat pump only,N1: condensate into tank,1081353.0,252158.0,4.29,865746.0,0.6624,3.588
+HTHP (wort boiling),N1 + both heat pumps,N1 + warm-water heat pump only,745000.0,-14557.0,inf,-857403.0,0.2655,0.909

@@ -3,22 +3,20 @@
 Usage:
     python consolidate_rq.py cases/brewery_padulles2026.json
 
-Definitions (all against the site as it is today, i.e. the case's baseline
-network, step 5):
+Definitions (against the site as it is today, i.e. the case's baseline network, step 5; supervisor
+review 2026-10-17, items A1-A4):
 
-* RQ1: largest share of today's gas use that heat recovery and heat pumps can
-  replace with a simple payback <= the threshold (5 years). Searched over the
-  retrofit options and their electrification curves (partial heat pump duty,
-  highest-COP unit first). Options flagged "cycle_based" are a variant of the
-  COP model and are excluded here (they are a sensitivity row instead).
-* RQ2: ΔTmin minimising the total annual cost (supertargeting) with the
-  case's primary installed cost law (the law whose label contains
-  "installed").
-* The warm-water heat pump is also judged on its own: payback of its
-  increment over the heat-recovery-only retrofit (so the cheap recovery
-  measure does not carry it).
-* RQ3: electricity-to-gas price ratio at which NPV = 0, (a) for full
-  electrification (retrofit + all heat pumps) and (b) for the RQ1 option.
+* RQ1: share of today's gas use that the heat pumps replace with an INCREMENTAL simple payback <= the
+  threshold (5 years) over the heat-recovery-only retrofit (``retrofit.heat_pump_reference``), searched
+  along the electrification curve (partial duty, highest-COP unit first). The heat-recovery retrofit is
+  reported separately (its own share and payback), so it does not carry the heat pumps. One denominator:
+  today's gas.
+* RQ2: ΔTmin minimising the total annual cost with the installed cost law, reported with the range of
+  ΔTmin over which the total cost stays within 1 % of the minimum (the optimum is flat).
+* RQ3: electricity-to-gas price ratio at which the NPV of each heat pump's increment is zero, per unit
+  (``retrofit.heat_pump_increments``): warm-water heat pump over the heat-recovery retrofit; HTHP over
+  the warm-water heat pump. The "full electrification" ratio is a capacity-weighted mix of both and is
+  kept for information only.
 
 Each sensitivity row changes one input from the base case; the source of each
 range is in the "basis" column. Writes outputs/<case>/rq_consolidated.csv,
@@ -29,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import json
 import math
 from dataclasses import replace
 from pathlib import Path
@@ -71,6 +70,7 @@ SENSITIVITIES = [
      "and energy-intensive consumers (SGCIE) may be exempt"),
     ("Horizon 20 years", "econ", {"horizon_years": 20}, "DEA sheet 2.a: HTHP technical lifetime 20 y"),
     ("Lorenz efficiency 0.45", "eta", 0.45, "DEA HTHP data, implied 0.45-0.52"),
+    ("Lorenz efficiency 0.55 (Padullés et al.)", "eta", 0.55, "published value used by Padullés et al. (2026)"),
     ("Lorenz efficiency 0.63", "eta", 0.63, "Andersen et al. (2024) polynomial, HTHP"),
     ("Cycle-based COP per unit", "cycle", None, "CoolProp screening (step 4b), practical options only"),
     ("Cycle-based COP -17 %", "cycle_scaled", 0.83,
@@ -78,6 +78,18 @@ SENSITIVITIES = [
     ("Heat pump CAPEX -25 %", "hp_capex", 0.75, "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"),
     ("Heat pump CAPEX +25 %", "hp_capex", 1.25, "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"),
     ("Retrofit exchanger CAPEX x3", "hx_capex", 3.0, "stress test"),
+    ("Batch: HTHP sized for the boil window, F = 1.14", "econ",
+     {"heat_pump_capacity_factors": {"HTHP (wort boiling)": 24 / (14 * 1.5)}},
+     "14 brews/day x 90 min (most continuous): installed = 24 h / (brews x boil time) x average"),
+    ("Batch: HTHP sized for the boil window, F = 1.75", "econ",
+     {"heat_pump_capacity_factors": {"HTHP (wort boiling)": 24 / (11 * 1.25)}},
+     "11 brews/day x 75 min (central); 8-14 brews/day (Briggs of Burton 2017, industry), 60-90 min boil (assumed)"),
+    ("Batch: HTHP sized for the boil window, F = 3.0", "econ",
+     {"heat_pump_capacity_factors": {"HTHP (wort boiling)": 24 / (8 * 1.0)}},
+     "8 brews/day x 60 min (least continuous); no high-temperature storage"),
+    ("RQ2 with heat-pump heat as hot utility", "hp_hot_utility", None,
+     "after electrification the marginal hot utility is HTHP heat: hours x (p_el / COP + variable O&M) "
+     "+ CRF x 600 EUR/kW + fixed O&M (supervisor review A4)"),
     ("Film coefficients x5 (gasketed plates)", "film", 5.0,
      "Sinnott & Towler Table 12.1: plate, water-water U 5,000-7,500 W/m2K vs 1,000 implied by Stampfli"),
     ("Production 0.25 Mhl/year", "scale", 0.25e6, "Padullés Table 1 range (UK case)"),
@@ -123,6 +135,8 @@ def _apply(case: Case, kind: str, value, selected: dict | None) -> Case:
             cf[k] = {**cf.get(k, {}), **v}
         return replace(case, economics={**case.economics, "cost_functions": cf,
                                         "boiler_variable_om_EUR_per_MWh": 0.0})
+    if kind == "area":
+        return replace(case, area_targeting={**case.area_targeting, **value})
     if kind == "film":
         at = dict(case.area_targeting)
         at["film_coefficients_kW_per_m2K"] = {k: v * float(value) for k, v in at["film_coefficients_kW_per_m2K"].items()}
@@ -136,45 +150,84 @@ def _apply(case: Case, kind: str, value, selected: dict | None) -> Case:
 
 
 def answers(case: Case, streams, unit: str, selected: dict | None) -> dict:
-    """RQ1, RQ2, RQ3 for one case variant."""
+    """RQ1, RQ2, RQ3 for one case variant (definitions in the module docstring)."""
     params = _params_and_converter(case, unit)[1]
     case_nc = replace(case, retrofit={**case.retrofit,
                                       "options": [o for o in case.retrofit["options"] if not o.get("cycle_based")]})
     r = run_retrofit(case_nc, streams, unit, params, selected)
     r.close_figures()
-    opts = r.summary["options"]
+    opts = {o["option"]: o for o in r.summary["options"]}
+    ref = opts.get(case.retrofit.get("heat_pump_reference"))
+    rq1 = r.summary["RQ1_vs_existing_site"]
+    inc = {i["increment"]: i for i in r.summary.get("increments", [])}
+    ww = next((v for k, v in inc.items() if "warm" in k.lower()), None)
+    ht = next((v for k, v in inc.items() if "hthp" in k.lower()), None)
+    # stacked per unit, so one unit never carries another (A2): the warm-water heat pump at its best partial
+    # duty with incremental payback <= threshold over the heat-recovery retrofit, plus the HTHP only if its
+    # own increment over the warm-water heat pump also pays back within the threshold
     thr = params.payback_threshold_years
-    cands = [(o["gas_reduction_vs_baseline"], o["option"], o["payback_years"], o["npv_EUR"]) for o in opts
-             if o["payback_years"] <= thr]
-    for name, cv in r.tables.items():
-        if not name.startswith("retrofit_curve_"):
-            continue
-        ok = cv[cv["payback_years"] <= thr]
-        if len(ok):
-            i = ok["gas_reduction_vs_baseline"].idxmax()
-            cands.append((float(ok.loc[i, "gas_reduction_vs_baseline"]), name.removeprefix("retrofit_curve_") + " (partial)",
-                          float(ok.loc[i, "payback_years"]), float(ok.loc[i, "npv_EUR"])))
-    rq1 = max(cands) if cands else (0.0, "none", math.nan, math.nan)
-    full = max((o for o in opts if o["Qh_residual"] < 1e-6), key=lambda o: o["gas_reduction_vs_baseline"] - 1e-9 * o["capex_EUR"])
-    ww = next((o for o in opts if "only" in o["option"]), None)
-    # the heat pump on its own merits: incremental to the heat-recovery-only option on the same network
-    hr = next((o for o in opts if ww and o["network"] == ww["network"] and o["heat_pumps"] == "none"), None)
-    inc = math.nan
-    if ww and hr and ww["savings_EUR"] > hr["savings_EUR"]:
-        inc = (ww["capex_EUR"] - hr["capex_EUR"]) / (ww["savings_EUR"] - hr["savings_EUR"])
+    ww_curve = next((v for k, v in rq1.items() if ww and k == ww["option"]), {})
+    hp_share = ww_curve.get("heat_pump_share_incremental_payback_ok", 0.0)
+    if ht and ht["payback_years"] <= thr and hp_share >= (ww["gas_share_of_today"] if ww else 0) - 1e-9:
+        hp_share += ht["gas_share_of_today"]
+    full = max((o for o in opts.values() if o["Qh_residual"] < 1e-6),
+               key=lambda o: o["gas_reduction_vs_baseline"] - 1e-9 * o["capex_EUR"])
     at = area_targeting_outputs(case, streams)
     at.close_figures()
     law = next((x for x in at.summary.get("RQ2", []) if "installed" in x["cost_law"]), None)
+    nan = math.nan
     return {
-        "RQ1_gas_share": round(rq1[0], 4), "RQ1_option": rq1[1], "RQ1_payback_y": round(rq1[2], 2),
-        "RQ1_NPV_MEUR": round(rq1[3] / 1e6, 3),
-        "RQ2_dTmin_opt_K": law["dTmin_opt_K"] if law else math.nan,
-        "RQ3_ratio_full_electrification": full["break_even_ratio_NPV"],
-        "RQ3_ratio_warm_water_HP_only": ww["break_even_ratio_NPV"] if ww else math.nan,
-        "warm_water_HP_incremental_payback_y": round(inc, 2),
+        "RQ1_HP_gas_share": round(hp_share, 4),
+        "WW_HP_incremental_payback_y": ww["payback_years"] if ww else nan,
+        "WW_HP_incremental_NPV_MEUR": round(ww["delta_npv_EUR"] / 1e6, 3) if ww else nan,
+        "HTHP_incremental_payback_y": ht["payback_years"] if ht else nan,
+        "HTHP_incremental_NPV_MEUR": round(ht["delta_npv_EUR"] / 1e6, 3) if ht else nan,
+        "HR_retrofit_gas_share": ref["gas_reduction_vs_baseline"] if ref else nan,
+        "HR_retrofit_payback_y": ref["payback_years"] if ref else nan,
+        "RQ2_dTmin_opt_K": law["dTmin_opt_K"] if law else nan,
+        "RQ2_dTmin_within_1pct_K": f"{law['dTmin_within_1pct_K'][0]:g}-{law['dTmin_within_1pct_K'][1]:g}" if law else "",
+        "RQ3_ratio_WW_HP": ww["break_even_ratio_NPV"] if ww else nan,
+        "RQ3_ratio_HTHP": ht["break_even_ratio_NPV"] if ht else nan,
+        "RQ3_ratio_full_electrification_info": full["break_even_ratio_NPV"],
         "full_electrification_payback_y": full["payback_years"], "full_electrification_NPV_MEUR": round(full["npv_EUR"] / 1e6, 3),
         "price_ratio": round(params.price_ratio, 3),
     }
+
+
+def hp_hot_utility_cost(case: Case, streams, unit: str) -> float:
+    """Annual cost of 1 kW of hot utility supplied by the top heat pump (HTHP) instead of gas [EUR/(kW year)]:
+    electricity at the HTHP's COP, variable and fixed O&M, and the annualised marginal investment (alpha of
+    the heat pump cost function; the fixed term beta does not scale with ΔTmin). Its source is ambient at the
+    margin (the warm-water heat pump already takes over the refrigeration)."""
+    from pinch.design import design_from_gcc
+    params = _params_and_converter(case, unit)[1]
+    d = design_from_gcc(streams, case.sink_levels, case.eta_lorenz, case.source_T_C)
+    top = max(d.units, key=lambda u: u.T_sink_out_C)
+    cf = params.cost_functions[params.heat_pump_cost_items(top)[0][0]]
+    h = params.operating_hours_per_year
+    return (h * (params.electricity_price_EUR_per_kWh / top.COP + cf.variable_om_EUR_per_MWh / 1000)
+            + cf.alpha / params.annuity_factor + cf.fixed_om_EUR_per_unit_year)
+
+
+def production_threshold(case: Case, streams, unit: str, selected: dict | None, target_y: float = 5.0) -> dict:
+    """Production [per year] above which the warm-water heat pump's incremental payback is <= target (A3);
+    bisection between 0.1 and 3 times the case's production. Also reports whether the HTHP increment pays
+    back within the target anywhere in that range."""
+    base = case.basis["production_per_year"]
+
+    def pb(x):
+        a = answers(_apply(case, "scale", x, selected), streams, unit, selected)
+        return a["WW_HP_incremental_payback_y"], a["HTHP_incremental_payback_y"]
+
+    lo, hi = 0.1 * base, 3.0 * base
+    if pb(hi)[0] > target_y:
+        return {"threshold": None, "note": "warm-water heat pump above the target even at 3x production"}
+    if pb(lo)[0] <= target_y:
+        return {"threshold": lo, "note": "warm-water heat pump within the target down to 0.1x production"}
+    for _ in range(18):
+        mid = (lo + hi) / 2
+        lo, hi = (lo, mid) if pb(mid)[0] <= target_y else (mid, hi)
+    return {"threshold": round(hi, -3), "HTHP_payback_at_3x_y": pb(3.0 * base)[1]}
 
 
 def consolidate(case_file: Path) -> pd.DataFrame:
@@ -194,38 +247,64 @@ def consolidate_case(case: Case, streams, selected: dict | None) -> pd.DataFrame
     unit = streams.energy_unit
     rows = [{"sensitivity": "Base case", "basis": "current inputs",
              **answers(case, streams, unit, selected)}]
+    c_hp = hp_hot_utility_cost(case, streams, unit)
     for label, kind, value, basis in SENSITIVITIES:
+        if kind == "hp_hot_utility":
+            kind, value = "area", {"hot_utility_cost_EUR_per_kW_year": c_hp}
+            basis = f"{basis}: {c_hp:.0f} EUR/(kW year)"
         if (kind.startswith("cycle") or (kind == "combo" and any(k.startswith("cycle") for k, _ in value))) and not selected:
             continue
         rows.append({"sensitivity": label, "basis": basis, **answers(_apply(case, kind, value, selected), streams, unit, selected)})
     return pd.DataFrame(rows)
 
 
-def _markdown(df: pd.DataFrame, threshold: float) -> str:
-    lines = ["| Sensitivity | RQ1: gas share, payback ≤ 5 y | RQ1 payback / NPV₁₀ | Warm-water HP alone, payback | "
-             "RQ2: ΔTmin,opt [K] | RQ3: break-even ratio (full / warm-water HP) | Current ratio | Basis |",
-             "|---|---|---|---|---|---|---|---|"]
+def _f(x, fmt="{:.2f}", unit=""):
+    """Number for the table: 'never' for an infinite payback, 'none' for a break-even ratio <= 0."""
+    if isinstance(x, float) and math.isinf(x):
+        return "never"
+    if x != x:
+        return "n/a"
+    if unit == "ratio" and x <= 0:
+        return "none"
+    return fmt.format(x) + unit if unit != "ratio" else fmt.format(x)
+
+
+def _markdown(df: pd.DataFrame, threshold: float, prod: dict | None = None) -> str:
+    lines = []
+    if prod:
+        t = prod.get("threshold")
+        lines += [f"RQ1 condition (A3): the warm-water heat pump's incremental payback is ≤ {threshold:g} years above "
+                  f"about {t / 1e6:.2f} Mhl/year" if t else f"RQ1 condition: {prod.get('note', '')}",
+                  f"(HTHP increment at 3x production: payback {_f(prod.get('HTHP_payback_at_3x_y', math.nan), unit=' y')}).", ""]
+    lines += ["| Sensitivity | RQ1: heat-pump share of today's gas, incremental payback ≤ 5 y | Warm-water HP: "
+              "payback / NPV₁₀ | HTHP: payback / NPV₁₀ | Heat-recovery retrofit: share / payback | RQ2: ΔTmin,opt "
+              "(within 1 %) [K] | RQ3 per unit: WW HP / HTHP | Current ratio | Basis |",
+              "|---|---|---|---|---|---|---|---|---|"]
     for _, r in df.iterrows():
-        lines.append(f"| {r['sensitivity']} | {100 * r['RQ1_gas_share']:.1f} % | {r['RQ1_payback_y']} y / "
-                     f"{r['RQ1_NPV_MEUR']:+.2f} M€ | {r['warm_water_HP_incremental_payback_y']} y | {r['RQ2_dTmin_opt_K']:g} | "
-                     f"{r['RQ3_ratio_full_electrification']:.2f} / {r['RQ3_ratio_warm_water_HP_only']:.2f} | "
+        lines.append(f"| {r['sensitivity']} | {100 * r['RQ1_HP_gas_share']:.1f} % | "
+                     f"{_f(r['WW_HP_incremental_payback_y'], unit=' y')} / {r['WW_HP_incremental_NPV_MEUR']:+.2f} M€ | "
+                     f"{_f(r['HTHP_incremental_payback_y'], '{:.0f}', ' y')} / {r['HTHP_incremental_NPV_MEUR']:+.2f} M€ | "
+                     f"{100 * r['HR_retrofit_gas_share']:.1f} % / {_f(r['HR_retrofit_payback_y'], unit=' y')} | "
+                     f"{r['RQ2_dTmin_opt_K']:g} ({r['RQ2_dTmin_within_1pct_K']}) | "
+                     f"{_f(r['RQ3_ratio_WW_HP'], unit='ratio')} / {_f(r['RQ3_ratio_HTHP'], unit='ratio')} | "
                      f"{r['price_ratio']:.2f} | {r['basis']} |")
     return "\n".join(lines) + "\n"
 
 
 def _tornado(df: pd.DataFrame, path: Path, title: str) -> None:
+    """Break-even ratio of the warm-water heat pump's increment (the unit that answers RQ1)."""
+    col = "RQ3_ratio_WW_HP"
     base = df.iloc[0]
     d = df.iloc[1:].copy()
-    d["delta"] = d["RQ3_ratio_full_electrification"] - base["RQ3_ratio_full_electrification"]
+    d["delta"] = d[col] - base[col]
     d = d.reindex(d["delta"].abs().sort_values().index)
-    fig, ax = plt.subplots(figsize=(9, 6.5))
-    ax.barh(d["sensitivity"], d["delta"], left=base["RQ3_ratio_full_electrification"],
-            color=["#2471A3" if v > 0 else "#C0392B" for v in d["delta"]])
-    ax.axvline(base["RQ3_ratio_full_electrification"], color="black", lw=1)
+    fig, ax = plt.subplots(figsize=(9, 7))
+    ax.barh(d["sensitivity"], d["delta"], left=base[col], color=["#2471A3" if v > 0 else "#C0392B" for v in d["delta"]])
+    ax.axvline(base[col], color="black", lw=1)
     ax.axvline(base["price_ratio"], color="grey", ls="--", lw=1)
     ax.annotate(f"today's ratio {base['price_ratio']:.2f}", (base["price_ratio"], 0), xytext=(3, -12),
                 textcoords="offset points", fontsize=7, color="grey")
-    ax.set_xlabel("Break-even price ratio, full electrification (NPV = 0) [-]")
+    ax.set_xlabel("Break-even price ratio, warm-water heat pump increment (NPV = 0) [-]")
     ax.tick_params(axis="y", labelsize=7)
     ax.set_title(title, fontsize=10)
     ax.grid(axis="x", alpha=0.3)
@@ -240,11 +319,15 @@ def main() -> None:
     args = parser.parse_args()
     case = load_case(args.case_file)
     df = consolidate(args.case_file)
+    streams = with_extra_shift(load_streams(case.stream_file), case.extra_shift_K)
+    selected = load_selected(ROOT / "outputs" / case.name / "cycle_screening.json")
+    prod = production_threshold(case, streams, streams.energy_unit, selected)
     out = ROOT / "outputs" / case.name
     df.to_csv(out / "rq_consolidated.csv", index=False)
-    (out / "rq_consolidated.md").write_text(_markdown(df, 5.0), encoding="utf-8")
-    _tornado(df, out / "rq_tornado.png", f"RQ3 sensitivity: {case.name} (base {df.iloc[0]['RQ3_ratio_full_electrification']:.2f})")
-    print(_markdown(df, 5.0))
+    (out / "rq1_production_threshold.json").write_text(json.dumps(prod, indent=2), encoding="utf-8")
+    (out / "rq_consolidated.md").write_text(_markdown(df, 5.0, prod), encoding="utf-8")
+    _tornado(df, out / "rq_tornado.png", f"RQ3, warm-water heat pump: {case.name} (base {df.iloc[0]['RQ3_ratio_WW_HP']:.2f})")
+    print(_markdown(df, 5.0, prod))
 
 
 if __name__ == "__main__":

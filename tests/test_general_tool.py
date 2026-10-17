@@ -51,7 +51,8 @@ def test_gcc_max_level_electrifies_everything():
 def test_brewery_case_reproduces_step_by_step_design():
     """General tool on the brewery case = minimum-energy design of reproduce_padulles2026.py (3.4404)."""
     case = load_case(ROOT / "cases" / "brewery_padulles2026.json")
-    d = design_from_gcc(load_streams(case.stream_file), case.sink_levels, case.eta_lorenz, case.source_T_C)
+    # at the published eta_L 0.55 of Padullés et al. (the case now uses 0.50, an educated approximation)
+    d = design_from_gcc(load_streams(case.stream_file), case.sink_levels, 0.55, case.source_T_C)
     assert d.W_total == pytest.approx(3.4404, abs=1e-4)
     assert d.fraction_electrified == pytest.approx(1.0, abs=1e-6)
 

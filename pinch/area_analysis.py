@@ -64,6 +64,8 @@ def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
     h = block["film_coefficients_kW_per_m2K"]
     grid = block.get("dTmin_grid_K", list(np.arange(1, 31, 1.0)))
     c_hot = hours * params.gas_price_EUR_per_kWh / params.boiler_efficiency
+    if block.get("hot_utility_cost_EUR_per_kW_year") is not None:   # e.g. heat-pump heat after electrification
+        c_hot = float(block["hot_utility_cost_EUR_per_kW_year"])
     c_cold_given = block.get("cold_utility_cost_EUR_per_kW_year")
     cw = block.get("cooling_water")   # {"electricity_kWh_per_kWh": e, "other_EUR_per_kWh": o} per kWh of heat removed
     if cw:
@@ -91,10 +93,16 @@ def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
         df["cost_law"] = law.source
         frames.append(df)
         best = df.loc[df["TAC_EUR"].idxmin()]
+        flat = {}
+        for tol in (0.01, 0.02):     # range of ΔTmin with TAC within tol of the minimum (flat optimum)
+            near = df[df["TAC_EUR"] <= best["TAC_EUR"] * (1 + tol)]["dTmin_K"]
+            flat[tol] = (float(near.min()), float(near.max()))
         results.append({"cost_law": law.source, "a": law.a, "b": law.b, "c": law.c,
                         "dTmin_opt_K": float(best["dTmin_K"]), "TAC_min_EUR": round(float(best["TAC_EUR"]), 0),
                         "area_m2": round(float(best["area_m2"]), 1), "Qh_min_kW": round(float(best["Qh_min"]), 1),
-                        "at_grid_edge": bool(best["dTmin_K"] in (min(grid), max(grid)))})
+                        "at_grid_edge": bool(best["dTmin_K"] in (min(grid), max(grid))),
+                        "dTmin_within_1pct_K": list(flat[0.01]), "dTmin_within_2pct_K": list(flat[0.02]),
+                        "energy_share_of_TAC": round(float(best["energy_cost_EUR"] / best["TAC_EUR"]), 3)})
 
     fig, ax = plt.subplots(figsize=(7, 4.5))
     for df, r in zip(frames, results):
