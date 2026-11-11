@@ -127,6 +127,7 @@ def test_retrofit_bounds_spray_dryer_published_no_recovery():
 def test_retrofit_bounds_lower_bound_equals_step6():
     """The 'already at target' row is the grass-roots comparison of step 6."""
     from dataclasses import replace
+
     from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT

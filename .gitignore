@@ -5,3 +5,6 @@ outputs_app/
 *.egg-info/
 build/
 .venv/
+.coverage
+# volatile run metadata (pinch/provenance.py): commit, time, environment
+outputs/**/run_metadata.json

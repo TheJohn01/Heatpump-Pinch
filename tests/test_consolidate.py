@@ -60,6 +60,7 @@ def test_one_sensitivity_list(table):
 
 def test_old_scenario_block_is_rejected(tmp_path):
     import json
+
     from pinch.case import load_case
     raw = json.loads((ROOT / "cases" / "four_stream_process.json").read_text(encoding="utf-8"))
     raw["stream_file"] = str(ROOT / "data" / "four_stream_process_streams.csv")
@@ -85,6 +86,7 @@ def test_sensitivity_rows_are_validated(bad):
 # ------------------------------------------------- every case (pinch.research_questions)
 def _case(name, hours=8000):
     from dataclasses import replace
+
     from pinch.case import load_case
     c = load_case(ROOT / "cases" / f"{name}.json")
     return c if c.basis is not None else replace(c, basis={"type": "power", "operating_hours_per_year": hours})

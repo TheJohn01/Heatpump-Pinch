@@ -30,11 +30,11 @@ from pathlib import Path
 import pandas as pd
 
 from consolidate_rq import answers
-from pinch.sensitivity import apply
 from pinch import load_streams, with_extra_shift
 from pinch.case import load_case
 from pinch.cycle_analysis import load_selected
 from pinch.research_questions import unit_names
+from pinch.sensitivity import apply
 
 ROOT = Path(__file__).resolve().parent
 BREWS_PER_DAY = (8, 10, 12, 14)

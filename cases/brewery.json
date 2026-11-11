@@ -343,6 +343,12 @@
       "basis": "as above"
     },
     {
+      "label": "Heat pumps via intermediate water loops (+2 K each side)",
+      "kind": "hp_dT_cont",
+      "value": 2.0,
+      "basis": "condenser and evaporator reach the process through water loops: secondary fluids 2 K beyond T*, i.e. the loop contribution ΔT_HRL = ΔTmin/2 of Stampfli et al. (2019, Energy 182, Eq. 1) with the brewery's ΔT_shift of 2 K. Base: secondary fluids at T* (Padullés et al. 2026, Sec. 4.1)"
+    },
+    {
       "label": "Grid emission factor 0.167 (5-year average)",
       "kind": "econ",
       "value": {

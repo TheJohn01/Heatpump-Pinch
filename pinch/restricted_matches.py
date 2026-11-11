@@ -128,7 +128,7 @@ def restricted_targets(streams: StreamSet, limits: dict[tuple[str, str], float])
             row[ridx[i, k]] = 1.0
             if k > 0:
                 row[ridx[i, k - 1]] = -1.0
-            for (ii, j, kk), col in qidx.items():
+            for (ii, _j, kk), col in qidx.items():
                 if ii == i and kk == k:
                     row[col] = 1.0
             if i == 0 and k == 0:
@@ -140,7 +140,7 @@ def restricted_targets(streams: StreamSet, limits: dict[tuple[str, str], float])
             if d[j, k] == 0:
                 continue
             row = np.zeros(n)
-            for (i, jj, kk), col in qidx.items():
+            for (_i, jj, kk), col in qidx.items():
                 if jj == j and kk == k:
                     row[col] = 1.0
             A_eq.append(row)

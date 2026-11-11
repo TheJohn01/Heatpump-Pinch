@@ -11,7 +11,7 @@ is the sum of the two streams' shifts. Both are available through ``shifted``.
 
 from __future__ import annotations
 
-from typing import Iterable
+from collections.abc import Iterable
 
 import numpy as np
 

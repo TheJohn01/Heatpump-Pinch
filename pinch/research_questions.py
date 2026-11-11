@@ -35,8 +35,7 @@ from dataclasses import dataclass
 from pinch.area_analysis import area_targeting_outputs
 from pinch.case import Case, to_MWh_per_year
 from pinch.design import design_from_gcc, partial_designs
-from pinch.economics import (EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate,
-                             heat_pump_equipment)
+from pinch.economics import EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment
 from pinch.heat_pump import HeatPump
 from pinch.network import Network, constrained_streams, evaluate_network, load_networks
 from pinch.problem_table_algorithm import problem_table

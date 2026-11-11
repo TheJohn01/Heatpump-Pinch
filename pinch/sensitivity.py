@@ -30,6 +30,7 @@ hp_capex      heat pump cost function alpha and beta scaled by the value
 hx_capex      plate exchanger cost function alpha and beta scaled by the value
 no_om         operation and maintenance costs set to zero (as Padullés et al., 2026); value null
 hthp_sink     isothermal sink temperature [°C] of every level whose name contains "HTHP"
+hp_dT_cont    temperature contribution [K] of every heat pump level (intermediate loops; pinch.heat_pump)
 area          dict of area_targeting overrides
 film          film coefficients scaled by the value
 scale         production [per year]; the retrofit storage is scaled with it
@@ -43,10 +44,10 @@ import copy
 from dataclasses import dataclass, replace
 from typing import Any
 
-KINDS = ("econ", "eta", "cycle", "cycle_scaled", "hp_capex", "hx_capex", "no_om", "hthp_sink", "area", "film",
+KINDS = ("econ", "eta", "cycle", "cycle_scaled", "hp_capex", "hx_capex", "no_om", "hthp_sink", "hp_dT_cont", "area", "film",
          "scale", "hp_hot_utility", "combo")
 _DICT_KINDS = ("econ", "area")
-_NUMBER_KINDS = ("eta", "cycle_scaled", "hp_capex", "hx_capex", "hthp_sink", "film", "scale")
+_NUMBER_KINDS = ("eta", "cycle_scaled", "hp_capex", "hx_capex", "hthp_sink", "hp_dT_cont", "film", "scale")
 _NULL_KINDS = ("cycle", "no_om", "hp_hot_utility")
 
 
@@ -166,6 +167,8 @@ def apply(case, kind: str, value: Any, selected: dict | None = None):
     if kind == "hthp_sink":
         return replace(case, sink_levels=tuple(replace(lv, T_sink_in_C=float(value), T_sink_out_C=float(value))
                                                if "HTHP" in lv.name else lv for lv in case.sink_levels))
+    if kind == "hp_dT_cont":
+        return replace(case, sink_levels=tuple(replace(lv, dT_cont_K=float(value)) for lv in case.sink_levels))
     if kind == "area":
         return replace(case, area_targeting={**case.area_targeting, **value})
     if kind == "film":

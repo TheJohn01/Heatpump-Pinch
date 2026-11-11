@@ -29,6 +29,15 @@ isothermal source at T as a cold stream from T to T + w, with
 w = ``isothermal_width_K`` (default 1 K, the convention used for latent loads
 in the stream data). Results are insensitive to w for w <= 1 K (see
 ``tests/test_heat_pump.py``).
+
+Explicit approach (``dT_cont_K``, default 0): when the heat pump reaches the
+process through an intermediate loop, its condenser's secondary fluid must sit
+above, and its evaporator's below, the shifted temperature it serves. The COP is
+then evaluated at sink temperatures + dT_cont_K and source temperatures
+- dT_cont_K; the unit's position in the cascade does not change. Stampfli et al.
+(2019, Energy 182, Eq. 1) use ΔT_HRL = ΔTmin/2 for a water loop. The Lorenz
+efficiency already covers the refrigerant-side pinch (Andersen et al. 2024:
+3 K), so dT_cont_K is the loop's contribution only.
 """
 
 from __future__ import annotations
@@ -146,6 +155,9 @@ class HeatPump:
     isothermal_width_K : float
         Temperature interval used to represent an isothermal sink or source
         in the cascade [K].
+    dT_cont_K : float
+        Temperature contribution of an intermediate loop [K], applied to the
+        COP only (module docstring). 0 = secondary fluids at T*.
     """
 
     name: str
@@ -157,10 +169,13 @@ class HeatPump:
     eta_lorenz: float | None = None
     cop_fixed: float | None = None
     isothermal_width_K: float = 1.0
+    dT_cont_K: float = 0.0
 
     def __post_init__(self) -> None:
         if self.isothermal_width_K <= 0:
             raise ValueError(f"{self.name}: isothermal_width_K must be positive")
+        if self.dT_cont_K < 0:
+            raise ValueError(f"{self.name}: dT_cont_K must be >= 0")
         if self.Q_sink <= 0:
             raise ValueError(f"{self.name}: Q_sink must be positive")
         if self.T_sink_out_C < self.T_sink_in_C:
@@ -195,8 +210,9 @@ class HeatPump:
         """Heating COP [-]."""
         if self.cop_fixed is not None:
             return self.cop_fixed
-        return lorenz_cop(self.T_sink_in_C, self.T_sink_out_C,
-                          self.T_source_in_C, self.T_source_out_C, self.eta_lorenz)
+        d = self.dT_cont_K
+        return lorenz_cop(self.T_sink_in_C + d, self.T_sink_out_C + d,
+                          self.T_source_in_C - d, self.T_source_out_C - d, self.eta_lorenz)
 
     @property
     def W(self) -> float:
@@ -208,7 +224,7 @@ class HeatPump:
         """Heat absorbed from the source [case energy unit] (first law)."""
         return self.Q_sink - self.W if self.has_source else 0.0
 
-    def with_sink_duty(self, Q_sink: float) -> "HeatPump":
+    def with_sink_duty(self, Q_sink: float) -> HeatPump:
         """Copy with a different sink duty."""
         return replace(self, Q_sink=Q_sink)
 

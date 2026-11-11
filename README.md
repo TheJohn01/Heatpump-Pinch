@@ -140,6 +140,9 @@ pinch/
   uncertainty.py             Stream-data uncertainty of the targets, Latin hypercube, SRC ranking (Bergamini et al. 2019, 2021)
   restricted_matches.py      Targets with forbidden or limited matches (transshipment LP; reproduces the Problem Table)
   time_slices.py             Time Slice / Time Average targets, storage sizing, heat pump with storage loops (Stampfli et al. 2019)
+  utilities.py               Targets for several utility levels placed against the GCC (Klemeš et al. 1997)
+  refrigerants.py            Working-fluid GWP, safety group and EU F-gas prohibitions (Reg. (EU) 2024/573)
+  provenance.py              Tool version and input hashes in summary.json; run metadata (git-ignored)
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
 tests/                       pytest suite (validation cases first, then general behaviour; incl. app smoke tests,
@@ -301,3 +304,7 @@ A test checks that this table and the case files agree.
   The MIT licence does not cover these data.
 * **Citation**: see `CITATION.cff` (GitHub shows a "Cite this repository" button).
 
+## Quality and releases
+
+What CI enforces (tests, reproducible outputs, lint, types, one version, provenance), the recorded
+type debt and the release procedure are in `QUALITY.md`; changes per version in `CHANGELOG.md`.

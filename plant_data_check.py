@@ -78,7 +78,10 @@ def check(case_file: Path) -> dict:
 
 def markdown(res: dict) -> str:
     u, unit = res["uncertainty"], res["unit"]
-    f = lambda x: f"{x:.3g}"
+
+    def f(x: float) -> str:
+        return f"{x:.3g}"
+
     lines = [f"## Stream-data uncertainty ({N_SAMPLES} Latin hypercube samples, seed {SEED})", "",
              f"Heat loads σ {100 * BERGAMINI_2019_SIGMA['heat_flow_relative']:g} %, temperatures σ "
              f"{BERGAMINI_2019_SIGMA['temperature_K']:g} K (Bergamini et al. 2019, Table 1: rough estimates, dairy "

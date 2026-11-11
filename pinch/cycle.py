@@ -38,8 +38,8 @@ Not modelled: pressure drops, compressor maps and part load.
 from __future__ import annotations
 
 import math
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable
 
 import CoolProp.CoolProp as CP
 from scipy.optimize import minimize_scalar
@@ -111,7 +111,7 @@ class CycleResult:
     q_source_kJ_kg: float = math.nan
     w_el_kJ_kg: float = math.nan
     note: str = ""
-    stages: list["CycleResult"] = field(default_factory=list)
+    stages: list[CycleResult] = field(default_factory=list)
 
     def as_dict(self) -> dict:
         out = {k: (round(v, 4) if isinstance(v, float) and math.isfinite(v) else v)
@@ -282,7 +282,7 @@ def _evaluate_raw(f: _Fluid, T_e: float, P_hi: float, sink_T: Callable[[float], 
             for _ in range(30):  # shrink until the internal profile respects the pinch
                 if Q <= 0:
                     break
-                dT = _min_dT(lambda x: f.T_ph(P_hi, h3 - x * Q), lambda x: f.T_ph(P_lo, h1 + Q - x * Q), 10)
+                dT = _min_dT(lambda x: f.T_ph(P_hi, h3 - x * Q), lambda x: f.T_ph(P_lo, h1 + Q - x * Q), 10)  # noqa: B023 (called at once)
                 if dT >= a.dT_pinch_slhx_K - 1e-6:
                     break
                 Q *= 0.95

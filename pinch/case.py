@@ -42,6 +42,9 @@ class SinkLevelSpec:
     T_sink_out_C: float | str
     T_source_C: float | None = None
     eta_lorenz: float | None = None   # overrides the case-wide value for this level
+    #: temperature contribution of the heat pump side [K]: the condenser's secondary fluid sits dT above,
+    #: the evaporator's dT below the T* it serves (0 = read directly on the GCC, as in Padullés et al. 2026)
+    dT_cont_K: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -115,6 +118,7 @@ class Case:
     sensitivities: tuple[Sensitivity, ...] = ()   # the case's only sensitivity list (pinch.sensitivity)
     #: ((hot, cold, max heat or 0 = forbidden, reason), ...): match restrictions (pinch.restricted_matches)
     restricted_matches: tuple = ()
+    case_file: Path | None = None   # the file this case was read from (provenance)
 
     @property
     def data_source(self) -> str:
@@ -150,6 +154,7 @@ def load_case(path: str | Path) -> Case:
             T_sink_out_C=lv.get("T_sink_out_C", lv.get("T_sink_C")),
             T_source_C=lv.get("T_source_C"),
             eta_lorenz=None if lv.get("eta_lorenz") is None else float(lv["eta_lorenz"]),
+            dT_cont_K=float(lv.get("dT_cont_K", hp.get("dT_cont_K", 0.0))),
         )
         for lv in hp.get("sink_levels", [{"name": "HTHP", "T_sink_C": "gcc_max"}])
     )
@@ -190,6 +195,7 @@ def load_case(path: str | Path) -> Case:
         retrofit_bounds=raw.get("retrofit_bounds"),
         sensitivities=parse_sensitivities(raw.get("sensitivities"), path.name),
         restricted_matches=_parse_restrictions(raw.get("restricted_matches"), path.name),
+        case_file=path.resolve(),
     )
 
 

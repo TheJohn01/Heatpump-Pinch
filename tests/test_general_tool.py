@@ -153,6 +153,7 @@ def test_every_module_is_documented():
 def test_problem_table_name_is_unambiguous():
     """Audit 4: `pinch.problem_table` was both a submodule and the function re-exported by __init__."""
     import importlib
+
     import pinch
     assert callable(pinch.problem_table)
     assert importlib.util.find_spec("pinch.problem_table") is None
@@ -163,6 +164,7 @@ def test_cases_name_only_the_type_of_plant():
     """Case names, plant labels and descriptions carry no citation; the data source is in the provenance and in
     README's 'Data sources' table."""
     import re
+
     from pinch.case import load_case
     from pinch.validation import ROOT
     readme = (ROOT / "README.md").read_text(encoding="utf-8")

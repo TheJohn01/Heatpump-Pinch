@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 from pathlib import Path
 
 import pandas as pd
@@ -26,13 +27,15 @@ from pinch import energy_balance, load_streams, problem_table, with_extra_shift
 from pinch.area_analysis import area_targeting_outputs
 from pinch.case import Case, load_case, to_MWh_per_year
 from pinch.cycle_analysis import load_selected
-from pinch.economic_analysis import cycle_based_design, economics_outputs, eta_lorenz_sensitivity
-from pinch.results import Outputs
-from pinch.streams import StreamSet
 from pinch.design import HeatPumpDesign, design_from_gcc, plausibility_warnings, source_warnings
+from pinch.economic_analysis import cycle_based_design, economics_outputs, eta_lorenz_sensitivity
 from pinch.heat_pump import andersen2024_eta_lorenz
 from pinch.plotting import composite_curves_figure, gcc_figure, gcc_with_units_figure
+from pinch.provenance import deterministic_record, write_run_record
+from pinch.results import Outputs
+from pinch.streams import StreamSet
 
+log = logging.getLogger(__name__)
 ROOT = Path(__file__).resolve().parent
 CASES_DIR = ROOT / "cases"
 
@@ -136,6 +139,7 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
         "warnings": {u.name: w for u in design.units
                      if (w := plausibility_warnings(u, case.screening) + src_warn.get(u.name, []))},
         "provenance": case.provenance,
+        "run": deterministic_record(input_files(case)),
     }
 
     eco = economics_outputs(case, design, balance["Q_cold_total"], unit, streams)
@@ -174,6 +178,14 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
     return Outputs(summary, tables, figures)
 
 
+def input_files(case: Case) -> list[Path]:
+    """Every input file a case reads: case file, stream file, network file (provenance hashes)."""
+    files = [case.case_file, case.stream_file]
+    if case.retrofit:
+        files.append(Path(case.retrofit["network_file_resolved"]))
+    return [Path(f) for f in files if f is not None]
+
+
 def write(result: Outputs, out: Path) -> None:
     """Write every table, figure and the summary (JSON and Markdown) to ``out``."""
     s = result.summary
@@ -192,6 +204,8 @@ def analyse(case: Case, output_root: Path = ROOT / "outputs") -> dict:
     selected = load_selected(ROOT / "outputs" / case.name / "cycle_screening.json")
     result = compute(case, cycle_selected=selected)
     write(result, Path(output_root) / case.name)
+    write_run_record(Path(output_root) / case.name, input_files(case))
+    log.info("%s: outputs written to %s", case.name, Path(output_root) / case.name)
     return result.summary
 
 
@@ -311,7 +325,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("case_files", nargs="*", type=Path, help="case JSON files")
     parser.add_argument("--all", action="store_true", help="run every case in cases/")
+    parser.add_argument("-v", "--verbose", action="store_true", help="log progress (INFO level)")
     args = parser.parse_args()
+    logging.basicConfig(level=logging.INFO if args.verbose else logging.WARNING,
+                        format="%(levelname)s %(name)s: %(message)s")
     files = sorted(p for p in CASES_DIR.glob("*.json") if p.stem != "TEMPLATE") if args.all else args.case_files
     if not files:
         parser.error("give one or more case files, or --all")

@@ -74,6 +74,7 @@ def test_rejects_bad_parameters():
 def test_padulles_statements_reproduced():
     """Sec. 5.2, S1-S4: run the reproduction and require every statement to hold."""
     import pandas as pd
+
     import reproduce_padulles2026_economics as rep
     rep.main()
     checks = pd.read_csv(rep.OUT / "step6_padulles_checks.csv")
@@ -84,6 +85,7 @@ def test_padulles_statements_reproduced():
 def test_brewery_full_design_hand_check(tmp_path):
     """1 Mhl/year, prices from the case file: CAPEX and savings of the GCC design by hand."""
     import json
+
     from analyse import analyse
     from pinch.case import load_case
     from pinch.validation import ROOT
@@ -93,7 +95,9 @@ def test_brewery_full_design_hand_check(tmp_path):
     s = analyse(load_case(path), output_root=tmp_path)
     full = s["economics"]["results"]["full design (heat recovery installed)"]
     Q_co2, Q_hthp, W = 7.2824, 2.7600, 3.7845             # kWh/hl, from the step-4 design at eta_L 0.50
-    kW = lambda q: q * 1e3 * 1000 / 8000                   # kWh/hl -> MWh/year -> kW at 8000 h
+    def kW(q: float) -> float:                             # kWh/hl -> MWh/year -> kW at 8000 h
+        return q * 1e3 * 1000 / 8000
+
     capex = (520_000 + 600 * kW(Q_co2)) + (520_000 + 600 * kW(Q_hthp))
     savings = (10.0424 / eta_b * p_gas - W * p_el) * 1e6   # kWh/hl x 1e6 hl/year x EUR/kWh
     # O&M (DEA): boiler 1.23 EUR/MWh of heat avoided; heat pumps 2.494 EUR/kW/y + 3.6 EUR/MWh (sheet 2.a)
@@ -180,6 +184,7 @@ def test_milk_evaporator_capex_uses_dea_sheets():
     """Hand check: 0.64 MW at 55 °C (sheet 1.1, 0.95 M€/MW) + 2.90 MW of steam at 105 °C from 15 °C
     (sheet 2.a 1.2 + lift above 75 K 0.15 + steam generation 0.2 = 1.55 M€/MW)."""
     from dataclasses import replace
+
     from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
@@ -195,6 +200,7 @@ def test_milk_evaporator_capex_uses_dea_sheets():
 
 def test_heat_pump_cost_adders_follow_lift_and_steam():
     from types import SimpleNamespace as U
+
     from pinch.economics import load_economics
     lin = lambda a: {"alpha": a, "beta": 0.0, "gamma": 1.0, "size_unit": "kW"}  # noqa: E731
     p = load_economics({"cost_functions": {"b": lin(1200.0), "lift": lin(150.0), "steam": lin(200.0)},
@@ -210,6 +216,7 @@ def test_heat_pump_cost_adders_follow_lift_and_steam():
 def test_cooling_water_cost_follows_price_and_hours():
     """Sinnott & Towler Sec. 6.4.4: 0.0341 kWh + 0.00042 EUR per kWh removed; 8000 h at 0.1135 EUR/kWh = 34.3."""
     from dataclasses import replace
+
     from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT

@@ -98,14 +98,14 @@ def design_from_gcc(
         T_in, T_out = resolve_level(spec, base)
         T_src = default_source_T_C if spec.T_source_C is None else float(spec.T_source_C)
         eta = eta_lorenz if spec.eta_lorenz is None else float(spec.eta_lorenz)
-        resolved.append((T_out, spec.name, T_in, T_src, eta))
+        resolved.append((T_out, spec.name, T_in, T_src, eta, spec.dT_cont_K))
     resolved.sort()
 
     current = stream_set
     units: list[HeatPump] = []
     skipped: list[str] = []
-    for T_out, name, T_in, T_src, eta in resolved:
-        template = HeatPump(name, 1.0, T_in, T_out, T_src, T_src, eta_lorenz=eta)
+    for T_out, name, T_in, T_src, eta, dT_cont in resolved:
+        template = HeatPump(name, 1.0, T_in, T_out, T_src, T_src, eta_lorenz=eta, dT_cont_K=dT_cont)
         duty = max_useful_sink_duty(current, template)
         if duty <= 0.0:
             skipped.append(name)

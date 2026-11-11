@@ -30,6 +30,8 @@ from pathlib import Path
 import pandas as pd
 
 from pinch.cycle import CycleAssumptions, CycleResult, SecondaryStream, cascade, single_stage, two_stage
+from pinch.design import HeatPumpDesign
+from pinch.refrigerants import lookup
 
 #: Practical limits for screening, conservative. Sources: IEA HPT Annex 58, Task 1
 #: report (2023), Table 1-3: single-stage pressure ratio up to 10 for piston and
@@ -54,7 +56,16 @@ def practical_issues(r: CycleResult, limits: dict | None = None) -> list[str]:
             if st.T_discharge_C > lim["ammonia_max_discharge_C"]:
                 out.append(f"ammonia discharge {st.T_discharge_C:.0f} °C > {lim['ammonia_max_discharge_C']:g}")
     return out
-from pinch.design import HeatPumpDesign
+
+
+def refrigerant_columns(fluid: str) -> dict:
+    """GWP100, safety group and F-gas status of each fluid in a layout ("a / b" for cascades), from
+    ``pinch.refrigerants`` (EC page restating Regulation (EU) 2024/573). Blank where the source gives none."""
+    recs = [lookup(f.strip()) for f in fluid.split("/")]
+    fmt = lambda v: "" if v is None else (f"{v:g}" if isinstance(v, float) else str(v))  # noqa: E731
+    return {"GWP100": " / ".join(fmt(r.gwp100 if r else None) for r in recs),
+            "safety_group": " / ".join(fmt(r.safety_group if r else None) for r in recs),
+            "F_gas": " / ".join("?" if r is None else ("yes" if r.fluorinated else "no") for r in recs)}
 
 
 def _row(unit_name: str, r: CycleResult, eta_assumed: float, limits: dict | None = None) -> dict:
@@ -63,7 +74,8 @@ def _row(unit_name: str, r: CycleResult, eta_assumed: float, limits: dict | None
          "eta_lorenz_assumed": eta_assumed, "T_evap_C": r.T_evap_C, "T_cond_C": r.T_cond_C,
          "P_low_bar": r.P_low_bar, "P_high_bar": r.P_high_bar, "pressure_ratio": r.pressure_ratio,
          "T_discharge_C": r.T_discharge_C, "transcritical": r.transcritical, "note": r.note,
-         "practical_issues": "; ".join(practical_issues(r, limits)) if r.feasible else ""}
+         "practical_issues": "; ".join(practical_issues(r, limits)) if r.feasible else "",
+         **refrigerant_columns(r.fluid)}
     if r.stages:
         b, t = r.stages
         d.update({"T_evap_C": b.T_evap_C, "pressure_ratio": f"{b.pressure_ratio:.2f} / {t.pressure_ratio:.2f}",

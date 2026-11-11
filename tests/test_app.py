@@ -74,8 +74,9 @@ def test_every_case_runs(case, step):
 
 
 def _load_and_show(case, step):
-    import app_pages
     import streamlit as st
+
+    import app_pages
     app_pages.init_state()
     if st.session_state.choice != case:
         app_pages.load_inputs(case)
@@ -114,8 +115,9 @@ def test_dashboard_shows_saved_consolidated_table():
 
 def _dashboard_for(case, basis_on):
     def page(case, basis_on):
-        import app_pages
         import streamlit as st
+
+        import app_pages
         app_pages.init_state()
         if st.session_state.choice != case:
             app_pages.load_inputs(case)
@@ -154,8 +156,9 @@ def test_sources_page_runs():
 def _case_app(case, step, basis_on=None, h=None):
     """Load a case, optionally switch the annual basis on and fill film coefficients, show a step."""
     def page(case, step, basis_on, h):
-        import app_pages
         import streamlit as st
+
+        import app_pages
         app_pages.init_state()
         if st.session_state.choice != case:
             app_pages.load_inputs(case)
@@ -203,8 +206,9 @@ def test_assumed_basis_recorded_in_provenance():
     from streamlit.testing.v1 import AppTest
 
     def page():
-        import app_pages
         import streamlit as st
+
+        import app_pages
         app_pages.init_state()
         app_pages.load_inputs("four_stream_process")
         st.session_state.basis_on = True
@@ -228,8 +232,9 @@ def test_extrapolated_heat_pump_cost_is_flagged():
 
 def test_break_even_ratio_never_reached_is_shown_as_none():
     def page():
-        import app_pages
         import streamlit as st
+
+        import app_pages
         app_pages.init_state()
         if st.session_state.choice != "spray_dryer":
             app_pages.load_inputs("spray_dryer")
@@ -253,8 +258,8 @@ def test_retrofit_tab_shows_bracket_for_spray_dryer():
 def test_upload_uses_catalogue_heat_pump_costs():
     """Uploaded tables are costed with the DEA catalogue classes (template), not the brewery function."""
     import app_pages
-    from pinch.economics import load_economics
     from pinch.case import load_case
+    from pinch.economics import load_economics
     c = load_case(app_pages.ROOT / "cases" / "TEMPLATE.json")
     p = load_economics(c.economics)
     assert p.heat_pump_cost_class(105.0) == ("hp_dea_2a", False)

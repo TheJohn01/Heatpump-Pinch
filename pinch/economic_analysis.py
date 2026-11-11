@@ -33,14 +33,23 @@ import numpy as np
 import pandas as pd
 
 from pinch.case import Case, to_MWh_per_year
+from pinch.design import HeatPumpDesign, partial_designs
+from pinch.economics import (
+    ANNOTATION_KEYS,
+    DEFAULTS,
+    EconomicParameters,
+    Option,
+    break_even_ratio,
+    capacity_kW,
+    evaluate,
+    heat_pump_equipment,
+    load_economics,
+)
 from pinch.plotting import electrification_curve_figure, price_ratio_figure
 from pinch.problem_table_algorithm import problem_table
 from pinch.refrigeration import CoolingCascade, refrigeration_taken_over
 from pinch.results import Outputs
 from pinch.sensitivity import apply as apply_sensitivity
-from pinch.design import HeatPumpDesign, partial_designs
-from pinch.economics import (ANNOTATION_KEYS, DEFAULTS, EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment,
-                             load_economics)
 
 
 def cooling_cascade(streams, T_amb_C: float | None, heat_recovery: bool = True) -> CoolingCascade | None:

@@ -170,7 +170,7 @@ class EconomicParameters:
         """Electricity-to-gas price ratio [-]."""
         return self.electricity_price_EUR_per_kWh / self.gas_price_EUR_per_kWh
 
-    def with_ratio(self, ratio: float) -> "EconomicParameters":
+    def with_ratio(self, ratio: float) -> EconomicParameters:
         """Copy with the electricity price set to ratio * gas price."""
         return replace(self, electricity_price_EUR_per_kWh=ratio * self.gas_price_EUR_per_kWh)
 

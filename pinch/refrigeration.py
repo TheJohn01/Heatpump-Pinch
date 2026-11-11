@@ -46,8 +46,8 @@ than everything it takes.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable
 
 import numpy as np
 import pandas as pd
@@ -78,7 +78,7 @@ class CoolingCascade:
 
     # ------------------------------------------------------------ builders
     @classmethod
-    def from_table(cls, table: ProblemTable, T_amb_C: float | None) -> "CoolingCascade | None":
+    def from_table(cls, table: ProblemTable, T_amb_C: float | None) -> CoolingCascade | None:
         """Heat recovery at the target: the feasible cascade (GCC). None without an ambient temperature."""
         if T_amb_C is None:
             return None
@@ -86,7 +86,7 @@ class CoolingCascade:
         return cls(np.asarray(table.T_star_C, float), np.asarray(table.cascade_feasible, float), min(T_amb_C, pinch))
 
     @classmethod
-    def from_pieces(cls, pieces: Iterable[tuple[float, float, float]], T_amb_C: float | None) -> "CoolingCascade | None":
+    def from_pieces(cls, pieces: Iterable[tuple[float, float, float]], T_amb_C: float | None) -> CoolingCascade | None:
         """Cooling of hot pieces (T*_lo, T*_hi, CP) by utilities only (no heat recovery between them)."""
         if T_amb_C is None:
             return None
@@ -97,13 +97,13 @@ class CoolingCascade:
         return cls(T, H, min(T_amb_C, float(T[0])))
 
     @classmethod
-    def from_hot_streams(cls, streams: StreamSet, T_amb_C: float | None) -> "CoolingCascade | None":
+    def from_hot_streams(cls, streams: StreamSet, T_amb_C: float | None) -> CoolingCascade | None:
         """No heat recovery: every hot stream is cooled by utilities."""
         return cls.from_pieces(((min(s.T_star_in_C, s.T_star_out_C), max(s.T_star_in_C, s.T_star_out_C), s.CP)
                                 for s in streams.hot), T_amb_C)
 
     @classmethod
-    def from_coolers(cls, streams: StreamSet, coolers: pd.DataFrame, T_amb_C: float | None) -> "CoolingCascade | None":
+    def from_coolers(cls, streams: StreamSet, coolers: pd.DataFrame, T_amb_C: float | None) -> CoolingCascade | None:
         """An existing network: its residual coolers (columns stream, T_from_C, T_to_C, real temperatures)."""
         by_name = {s.name: s for s in streams.streams}
         pieces = []

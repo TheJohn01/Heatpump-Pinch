@@ -23,6 +23,9 @@ reconciliation           Data reconciliation of measured CP and T (step 1).
 uncertainty              Stream-data uncertainty of the targets, SRC ranking (steps 1-2).
 restricted_matches       Targets with forbidden or limited matches (step 2).
 time_slices              Non-continuous processes: time slices, storage, heat pump with storage (steps 2-4).
+utilities                Targets for several utility levels, placed against the GCC (step 2).
+refrigerants             Working-fluid GWP, safety group and EU F-gas prohibitions (step 4b).
+provenance               Tool version and input hashes in outputs; run metadata (QA).
 case                     Case files and annual conversion.
 validation               Reference targets vs computed values.
 results                  Outputs container (summary, tables, figures).
@@ -30,15 +33,23 @@ plotting                 Matplotlib figures for files and the dissertation.
 charts                   Altair charts for the app.
 """
 
+__version__ = "0.8.0"   # keep equal to pyproject.toml and CITATION.cff (tests/test_quality.py)
+
 import matplotlib as _mpl
 
 # Deterministic figures on every machine: DejaVu Sans ships with matplotlib, so PNG outputs do not depend on
 # the fonts installed locally (supervisor review C2).
 _mpl.rcParams["font.family"] = "DejaVu Sans"
 
-from pinch.streams import Stream, StreamSet, load_streams, with_extra_shift, energy_balance
-from pinch.problem_table_algorithm import ProblemTable, problem_table
-from pinch.curves import composite_curve
+from pinch.curves import composite_curve  # noqa: E402 (after the font setting, by design)
+from pinch.problem_table_algorithm import ProblemTable, problem_table  # noqa: E402 (after the font setting, by design)
+from pinch.streams import (  # noqa: E402 (after the font setting, by design)
+    Stream,
+    StreamSet,
+    energy_balance,
+    load_streams,
+    with_extra_shift,
+)
 
 __all__ = [
     "Stream",

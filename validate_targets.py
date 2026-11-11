@@ -15,9 +15,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from pinch.case import display_name
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
-from pinch.case import load_case
+from pinch.case import display_name, load_case
 from pinch.plotting import composite_curves_figure, gcc_figure, save_figure
 from pinch.validation import ROOT, load_references, validation_report
 

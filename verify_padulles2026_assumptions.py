@@ -20,7 +20,6 @@ calibrated on the gridlines; resolution about 0.05 kWh/hl and 0.2 K):
 
 from __future__ import annotations
 
-
 import pandas as pd
 
 from pinch import load_streams, problem_table

@@ -165,7 +165,8 @@ def reconcile_network(measurements: dict[str, Measurement], exchangers: list[Exc
     col = {n: i for i, n in enumerate(names)}
 
     iterations = 0
-    for iterations in range(1, max_iter + 1):
+    for _ in range(max_iter):
+        iterations += 1
         old = dict(v)
         if method == "simultaneous":
             # linearise g(x) = 0 at the current estimate x_k: g(x_k) + J (x - x_k) = 0, i.e. J x = J x_k - g(x_k)

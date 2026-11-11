@@ -25,11 +25,11 @@ from pathlib import Path
 import pandas as pd
 
 from pinch import load_streams, with_extra_shift
+from pinch import research_questions as rq
 from pinch.case import Case, load_case
 from pinch.cycle_analysis import load_selected
 from pinch.economic_analysis import _params_and_converter
 from pinch.plotting import save_figure, tornado_figure
-from pinch import research_questions as rq
 from pinch.sensitivity import apply
 
 ROOT = Path(__file__).resolve().parent

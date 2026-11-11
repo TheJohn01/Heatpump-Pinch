@@ -68,8 +68,9 @@ def cash_flows(investment_EUR: float, annual_savings_EUR: float, years: int, *, 
     flows = np.full(years + 1, float(annual_savings_EUR))
     flows[0] = -investment_EUR + grant_EUR
     if tax_rate > 0:
+        assert depreciation_years is not None          # checked above
         depreciation = np.zeros(years + 1)
-        n = min(int(depreciation_years), years)
+        n = min(depreciation_years, years)
         depreciation[1:n + 1] = (investment_EUR - grant_EUR) / depreciation_years
         flows[1:] -= tax_rate * (annual_savings_EUR - depreciation[1:])
     return flows

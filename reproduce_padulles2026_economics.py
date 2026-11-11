@@ -14,13 +14,12 @@ Usage:  python reproduce_padulles2026_economics.py
 
 from __future__ import annotations
 
-
 import numpy as np
 import pandas as pd
 
-from pinch.plotting import option_maps_figure, save_figure
 from pinch.economics import NO_OM, Option, capacity_kW, evaluate, load_economics
 from pinch.heat_pump import HeatPump
+from pinch.plotting import option_maps_figure, save_figure
 from pinch.validation import ROOT
 
 OUT = ROOT / "outputs"
@@ -94,14 +93,16 @@ def main() -> None:
         checks.append({"check": name, "statement": statement, "reproduced": bool(passed), "detail": detail})
         print(f"[{name}] {'REPRODUCED' if passed else 'NOT reproduced'}: {statement}\n      {detail}")
 
-    b1 = best(0.25e6, 1.0, False, params, "pbp"); b2 = best(0.25e6, 2.0, False, params, "pbp")
+    b1 = best(0.25e6, 1.0, False, params, "pbp")
+    b2 = best(0.25e6, 2.0, False, params, "pbp")
     bh = best(0.25e6, 1.0, True, params, "pbp")
     check("S1", "Small breweries (< 0.5 Mhl/y) need a ratio close to 1 for PBP <= 4 y; with HR installed, electrification alone fails",
           b1.payback_years <= PAPER_PBP_THRESHOLD < b2.payback_years and bh.payback_years > PAPER_PBP_THRESHOLD,
           f"0.25 Mhl/y no HR: best PBP {b1.payback_years:.2f} y at r=1 ({b1.option}), {b2.payback_years:.2f} y at r=2; "
           f"HR installed, r=1: {bh.payback_years:.2f} y")
 
-    m = best(0.75e6, 2.0, False, params, "pbp"); mh = best(0.75e6, 2.0, True, params, "pbp")
+    m = best(0.75e6, 2.0, False, params, "pbp")
+    mh = best(0.75e6, 2.0, True, params, "pbp")
     check("S2", "Medium breweries (0.5-1 Mhl/y) reach PBP < 4 y at ratio ~2 thanks to HR; with HR installed they fail",
           m.payback_years < PAPER_PBP_THRESHOLD < mh.payback_years,
           f"0.75 Mhl/y r=2: no HR {m.payback_years:.2f} y ({m.option}); HR installed {mh.payback_years:.2f} y ({mh.option})")
@@ -111,7 +112,8 @@ def main() -> None:
           l2.payback_years < m.payback_years and l2.option.startswith("2"),
           f"1.5 Mhl/y r=2: best PBP {l2.payback_years:.2f} y ({l2.option})")
 
-    ns = best(0.25e6, 2.0, False, params, "npv"); nl = best(1.5e6, 2.0, False, params, "npv")
+    ns = best(0.25e6, 2.0, False, params, "npv")
+    nl = best(1.5e6, 2.0, False, params, "npv")
     check("S4", "NPV10 (5 %): small breweries positive with HR at common ratios; central HTHP for small, two HPs for larger",
           ns.npv_EUR > 0 and ns.option.startswith("1") and nl.option.startswith("2"),
           f"0.25 Mhl/y r=2: {ns.option}, NPV {ns.npv_EUR / 1e6:.2f} M EUR; 1.5 Mhl/y r=2: {nl.option}")

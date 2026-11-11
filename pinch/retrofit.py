@@ -86,7 +86,7 @@ def new_recovery_equipment(case: Case, streams: StreamSet, base_net, net, params
     storage = block.get("storage")
     base_indirect = _indirect_duty(streams, base_net)
     equipment, hx_rows = [], []
-    for m, g, extra in _new_hot_segments(base_net, net):
+    for _m, g, extra in _new_hot_segments(base_net, net):
         s = next(x for x in streams.streams if x.name == g.stream)
         Q_kW = to_MWh(s.CP * abs(g.T_from_C - g.T_to_C)) * 1000 / params.operating_hours_per_year
         U = 1 / (1 / h[g.stream] + 1 / medium_h)

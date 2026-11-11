@@ -35,8 +35,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from pinch import load_streams, with_extra_shift
 from pinch import investment as inv
+from pinch import load_streams, with_extra_shift
 from pinch import research_questions as rq
 from pinch.case import load_case, to_MWh_per_year
 from pinch.economic_analysis import _params_and_converter

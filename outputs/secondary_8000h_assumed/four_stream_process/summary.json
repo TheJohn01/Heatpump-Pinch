@@ -61,6 +61,13 @@
     "COP check": "eta_lorenz 0.55 (copied from the brewery) is above the 0.45-0.52 implied by the DEA catalogue: COP 7.94 at 30 K lift vs about 5.5-6 extrapolated from DEA (4.45 at 40 K); at 0.45 the NPV10 turns from +0.07 to -1.17 M€",
     "steam sink": "assumed: the isothermal sink levels stand for steam mains (conventional for a chemical site; not stated by the source), so the DEA steam add-on applies"
   },
+  "run": {
+    "tool_version": "0.8.0",
+    "inputs_sha256": {
+      "cases/four_stream_process.json": "a2bbe134da1507ece4092dd3b2b8858de0951908d661d1596656aeb066418b2c",
+      "data/four_stream_process_streams.csv": "d3dc81f1e0416882f62b20d7e3e16dbe1cb7c1abe802cd952f8a65dbb17bf824"
+    }
+  },
   "economics": {
     "parameters": {
       "gas_price_EUR_per_kWh": 0.0445,

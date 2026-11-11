@@ -57,6 +57,14 @@
     "retrofit": "step 5, option (a): existing network = Padullés et al. (2026) Sec. 4.2 (Pfaduko + wort-cooling HR tank), data/brewery_networks.json",
     "warm-water heat pump name": "'Warm-water HP' = the CO2 heat pump of Padullés et al. (2026, config. 2); our cycle screening selects propane with SLHX as the practical fluid (step 4b), so the unit is named by its duty"
   },
+  "run": {
+    "tool_version": "0.8.0",
+    "inputs_sha256": {
+      "cases/brewery.json": "eb28c5a66c54d6e6b09f2abee987ed2509de6fe84df72766252264ac583bf5c2",
+      "data/brewery_networks.json": "2b5fe7b9fefc0f82dfb1acba833bbcb54c7cbe9080f375c66c3093b5d01b406e",
+      "data/brewery_streams.csv": "70a7b23ff21b25cdd95413a64ba682fdef48d53692456ebde9efa368e11daec2"
+    }
+  },
   "economics": {
     "parameters": {
       "gas_price_EUR_per_kWh": 0.0512,
