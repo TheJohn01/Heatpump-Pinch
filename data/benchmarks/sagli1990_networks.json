@@ -1,0 +1,25 @@
+{
+  "_source": "Sagli, Gundersen and Yee (1990), as reproduced by Polley and Panjeh Shahi (1991), Trans IChemE 69 A, 445-457: stream data Table 1 (data/sagli1990_four_stream.csv), networks read from Figs 2 (6.1) and 3 (5.1), expected sizes Tables 4-5 at U = 50 W/m2K (h = 100 W/m2K on every stream), cost law Table 1: 8600 + 670 A^0.83 $ per unit, capital costs Fig. 1 (k$ 716.0 and 717.3) and Table 2. Detailed (Bell-Delaware) sizes of the process exchangers: Tables 4-5, 'Actual size'.",
+  "utilities": {"ST": [180, 180, "hot"], "CW": [10, 15, "cold"]},
+  "h_kW_per_m2K": 0.1,
+  "cost_law": {"a": 8600, "b": 670, "c": 0.83},
+  "networks": {
+    "6.1": {
+      "matches": [["H1", "C1", 1800.0], ["H2", "C2", 1563.5], ["H2", "C1", 436.5], ["H2", "CW", 400.0], ["ST", "C1", 388.5], ["ST", "C2", 686.5]],
+      "published_expected_area_m2": {"H1-C1": 1175.6, "H2-C1": 225.6, "H2-C2": 1209.1, "H2-CW": 160.0, "ST-C1": 124.5, "ST-C2": 150.9},
+      "published_actual_area_m2": {"H1-C1": 184.0, "H2-C1": 27.7, "H2-C2": 118.3},
+      "published_capital_cost": 716000
+    },
+    "5.1": {
+      "matches": [["H1", "C2", 1800.0], ["H2", "C1", 1550.0], ["H2", "C2", 450.0], ["H2", "CW", 400.0], ["ST", "C1", 1075.0]],
+      "published_expected_area_m2": {"H1-C2": 1099.5, "H2-C1": 1342.2, "H2-C2": 256.5, "H2-CW": 160.0, "ST-C1": 288.8},
+      "published_actual_area_m2": {"H1-C2": 122.2, "H2-C1": 180.3, "H2-C2": 23.3},
+      "published_capital_cost": 717300
+    }
+  },
+  "detailed_design_data": {
+    "_source": "Polley and Panjeh Shahi (1991), Table 3 (all four streams) and Table 5 (tube bore 15.4 mm)",
+    "rho_kg_m3": 800, "cp_J_kgK": 2600, "mu_Pa_s": 0.0005, "k_W_mK": 0.12, "Rf_m2K_W": 0.00018,
+    "dP_kPa": {"H1": 20, "H2": 30, "C1": 10, "C2": 60}, "tube_bore_m": 0.0154
+  }
+}

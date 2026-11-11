@@ -143,6 +143,8 @@ pinch/
   utilities.py               Targets for several utility levels placed against the GCC (Klemeš et al. 1997)
   refrigerants.py            Working-fluid GWP, safety group and EU F-gas prohibitions (Reg. (EU) 2024/573)
   provenance.py              Tool version and input hashes in summary.json; run metadata (git-ignored)
+  hen_design.py              Network synthesis (minimum units), series placement, sizing and cost; validated on Sagli et al. (1990)
+  pressure_drop.py           Film coefficients from allowable pressure drop and fouling (Polley et al. 1990, 1991)
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
 tests/                       pytest suite (validation cases first, then general behaviour; incl. app smoke tests,
@@ -155,6 +157,8 @@ mvr_check.py                 Padullés config. 3: MVR for wort boiling + booster
 investment_check.py          IRR, estimate accuracy (AACE Class 5), grant scenarios and Monte Carlo for each RQ increment
 plant_data_check.py          Stream-data uncertainty (which data matter) and match-restriction screening
 reproduce_stampfli2019.py    Non-continuous dairy site (Stampfli et al. 2019): validation of pinch/time_slices.py
+benchmark_openpinch.py       Targets against OpenPinch 0.8.3 (independent tool), both directions
+benchmark_hen.py             Network sizes, costs, synthesis and pressure-drop basis against Polley and Panjeh Shahi (1991)
 reproduce_secondary_economics.py  Milk evaporator and four-stream example at an ASSUMED 8000 h/year
 regenerate_outputs.py        Rebuild every output in dependency order; --check fails on stale outputs (CI)
 consolidate_rq.py            RQ1-RQ3 answers for any case (cases/<plant>.json) with its sensitivities

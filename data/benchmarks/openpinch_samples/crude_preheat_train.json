@@ -1,0 +1,225 @@
+{
+    "streams": [
+        {
+            "zone": "Crude Unit",
+            "name": "Desalted crude to preheat train",
+            "t_supply": {
+                "value": 20,
+                "unit": "degC"
+            },
+            "t_target": {
+                "value": 140,
+                "unit": "degC"
+            },
+            "heat_flow": {
+                "value": 2400,
+                "unit": "kW"
+            },
+            "dt_cont": {
+                "value": 5,
+                "unit": "degC"
+            },
+            "htc": {
+                "value": 1,
+                "unit": "kW/m^2/degC"
+            }
+        },
+        {
+            "zone": "Crude Unit",
+            "name": "Crude charge heater feed",
+            "t_supply": {
+                "value": 140,
+                "unit": "degC"
+            },
+            "t_target": {
+                "value": 180,
+                "unit": "degC"
+            },
+            "heat_flow": {
+                "value": 800,
+                "unit": "kW"
+            },
+            "dt_cont": {
+                "value": 5,
+                "unit": "degC"
+            },
+            "htc": {
+                "value": 1,
+                "unit": "kW/m^2/degC"
+            }
+        },
+        {
+            "zone": "Crude Unit",
+            "name": "Kerosene side-draw preheat",
+            "t_supply": {
+                "value": 140,
+                "unit": "degC"
+            },
+            "t_target": {
+                "value": 230,
+                "unit": "degC"
+            },
+            "heat_flow": {
+                "value": 2700,
+                "unit": "kW"
+            },
+            "dt_cont": {
+                "value": 5,
+                "unit": "degC"
+            },
+            "htc": {
+                "value": 1,
+                "unit": "kW/m^2/degC"
+            }
+        },
+        {
+            "zone": "Crude Unit",
+            "name": "Atmospheric residue pumparound",
+            "t_supply": {
+                "value": 196.666667,
+                "unit": "degC"
+            },
+            "t_target": {
+                "value": 40,
+                "unit": "degC"
+            },
+            "heat_flow": {
+                "value": 2350.000005,
+                "unit": "kW"
+            },
+            "dt_cont": {
+                "value": 5,
+                "unit": "degC"
+            },
+            "htc": {
+                "value": 1,
+                "unit": "kW/m^2/degC"
+            }
+        },
+        {
+            "zone": "Crude Unit",
+            "name": "Overhead reflux trim cooler",
+            "t_supply": {
+                "value": 104,
+                "unit": "degC"
+            },
+            "t_target": {
+                "value": 80,
+                "unit": "degC"
+            },
+            "heat_flow": {
+                "value": 600,
+                "unit": "kW"
+            },
+            "dt_cont": {
+                "value": 5,
+                "unit": "degC"
+            },
+            "htc": {
+                "value": 1,
+                "unit": "kW/m^2/degC"
+            }
+        },
+        {
+            "zone": "Crude Unit",
+            "name": "Diesel pumparound return",
+            "t_supply": {
+                "value": 200,
+                "unit": "degC"
+            },
+            "t_target": {
+                "value": 104,
+                "unit": "degC"
+            },
+            "heat_flow": {
+                "value": 2400,
+                "unit": "kW"
+            },
+            "dt_cont": {
+                "value": 5,
+                "unit": "degC"
+            },
+            "htc": {
+                "value": 1,
+                "unit": "kW/m^2/degC"
+            }
+        },
+        {
+            "zone": "Crude Unit",
+            "name": "Atmospheric residue rundown",
+            "t_supply": {
+                "value": 250,
+                "unit": "degC"
+            },
+            "t_target": {
+                "value": 196.666667,
+                "unit": "degC"
+            },
+            "heat_flow": {
+                "value": 800,
+                "unit": "kW"
+            },
+            "dt_cont": {
+                "value": 5,
+                "unit": "degC"
+            },
+            "htc": {
+                "value": 1,
+                "unit": "kW/m^2/degC"
+            }
+        }
+    ],
+    "utilities": [
+        {
+            "name": "MP Steam",
+            "type": "Hot",
+            "t_supply": {
+                "value": 260,
+                "unit": "degC"
+            },
+            "t_target": {
+                "value": 259.9,
+                "unit": "degC"
+            },
+            "dt_cont": {
+                "value": 1,
+                "unit": "degC"
+            },
+            "price": {
+                "value": 10,
+                "unit": "$/MWh"
+            },
+            "htc": {
+                "value": 1,
+                "unit": "kW/m^2/degC"
+            },
+            "heat_flow": null
+        },
+        {
+            "name": "Cooling Water",
+            "type": "Cold",
+            "t_supply": {
+                "value": 10,
+                "unit": "degC"
+            },
+            "t_target": {
+                "value": 10.1,
+                "unit": "degC"
+            },
+            "dt_cont": {
+                "value": 1,
+                "unit": "degC"
+            },
+            "price": {
+                "value": 10,
+                "unit": "$/MWh"
+            },
+            "htc": {
+                "value": 1,
+                "unit": "kW/m^2/degC"
+            },
+            "heat_flow": null
+        }
+    ],
+    "options": {}
+}

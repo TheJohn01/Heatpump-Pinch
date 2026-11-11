@@ -14,6 +14,7 @@ and the FAIR principles for research software (Barker et al. 2022, Sci. Data 9, 
 | Types | `tests/test_quality.py::test_mypy_typed_modules` | a type error in a module of `TYPED_MODULES` |
 | One version | `tests/test_quality.py::test_one_version_everywhere` | `pinch.__version__`, `pyproject.toml`, `CITATION.cff` or `CHANGELOG.md` disagree |
 | Provenance | `tests/test_quality.py` | `summary.json` hashes do not match the input files |
+| Independent tool | `tests/test_hen_design.py` (`benchmark_openpinch.py`) | a target differs from OpenPinch 0.8.3 by more than 1e-6 (11 cases) |
 
 Tool versions are pinned in `requirements.txt` and `requirements-dev.txt`.
 

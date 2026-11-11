@@ -6,8 +6,7 @@ committed outputs change only where an entry says so.
 
 ## 0.8.0 (2026-11-11)
 
-Industrial-use review of 0.7.0 (commit bdc970a): eight gap groups, closed here except network synthesis
-(group 5) and an external benchmark (group 8). No RQ1-RQ3 value of the brewery base case changes.
+Industrial-use review of 0.7.0 (commit bdc970a): eight gap groups addressed. No RQ1-RQ3 value of the brewery base case changes.
 
 ### Added
 - `pinch/investment.py`, `investment_check.py`: IRR, discounted payback, tax and depreciation, AACE 18R-97
@@ -24,6 +23,12 @@ Industrial-use review of 0.7.0 (commit bdc970a): eight gap groups, closed here e
   sink level or case-wide; brewery sensitivity row "+2 K each side".
 - `pinch/provenance.py`: tool version and input SHA-256 in every `summary.json`; volatile run metadata
   (commit, time, environment) in git-ignored `run_metadata.json`. `analyse.py --verbose` logging.
+- `pinch/hen_design.py`: network synthesis by minimum units (transshipment MILP), series placement of the
+  matches, exchanger sizing with film coefficients and fouling, per-unit cost law. `pinch/pressure_drop.py`:
+  film coefficients from allowable pressure drop (Polley et al. 1990, 1991). `benchmark_hen.py`: the
+  four-stream problem of Sagli et al. and the Aromatics Plant as published by Polley and Panjeh Shahi (1991).
+- `benchmark_openpinch.py`: targets against OpenPinch 0.8.3 (Walmsley 2026) on 11 cases, both directions;
+  results stored in `data/benchmarks/` (OpenPinch needs Python >= 3.14). `AreaTarget.contributions`.
 - Quality gate: ruff rule set and mypy configuration in `pyproject.toml`; `tests/test_quality.py`;
   `QUALITY.md`; release workflow `.github/workflows/release.yml`.
 

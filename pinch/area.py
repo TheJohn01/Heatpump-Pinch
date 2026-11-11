@@ -79,6 +79,8 @@ class AreaTarget:
     area: float
     units: int
     heat_recovered: float
+    #: area contribution of each stream, Σ_k q_j,k / (h_j ΔT_LM,k) (Polley et al. 1990, Eq. 2); sums to ``area``
+    contributions: dict[str, float] | None = None
 
 
 def area_target(stream_set: StreamSet, h: dict[str, float], include_utilities: bool = False,
@@ -112,21 +114,26 @@ def area_target(stream_set: StreamSet, h: dict[str, float], include_utilities: b
     H_c = H_c + table.Qc_min  # cold composite starts where cold utility ends
     H_lo, H_hi = table.Qc_min, H_h[-1]          # overlap = heat recovered
     if H_hi <= H_lo:
-        return AreaTarget(0.0, 0, 0.0)
+        return AreaTarget(0.0, 0, 0.0, {x.name: 0.0 for x in stream_set.streams})
 
     breaks = np.unique(np.concatenate([H_h[(H_h > H_lo) & (H_h < H_hi)], H_c[(H_c > H_lo) & (H_c < H_hi)], [H_lo, H_hi]]))
     T_hot = lambda H: float(np.interp(H, H_h, T_h))   # noqa: E731
     T_cold = lambda H: float(np.interp(H, H_c, T_c))  # noqa: E731
 
     area = 0.0
+    contrib = {s.name: 0.0 for s in stream_set.streams}
     for H_a, H_b in zip(breaks[:-1], breaks[1:]):
         Th_a, Th_b, Tc_a, Tc_b = T_hot(H_a), T_hot(H_b), T_cold(H_a), T_cold(H_b)
         dTlm = log_mean(Th_b - Tc_b, Th_a - Tc_a)
         q_hot = _heat_by_stream(hot, Th_a, Th_b)
         q_cold = _heat_by_stream(cold, Tc_a, Tc_b)
+        # total summed exactly as before the per-stream split (outputs stay byte-identical)
         area += (sum(q / h[n] for n, q in q_hot.items()) + sum(q / h[n] for n, q in q_cold.items())) / dTlm
+        for n, q in (*q_hot.items(), *q_cold.items()):
+            contrib[n] += q / h[n] / dTlm
 
-    return AreaTarget(area=area, units=units_target(stream_set, table), heat_recovered=H_hi - H_lo)
+    return AreaTarget(area=area, units=units_target(stream_set, table), heat_recovered=H_hi - H_lo,
+                      contributions=contrib)
 
 
 def units_target(stream_set: StreamSet, table: ProblemTable | None = None) -> int:

@@ -26,6 +26,8 @@ time_slices              Non-continuous processes: time slices, storage, heat pu
 utilities                Targets for several utility levels, placed against the GCC (step 2).
 refrigerants             Working-fluid GWP, safety group and EU F-gas prohibitions (step 4b).
 provenance               Tool version and input hashes in outputs; run metadata (QA).
+hen_design               Network synthesis (minimum units), series placement, exchanger sizing and cost (step 5).
+pressure_drop            Film coefficients from allowable pressure drop; fouling (steps 3 and 5).
 case                     Case files and annual conversion.
 validation               Reference targets vs computed values.
 results                  Outputs container (summary, tables, figures).

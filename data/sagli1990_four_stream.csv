@@ -1,0 +1,5 @@
+stream,type,T_in_C,T_out_C,CP_kW_per_K,dT_shift_K,h_kW_per_m2K,note
+H1,hot,150,60,20,10,0.1,"Sagli et al. (1990), as given by Polley and Panjeh Shahi (1991), Table 1; dTmin 20 K"
+H2,hot,90,60,80,10,0.1,
+C1,cold,20,125,25,10,0.1,
+C2,cold,25,100,30,10,0.1,
