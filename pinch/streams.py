@@ -23,12 +23,14 @@ out of the calculation.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, replace
 from pathlib import Path
 
 import pandas as pd
 
 REQUIRED_COLUMNS = ("stream", "type", "T_in_C", "T_out_C", "dT_shift_K")
+ABSOLUTE_ZERO_C = -273.15
 
 
 @dataclass(frozen=True)
@@ -176,6 +178,15 @@ def streams_from_frame(df: pd.DataFrame, source: str = "table") -> StreamSet:
         kind = str(row["type"]).strip().lower()
         if kind not in ("hot", "cold"):
             raise ValueError(f"{row['stream']}: type must be 'hot' or 'cold'")
+        for column in numeric:
+            if not math.isfinite(row[column]):
+                raise ValueError(f"{row['stream']}: {column} must be a finite number")
+        for column in ("T_in_C", "T_out_C"):
+            if row[column] < ABSOLUTE_ZERO_C:
+                raise ValueError(f"{row['stream']}: {column} is below absolute zero ({ABSOLUTE_ZERO_C} °C)")
+        if row["T_in_C"] == row["T_out_C"]:
+            raise ValueError(f"{row['stream']}: T_in equals T_out. Give a latent load (boiling, condensation) "
+                             "over a 1 K interval, as in the brewery case")
         dT_K = row["T_out_C"] - row["T_in_C"]
         if kind == "hot" and dT_K >= 0:
             raise ValueError(f"{row['stream']}: hot stream needs T_in > T_out")

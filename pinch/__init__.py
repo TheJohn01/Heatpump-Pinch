@@ -18,6 +18,7 @@ economics                Cost functions, evaluation, break-even ratio, defaults 
 economic_analysis        Grass-roots reference economics of a GCC design (step 6).
 research_questions       RQ1-RQ3 against today's site, for any case (step 6; Dashboard).
 sensitivity              The case's single sensitivity list (steps 3-6).
+investment               IRR, tax and depreciation, estimate accuracy, grants, Monte Carlo (step 6).
 case                     Case files and annual conversion.
 validation               Reference targets vs computed values.
 results                  Outputs container (summary, tables, figures).

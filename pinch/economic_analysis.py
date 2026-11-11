@@ -39,7 +39,7 @@ from pinch.refrigeration import CoolingCascade, refrigeration_taken_over
 from pinch.results import Outputs
 from pinch.sensitivity import apply as apply_sensitivity
 from pinch.design import HeatPumpDesign, partial_designs
-from pinch.economics import (DEFAULTS, EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment,
+from pinch.economics import (ANNOTATION_KEYS, DEFAULTS, EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment,
                              load_economics)
 
 
@@ -143,7 +143,7 @@ def _headline(core: dict, params: EconomicParameters) -> dict:
 
 
 #: Keys of the economics block that are not parameters of ``load_economics``.
-NON_PARAMETER_KEYS = ("sources", "heat_recovery_equipment", "co2_price_sensitivity_EUR_per_t")
+NON_PARAMETER_KEYS = ANNOTATION_KEYS
 
 GRASS_ROOTS_DEFINITION = ("grass-roots reference, not the answer to RQ1 or RQ3: heat pump heat / Q̇h,min for a site "
                           "already recovering heat at the energy target. RQ1-RQ3 against today's site: consolidate_rq.py")

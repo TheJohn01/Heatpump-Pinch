@@ -135,6 +135,7 @@ pinch/
   research_questions.py      RQ1-RQ3 against today's site for any case: baseline, heat-recovery step, units HP1, HP2...
   refrigeration.py           Refrigeration duty and the part heat pump sources take over (steps 5 and 6)
   sensitivity.py             The case's single sensitivity list: row kinds, validation, apply()
+  investment.py              IRR, tax and depreciation, estimate accuracy (AACE 18R-97), grants, Monte Carlo (step 6)
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
 tests/                       pytest suite (validation cases first, then general behaviour; incl. app smoke tests,
@@ -144,6 +145,7 @@ ASSUMPTIONS.md               Register of every assumption: verified / decision /
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
 batch_check.py               Batch brewhouse check: HTHP capacity for the boil window (8-14 brews/day x 60-90 min)
 mvr_check.py                 Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
+investment_check.py          IRR, estimate accuracy (AACE Class 5), grant scenarios and Monte Carlo for each RQ increment
 reproduce_secondary_economics.py  Milk evaporator and four-stream example at an ASSUMED 8000 h/year
 regenerate_outputs.py        Rebuild every output in dependency order; --check fails on stale outputs (CI)
 consolidate_rq.py            RQ1-RQ3 answers for any case (cases/<plant>.json) with its sensitivities
@@ -226,7 +228,7 @@ heat-exchanger cost law); the reasoning behind each choice is in `ASSUMPTIONS.md
 | `operating_hours_per_year` | 8000.0 | published: Padullés et al. (2026), Sec. 5.1 |
 | `discount_rate` | 0.05 | published: Padullés et al. (2026), Sec. 5.2 |
 | `horizon_years` | 10 | published: Padullés et al. (2026), Sec. 5.2 (NPV10) |
-| `payback_threshold_years` | 5.0 | research question 1 (industry practice 3-5 years: Cooremans, cited in Padullés et al. 2026) |
+| `payback_threshold_years` | 5.0 | research question 1. Industry practice cited by Padullés et al. (2026); primary source Cooremans (2012), Energy Efficiency 5, 497-518, p. 511: of the firms surveyed that state a duration for energy-efficiency investments, two use 2 years, four use 3 to 5 years and two use 10 years (small sample; 5 years is the upper end of the most common answer) |
 | `gas_EF_kg_per_kWh` | 0.182 | IPCC 2006 Guidelines, Vol. 2, Ch. 2, Table 2.2: natural gas, stationary combustion, 56,100 kg CO2/TJ (NCV) = 0.202 kg/kWh NCV = 0.182 kg/kWh GCV (NCV/GCV = 0.90), direct combustion only, matching the scope of production-based grid factors. Padullés et al. (2026, Sec. 5.3) use 0.219 (scope not stated); report it as a sensitivity |
 | `grid_EF_kg_per_kWh` | 0.107 | APA, 'Fator de Emissão da Eletricidade - 2025', Table T1: Portugal 2023, 0.107 t CO2eq/MWh (annual, production-based, direct emissions). Sensitivities: mainland 2023 0.092; 5-year moving average 0.167 (Table T2); Electricity Maps 2025 flow-traced 0.1172 |
 | `co2_price_EUR_per_t` | 0.0 | 0 by default (site may be outside the EU ETS); sensitivity uses the EUA price |

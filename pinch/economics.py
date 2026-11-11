@@ -25,6 +25,7 @@ override any of them in its "economics" block.
 
 from __future__ import annotations
 
+import difflib
 import math
 from dataclasses import dataclass, field, replace
 
@@ -55,7 +56,7 @@ DEFAULTS = {
     "operating_hours_per_year": (8000.0, "published: Padullés et al. (2026), Sec. 5.1"),
     "discount_rate": (0.05, "published: Padullés et al. (2026), Sec. 5.2"),
     "horizon_years": (10, "published: Padullés et al. (2026), Sec. 5.2 (NPV10)"),
-    "payback_threshold_years": (5.0, "research question 1 (industry practice 3-5 years: Cooremans, cited in Padullés et al. 2026)"),
+    "payback_threshold_years": (5.0, "research question 1. Industry practice cited by Padullés et al. (2026); primary source Cooremans (2012), Energy Efficiency 5, 497-518, p. 511: of the firms surveyed that state a duration for energy-efficiency investments, two use 2 years, four use 3 to 5 years and two use 10 years (small sample; 5 years is the upper end of the most common answer)"),
     "gas_EF_kg_per_kWh": (0.182, "IPCC 2006 Guidelines, Vol. 2, Ch. 2, Table 2.2: natural gas, stationary combustion, 56,100 kg CO2/TJ (NCV) = 0.202 kg/kWh NCV = 0.182 kg/kWh GCV (NCV/GCV = 0.90), direct combustion only, matching the scope of production-based grid factors. Padullés et al. (2026, Sec. 5.3) use 0.219 (scope not stated); report it as a sensitivity"),
     "grid_EF_kg_per_kWh": (0.107, "APA, 'Fator de Emissão da Eletricidade - 2025', Table T1: Portugal 2023, 0.107 t CO2eq/MWh (annual, production-based, direct emissions). Sensitivities: mainland 2023 0.092; 5-year moving average 0.167 (Table T2); Electricity Maps 2025 flow-traced 0.1172"),
     "co2_price_EUR_per_t": (0.0, "0 by default (site may be outside the EU ETS); sensitivity uses the EUA price"),
@@ -179,13 +180,33 @@ class EconomicParameters:
         return float(n) if i == 0 else (1 - (1 + i) ** -n) / i
 
 
+#: Keys of an "economics" block that are not scalar defaults: read explicitly by ``load_economics``.
+STRUCTURED_KEYS = ("electricity_price_EUR_per_kWh", "cost_functions", "heat_pump_cost_classes",
+                   "heat_pump_cost_adders", "heat_pump_capacity_factors")
+#: Keys that carry provenance or data for other modules and are not parameters. Keys starting with "_" are notes.
+ANNOTATION_KEYS = ("sources", "heat_recovery_equipment", "co2_price_sensitivity_EUR_per_t")
+
+
 def load_economics(block: dict | None) -> EconomicParameters:
     """Build parameters from a case-file "economics" block, filling in ``DEFAULTS``.
 
     The electricity price is either given directly (``electricity_price_EUR_per_kWh``)
     or through ``electricity_to_gas_ratio``.
+
+    Raises ValueError for a key that is not a known parameter (e.g. ``discount_rte``): silently
+    falling back to the default would give a result for inputs the user did not intend.
     """
     block = dict(block or {})
+    unknown = [k for k in block if k not in DEFAULTS and k not in STRUCTURED_KEYS and k not in ANNOTATION_KEYS
+               and not k.startswith("_")]
+    if unknown:
+        known = list(DEFAULTS) + list(STRUCTURED_KEYS)
+        hints = []
+        for k in unknown:
+            close = difflib.get_close_matches(k, known, n=1)
+            hints.append(f"'{k}'" + (f" (did you mean '{close[0]}'?)" if close else ""))
+        raise ValueError("economics: unknown key " + ", ".join(hints)
+                         + ". A misspelt key would otherwise be ignored and the default used")
     values = {k: block.get(k, v[0]) for k, v in DEFAULTS.items()}
     if "electricity_price_EUR_per_kWh" in block:
         p_el = float(block["electricity_price_EUR_per_kWh"])
