@@ -69,6 +69,15 @@ pan, menu to export PNG/SVG. Results are cached per set of inputs. Input errors 
 messages. Tests: `tests/test_app.py` (every step and case, input persistence, dashboard,
 sources) and `ui_smoke.py` (browser: upload, malformed file, cell edit).
 
+Theme: a plain technical-document style (IBM Plex Sans and Mono, white or near-black
+background, thin rules) with a light and a dark mode; choose in the app menu, Settings > Theme
+("Use system setting" follows the operating system). Colours carry meaning: **red is hot** (hot
+streams, Q̇h, heat pump sinks) and **blue is cold** (cold streams, Q̇c, heat pump sources), in
+labels and charts alike; economic charts use teal and amber instead, so a red line never means
+"bad". Text meets WCAG 2.2 AA contrast (4.5:1) and chart lines 3:1 in both modes
+(`tests/test_theme.py`). The fonts are served by the app (`static/fonts/`), so no request goes to
+an outside font host. Figures written to `outputs/` stay light (they go into the dissertation).
+
 Hosting: the online app runs on Streamlit Community Cloud (servers in the United States).
 Anything uploaded there passes through that provider, so use published or anonymised data only;
 for confidential plant data, run the app locally (`streamlit run app.py`).
@@ -127,7 +136,8 @@ pinch/
   design.py                  Automatic multi-level design and plausibility screening
   case.py                    Case files and annual (MWh/year) conversion
   plotting.py                Figures (returned, or saved to file)
-  charts.py                  Interactive charts for the front end (Altair)
+  charts.py                  Interactive charts for the front end (Altair), light or dark palette
+  theme.py                   Light and dark palettes of the front end, colour meaning, WCAG contrast check
   results.py                 Outputs container: summary, tables, figures; write to disk
   validation.py              Reference vs computed comparison
   economics.py               Cost functions, evaluation, break-even ratio (defaults with sources)
@@ -152,6 +162,8 @@ tests/                       pytest suite (validation cases first, then general 
 
 ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
 ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
+.streamlit/config.toml       Streamlit settings and theme (light and dark; mirrors pinch/theme.py)
+static/fonts/                IBM Plex Sans and Mono (woff2) served by the app, with the SIL OFL 1.1 licence
 batch_check.py               Batch brewhouse check: HTHP capacity for the boil window (8-14 brews/day x 60-90 min)
 mvr_check.py                 Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
 investment_check.py          IRR, estimate accuracy (AACE Class 5), grant scenarios and Monte Carlo for each RQ increment

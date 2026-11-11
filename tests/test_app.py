@@ -49,7 +49,7 @@ def test_targets_match_command_line(brewery):
     at = _goto(brewery, STEPS[1])
     shown = {m.label: m.value for m in at.metric}
     s = compute(load_case(ROOT / "cases" / "brewery.json")).summary
-    assert shown["Q̇h,min [kWh/hl]"] == f"{s['targets']['Qh_min']:.4g}"
+    assert shown[":red[Q̇h,min] [kWh/hl]"] == f"{s['targets']['Qh_min']:.4g}"
 
 
 def test_price_change_moves_ratio_and_persists_across_steps(brewery):

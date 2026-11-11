@@ -4,6 +4,25 @@ Versions follow semantic versioning. Each release is a git tag `vX.Y.Z` whose ve
 `pinch.__version__`, `pyproject.toml` and `CITATION.cff` (checked by `tests/test_quality.py`). Numbers in
 committed outputs change only where an entry says so.
 
+## Unreleased
+
+Front-end theme. No number in any output changes; the committed figures are untouched.
+
+### Added
+- Light and dark theme (`.streamlit/config.toml`, `pinch/theme.py`): a technical-document style with
+  IBM Plex Sans and Mono served by the app (`static/fonts/`, SIL Open Font License 1.1). The viewer picks
+  the mode in Settings > Theme; charts follow it (`st.context.theme`).
+- `tests/test_theme.py`: config keys are valid Streamlit options and match `pinch/theme.py`; text contrast
+  at least 4.5:1 and chart colours at least 3:1 against the background in both modes (WCAG 2.2, criteria
+  1.4.3 and 1.4.11); font files present and licensed; every chart uses only its mode's palette.
+
+### Changed
+- Colour meaning: red only for hot (hot streams, Q̇h, heat pump sinks), blue only for cold. Payback, NPV,
+  retrofit and tornado charts used red and blue for economic quantities; they now use teal and amber.
+  The supertargeting chart's cost laws no longer start with red. Q̇h,min / Q̇c,min and hot/cold stream
+  totals are labelled in their colour.
+- `pinch.charts` functions take a `palette` argument (default light) and are now type-checked.
+
 ## 0.8.0 (2026-11-11)
 
 Industrial-use review of 0.7.0 (commit bdc970a): eight gap groups addressed. No RQ1-RQ3 value of the brewery base case changes.

@@ -32,7 +32,8 @@ case                     Case files and annual conversion.
 validation               Reference targets vs computed values.
 results                  Outputs container (summary, tables, figures).
 plotting                 Matplotlib figures for files and the dissertation.
-charts                   Altair charts for the app.
+charts                   Altair charts for the app, in the light or dark palette.
+theme                    Light and dark colour palettes, colour meaning, WCAG contrast (front end).
 """
 
 __version__ = "0.8.0"   # keep equal to pyproject.toml and CITATION.cff (tests/test_quality.py)

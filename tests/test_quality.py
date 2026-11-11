@@ -21,9 +21,9 @@ import pinch
 from pinch.provenance import deterministic_record, file_sha256
 
 ROOT = Path(__file__).resolve().parent.parent
-TYPED_MODULES = ("area", "case", "curves", "hen_design", "investment", "plotting", "pressure_drop",
+TYPED_MODULES = ("area", "case", "charts", "curves", "hen_design", "investment", "plotting", "pressure_drop",
                  "problem_table_algorithm", "provenance",
-                 "reconciliation", "refrigerants", "restricted_matches", "results", "streams", "time_slices",
+                 "reconciliation", "refrigerants", "restricted_matches", "results", "streams", "theme", "time_slices",
                  "uncertainty", "utilities", "validation")
 
 

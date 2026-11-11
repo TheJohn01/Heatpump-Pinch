@@ -34,6 +34,7 @@ from pinch.cycle_analysis import load_selected
 from pinch.economics import DEFAULTS
 from pinch.research_questions import unit_names
 from pinch.streams import streams_from_frame
+from pinch.theme import Palette, palette_for
 
 ROOT = Path(__file__).resolve().parent
 CASES = {p.stem: p for p in sorted((ROOT / "cases").glob("*.json")) if p.stem != "TEMPLATE"}
@@ -322,6 +323,11 @@ def _units(tables, unit: str) -> list[_Unit]:
                   r[f"Q_sink_{unit}"], r[f"Q_source_{unit}"], r["COP"]) for _, r in df.iterrows()]
 
 
+def _palette() -> Palette:
+    """Chart palette for the viewer's theme (light when the browser has not reported one)."""
+    return palette_for(st.context.theme.type)
+
+
 def _chart(ch) -> None:
     st.altair_chart(ch, width="stretch")
 
@@ -408,8 +414,8 @@ def _step_streams() -> None:
             s = r[2]
             t = s["targets"]
             c = st.columns(3)
-            c[0].metric(f"Hot streams [{s['energy_unit']}]", f"{t['Q_hot_total']:.4g}", border=True)
-            c[1].metric(f"Cold streams [{s['energy_unit']}]", f"{t['Q_cold_total']:.4g}", border=True)
+            c[0].metric(f":red[Hot streams] [{s['energy_unit']}]", f"{t['Q_hot_total']:.4g}", border=True)
+            c[1].metric(f":blue[Cold streams] [{s['energy_unit']}]", f"{t['Q_cold_total']:.4g}", border=True)
             c[2].metric("Net surplus (hot − cold)", f"{t['Q_hot_total'] - t['Q_cold_total']:+.4g}", border=True)
 
 
@@ -422,15 +428,15 @@ def _step_targets() -> None:
     table = problem_table(shifted)
     t, u = s["targets"], s["energy_unit"]
     c = st.columns(4)
-    c[0].metric(f"Q̇h,min [{u}]", f"{t['Qh_min']:.4g}", border=True)
-    c[1].metric(f"Q̇c,min [{u}]", f"{t['Qc_min']:.4g}", border=True)
+    c[0].metric(f":red[Q̇h,min] [{u}]", f"{t['Qh_min']:.4g}", border=True)
+    c[1].metric(f":blue[Q̇c,min] [{u}]", f"{t['Qc_min']:.4g}", border=True)
     c[2].metric(f"Heat recovery [{u}]", f"{t['heat_recovery']:.4g}", border=True)
     c[3].metric("Pinch T* [°C]", ", ".join(f"{p:g}" for p in t["pinch_T_star_C"]) or "threshold", border=True)
     a, b = st.columns(2)
     with a:
-        _chart(charts.composite_curves_chart(shifted, table))
+        _chart(charts.composite_curves_chart(shifted, table, palette=_palette()))
     with b:
-        _chart(charts.gcc_chart(table))
+        _chart(charts.gcc_chart(table, palette=_palette()))
     with st.expander("Problem table (heat cascade)"):
         st.dataframe(tables["problem_table"], width="stretch")
 
@@ -466,7 +472,7 @@ def _step_dtmin() -> None:
             st.info(f"Supertargeting not run: {at.get('skipped', 'switched off')}."
                     + (" Switch on the annual basis in step 1." if ss.basis is None else ""))
             return
-        _chart(charts.supertargeting_chart(r[3]["supertargeting"]))
+        _chart(charts.supertargeting_chart(r[3]["supertargeting"], palette=_palette()))
         st.dataframe(pd.DataFrame(at["RQ2"]).drop(columns=["a", "b", "c"], errors="ignore"), width="stretch")
         st.caption(f"Hot utility {at['hot_utility_cost_EUR_per_kW_year']} €/kW·year; cold utility "
                    f"{at['cold_utility_cost_EUR_per_kW_year']:.1f} €/kW·year. Optimum ΔTmin is a lower bound "
@@ -498,14 +504,14 @@ def _step_heat_pumps() -> None:
         case, streams, s, tables, *_ = r
         d, u = s["heat_pump_design"], s["energy_unit"]
         c = st.columns(4)
-        c[0].metric(f"Heat delivered [{u}]", f"{d['Q_sink_total']:.4g}", border=True)
+        c[0].metric(f":red[Heat delivered] [{u}]", f"{d['Q_sink_total']:.4g}", border=True)
         c[1].metric(f"Electricity [{u}]", f"{d['W_total']:.4g}", border=True)
         c[2].metric("System COP", f"{d['COP_system']:.2f}", border=True)
         c[3].metric("Share of Q̇h,min electrified", f"{100 * d['fraction_of_Qh_min_electrified']:.1f} %", border=True)
         for name, w in s["warnings"].items():
             st.warning(f"**{name}**: " + "; ".join(w))
         table = problem_table(with_extra_shift(streams, case.extra_shift_K))
-        _chart(charts.gcc_chart(table, _units(tables, u)))
+        _chart(charts.gcc_chart(table, _units(tables, u), palette=_palette()))
         st.dataframe(tables["heat_pump_design"], width="stretch")
         cb = s.get("cycle_based_design")
         if cb:
@@ -577,7 +583,7 @@ def _step_retrofit() -> None:
     c[1].metric("Cooling above the pinch", f"{b['coolers_above_pinch']:.3g}", border=True)
     c[2].metric("Cross-pinch in exchangers", f"{b['cross_pinch_in_matches']:.3g}", border=True)
     c[3].metric("Refrigeration below ambient", f"{b['refrigeration_below_ambient']:.3g}", border=True)
-    g, pb = charts.retrofit_charts(pd.DataFrame(rf["options"]))
+    g, pb = charts.retrofit_charts(pd.DataFrame(rf["options"]), palette=_palette())
     a, b = st.columns(2)
     with a:
         _chart(g)
@@ -654,9 +660,10 @@ def _step_economics() -> None:
         thr = float(ss["econ_payback_threshold_years"])
         a, b = st.columns(2)
         with a:
-            _chart(charts.electrification_chart(tables["electrification_curve"], thr))
+            _chart(charts.electrification_chart(tables["electrification_curve"], thr, palette=_palette()))
         with b:
-            _chart(charts.price_ratio_chart(tables["price_ratio_sweep"], ec["price_ratio"], thr))
+            _chart(charts.price_ratio_chart(tables["price_ratio_sweep"], ec["price_ratio"], thr,
+                                            palette=_palette()))
         if "grass_roots_sensitivities" in tables:
             with st.expander("Sensitivities (economics rows of the case's list; RQ1-RQ3 for all rows on the Dashboard)"):
                 st.dataframe(tables["grass_roots_sensitivities"], width="stretch")
@@ -767,13 +774,13 @@ def dashboard_page() -> None:
     left, right = st.columns([1.25, 1], gap="large") if has_rf else (st.container(), None)
     with left:
         if rq.iloc[1:]["RQ3_ratio_HP1"].notna().any():
-            _chart(charts.tornado_chart(rq))
+            _chart(charts.tornado_chart(rq, palette=_palette()))
         else:
             st.caption("No sensitivity rows with a break-even ratio for HP1 (add rows to the case's "
                        "`sensitivities` list).")
     if has_rf:
         with right:
-            g, pb = charts.retrofit_charts(pd.DataFrame(rf["options"]), band_px=26)
+            g, pb = charts.retrofit_charts(pd.DataFrame(rf["options"]), band_px=26, palette=_palette())
             _chart(g)
             _chart(pb)
     st.dataframe(rq, width="stretch", hide_index=True)
