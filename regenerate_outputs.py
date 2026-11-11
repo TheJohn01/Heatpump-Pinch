@@ -29,6 +29,7 @@ STEPS: tuple[tuple[str, ...], ...] = (
     ("reproduce_padulles2026_economics.py",),
     ("verify_padulles2026_assumptions.py",),
     ("verify_walmsley2024.py",),
+    ("reproduce_stampfli2019.py",),
     ("screen_cycles.py", BREWERY),
     ("analyse.py", "--all"),
     ("consolidate_rq.py", BREWERY),

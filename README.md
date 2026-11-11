@@ -139,6 +139,7 @@ pinch/
   reconciliation.py          Data reconciliation of measured CP and T (Yong et al. 2016; simultaneous and iterative)
   uncertainty.py             Stream-data uncertainty of the targets, Latin hypercube, SRC ranking (Bergamini et al. 2019, 2021)
   restricted_matches.py      Targets with forbidden or limited matches (transshipment LP; reproduces the Problem Table)
+  time_slices.py             Time Slice / Time Average targets, storage sizing, heat pump with storage loops (Stampfli et al. 2019)
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
 tests/                       pytest suite (validation cases first, then general behaviour; incl. app smoke tests,
@@ -150,6 +151,7 @@ batch_check.py               Batch brewhouse check: HTHP capacity for the boil w
 mvr_check.py                 Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
 investment_check.py          IRR, estimate accuracy (AACE Class 5), grant scenarios and Monte Carlo for each RQ increment
 plant_data_check.py          Stream-data uncertainty (which data matter) and match-restriction screening
+reproduce_stampfli2019.py    Non-continuous dairy site (Stampfli et al. 2019): validation of pinch/time_slices.py
 reproduce_secondary_economics.py  Milk evaporator and four-stream example at an ASSUMED 8000 h/year
 regenerate_outputs.py        Rebuild every output in dependency order; --check fails on stale outputs (CI)
 consolidate_rq.py            RQ1-RQ3 answers for any case (cases/<plant>.json) with its sensitivities

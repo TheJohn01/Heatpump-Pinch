@@ -1,0 +1,14 @@
+quantity,published,reproduced,deviation,source
+T_co_C,46.26,46.3,0.04,"CET 2018, Table 2 (graphical method)"
+T_ev_C,-4.56,-4.568,-0.008,"CET 2018, Table 2 (graphical method)"
+COP,2.2,2.198,-0.002,"CET 2018, Sec. 4 text"
+T_ev_star_C,8.3,7.932,-0.368,"Energy 2019, Sec. 3.2 (inconsistent with CET 2018 Table 2: -4.56 + 12.5 = 7.94)"
+hot_storage_MWh,1.35,1.359,0.009,"Energy 2019, Sec. 3.2 (condenser side)"
+cold_storage_MWh,0.68,0.74,0.06,"Energy 2019, Sec. 3.2 (evaporator side, at T*ev = 8.3 °C)"
+cold_storage_MWh at T*ev = 8.3 °C,0.68,0.688,0.008,Energy 2019 value of T*ev imposed; cold side then unbalanced by -92 kWh/day
+TSM Qh_kWh per day (direct recovery only),,5034.7,,not published
+TAM Qh_kWh per day (storage at any temperature),,5026.1,,not published
+TSM Qc_kWh per day (direct recovery only),,2383.8,,not published
+TAM Qc_kWh per day (storage at any temperature),,2375.2,,not published
+TSM recovery_kWh per day (direct recovery only),,25183.1,,not published
+TAM recovery_kWh per day (storage at any temperature),,25191.7,,not published

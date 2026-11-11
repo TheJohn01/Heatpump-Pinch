@@ -22,6 +22,7 @@ investment               IRR, tax and depreciation, estimate accuracy, grants, M
 reconciliation           Data reconciliation of measured CP and T (step 1).
 uncertainty              Stream-data uncertainty of the targets, SRC ranking (steps 1-2).
 restricted_matches       Targets with forbidden or limited matches (step 2).
+time_slices              Non-continuous processes: time slices, storage, heat pump with storage (steps 2-4).
 case                     Case files and annual conversion.
 validation               Reference targets vs computed values.
 results                  Outputs container (summary, tables, figures).

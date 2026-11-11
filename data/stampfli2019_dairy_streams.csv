@@ -1,0 +1,23 @@
+stream,type,T_in_C,T_out_C,CP_kW_per_K,dT_shift_K,t_start_h,t_end_h,plant,note,h_W_per_m2K
+Cream heating C3,cold,8.0,68.0,32.54,5,10,17.5,AMF,,500
+Oil pasteurization C4,cold,68.0,95.0,11.83,5,10,17.5,AMF,,500
+AMF cooling H3,hot,95.0,40.0,13.64,5,10,17.5,AMF,,500
+Buttermilk thermalization C5,cold,68.0,80.0,13.95,5,10,17.5,AMF,,500
+Buttermilk cooling H4,hot,80.0,8.0,13.95,5,10,17.5,AMF,,500
+Beta Serum cooling H5,hot,68.0,8.0,8.42,5,10,17.5,AMF,,500
+Wash water heating C6,cold,20.0,90.0,3.47,5,10,17.5,AMF,"Table 1 gives dH 260.25 kW (1951.88 kWh); CP x dT = 242.9 kW. CP used, as for every stream",2000
+Polish waste cooling H6,hot,90.0,42.0,4.7,5,10,17.5,AMF,,500
+Deodorizer evaporation a C7a,cold,25.0,177.67,0.27,5,10,17.5,AMF,,2000
+Deodorizer evaporation b C7b,cold,177.67,178.67,114.27,5,10,17.5,AMF,latent over 1 K,5000
+Deodorizer condensation a H7a,hot,178.67,177.67,171.38,5,10,17.5,AMF,latent over 1 K,5000
+Deodorizer condensation b H7b,hot,177.67,25.0,0.41,5,10,17.5,AMF,,2000
+Cream pasteurization C1,cold,8.0,88.0,8.95,5,8,15.5,CT,,500
+Treated cream cooling H1,hot,88.0,8.0,8.95,5,8,15.5,CT,,500
+SCC evaporation a C2a,cold,24.0,177.67,0.41,5,8,15.5,CT,,2000
+SCC evaporation b C2b,cold,177.67,178.67,171.38,5,8,15.5,CT,latent over 1 K,5000
+SCC condensation a H2a,hot,178.67,177.67,171.38,5,8,15.5,CT,latent over 1 K,5000
+SCC condensation b H2b,hot,177.67,24.0,0.41,5,8,15.5,CT,,2000
+Pre-rinse water C8,cold,20.0,50.0,0.92,5,8,17.5,CIP,,2000
+Alkaline detergent solution C9,cold,20.0,75.0,1.84,5,8,17.5,CIP,,2000
+Nitric acid C10,cold,20.0,70.0,1.23,5,8,17.5,CIP,,2000
+Post-rinse water H8,hot,20.0,15.0,0.92,5,8,17.5,CIP,,2000
