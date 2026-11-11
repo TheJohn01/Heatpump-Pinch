@@ -1,0 +1,13 @@
+stream,type,load,Qh_min,penalty
+Wortcooling,hot,8.5,18.142353,8.1
+Boiloff condensation,hot,2.4,12.442353,2.4
+Condensate cooling,hot,0.9,10.9,0.857647
+Pre-mashing,cold,4.4,10.042353,0.0
+Mashing,cold,3.5,10.042353,0.0
+Lautering/Filtering,cold,6.0,10.042353,0.0
+Wortboiling (preheating),cold,3.0,10.042353,0.0
+Wortboiling (boiling),cold,2.4,10.042353,0.0
+Fermentation,hot,1.5,10.042353,0.0
+Beer cooling,hot,1.1,10.042353,0.0
+Filtration/centrifugation,hot,0.4,10.042353,0.0
+CIP,cold,2.1,10.042353,0.0

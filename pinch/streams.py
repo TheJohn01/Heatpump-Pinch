@@ -18,7 +18,19 @@ Required columns: ``stream, type, T_in_C, T_out_C, dT_shift_K`` and exactly one
 of ``Q_<unit>`` (heat load) or ``CP_<unit>`` (heat capacity flow rate).
 Underscored units are converted for display, e.g. ``Q_kWh_per_hl`` -> "kWh/hl"
 and ``CP_MW_per_K`` -> heat loads in "MW". Extra columns (e.g. ``note``) are kept
-out of the calculation.
+out of the calculation. An Excel workbook (.xlsx) with the same columns is read
+from its sheet "streams", or from the first sheet if there is none.
+
+Segmented streams (variable heat capacity)
+------------------------------------------
+A stream whose CP changes with temperature is entered as several rows, one per
+linear segment, each with its own name and the parent's name in the optional
+column ``segment_of``. The segments must have the same type and join end to end
+(one segment's T_out is the next one's T_in). Each segment is a stream of its own
+in every calculation; ``Stream.parent`` keeps the link. Yong et al. (2016,
+Chemical Engineering Transactions 52, 1045-1050) note that a stepwise CP forces
+this segmentation. ``segments_from_TH`` builds the segments from a temperature-
+enthalpy table, e.g. exported from a process simulator.
 """
 
 from __future__ import annotations
@@ -57,6 +69,7 @@ class Stream:
     T_out_C: float
     Q: float
     dT_shift_K: float
+    parent: str | None = None   # name of the stream this row is a segment of (variable CP); None = whole stream
 
     @property
     def CP(self) -> float:
@@ -121,7 +134,7 @@ def load_streams(path: str | Path) -> StreamSet:
     Parameters
     ----------
     path : str or Path
-        CSV file following the format described in the module docstring.
+        CSV file (or .xlsx workbook) following the format described in the module docstring.
 
     Returns
     -------
@@ -135,7 +148,22 @@ def load_streams(path: str | Path) -> StreamSet:
         direction does not match its type, or stream names are duplicated.
     """
     path = Path(path)
+    if path.suffix.lower() in (".xlsx", ".xlsm"):
+        return streams_from_frame(read_excel_streams(path), source=str(path))
     return streams_from_frame(pd.read_csv(path), source=str(path))
+
+
+def read_excel_streams(path: str | Path) -> pd.DataFrame:
+    """Read the stream table of a workbook: sheet "streams" if present, else the first sheet.
+
+    Needs the optional dependency openpyxl (``pip install openpyxl``).
+    """
+    path = Path(path)
+    try:
+        sheets = pd.ExcelFile(path).sheet_names
+    except ImportError as exc:  # pragma: no cover - depends on the environment
+        raise ImportError("reading .xlsx needs openpyxl: pip install openpyxl") from exc
+    return pd.read_excel(path, sheet_name="streams" if "streams" in sheets else sheets[0])
 
 
 def streams_from_frame(df: pd.DataFrame, source: str = "table") -> StreamSet:
@@ -199,6 +227,9 @@ def streams_from_frame(df: pd.DataFrame, source: str = "table") -> StreamSet:
         if Q <= 0:
             raise ValueError(f"{row['stream']}: heat load must be positive")
 
+        parent = row.get("segment_of")
+        parent = None if parent is None or (isinstance(parent, float) and math.isnan(parent)) \
+            or str(parent).strip() == "" else str(parent).strip()
         streams.append(
             Stream(
                 name=str(row["stream"]),
@@ -207,12 +238,83 @@ def streams_from_frame(df: pd.DataFrame, source: str = "table") -> StreamSet:
                 T_out_C=row["T_out_C"],
                 Q=Q,
                 dT_shift_K=row["dT_shift_K"],
+                parent=parent,
             )
         )
 
     if not streams:
         raise ValueError(f"{path.name}: no streams")
+    _check_segments(streams)
     return StreamSet(streams=tuple(streams), energy_unit=energy_unit, source=source)
+
+
+def _check_segments(streams: list[Stream]) -> None:
+    """Segments of one parent: same type, joined end to end, and the parent name is not also a stream."""
+    names = {s.name for s in streams}
+    groups: dict[str, list[Stream]] = {}
+    for s in streams:
+        if s.parent is not None:
+            groups.setdefault(s.parent, []).append(s)
+    for parent, segs in groups.items():
+        if parent in names:
+            raise ValueError(f"segment_of '{parent}': a stream row has the same name as the parent")
+        if len({s.kind for s in segs}) > 1:
+            raise ValueError(f"segments of '{parent}' mix hot and cold rows")
+        hot = segs[0].kind == "hot"
+        segs = sorted(segs, key=lambda s: -s.T_in_C if hot else s.T_in_C)
+        for a, b in zip(segs[:-1], segs[1:]):
+            if abs(a.T_out_C - b.T_in_C) > 1e-9:
+                raise ValueError(f"segments of '{parent}' do not join: '{a.name}' ends at {a.T_out_C} °C, "
+                                 f"'{b.name}' starts at {b.T_in_C} °C")
+
+
+def segments_from_TH(name: str, kind: str, T_C, H, dT_shift_K: float, max_error_K: float = 1.0) -> list[Stream]:
+    """Linear segments of a stream from a temperature-enthalpy table (variable CP).
+
+    Parameters
+    ----------
+    name, kind : stream name and "hot" or "cold".
+    T_C, H : temperatures [°C] and cumulative enthalpy change [case energy unit] at the same points,
+        ordered along the stream's path (hot: decreasing T; cold: increasing T); H starts at 0.
+    dT_shift_K : temperature shift of every segment [K].
+    max_error_K : largest temperature deviation allowed between the table and the segments [K].
+
+    Method: recursive splitting (Ramer-Douglas-Peucker) at the table point that deviates most in
+    temperature from the chord, until every point is within ``max_error_K``. The end points of every
+    segment are table points, so the total load is preserved exactly. This is a fitting choice of this
+    tool, not taken from a source; it does not place the segments on the conservative side of a curved
+    profile (an error of up to ``max_error_K`` either way is accepted), so choose ``max_error_K`` well
+    below the stream's ΔT_shift.
+    """
+    T = [float(x) for x in T_C]
+    Hs = [float(x) for x in H]
+    if len(T) != len(Hs) or len(T) < 2:
+        raise ValueError("T_C and H need the same length, at least 2")
+    if kind not in ("hot", "cold"):
+        raise ValueError("kind must be 'hot' or 'cold'")
+    if max_error_K <= 0:
+        raise ValueError("max_error_K must be positive")
+    step = [b - a for a, b in zip(T[:-1], T[1:])]
+    if any((d >= 0) if kind == "hot" else (d <= 0) for d in step):
+        raise ValueError(f"{name}: temperatures must {'fall' if kind == 'hot' else 'rise'} strictly along the table")
+    if any(b <= a for a, b in zip(Hs[:-1], Hs[1:])):
+        raise ValueError(f"{name}: enthalpy must increase strictly along the table")
+
+    def split(i: int, j: int) -> list[int]:
+        worst, k_worst = 0.0, None
+        for k in range(i + 1, j):
+            T_chord = T[i] + (T[j] - T[i]) * (Hs[k] - Hs[i]) / (Hs[j] - Hs[i])
+            if abs(T[k] - T_chord) > worst:
+                worst, k_worst = abs(T[k] - T_chord), k
+        if k_worst is None or worst <= max_error_K:
+            return [i, j]
+        return split(i, k_worst)[:-1] + split(k_worst, j)
+
+    idx = split(0, len(T) - 1)
+    many = len(idx) > 2
+    return [Stream(name=f"{name} [{n}]" if many else name, kind=kind, T_in_C=T[a], T_out_C=T[b], Q=Hs[b] - Hs[a],
+                   dT_shift_K=dT_shift_K, parent=name if many else None)
+            for n, (a, b) in enumerate(zip(idx[:-1], idx[1:]), start=1)]
 
 
 def with_extra_shift(stream_set: StreamSet, extra_K: float) -> StreamSet:

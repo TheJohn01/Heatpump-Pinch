@@ -136,6 +136,9 @@ pinch/
   refrigeration.py           Refrigeration duty and the part heat pump sources take over (steps 5 and 6)
   sensitivity.py             The case's single sensitivity list: row kinds, validation, apply()
   investment.py              IRR, tax and depreciation, estimate accuracy (AACE 18R-97), grants, Monte Carlo (step 6)
+  reconciliation.py          Data reconciliation of measured CP and T (Yong et al. 2016; simultaneous and iterative)
+  uncertainty.py             Stream-data uncertainty of the targets, Latin hypercube, SRC ranking (Bergamini et al. 2019, 2021)
+  restricted_matches.py      Targets with forbidden or limited matches (transshipment LP; reproduces the Problem Table)
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
 tests/                       pytest suite (validation cases first, then general behaviour; incl. app smoke tests,
@@ -146,6 +149,7 @@ ui_smoke.py                  Browser smoke test of the app (upload, bad input, c
 batch_check.py               Batch brewhouse check: HTHP capacity for the boil window (8-14 brews/day x 60-90 min)
 mvr_check.py                 Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
 investment_check.py          IRR, estimate accuracy (AACE Class 5), grant scenarios and Monte Carlo for each RQ increment
+plant_data_check.py          Stream-data uncertainty (which data matter) and match-restriction screening
 reproduce_secondary_economics.py  Milk evaporator and four-stream example at an ASSUMED 8000 h/year
 regenerate_outputs.py        Rebuild every output in dependency order; --check fails on stale outputs (CI)
 consolidate_rq.py            RQ1-RQ3 answers for any case (cases/<plant>.json) with its sensitivities

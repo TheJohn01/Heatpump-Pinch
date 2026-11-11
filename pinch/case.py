@@ -113,6 +113,8 @@ class Case:
     retrofit: dict | None = None
     retrofit_bounds: dict | None = None   # used when no network is published: baseline status and note
     sensitivities: tuple[Sensitivity, ...] = ()   # the case's only sensitivity list (pinch.sensitivity)
+    #: ((hot, cold, max heat or 0 = forbidden, reason), ...): match restrictions (pinch.restricted_matches)
+    restricted_matches: tuple = ()
 
     @property
     def data_source(self) -> str:
@@ -187,7 +189,25 @@ def load_case(path: str | Path) -> Case:
         retrofit=_resolve_retrofit(raw.get("retrofit"), path),
         retrofit_bounds=raw.get("retrofit_bounds"),
         sensitivities=parse_sensitivities(raw.get("sensitivities"), path.name),
+        restricted_matches=_parse_restrictions(raw.get("restricted_matches"), path.name),
     )
+
+
+def _parse_restrictions(raw: list | None, file_name: str) -> tuple:
+    """Case-file "restricted_matches": [{"hot": ..., "cold": ..., "max_heat": 0, "reason": ...}, ...].
+
+    ``max_heat`` 0 (the default) forbids the match; "HU"/"CU" name the hot and cold utilities. A reason is
+    required, so that every restriction in a study carries its justification (hygiene, safety, distance).
+    """
+    out = []
+    for r in raw or []:
+        if not isinstance(r, dict) or "hot" not in r or "cold" not in r or not str(r.get("reason", "")).strip():
+            raise ValueError(f"{file_name}: each restricted match needs 'hot', 'cold' and a 'reason'")
+        limit = float(r.get("max_heat", 0.0))
+        if limit < 0:
+            raise ValueError(f"{file_name}: max_heat must be >= 0")
+        out.append((str(r["hot"]), str(r["cold"]), limit, str(r["reason"])))
+    return tuple(out)
 
 
 def _resolve_retrofit(block: dict | None, case_path: Path) -> dict | None:

@@ -1,0 +1,37 @@
+hot,cold,Qh_min,penalty
+Wortcooling,Pre-mashing,10.042353,0.0
+Wortcooling,Mashing,10.042353,0.0
+Wortcooling,Lautering/Filtering,10.042353,0.0
+Wortcooling,Wortboiling (preheating),10.042353,0.0
+Wortcooling,Wortboiling (boiling),10.042353,0.0
+Wortcooling,CIP,10.042353,0.0
+Boiloff condensation,Pre-mashing,10.042353,0.0
+Boiloff condensation,Mashing,10.042353,0.0
+Boiloff condensation,Lautering/Filtering,10.042353,0.0
+Boiloff condensation,Wortboiling (preheating),10.042353,0.0
+Boiloff condensation,Wortboiling (boiling),10.042353,0.0
+Boiloff condensation,CIP,10.042353,0.0
+Condensate cooling,Pre-mashing,10.042353,0.0
+Condensate cooling,Mashing,10.042353,0.0
+Condensate cooling,Lautering/Filtering,10.042353,0.0
+Condensate cooling,Wortboiling (preheating),10.042353,0.0
+Condensate cooling,Wortboiling (boiling),10.042353,0.0
+Condensate cooling,CIP,10.042353,0.0
+Fermentation,Pre-mashing,10.042353,0.0
+Fermentation,Mashing,10.042353,0.0
+Fermentation,Lautering/Filtering,10.042353,0.0
+Fermentation,Wortboiling (preheating),10.042353,0.0
+Fermentation,Wortboiling (boiling),10.042353,0.0
+Fermentation,CIP,10.042353,0.0
+Beer cooling,Pre-mashing,10.042353,0.0
+Beer cooling,Mashing,10.042353,0.0
+Beer cooling,Lautering/Filtering,10.042353,0.0
+Beer cooling,Wortboiling (preheating),10.042353,0.0
+Beer cooling,Wortboiling (boiling),10.042353,0.0
+Beer cooling,CIP,10.042353,0.0
+Filtration/centrifugation,Pre-mashing,10.042353,0.0
+Filtration/centrifugation,Mashing,10.042353,0.0
+Filtration/centrifugation,Lautering/Filtering,10.042353,0.0
+Filtration/centrifugation,Wortboiling (preheating),10.042353,0.0
+Filtration/centrifugation,Wortboiling (boiling),10.042353,0.0
+Filtration/centrifugation,CIP,10.042353,0.0

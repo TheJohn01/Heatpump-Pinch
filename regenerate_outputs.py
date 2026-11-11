@@ -36,6 +36,7 @@ STEPS: tuple[tuple[str, ...], ...] = (
     ("batch_check.py", BREWERY),
     ("mvr_check.py", BREWERY),
     ("investment_check.py", BREWERY),
+    ("plant_data_check.py", BREWERY),
     ("reproduce_secondary_economics.py",),
 )
 

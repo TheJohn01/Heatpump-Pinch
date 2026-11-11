@@ -21,6 +21,7 @@ dependencies = [
 [project.optional-dependencies]
 app = ["streamlit>=1.50", "altair>=5"]
 cycle = ["CoolProp>=6.6", "scipy>=1.10"]   # step 4b: working-fluid cycle model
+excel = ["openpyxl>=3.1"]                   # stream tables from .xlsx workbooks
 dev = ["pytest>=8"]
 
 [project.scripts]
