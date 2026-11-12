@@ -6,6 +6,14 @@ committed outputs change only where an entry says so.
 
 ## Unreleased
 
+### Fixed
+- CI: the `outputs-reproducible` job failed on every push since 11 November 2026 because GitHub moved the
+  `ubuntu-latest` runner from Ubuntu 24.04 to 26.04. With identical package versions, the newer C library most likely
+  changes the last digits of some CoolProp results, and `outputs/brewery/cycle_screening.csv` (written at
+  4 decimals) no longer matched byte for byte. The committed outputs are unchanged; CI is pinned to
+  `ubuntu-24.04`, the environment they were produced in. On failure the job now prints the diff of the
+  stale outputs. `actions/checkout` and `actions/setup-python` move to v7 (Node 24; Node 20 is deprecated).
+
 Front-end theme. No number in any output changes; the committed figures are untouched.
 
 ### Added

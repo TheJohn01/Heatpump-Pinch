@@ -11,11 +11,11 @@ permissions:
 
 jobs:
   pytest:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # pinned: committed outputs are produced on 24.04 (glibc 2.39)
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
           cache: pip
@@ -28,11 +28,11 @@ jobs:
         run: python -m pytest -q
 
   outputs-reproducible:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # pinned: committed outputs are produced on 24.04 (glibc 2.39)
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
           cache: pip
@@ -43,3 +43,9 @@ jobs:
         env:
           MPLBACKEND: Agg
         run: python regenerate_outputs.py --check
+      - name: Show what changed (only when the check fails)
+        if: failure()
+        run: |
+          git status --short -- outputs
+          git diff --stat -- outputs ':!*.png'
+          git diff --word-diff=color --unified=0 -- outputs ':!*.png' | head -n 300

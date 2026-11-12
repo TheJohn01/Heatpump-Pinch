@@ -1,5 +1,5 @@
 # Exact versions used to produce the committed results and run the test suite
-# (Python 3.13.16, Linux). Install with:  pip install -r requirements.txt
+# (Python 3.13, Ubuntu 24.04 with glibc 2.39; CI is pinned to it). Install with:  pip install -r requirements.txt
 numpy==2.5.3
 pandas==3.0.5
 matplotlib==3.11.2
