@@ -3,8 +3,8 @@ message: "If you use this software, please cite it as below."
 type: software
 title: "Heatpump-Pinch: pinch analysis, heat pump integration and techno-economics for industrial process-heat electrification"
 abstract: >-
-  Python toolkit and Streamlit front end developed for an MSc dissertation in
-  Chemical Engineering (electrification of process heat). It computes pinch
+  Python toolkit and Streamlit front end for the electrification of industrial
+  process heat. It computes pinch
   targets with individual temperature shifts, composite and grand composite
   curves, sizes heat pumps from the GCC, screens working fluids with a CoolProp
   cycle model, evaluates heat-exchanger network retrofits and performs the

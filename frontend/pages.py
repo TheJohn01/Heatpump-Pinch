@@ -2,7 +2,7 @@
 
 Layout
 ------
-* **Workflow**: a step-by-step wizard following the dissertation method (1
+* **Workflow**: a step-by-step wizard following the method (1
   streams, 2 targets, 3 ΔTmin, 4 heat pumps, 5 retrofit, 6 economics). Steps
   with many inputs use a split workspace: inputs on the left, results on the right.
 * **Dashboard**: RQ1-RQ3 on one screen (consolidated sensitivity table, tornado) and the

@@ -55,7 +55,7 @@
   "run": {
     "tool_version": "0.8.0",
     "inputs_sha256": {
-      "cases/four_stream_process.json": "a2bbe134da1507ece4092dd3b2b8858de0951908d661d1596656aeb066418b2c",
+      "cases/four_stream_process.json": "ba6efe9b2491abb8dbe39eb9abcf251ff832ccac577c65e6250cb7a0862b6bbf",
       "data/four_stream_process_streams.csv": "d3dc81f1e0416882f62b20d7e3e16dbe1cb7c1abe802cd952f8a65dbb17bf824"
     }
   },

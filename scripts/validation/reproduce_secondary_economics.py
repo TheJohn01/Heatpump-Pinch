@@ -1,4 +1,4 @@
-"""Economics of the secondary cases on an ASSUMED annual basis (supervisor review C3).
+"""Economics of the secondary cases on an ASSUMED annual basis (design review C3).
 
 Usage:
     python -m scripts.validation.reproduce_secondary_economics

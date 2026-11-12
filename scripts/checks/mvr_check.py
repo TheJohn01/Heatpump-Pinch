@@ -1,4 +1,4 @@
-"""Configuration 3 of Padullés et al. (2026): MVR for wort boiling (supervisor review B4).
+"""Configuration 3 of Padullés et al. (2026): MVR for wort boiling (design review B4).
 
 Usage:
     python -m scripts.checks.mvr_check cases/brewery.json

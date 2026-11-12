@@ -26,7 +26,7 @@ def test_base_row_matches_retrofit_and_hand_check(table):
     assert b["RQ3_ratio_HP2"] < b["price_ratio"] < b["RQ3_ratio_HP1"]
     # A4: flat optimum reported as a range
     assert b["RQ2_dTmin_within_1pct_K"] == "0.08-2"
-    # the published eta_L 0.55 reproduces the supervisor's decomposition (HTHP 291 y, NPV -0.73 M€)
+    # the published eta_L 0.55 reproduces the design review's decomposition (HTHP 291 y, NPV -0.73 M€)
     p = table.loc["Lorenz efficiency 0.55 (paper's value)"]
     assert p["HP2_incremental_payback_y"] == pytest.approx(291, abs=1)
     assert p["HP1_incremental_payback_y"] == pytest.approx(3.92, abs=0.01)

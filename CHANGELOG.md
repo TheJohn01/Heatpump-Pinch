@@ -39,6 +39,9 @@ committed outputs change only where an entry says so.
   optional extras `rating`, `tespy`, `prices` in `pyproject.toml`.
 
 ### Changed
+- Wording only: the project no longer refers to an academic programme or institution; review notes
+  are called "design review" (same item codes A1-C4). Committed outputs change only in these text
+  fields and in the input hashes of `summary.json`; no number changes.
 - README rewritten as a structured technical document: abstract with the RQ answers, introduction
   (motivation, objectives, scope, contributions), architecture diagrams, one section per workflow step
   with its equations, results for the brewery with sensitivities, validation and limitations, software
@@ -123,5 +126,4 @@ Industrial-use review of 0.7.0 (commit bdc970a): eight gap groups addressed. No 
 
 ## 0.7.0 (2026-10-17)
 
-Redundancy audit and RQ1-RQ3 for every case (commits up to bdc970a). See `claude/sources_case_studies.md`
-in the dissertation project for the history before this file existed.
+Redundancy audit and RQ1-RQ3 for every case (commits up to bdc970a). Earlier history is in the git log.

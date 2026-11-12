@@ -4,7 +4,7 @@ Each function takes data already computed by the toolkit and returns an
 ``alt.Chart``: hover shows the values, the mouse wheel zooms, drag pans
 (``.interactive()``), and the chart menu exports PNG or SVG. The static
 Matplotlib figures in ``pinch.plotting`` remain the ones written to files for
-the dissertation.
+reports.
 
 Every function takes a ``palette`` (``pinch.theme.LIGHT`` or ``DARK``), so the
 lines keep their contrast in both theme modes. Red and blue mean hot and cold

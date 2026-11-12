@@ -8,8 +8,7 @@ A toolkit that takes the stream table of an industrial site, computes its energy
 sizes heat pumps from the Grand Composite Curve, evaluates the existing heat-exchanger network and
 its retrofit, and prices the result (investment, operating cost, NPV, payback, CO₂, primary energy),
 with a Streamlit front end. Main case: a generalised brewery; secondary cases: a milk evaporator, a
-milk powder spray dryer and a four-stream textbook process. Developed for the MSc dissertation
-"Eletrificação do calor de processo" (Chemical Engineering, FEUP).
+milk powder spray dryer and a four-stream textbook process.
 
 ---
 
@@ -666,7 +665,7 @@ heat-exchanger cost law); the reasoning behind each choice is in `docs/ASSUMPTIO
 | `co2_price_EUR_per_t` | 0.0 | 0 by default (site may be outside the EU ETS); sensitivity uses the EUA price |
 | `pef_electricity` | 1.9 | published: Commission Delegated Regulation (EU) 2023/807 (EED default) |
 | `pef_gas` | 1.0 | convention: primary energy of a fuel = its final energy, on the net calorific value (NCV) basis of energy statistics |
-| `gas_ncv_over_gcv` | 0.9 | IPCC (1996) Revised Guidelines, Reference Manual, Ch. 1, Table 1-4 note a: GCV-NCV 10 % for natural gas. Gas is bought on GCV (Regulation (EU) 2016/1952); primary energy is counted on NCV, the basis of the EU primary-energy factors (Directive 2012/27/EU Annex IV; supervisor review B5) |
+| `gas_ncv_over_gcv` | 0.9 | IPCC (1996) Revised Guidelines, Reference Manual, Ch. 1, Table 1-4 note a: GCV-NCV 10 % for natural gas. Gas is bought on GCV (Regulation (EU) 2016/1952); primary energy is counted on NCV, the basis of the EU primary-energy factors (Directive 2012/27/EU Annex IV; design review B5) |
 | `refrigeration_credit_fraction` | 1.0 | share of the refrigeration that the heat pump sources can take over that is actually credited (1 = all, continuous operation as in Padullés et al. 2026 Sec. 5.1; lower values represent batch mismatch between heat pump and cooling loads) |
 | `boiler_variable_om_EUR_per_MWh` | 1.23 | Danish Energy Agency, Technology Data - Industrial Process Heat, sheet 6.1 'Boiler, gas and oil' (2025): variable O&M 1.23 EUR/MWh of heat, avoided with the gas heat it no longer supplies. The fixed O&M (2,000 EUR/MW/y) is not credited: the boiler is kept as back-up |
 | `chiller_cop` | none | no refrigeration credit unless set (Padullés et al. 2026 do not count it). Sinnott and Towler (2020), Sec. 6.4.4: real COP about 0.6 x Carnot for a simple cycle (up to 0.9 for complex cycles) |
@@ -1008,7 +1007,7 @@ debt and the release procedure are in `docs/QUALITY.md`; changes per version in 
 4. The total annual cost is flat in ΔTmin for this site (0.08-2 K within 1 %, RQ2): energy, not
    exchanger area, sets the cost.
 5. The RQ1 answer is sensitive to three inputs that the source paper treats differently: the price
-   ratio, the boiler efficiency and the refrigeration credit. A dissertation answer should state the
+   ratio, the boiler efficiency and the refrigeration credit. A reported answer should state the
    range (0-66 %), not one number.
 6. Checking each step against an independent answer (textbooks, papers, OpenPinch, TESPy, published
    exchanger designs) found errors in teaching material and inconsistencies in three papers, which a

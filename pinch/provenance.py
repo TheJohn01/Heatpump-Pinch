@@ -1,6 +1,6 @@
 """Run provenance: which version of the tool and which inputs produced a result (software QA).
 
-A result handed to a client or an examiner must be traceable to the code and the data behind it
+A result handed to a client or a reviewer must be traceable to the code and the data behind it
 (Wilson et al. 2017, PLOS Comput. Biol. 13, e1005510, "Software" and "Keeping track of changes";
 Barker et al. 2022, Sci. Data 9, 622, FAIR4RS principles F1-F4 and R1: identifiers, metadata, version).
 Two records are kept apart, because committed outputs must stay byte-for-byte reproducible

@@ -1,6 +1,6 @@
 """RQ1-RQ3 for any case, against the site as it is today (step 6; dashboard and scripts/analysis/consolidate_rq.py).
 
-Definitions (supervisor review 2026-10-17, A1-A4), for every case:
+Definitions (design review 2026-10-17, A1-A4), for every case:
 
 * **Today's site** (the baseline):
   - a case with a published existing network (``retrofit`` block): that network;
@@ -135,7 +135,7 @@ def _payback(x: float) -> float:
 def answers(case: Case, streams: StreamSet, params: EconomicParameters, source_limited: bool = False) -> dict:
     """RQ1, RQ2, RQ3 for one case variant (definitions in the module docstring).
 
-    ``source_limited``: no ambient heat source (supervisor review B2). HP1 may take as its source only the
+    ``source_limited``: no ambient heat source (design review B2). HP1 may take as its source only the
     refrigeration after the heat-recovery step that its evaporator can reach (``pinch.refrigeration``), so its
     heat is capped at that refrigeration / (1 - 1/COP); the other units, whose source would be ambient, are
     left out. Returns None when the site has no refrigeration at all.

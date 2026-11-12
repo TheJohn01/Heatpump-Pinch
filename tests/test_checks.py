@@ -1,4 +1,4 @@
-"""Supervisor-review checks: MVR configuration (B4) and output reproducibility (C2)."""
+"""Design-review checks: MVR configuration (B4) and output reproducibility (C2)."""
 
 from __future__ import annotations
 

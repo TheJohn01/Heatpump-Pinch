@@ -334,7 +334,7 @@
       "label": "HTHP sink 110 °C (boiling driving force)",
       "kind": "hthp_sink",
       "value": 110.0,
-      "basis": "103 °C leaves 2 K to boiling wort; nucleate boiling needs some K of wall superheat plus hydrostatic boiling-point rise (no sourced value); Padullés Fig. 11 spans 100-180 °C (supervisor review B1)"
+      "basis": "103 °C leaves 2 K to boiling wort; nucleate boiling needs some K of wall superheat plus hydrostatic boiling-point rise (no sourced value); Padullés Fig. 11 spans 100-180 °C (design review B1)"
     },
     {
       "label": "HTHP sink 120 °C (boiling driving force)",
@@ -370,7 +370,7 @@
       "value": {
         "grid_EF_kg_per_kWh": 0.367
       },
-      "basis": "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 55 % efficiency (assumed, not sourced); affects CO2 avoided only (supervisor review B5)"
+      "basis": "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 55 % efficiency (assumed, not sourced); affects CO2 avoided only (design review B5)"
     },
     {
       "label": "Batch: HTHP sized for the boil window, F = 1.14",
@@ -406,7 +406,7 @@
       "label": "RQ2 with heat-pump heat as hot utility",
       "kind": "hp_hot_utility",
       "value": null,
-      "basis": "after electrification the marginal hot utility is HTHP heat: hours x (p_el / COP + variable O&M) + CRF x 600 EUR/kW + fixed O&M (supervisor review A4)"
+      "basis": "after electrification the marginal hot utility is HTHP heat: hours x (p_el / COP + variable O&M) + CRF x 600 EUR/kW + fixed O&M (design review A4)"
     },
     {
       "label": "Film coefficients x5 (gasketed plates)",
@@ -633,7 +633,7 @@
       }
     ],
     "heat_pump_reference": "N1: condensate into tank",
-    "_heat_pump_reference": "RQ1 and RQ3 per unit judge the heat pumps as increments over the heat-recovery-only retrofit, so the cheap recovery measure does not carry them (supervisor review, item A1)",
+    "_heat_pump_reference": "RQ1 and RQ3 per unit judge the heat pumps as increments over the heat-recovery-only retrofit, so the cheap recovery measure does not carry them (design review, item A1)",
     "heat_pump_increments": [
       {
         "name": "Warm-water heat pump",

@@ -10,7 +10,7 @@ conditioning and heat pumps" (climate-friendly alternatives to F-gases),
 https://climate.ec.europa.eu/eu-action/fluorinated-greenhouse-gases/climate-friendly-alternatives-f-gases/air-conditioning_en.
 The page restates Annex IV and gives GWP100 from Annexes I and II of the Regulation (non-fluorinated
 substances under Annex VI) with ASHRAE safety groups. The Regulation's own text (EUR-Lex) could not be
-fetched in this session; check Annex IV there before citing a date in the dissertation.
+fetched in this session; check Annex IV there before citing a date.
 
 Annex IV as stated on that page, for the equipment a process heat pump can be
 ---------------------------------------------------------------------------------

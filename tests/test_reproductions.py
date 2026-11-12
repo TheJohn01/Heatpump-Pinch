@@ -1,7 +1,7 @@
 """Verdicts of the paper-verification scripts (redundancy audit, item 6).
 
 The scripts compute the comparisons once (``checks()``) and only write the tables; these tests pin
-every verdict, so a change in the code that alters a conclusion stated in the dissertation fails here.
+every verdict, so a change in the code that alters a conclusion stated in the README fails here.
 """
 
 

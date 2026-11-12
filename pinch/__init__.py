@@ -1,4 +1,4 @@
-"""Pinch analysis toolkit for the heat pump integration dissertation.
+"""Pinch analysis toolkit for heat pump integration and process-heat electrification.
 
 Modules (a test checks that this list and README.md name every module)
 -------
@@ -34,7 +34,7 @@ tespy_heat_pump          TESPy rebuild of single-stage cycles: design check, par
 case                     Case files and annual conversion.
 validation               Reference targets vs computed values.
 results                  Outputs container (summary, tables, figures).
-plotting                 Matplotlib figures for files and the dissertation.
+plotting                 Matplotlib figures for files and reports.
 charts                   Altair charts for the app, in the light or dark palette.
 process_diagram          Simplified flowsheet and T* stream diagram as SVG, four views (step 1; Dashboard).
 theme                    Light and dark colour palettes, colour meaning, WCAG contrast (front end).
@@ -45,7 +45,7 @@ __version__ = "0.8.0"   # keep equal to pyproject.toml and CITATION.cff (tests/t
 import matplotlib as _mpl
 
 # Deterministic figures on every machine: DejaVu Sans ships with matplotlib, so PNG outputs do not depend on
-# the fonts installed locally (supervisor review C2).
+# the fonts installed locally (design review C2).
 _mpl.rcParams["font.family"] = "DejaVu Sans"
 
 from pinch.curves import composite_curve  # noqa: E402 (after the font setting, by design)

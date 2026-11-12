@@ -1,7 +1,7 @@
 """Figures for the pinch analysis, with labelled axes and units.
 
 The only module that draws with matplotlib (redundancy audit, item 5): every figure of the
-dissertation, the analyses and the reproduction scripts is built here from tables the caller
+reports, the analyses and the reproduction scripts is built here from tables the caller
 computed. ``*_figure`` functions return a matplotlib Figure; ``save_figure`` writes one to file
 and closes it. The app draws the same tables with Altair (``pinch.charts``).
 """

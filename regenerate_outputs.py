@@ -1,4 +1,4 @@
-"""Regenerate every committed output from the inputs, in dependency order (supervisor review C2).
+"""Regenerate every committed output from the inputs, in dependency order (design review C2).
 
 Usage:
     python regenerate_outputs.py            # rerun everything

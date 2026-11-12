@@ -26,7 +26,7 @@ Tool versions are pinned in `requirements.txt` and `requirements-dev.txt`.
   leaves it.
 - **Units.** Units live in names (`T_C`, `Q_kWh_per_hl`, `dT_K`) and in docstrings, and conversions are
   centralised in `pinch.case.to_MWh_per_year`; there is no unit library. A library such as pint would
-  catch mixed units at run time but makes formulas harder for examiners to read; not adopted.
+  catch mixed units at run time but makes formulas harder for reviewers to read; not adopted.
 - **Logging.** `scripts/analysis/analyse.py --verbose` logs progress; other scripts print their results tables. Warnings
   about input plausibility are part of the outputs (`summary.json` "warnings").
 - **Coverage.** Line coverage was 91 % at 0.7.0 (lowest: `cycle_analysis` 39 %, `validation` 65 %); not

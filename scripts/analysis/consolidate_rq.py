@@ -106,7 +106,7 @@ def consolidate_case(case: Case, streams, selected: dict | None) -> pd.DataFrame
         rows.append({"sensitivity": "No ambient source: heat pumps limited to the refrigeration heat",
                      "basis": "the base case may draw part of the heat pumps' source from ambient air (frosting, "
                               "defrost and air-coil costs not included); here HP1 takes only the refrigeration duty "
-                              "as its source and the other units are left out (supervisor review B2)",
+                              "as its source and the other units are left out (design review B2)",
                      **limited})
     for sens in case.sensitivities:
         kind, value, basis = sens.kind, sens.value, sens.basis
