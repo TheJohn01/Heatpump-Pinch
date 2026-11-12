@@ -228,10 +228,13 @@ def _layer(body: list[str], opacity: float) -> str:
     return f'<g opacity="{opacity:g}">' + "".join(body) + "</g>" if opacity else ""
 
 
-def _svg(height: float, title: str, desc: str, p: Palette, body: str) -> str:
+def _svg(height: float, title: str, desc: str, p: Palette, body: str, uid: str) -> str:
+    """Whole SVG document; marker ids get the prefix ``uid`` so two diagrams can share a page."""
+    defs = _defs(p).replace('id="a-', f'id="{uid}-')
+    body = body.replace("url(#a-", f"url(#{uid}-")
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 {WIDTH} {height:.0f}" '
             f'role="img" style="font-family: inherit; max-width: {WIDTH * 1.4:.0f}px">'
-            f"<title>{escape(title)}</title><desc>{escape(desc)}</desc>{_defs(p)}{body}</svg>")
+            f"<title>{escape(title)}</title><desc>{escape(desc)}</desc>{defs}{body}</svg>")
 
 
 def _temperatures(streams: list[Stream]) -> str:
@@ -369,7 +372,7 @@ def flowsheet_svg(fs: Flowsheet, stream_set: StreamSet, heat_pumps: pd.DataFrame
     height = _Y0 + _ROW_DY * (fs.rows - 1) + _BOX_H + 50
     body = _layer(base, op_base) + _layer(energy, op_energy) + _layer(hp, op_hp)
     return _svg(height, f"Simplified flowsheet: {fs.case}",
-                f"Process steps with material flow; view: {VIEW_LABELS[view]}.", p, body)
+                f"Process steps with material flow; view: {VIEW_LABELS[view]}.", p, body, "fs")
 
 
 # ------------------------------------------------------------------ T* stream diagram
@@ -481,7 +484,7 @@ def stream_diagram_svg(stream_set: StreamSet, targets: dict, heat_pumps: pd.Data
     body = (_layer(frame, 1.0) + _layer(streams, op_streams)
             + _layer(energy, op_energy) + _layer(hp, op_hp))
     return _svg(bottom + 30, "Streams on the shifted-temperature axis",
-                f"Hot and cold streams, pinch, energy targets and heat pumps; view: {VIEW_LABELS[view]}.", p, body)
+                f"Hot and cold streams, pinch, energy targets and heat pumps; view: {VIEW_LABELS[view]}.", p, body, "ts")
 
 
 def legend_rows(stream_set: StreamSet) -> pd.DataFrame:

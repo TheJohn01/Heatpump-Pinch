@@ -138,7 +138,7 @@ def test_dashboard_computes_for_every_case(case):
     assert any(lbl.startswith("RQ1") for lbl in labels) and any(lbl.startswith("RQ3") for lbl in labels)
     assert any("Today's site" in c.value for c in at.caption)
     assert len(at.dataframe) == 2                     # RQ table and the stream key of the T* diagram
-    assert any("<svg" in h.proto.body for h in at.get("html"))
+    assert any("<svg" in m.value for m in at.markdown)
 
 
 def test_dashboard_asks_for_a_basis_when_none_is_published():
@@ -276,13 +276,14 @@ def test_step1_shows_the_flowsheet_above_the_stream_table(brewery):
     """Brewery: the flowsheet (layout file) in every view; the HP layer names both units."""
     at = _goto(brewery, STEPS[0])
     _ok(at)
-    html = [h.proto.body for h in at.get("html")]
+    html = [m.value for m in at.markdown if m.value.startswith("<svg")]
     assert html and "Simplified flowsheet" in html[0] and "Wort kettle" in html[0]
+    assert not at.get("html")          # st.html strips <svg> in the browser
     for view in ("process", "energy", "heat_pumps"):
         at.session_state["diagram_view_flowsheet"] = view
         at.run()
         _ok(at)
-        body = at.get("html")[0].proto.body
+        body = next(m.value for m in at.markdown if m.value.startswith("<svg"))
         assert ("HP2 · HTHP" in body) == (view == "heat_pumps")
     at.session_state["diagram_view_flowsheet"] = "all"
     at.run()
@@ -305,4 +306,4 @@ def test_step1_falls_back_to_the_tstar_diagram_without_a_layout(case):
     at = st_testing.AppTest.from_function(page, args=(case,), default_timeout=300)
     at.run()
     _ok(at)
-    assert any("shifted-temperature axis" in h.proto.body for h in at.get("html"))
+    assert any(m.value.startswith("<svg") and "shifted-temperature axis" in m.value for m in at.markdown)

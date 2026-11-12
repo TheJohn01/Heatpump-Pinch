@@ -4,7 +4,9 @@ Usage (needs Playwright + Chromium):
     streamlit run app.py --server.headless true --server.port 8601 &
     python tests/ui_smoke.py
 
-Checks (Workflow page): (1) uploading a stream CSV gives targets; (2) a CSV with missing columns
+Checks: (0) the process diagrams are drawn as inline SVG in the browser (Workflow step 1 flowsheet,
+Dashboard T* diagram); ``st.html`` sanitises ``<svg>`` away, which streamlit.testing does not see.
+Workflow page: (1) uploading a stream CSV gives targets; (2) a CSV with missing columns
 gives an input message, not a crash; (3) editing a cell of the stream table
 re-computes the targets (four-stream example: CP of Reactor 1 feed 0.2 -> 0.3
 moves Q̇h,min from 7.5 to 13.5 MW, the problem-table answer).
@@ -27,12 +29,23 @@ async def _metric(pg) -> str:
     return t[i:i + 22].replace("\n", " ")
 
 
+async def _svgs(pg) -> list[str]:
+    return await pg.evaluate("Array.from(document.querySelectorAll('svg[role=img] > title')).map(t => t.textContent)")
+
+
 async def main() -> None:
     async with async_playwright() as p:
         b = await p.chromium.launch()
         pg = await b.new_page(viewport={"width": 1500, "height": 1300})
         await pg.goto(URL)
         await pg.wait_for_timeout(15000)
+        # 0: diagrams visible (brewery flowsheet; T* diagram on the Dashboard)
+        assert any(t.startswith("Simplified flowsheet") for t in await _svgs(pg)), await _svgs(pg)
+        await pg.get_by_text("Dashboard", exact=True).first.click()
+        await pg.wait_for_timeout(20000)
+        assert any(t.startswith("Streams on the shifted") for t in await _svgs(pg)), await _svgs(pg)
+        await pg.get_by_text("Workflow", exact=True).first.click()
+        await pg.wait_for_timeout(8000)
         case_box = pg.locator('[data-testid="stSelectbox"]').first
         # 1-2: upload a CSV, then a malformed one (step 1, left panel)
         await case_box.click()
@@ -53,10 +66,10 @@ async def main() -> None:
         assert "Input problem" in t and "missing columns" in t, "bad CSV not reported"
         # 3: published four-stream case, edit a cell, check the targets
         await case_box.click()
-        await pg.get_by_role("option", name="four_stream_process").click()
+        await pg.get_by_role("option", name="Four-stream chemical process").click()
         await pg.wait_for_timeout(9000)
-        assert "four_stream_process" in await pg.inner_text("body")
-        grid = await pg.locator('[data-testid="stDataFrameResizable"]').first.bounding_box()
+        assert "Four-stream chemical process" in await pg.inner_text("body")
+        grid = await pg.locator('[data-testid="stDataFrameResizable"]').last.bounding_box()
         await pg.mouse.click(grid["x"] + 80, grid["y"] + 54)          # first cell of the first row
         await pg.wait_for_timeout(500)
         for _ in range(4):                                             # -> CP column (5th)
@@ -72,7 +85,7 @@ async def main() -> None:
         await pg.wait_for_timeout(7000)
         assert "13.5" in await _metric(pg), await _metric(pg)
         await b.close()
-    print("UI smoke test passed: upload, bad input, cell edit")
+    print("UI smoke test passed: diagrams, upload, bad input, cell edit")
 
 
 if __name__ == "__main__":

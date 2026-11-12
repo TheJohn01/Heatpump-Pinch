@@ -337,6 +337,12 @@ def _chart(ch) -> None:
     st.altair_chart(ch, width="stretch")
 
 
+def _svg(svg: str) -> None:
+    """Inline SVG. Not ``st.html``: its sanitiser drops ``<svg>`` elements, so nothing would show
+    (found in the browser, tests/ui_smoke.py check 4); ``st.markdown`` keeps markers and tooltips."""
+    st.markdown(svg, unsafe_allow_html=True)
+
+
 def _diagram(r, kind: str) -> None:
     """Process diagram with its view selector: ``kind`` = "flowsheet" (falls back to T*) or "tstar"."""
     case, streams, s, tables, *_ = r
@@ -356,14 +362,14 @@ def _diagram(r, kind: str) -> None:
     view = st.segmented_control("Diagram view", list(labels), format_func=labels.get, key=key,
                                 label_visibility="collapsed") or "all"
     if fs is not None:
-        st.html(pdg.flowsheet_svg(fs, streams, hp, view, _palette()))
+        _svg(pdg.flowsheet_svg(fs, streams, hp, view, _palette()))
         missing = pdg.unassigned_streams(fs, streams)
         st.caption("Simplified flowsheet: one box per process step; tags give each step's heat demand (+) or "
                    f"release (−) in {streams.energy_unit} from the stream table below. Heat pump connections are "
                    "indicative (fixed by the network design, step 5). Hover for details."
                    + (f" Not on the flowsheet: {', '.join(missing)}." if missing else ""))
     else:
-        st.html(pdg.stream_diagram_svg(streams, s["targets"], hp, view, _palette()))
+        _svg(pdg.stream_diagram_svg(streams, s["targets"], hp, view, _palette()))
         st.caption("Streams on the shifted-temperature axis T*: hot streams point down, cold streams up. Energy "
                    f"targets and heat pumps (step 4) in {streams.energy_unit}; streams of 1 K are drawn at a "
                    "minimum length. Hover for details.")

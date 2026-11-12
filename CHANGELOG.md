@@ -65,6 +65,9 @@ committed outputs change only where an entry says so.
   every script). The `heatpump-pinch` console command points to `scripts.analysis.analyse:main`.
 
 ### Fixed
+- Process diagrams did not show in the browser: `st.html` sanitises `<svg>` away. They are now
+  drawn with `st.markdown` (markers and tooltips kept); `tests/ui_smoke.py` checks in Chromium that
+  both diagrams are present, and its case selector uses the plant names shown since 0.8.0.
 - CI: the `outputs-reproducible` job failed on every push since 11 November 2026 because GitHub moved the
   `ubuntu-latest` runner from Ubuntu 24.04 to 26.04. With identical package versions, the newer C library most likely
   changes the last digits of some CoolProp results, and `outputs/brewery/cycle_screening.csv` (written at
