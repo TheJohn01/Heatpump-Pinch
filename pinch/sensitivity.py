@@ -1,7 +1,7 @@
 """Sensitivity cases: one list per site, in the case file (redundancy audit, item 1.1).
 
 Before 2026-10-17 the brewery had two lists that overlapped: ``economics.scenarios`` in the
-case file (read by the grass-roots economics) and ``SENSITIVITIES`` in ``consolidate_rq.py``
+case file (read by the grass-roots economics) and ``SENSITIVITIES`` in ``scripts/analysis/consolidate_rq.py``
 (read by the RQ1-RQ3 table). The same label could then report two different "RQ1" values.
 Now there is one list, ``sensitivities`` in the case file::
 
@@ -15,7 +15,7 @@ Now there is one list, ``sensitivities`` in the case file::
 Every row changes one thing in the base case (``apply``); ``basis`` says where the value comes
 from. Which analysis uses which rows:
 
-* ``consolidate_rq.py`` (the RQ1-RQ3 answers): every row;
+* ``scripts/analysis/consolidate_rq.py`` (the RQ1-RQ3 answers): every row;
 * ``pinch.economic_analysis`` (grass-roots reference, step 6): the ``econ`` rows only, since the
   other kinds change the design, the network or the area targeting, which that table does not
   recompute.
@@ -147,7 +147,7 @@ def apply(case, kind: str, value: Any, selected: dict | None = None):
                        sink_levels=tuple(replace(lv, eta_lorenz=None) for lv in case.sink_levels))
     if kind in ("cycle", "cycle_scaled"):
         if not selected:
-            raise ValueError("cycle-based sensitivities need the cycle screening (screen_cycles.py)")
+            raise ValueError("cycle-based sensitivities need the cycle screening (scripts/analysis/screen_cycles.py)")
         k = 1.0 if kind == "cycle" else float(value)
         return replace(case, sink_levels=tuple(replace(lv, eta_lorenz=k * selected[lv.name]["eta_lorenz_cycle"])
                                                if lv.name in selected else lv for lv in case.sink_levels))

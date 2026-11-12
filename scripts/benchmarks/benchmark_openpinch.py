@@ -1,8 +1,8 @@
 """Benchmark against an independent tool: OpenPinch (gap group 8: validation).
 
 Usage:
-    python benchmark_openpinch.py                        # compare with the stored OpenPinch results
-    python benchmark_openpinch.py --refresh PYTHON314    # rerun OpenPinch first (needs Python >= 3.14 with
+    python -m scripts.benchmarks.benchmark_openpinch                        # compare with the stored OpenPinch results
+    python -m scripts.benchmarks.benchmark_openpinch --refresh PYTHON314    # rerun OpenPinch first (needs Python >= 3.14 with
                                                          # openpinch installed), then compare
 
 Independent tool: Walmsley (2026), "OpenPinch: An Open-Source Python Library for Advanced Pinch Analysis and
@@ -38,7 +38,7 @@ import pandas as pd
 from pinch import load_streams, problem_table, with_extra_shift
 from pinch.streams import StreamSet, streams_from_frame
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 REFERENCE = ROOT / "data" / "benchmarks" / "openpinch_0.8.3.json"
 SAMPLES = ROOT / "data" / "benchmarks" / "openpinch_samples"
 OPENPINCH_DEFAULT_DT_CONT_K = 5.0      # OpenPinch configuration_fields.py, THERMAL_DT_CONT

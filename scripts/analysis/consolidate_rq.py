@@ -1,8 +1,8 @@
 """Consolidated answers to the three research questions, with sensitivities, for any case.
 
 Usage:
-    python consolidate_rq.py cases/brewery.json
-    python consolidate_rq.py cases/spray_dryer.json
+    python -m scripts.analysis.consolidate_rq cases/brewery.json
+    python -m scripts.analysis.consolidate_rq cases/spray_dryer.json
 
 RQ1-RQ3 are defined once, in ``pinch.research_questions``: against the site as it is today (the
 case's existing network, or the baseline its ``retrofit_bounds`` status implies), with the heat
@@ -32,7 +32,7 @@ from pinch.economic_analysis import _params_and_converter
 from pinch.plotting import save_figure, tornado_figure
 from pinch.sensitivity import apply
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 
 def answers(case: Case, streams, unit: str, selected: dict | None = None, source_limited: bool = False) -> dict | None:
     """RQ1, RQ2, RQ3 for one case variant (``pinch.research_questions.answers``).

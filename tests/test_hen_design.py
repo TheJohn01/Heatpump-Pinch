@@ -170,7 +170,7 @@ def test_fixed_point_returns_known_coefficients():
 
 
 def test_benchmark_hen_reproduces_the_published_values():
-    import benchmark_hen
+    from scripts.benchmarks import benchmark_hen
     df = benchmark_hen.run()
     exact = df[df["source"].str.startswith(("Table 1", "Table 12", "Tables 4-5, expected", "Fig. 1"))]
     assert len(exact) == 16                                   # 3 targets, 11 exchanger sizes, 2 costs
@@ -184,7 +184,7 @@ def test_benchmark_hen_reproduces_the_published_values():
 # ---------------------------------------------------------------- independent tool
 def test_openpinch_benchmark_matches_to_six_decimals():
     """Every case against OpenPinch 0.8.3 (stored results): Q̇h,min and Q̇c,min within 1e-6 relative, pinch equal."""
-    import benchmark_openpinch
+    from scripts.benchmarks import benchmark_openpinch
     df = benchmark_openpinch.compare()
     assert len(df) == 11
     assert (df["max_rel_deviation"] <= 1e-6).all()
@@ -194,8 +194,8 @@ def test_openpinch_benchmark_matches_to_six_decimals():
 
 def test_openpinch_conversion_round_trip():
     """Our stream set -> OpenPinch input -> back gives the same streams (temperatures, loads, shifts)."""
-    import benchmark_openpinch as b
     from pinch.streams import streams_from_frame
+    from scripts.benchmarks import benchmark_openpinch as b
     s = load_streams("data/brewery_streams.csv")
     back = streams_from_frame(b.from_openpinch(b.to_openpinch(s)))
     assert [(x.T_in_C, x.T_out_C, x.Q, x.dT_shift_K) for x in back.streams] == \

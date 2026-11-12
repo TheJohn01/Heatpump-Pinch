@@ -4,10 +4,10 @@ Runs every case in data/reference_targets.json and writes the validation report
 (outputs/validation_report.csv; the same comparison the tests assert, through
 ``pinch.validation``). Problem tables and figures are written to outputs/ only for
 reference cases that no case file covers (same stream file and extra shift):
-the others are already in outputs/<case>/, written by analyse.py, and writing them
+the others are already in outputs/<case>/, written by scripts/analysis/analyse.py, and writing them
 twice gave byte-identical duplicates (redundancy audit, item 6).
 
-Usage:  python validate_targets.py
+Usage:  python -m scripts.validation.validate_targets
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ class Config:
 
 
 def covered_by_case_files(cases_dir: Path = ROOT / "cases") -> set[tuple[Path, float]]:
-    """(stream file, extra shift) of every case file, whose outputs analyse.py writes to outputs/<case>/."""
+    """(stream file, extra shift) of every case file, whose outputs scripts/analysis/analyse.py writes to outputs/<case>/."""
     out = set()
     for f in cases_dir.glob("*.json"):
         if f.stem == "TEMPLATE":

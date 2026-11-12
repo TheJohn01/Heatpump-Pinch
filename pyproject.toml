@@ -25,11 +25,10 @@ excel = ["openpyxl>=3.1"]                   # stream tables from .xlsx workbooks
 dev = ["pytest>=8"]
 
 [project.scripts]
-heatpump-pinch = "analyse:main"
+heatpump-pinch = "scripts.analysis.analyse:main"
 
 [tool.setuptools]
-packages = ["pinch"]
-py-modules = ["analyse"]
+packages = ["pinch", "scripts", "scripts.analysis"]   # the CLI is scripts/analysis/analyse.py
 
 [tool.ruff]
 line-length = 120
@@ -48,4 +47,4 @@ ignore = ["B008", "E741", "B905"]   # B905: zip over equal-length sequences by c
 [tool.mypy]
 python_version = "3.13"
 ignore_missing_imports = true
-# Modules checked in CI (tests/test_quality.py); the others carry recorded type debt (QUALITY.md)
+# Modules checked in CI (tests/test_quality.py); the others carry recorded type debt (docs/QUALITY.md)

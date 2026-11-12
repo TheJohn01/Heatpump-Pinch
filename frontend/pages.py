@@ -27,7 +27,6 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from analyse import compute, markdown, write
 from pinch import charts, problem_table, with_extra_shift
 from pinch.case import POWER_TO_MW, SinkLevelSpec, load_case
 from pinch.cycle_analysis import load_selected
@@ -35,8 +34,9 @@ from pinch.economics import DEFAULTS
 from pinch.research_questions import unit_names
 from pinch.streams import streams_from_frame
 from pinch.theme import Palette, palette_for
+from scripts.analysis.analyse import compute, markdown, write
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]   # repository root
 CASES = {p.stem: p for p in sorted((ROOT / "cases").glob("*.json")) if p.stem != "TEMPLATE"}
 PLANTS = {k: load_case(p).plant for k, p in CASES.items()}
 UPLOAD = "Upload my own stream table"
@@ -518,7 +518,7 @@ def _step_heat_pumps() -> None:
             st.markdown("**Working-fluid check (step 4b)**: best practical cycle per unit")
             st.dataframe(pd.DataFrame([{"unit": n, **v} for n, v in cb["units"].items()]), width="stretch")
         elif ss.choice != UPLOAD:
-            st.caption("Working-fluid check applies to the unedited published case (run screen_cycles.py for others).")
+            st.caption("Working-fluid check applies to the unedited published case (run python -m scripts.analysis.screen_cycles for others).")
 
 
 RETROFIT_NEEDS = (
@@ -675,7 +675,7 @@ def _step_economics() -> None:
 # ================================================================== dashboard
 @st.cache_resource(max_entries=4, show_spinner=False)
 def _consolidate(key: str, _case, _streams, _selected) -> pd.DataFrame:
-    from consolidate_rq import consolidate_case
+    from scripts.analysis.consolidate_rq import consolidate_case
     return consolidate_case(_case, _streams, _selected)
 
 
@@ -816,7 +816,7 @@ def sources_page() -> None:
         st.download_button("Summary (Markdown)", markdown(s), file_name=f"{case.name}_summary.md", width="stretch")
         st.download_button("Summary (JSON)", json.dumps(s, indent=2, ensure_ascii=False, default=str),
                            file_name=f"{case.name}_summary.json", width="stretch")
-        reg = ROOT / "ASSUMPTIONS.md"
+        reg = ROOT / "docs" / "ASSUMPTIONS.md"
         if reg.exists() and case.name.startswith("brewery"):
             st.subheader("Assumptions register")
             with st.container(height=520, border=True):

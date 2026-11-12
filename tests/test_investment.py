@@ -148,11 +148,10 @@ def test_monte_carlo_grant_raises_npv_by_the_grant():
 
 
 def test_brewery_investment_check_agrees_with_the_research_questions():
-    """investment_check.py's 'no grant' rows repeat the consolidated RQ results (payback, NPV) for the brewery."""
-    from pathlib import Path
+    """scripts/checks/investment_check.py's 'no grant' rows repeat the consolidated RQ results (payback, NPV) for the brewery."""
 
-    import investment_check
-    root = Path(investment_check.__file__).resolve().parent
+    from scripts.checks import investment_check
+    root = investment_check.ROOT
     df = investment_check.check(root / "cases" / "brewery.json")
     rq_table = pd.read_csv(root / "outputs" / "brewery" / "rq_consolidated.csv")
     base = rq_table.iloc[0]

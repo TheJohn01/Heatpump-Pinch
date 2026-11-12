@@ -75,7 +75,7 @@ def test_padulles_statements_reproduced():
     """Sec. 5.2, S1-S4: run the reproduction and require every statement to hold."""
     import pandas as pd
 
-    import reproduce_padulles2026_economics as rep
+    from scripts.validation import reproduce_padulles2026_economics as rep
     rep.main()
     checks = pd.read_csv(rep.OUT / "step6_padulles_checks.csv")
     assert checks["reproduced"].all(), checks[~checks["reproduced"]].to_string()
@@ -86,9 +86,9 @@ def test_brewery_full_design_hand_check(tmp_path):
     """1 Mhl/year, prices from the case file: CAPEX and savings of the GCC design by hand."""
     import json
 
-    from analyse import analyse
     from pinch.case import load_case
     from pinch.validation import ROOT
+    from scripts.analysis.analyse import analyse
     path = ROOT / "cases" / "brewery.json"
     ec = json.loads(path.read_text(encoding="utf-8"))["economics"]
     p_gas, p_el, eta_b = ec["gas_price_EUR_per_kWh"], ec["electricity_price_EUR_per_kWh"], ec["boiler_efficiency"]
@@ -185,9 +185,9 @@ def test_milk_evaporator_capex_uses_dea_sheets():
     (sheet 2.a 1.2 + lift above 75 K 0.15 + steam generation 0.2 = 1.55 M€/MW)."""
     from dataclasses import replace
 
-    from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
+    from scripts.analysis.analyse import compute
     c = load_case(ROOT / "cases" / "milk_evaporator.json")
     res = compute(replace(c, basis={"type": "power", "operating_hours_per_year": 8000.0}))
     t = res.tables["heat_pump_design"]
@@ -217,9 +217,9 @@ def test_cooling_water_cost_follows_price_and_hours():
     """Sinnott & Towler Sec. 6.4.4: 0.0341 kWh + 0.00042 EUR per kWh removed; 8000 h at 0.1135 EUR/kWh = 34.3."""
     from dataclasses import replace
 
-    from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
+    from scripts.analysis.analyse import compute
     c = load_case(ROOT / "cases" / "four_stream_process.json")
     for hours, p_el in [(8000.0, 0.1135), (6000.0, 0.0897)]:
         eco = {**c.economics, "operating_hours_per_year": hours, "electricity_price_EUR_per_kWh": p_el}
@@ -229,9 +229,9 @@ def test_cooling_water_cost_follows_price_and_hours():
 
 def test_spray_dryer_steam_add_on_only_for_steam_heat_pump():
     """Liang et al. (2022): water loops up to 114 °C, a closed-loop steam heat pump for the main air."""
-    from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
+    from scripts.analysis.analyse import compute
     c = load_case(ROOT / "cases" / "spray_dryer.json")
     assert c.basis == {"type": "power", "operating_hours_per_year": 6000}        # published by Liang et al. (2022)
     cls = compute(c).summary["economics"]["heat_pump_cost_class"]

@@ -1,7 +1,7 @@
 """Investment-grade view of the research-question results, for any case with an annual basis.
 
 Usage:
-    python investment_check.py cases/brewery.json
+    python -m scripts.checks.investment_check cases/brewery.json
 
 For the heat-recovery step, each heat pump increment (HP1 over the heat-recovery step, HP2 over HP1, ...)
 and the full design against today's site (``pinch.research_questions``), this script adds what
@@ -42,7 +42,7 @@ from pinch.case import load_case, to_MWh_per_year
 from pinch.economic_analysis import _params_and_converter
 from pinch.economics import evaluate
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 ESTIMATE_CLASS = 5
 GRANTS = (("no grant", 0.0),
           ("grant 30 % (energy efficiency, large firm)", inv.prr_aid_intensity("energy_efficiency", "large", "none")),

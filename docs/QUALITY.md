@@ -14,7 +14,7 @@ and the FAIR principles for research software (Barker et al. 2022, Sci. Data 9, 
 | Types | `tests/test_quality.py::test_mypy_typed_modules` | a type error in a module of `TYPED_MODULES` |
 | One version | `tests/test_quality.py::test_one_version_everywhere` | `pinch.__version__`, `pyproject.toml`, `CITATION.cff` or `CHANGELOG.md` disagree |
 | Provenance | `tests/test_quality.py` | `summary.json` hashes do not match the input files |
-| Independent tool | `tests/test_hen_design.py` (`benchmark_openpinch.py`) | a target differs from OpenPinch 0.8.3 by more than 1e-6 (11 cases) |
+| Independent tool | `tests/test_hen_design.py` (`scripts/benchmarks/benchmark_openpinch.py`) | a target differs from OpenPinch 0.8.3 by more than 1e-6 (11 cases) |
 
 Tool versions are pinned in `requirements.txt` and `requirements-dev.txt`.
 
@@ -27,7 +27,7 @@ Tool versions are pinned in `requirements.txt` and `requirements-dev.txt`.
 - **Units.** Units live in names (`T_C`, `Q_kWh_per_hl`, `dT_K`) and in docstrings, and conversions are
   centralised in `pinch.case.to_MWh_per_year`; there is no unit library. A library such as pint would
   catch mixed units at run time but makes formulas harder for examiners to read; not adopted.
-- **Logging.** `analyse.py --verbose` logs progress; other scripts print their results tables. Warnings
+- **Logging.** `scripts/analysis/analyse.py --verbose` logs progress; other scripts print their results tables. Warnings
   about input plausibility are part of the outputs (`summary.json` "warnings").
 - **Coverage.** Line coverage was 91 % at 0.7.0 (lowest: `cycle_analysis` 39 %, `validation` 65 %); not
   gated.

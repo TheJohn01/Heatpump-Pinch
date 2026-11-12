@@ -9,12 +9,12 @@ from pathlib import Path
 
 import pytest
 
-from analyse import analyse
 from pinch import load_streams, problem_table
 from pinch.case import SinkLevelSpec, load_case, to_MWh_per_year
 from pinch.design import design_from_gcc, plausibility_warnings, source_warnings
 from pinch.heat_pump import HeatPump
 from pinch.validation import ROOT
+from scripts.analysis.analyse import analyse
 
 FOURSTREAM = load_streams(ROOT / "data" / "four_stream_process_streams.csv")
 
@@ -49,7 +49,7 @@ def test_gcc_max_level_electrifies_everything():
 
 
 def test_brewery_case_reproduces_step_by_step_design():
-    """General tool on the brewery case = minimum-energy design of reproduce_padulles2026.py (3.4404)."""
+    """General tool on the brewery case = minimum-energy design of scripts/validation/reproduce_padulles2026.py (3.4404)."""
     case = load_case(ROOT / "cases" / "brewery.json")
     # at the published eta_L 0.55 of Padullés et al. (the case now uses 0.50, an educated approximation)
     d = design_from_gcc(load_streams(case.stream_file), case.sink_levels, 0.55, case.source_T_C)

@@ -9,8 +9,8 @@ files fails the build. The same holds for the generated blocks of README.md (the
 defaults, written from ``pinch.economics``). PNG files are regenerated but excluded from the comparison (font rasterisation
 differs between machines); their data are in the CSV files next to them.
 
-Order: step-1/2 validation and reproductions, cycle screening (read by analyse.py), all cases, then the
-brewery checks that read analyse.py's outputs.
+Order: step-1/2 validation and reproductions, cycle screening (read by scripts/analysis/analyse.py), all cases, then the
+brewery checks that read scripts/analysis/analyse.py's outputs.
 """
 
 from __future__ import annotations
@@ -24,30 +24,30 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 BREWERY = "cases/brewery.json"
 STEPS: tuple[tuple[str, ...], ...] = (
-    ("validate_targets.py",),
-    ("reproduce_padulles2026.py",),
-    ("reproduce_padulles2026_economics.py",),
-    ("verify_padulles2026_assumptions.py",),
-    ("verify_walmsley2024.py",),
-    ("reproduce_stampfli2019.py",),
-    ("benchmark_openpinch.py",),
-    ("benchmark_hen.py",),
-    ("screen_cycles.py", BREWERY),
-    ("analyse.py", "--all"),
-    ("consolidate_rq.py", BREWERY),
-    ("consolidate_rq.py", "cases/spray_dryer.json"),
-    ("batch_check.py", BREWERY),
-    ("mvr_check.py", BREWERY),
-    ("investment_check.py", BREWERY),
-    ("plant_data_check.py", BREWERY),
-    ("reproduce_secondary_economics.py",),
+    ("-m", "scripts.validation.validate_targets"),
+    ("-m", "scripts.validation.reproduce_padulles2026"),
+    ("-m", "scripts.validation.reproduce_padulles2026_economics"),
+    ("-m", "scripts.validation.verify_padulles2026_assumptions"),
+    ("-m", "scripts.validation.verify_walmsley2024"),
+    ("-m", "scripts.validation.reproduce_stampfli2019"),
+    ("-m", "scripts.benchmarks.benchmark_openpinch"),
+    ("-m", "scripts.benchmarks.benchmark_hen"),
+    ("-m", "scripts.analysis.screen_cycles", BREWERY),
+    ("-m", "scripts.analysis.analyse", "--all"),
+    ("-m", "scripts.analysis.consolidate_rq", BREWERY),
+    ("-m", "scripts.analysis.consolidate_rq", "cases/spray_dryer.json"),
+    ("-m", "scripts.checks.batch_check", BREWERY),
+    ("-m", "scripts.checks.mvr_check", BREWERY),
+    ("-m", "scripts.checks.investment_check", BREWERY),
+    ("-m", "scripts.checks.plant_data_check", BREWERY),
+    ("-m", "scripts.validation.reproduce_secondary_economics"),
 )
 
 
 def run_all() -> None:
     env = dict(os.environ, MPLBACKEND="Agg")
     for step in STEPS:
-        print(f"--> python {' '.join(step)}", flush=True)
+        print(f"--> python {' '.join(step)}", flush=True)   # e.g. python -m scripts.analysis.analyse --all
         subprocess.run([sys.executable, *step], cwd=ROOT, env=env, check=True, stdout=subprocess.DEVNULL)
 
 

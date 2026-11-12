@@ -8,7 +8,6 @@ published dairy case (Stampfli et al. 2019, Energy 182; Stampfli et al. 2018, CE
 import pandas as pd
 import pytest
 
-import reproduce_stampfli2019 as rs
 from pinch import load_streams, problem_table
 from pinch.time_slices import (
     load_schedule,
@@ -19,6 +18,7 @@ from pinch.time_slices import (
     time_slices,
     tsm_targets,
 )
+from scripts.validation import reproduce_stampfli2019 as rs
 
 
 def _schedule_csv(tmp_path, rows, unit_col="CP_kW_per_K"):

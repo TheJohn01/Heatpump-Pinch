@@ -12,7 +12,7 @@ def _verdicts(module) -> dict[tuple[str, str], str]:
 
 
 def test_walmsley2024_verdicts():
-    import verify_walmsley2024 as v
+    from scripts.validation import verify_walmsley2024 as v
     got = _verdicts(v)
     expected = {
         ("W1", "Qh_min / Qc_min [MW]"): "reproduced",
@@ -29,7 +29,7 @@ def test_walmsley2024_verdicts():
 
 
 def test_padulles2026_assumption_verdicts():
-    import verify_padulles2026_assumptions as v
+    from scripts.validation import verify_padulles2026_assumptions as v
     got = _verdicts(v)
     expected = {
         ("A1", "CO2 HP COP, source -1 °C (our assumption)"): "matches",

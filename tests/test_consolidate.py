@@ -7,7 +7,7 @@ from pinch.validation import ROOT
 
 @pytest.fixture(scope="module")
 def table():
-    import consolidate_rq
+    from scripts.analysis import consolidate_rq
     return consolidate_rq.consolidate(ROOT / "cases" / "brewery.json").set_index("sensitivity")
 
 
@@ -94,7 +94,7 @@ def _case(name, hours=8000):
 
 @pytest.mark.parametrize("name", ["spray_dryer", "milk_evaporator", "four_stream_process"])
 def test_every_case_has_rq_answers(name):
-    import consolidate_rq
+    from scripts.analysis import consolidate_rq
     df = consolidate_rq.consolidate(_case(name))
     b = df.iloc[0]
     assert b["sensitivity"] == "Base case" and 0.0 <= b["RQ1_HP_gas_share"] <= 1.0
@@ -112,7 +112,7 @@ def test_every_case_has_rq_answers(name):
 def test_baseline_follows_the_published_status():
     """Spray dryer: the source says the plant recovers no heat -> today's site has none and the heat-recovery step
     is a new network at the target. Milk evaporator (heat-integrated, exchangers unknown) -> site at the target."""
-    import consolidate_rq
+    from scripts.analysis import consolidate_rq
     sd = consolidate_rq.consolidate(_case("spray_dryer")).iloc[0]
     me = consolidate_rq.consolidate(_case("milk_evaporator")).iloc[0]
     assert sd["todays_site"].startswith("no heat recovery") and sd["HR_retrofit_gas_share"] > 0
@@ -122,7 +122,7 @@ def test_baseline_follows_the_published_status():
 def test_econ_override_keeps_other_cost_function_fields():
     """A row that changes the cost functions' capital terms keeps their O&M (it used to drop them, which made the
     'hot-water piping' rows pay back faster than the base case)."""
-    import consolidate_rq
+    from scripts.analysis import consolidate_rq
     df = consolidate_rq.consolidate(_case("milk_evaporator")).set_index("sensitivity")
     base, piping = df.loc["Base case"], df.loc["with hot-water piping (indirect cost)"]
     assert piping["HP1_incremental_payback_y"] > base["HP1_incremental_payback_y"]
@@ -131,7 +131,7 @@ def test_econ_override_keeps_other_cost_function_fields():
 
 def test_source_limited_row_needs_a_reachable_refrigeration_source():
     """Milk evaporator sources sit at ambient (15 °C): with no ambient source the heat pumps have nothing to take."""
-    import consolidate_rq
+    from scripts.analysis import consolidate_rq
     df = consolidate_rq.consolidate(_case("milk_evaporator")).set_index("sensitivity")
     row = df.loc["No ambient source: heat pumps limited to the refrigeration heat"]
     assert row["RQ1_HP_gas_share"] == 0.0 and row["HP1_incremental_payback_y"] != row["HP1_incremental_payback_y"]
@@ -139,6 +139,6 @@ def test_source_limited_row_needs_a_reachable_refrigeration_source():
 
 def test_rq2_needs_a_sourced_cost_law():
     """The spray dryer has only a cost sweep (no sourced exchanger cost law): RQ2 is n/a, not the sweep's optimum."""
-    import consolidate_rq
+    from scripts.analysis import consolidate_rq
     b = consolidate_rq.consolidate(_case("spray_dryer")).iloc[0]
     assert b["RQ2_dTmin_opt_K"] != b["RQ2_dTmin_opt_K"] and b["RQ2_dTmin_within_1pct_K"] == ""

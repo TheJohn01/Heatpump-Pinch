@@ -1,6 +1,6 @@
 """Reproduction of Padullés et al. (2026), Sec. 5 (brewery economics; workflow step 6).
 
-Energy flows per hectolitre are those reproduced in step 4 (reproduce_padulles2026.py);
+Energy flows per hectolitre are those reproduced in step 4 (scripts/validation/reproduce_padulles2026.py);
 cost functions, 8000 h/year, gas 0.06 EUR/kWh, 5 % / 10 years, and the 4-year
 payback threshold are published (Sec. 5.1-5.2). The heat-recovery tank is sized
 linearly with production from the one published point (375 m3 for 720,000 hl/year,
@@ -9,7 +9,7 @@ Sec. 5.1). Boiler efficiency: 1.0 (bound; not stated in the paper).
 Checks the paper's qualitative statements S1-S4 (Sec. 5.2) and draws our version
 of Figs. 18-19 (PBP- and NPV10-optimal option by brewery size and price ratio).
 
-Usage:  python reproduce_padulles2026_economics.py
+Usage:  python -m scripts.validation.reproduce_padulles2026_economics
 """
 
 from __future__ import annotations

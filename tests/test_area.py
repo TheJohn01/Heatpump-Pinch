@@ -113,8 +113,8 @@ def test_brewery_optimum_matches_marginal_analysis(tmp_path):
     """RQ2: near the optimum the area grows logarithmically, dA/dΔTmin ≈ -62 m2 / ΔTmin,
     and each kelvin of ΔTmin adds 13.82 kW of hot utility. Equating marginal capital and
     energy cost gives ΔTmin,opt ≈ 62 b CRF / (13.82 (c_h + c_c)), linear in the area cost b."""
-    from analyse import analyse
     from pinch.case import load_case
+    from scripts.analysis.analyse import analyse
     s = analyse(load_case(ROOT / "cases" / "brewery.json"), output_root=tmp_path)
     rq2 = sorted(s["area_targeting"]["RQ2"], key=lambda r: r["b"])
     opts = [r["dTmin_opt_K"] for r in rq2]

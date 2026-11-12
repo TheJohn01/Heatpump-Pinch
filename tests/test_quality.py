@@ -4,7 +4,7 @@ provenance records.
 * One version in pinch/__init__.py, pyproject.toml and CITATION.cff (FAIR4RS: Barker et al. 2022).
 * ruff with the rule set in pyproject.toml over the whole repository.
 * mypy over the modules that are type-clean (TYPED_MODULES); the others carry the recorded debt in
-  QUALITY.md, and this list may only grow.
+  docs/QUALITY.md, and this list may only grow.
 * Provenance: deterministic records in summary.json match the input files; run metadata is git-ignored.
 """
 

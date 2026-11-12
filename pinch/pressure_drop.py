@@ -32,7 +32,7 @@ Relations
 Validation (tests/test_pressure_drop.py): the tube-side constant against a direct calculation from tube
 geometry (velocity, Dittus-Boelter, Fanning); a fixed point built from known h is returned unchanged; the
 area at the converged h equals the Bath area target with those h. The Sagli problem with Polley and
-Panjeh Shahi's Table 3 properties is computed in ``benchmark_hen.py`` and compared with their detailed
+Panjeh Shahi's Table 3 properties is computed in ``scripts/benchmarks/benchmark_hen.py`` and compared with their detailed
 designs (Tables 4-5), as a comparison, not a reproduction: their designs are Bell-Delaware shells.
 """
 

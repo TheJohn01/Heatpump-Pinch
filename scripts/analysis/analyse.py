@@ -2,8 +2,8 @@
 
 Usage
 -----
-    python analyse.py cases/brewery.json
-    python analyse.py --all            # every case file in cases/ (except TEMPLATE)
+    python -m scripts.analysis.analyse cases/brewery.json
+    python -m scripts.analysis.analyse --all            # every case file in cases/ (except TEMPLATE)
 
 For each case, writes to outputs/<case name>/:
     problem_table.csv          heat cascade
@@ -36,7 +36,7 @@ from pinch.results import Outputs
 from pinch.streams import StreamSet
 
 log = logging.getLogger(__name__)
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 CASES_DIR = ROOT / "cases"
 
 
@@ -51,7 +51,7 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
         Stream data; read from ``case.stream_file`` when omitted (front ends
         pass an uploaded or edited table here).
     cycle_selected : dict, optional
-        Working-fluid screening result per unit (``screen_cycles.py``); adds a
+        Working-fluid screening result per unit (``scripts/analysis/screen_cycles.py``); adds a
         cycle-based design (η_L from the cycle model) to the summary.
 
     Returns

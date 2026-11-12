@@ -1,7 +1,7 @@
 """Configuration 3 of Padullés et al. (2026): MVR for wort boiling (supervisor review B4).
 
 Usage:
-    python mvr_check.py cases/brewery.json
+    python -m scripts.checks.mvr_check cases/brewery.json
 
 Compares, as increments over the site with the heat-recovery retrofit N1 and the warm-water heat pump
 (residual gas 3.0 kWh/hl: wort preheating 95 -> 100 °C, 0.6, and boiling, 2.4):
@@ -19,7 +19,7 @@ Andersen et al. 2024 used in step 4b); delivered heat = condensing the compresse
 Lift 10 K (central), 5-15 K range: the paper's MVR COP of 15 corresponds to about 16 K. Costs: Padullés
 Table 3 (MVR 280,000 + 350 EUR/kW; heat pump 520,000 + 600 EUR/kW) with DEA O&M (sheets 4 and 2.a). The
 MVR (about 300 kW) lies below the DEA sheet-4 range (5-50 MW). The booster and the MVR only run in the
-boil window: capacity factor F applies to both (batch_check.py).
+boil window: capacity factor F applies to both (scripts/checks/batch_check.py).
 
 Writes outputs/<case>/mvr_check.csv and .md.
 """
@@ -40,7 +40,7 @@ from pinch.economic_analysis import _params_and_converter
 from pinch.economics import CostFunction, Option, break_even_ratio, capacity_kW, evaluate
 from pinch.heat_pump import lorenz_cop
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 RESIDUAL_GAS = 3.0      # kWh/hl after N1 + warm-water heat pump (retrofit table)
 BOIL, PREHEAT_TANK, PREHEAT_BOOST = 2.4, 0.84, 2.16   # kWh/hl: boiling; 75 -> 82 °C; 82 -> 100 °C (CP 0.12 kWh/hl K)
 

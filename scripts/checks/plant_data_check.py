@@ -1,7 +1,7 @@
 """Plant-data checks for a case: stream-data uncertainty and match restrictions (workflow steps 1-2).
 
 Usage:
-    python plant_data_check.py cases/brewery.json
+    python -m scripts.checks.plant_data_check cases/brewery.json
 
 1. Uncertainty of the energy targets (``pinch.uncertainty``; Bergamini et al. 2019, 2021): 5000 Latin
    hypercube samples (seed 0) of every heat load (σ 10 %, relative) and temperature (σ 3 K), the nominal
@@ -39,7 +39,7 @@ from pinch.uncertainty import (
     target_uncertainty,
 )
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 N_SAMPLES, SEED = 5000, 0
 
 

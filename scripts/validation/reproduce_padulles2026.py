@@ -1,6 +1,6 @@
 """Reproduction of Padullés et al. (2026), Sec. 4.3 (brewery-specific; workflow step 4).
 
-For a general site use analyse.py with a case file. This script reproduces the
+For a general site use scripts/analysis/analyse.py with a case file. This script reproduces the
 paper's three configurations from its published heat flows.
 
 Part A  Reproduce the paper's electricity use from its published heat flows,
@@ -10,7 +10,7 @@ Part B  Check each configuration against the minimum-energy cascade of the
         heat taken from the process vs. from ambient.
 Part C  Our own design sized from the GCC (minimum energy, two heat pumps).
 
-Usage:  python reproduce_padulles2026.py
+Usage:  python -m scripts.validation.reproduce_padulles2026
 """
 
 from __future__ import annotations

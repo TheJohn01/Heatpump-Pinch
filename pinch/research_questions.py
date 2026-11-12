@@ -1,4 +1,4 @@
-"""RQ1-RQ3 for any case, against the site as it is today (step 6; dashboard and consolidate_rq.py).
+"""RQ1-RQ3 for any case, against the site as it is today (step 6; dashboard and scripts/analysis/consolidate_rq.py).
 
 Definitions (supervisor review 2026-10-17, A1-A4), for every case:
 

@@ -10,12 +10,12 @@ Three pages in a top navigation bar (no sidebar):
 * Dashboard: RQ1-RQ3 with the consolidated sensitivities;
 * Sources: provenance, assumptions register, downloads.
 
-The app does no calculation of its own: see app_pages.py.
+The app does no calculation of its own: see frontend/pages.py.
 """
 
 import streamlit as st
 
-import app_pages
+from frontend import pages as app_pages
 
 st.set_page_config(page_title="Heat pump pinch analysis", layout="wide", initial_sidebar_state="collapsed")
 page = st.navigation([st.Page(app_pages.workflow_page, title="Workflow", icon=":material/account_tree:", default=True),

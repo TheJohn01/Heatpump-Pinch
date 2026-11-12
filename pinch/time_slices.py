@@ -27,7 +27,7 @@ A stream table with start and end times describes a process whose requirements c
 
 Units: heat in kW and kWh (power units are required: a per-product stream table has no time base).
 
-Validation (tests/test_time_slices.py, reproduce_stampfli2019.py) on the dairy site of Stampfli et al.
+Validation (tests/test_time_slices.py, scripts/validation/reproduce_stampfli2019.py) on the dairy site of Stampfli et al.
 (2019), Table 1: with T*co = 33.8 °C, ΔTmin = 10 K, Eq. 9 gives Tev = -4.57 °C, Tco = 46.3 °C, COP 2.20
 (CET 2018, Table 2, graphical method: -4.56 °C, 46.26 °C; text: COP 2.2) and a condenser-side storage
 of 1.36 MWh for 24 h operation (Energy 2019, Sec. 3.2: 1.35 MWh).

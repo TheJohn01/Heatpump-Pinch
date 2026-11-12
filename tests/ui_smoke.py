@@ -2,7 +2,7 @@
 
 Usage (needs Playwright + Chromium):
     streamlit run app.py --server.headless true --server.port 8601 &
-    python ui_smoke.py
+    python tests/ui_smoke.py
 
 Checks (Workflow page): (1) uploading a stream CSV gives targets; (2) a CSV with missing columns
 gives an input message, not a crash; (3) editing a cell of the stream table
@@ -18,7 +18,7 @@ from pathlib import Path
 from playwright.async_api import async_playwright
 
 URL = "http://localhost:8601"   # streamlit run app.py --server.port 8601
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]   # repository root
 
 
 async def _metric(pg) -> str:

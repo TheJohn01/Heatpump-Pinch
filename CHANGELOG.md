@@ -6,6 +6,24 @@ committed outputs change only where an entry says so.
 
 ## Unreleased
 
+### Changed
+- Repository layout: the 18 scripts that sat in the root move into folders; only `app.py` (Streamlit Cloud
+  entry point) and `regenerate_outputs.py` stay in the root. Scripts now run from the root as modules.
+  No output changes (all committed outputs regenerate byte for byte).
+
+  | Before | After |
+  |---|---|
+  | `analyse.py`, `screen_cycles.py`, `consolidate_rq.py` | `scripts/analysis/` |
+  | `batch_check.py`, `mvr_check.py`, `investment_check.py`, `plant_data_check.py` | `scripts/checks/` |
+  | `validate_targets.py`, `reproduce_*.py`, `verify_*.py` | `scripts/validation/` |
+  | `benchmark_openpinch.py`, `benchmark_hen.py` | `scripts/benchmarks/` |
+  | `app_pages.py` | `frontend/pages.py` |
+  | `ui_smoke.py` | `tests/ui_smoke.py` |
+  | `ASSUMPTIONS.md`, `QUALITY.md` | `docs/` |
+
+  Commands: `python analyse.py --all` becomes `python -m scripts.analysis.analyse --all` (same pattern for
+  every script). The `heatpump-pinch` console command points to `scripts.analysis.analyse:main`.
+
 ### Fixed
 - CI: the `outputs-reproducible` job failed on every push since 11 November 2026 because GitHub moved the
   `ubuntu-latest` runner from Ubuntu 24.04 to 26.04. With identical package versions, the newer C library most likely

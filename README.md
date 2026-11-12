@@ -32,15 +32,15 @@ technology ranges. Site-specific data live only in a **case file** and a **strea
 pip install -r requirements-dev.txt               # exact tested versions (Python 3.13)
 python -m pytest                                  # full suite (about 2 min)
 python regenerate_outputs.py                      # rebuild every output (about 3.5 min; --check compares with Git)
-python analyse.py --all                           # every case in cases/
-python analyse.py cases/brewery.json # one case
+python -m scripts.analysis.analyse --all          # every case in cases/
+python -m scripts.analysis.analyse cases/brewery.json  # one case
 streamlit run app.py                              # interactive front end
 ```
 
 `pip install -e ".[app,dev]"` installs the package with loose version bounds instead
 (`pyproject.toml`); `requirements.txt` pins the versions that produced the committed results.
 
-## Interactive front end (`app.py`, `app_pages.py`)
+## Interactive front end (`app.py`, `frontend/pages.py`)
 
 Three pages in a top navigation bar (no sidebar), over the same `analyse.compute`
 used by the command line and the tests (no calculation of its own):
@@ -67,7 +67,7 @@ end is realistic (milk evaporator: the lower bound).
 Charts are interactive (Altair, `pinch/charts.py`): hover for values, wheel to zoom, drag to
 pan, menu to export PNG/SVG. Results are cached per set of inputs. Input errors are shown as
 messages. Tests: `tests/test_app.py` (every step and case, input persistence, dashboard,
-sources) and `ui_smoke.py` (browser: upload, malformed file, cell edit).
+sources) and `tests/ui_smoke.py` (browser: upload, malformed file, cell edit).
 
 Theme: a plain technical-document style (IBM Plex Sans and Mono, white or near-black
 background, thin rules) with a light and a dark mode; choose in the app menu, Settings > Theme
@@ -91,7 +91,7 @@ for confidential plant data, run the app locally (`streamlit run app.py`).
    source temperature, Lorenz efficiency and (optionally) the annual basis.
 3. Fill in `provenance`: for every value, say whether it is published or assumed, and
    where it comes from.
-4. Run `python analyse.py cases/<your file>.json`.
+4. Run `python -m scripts.analysis.analyse cases/<your file>.json` from the repository root.
 
 ## Status
 
@@ -107,9 +107,11 @@ for confidential plant data, run the app locally (`streamlit run app.py`).
 ## Layout
 
 ```
-analyse.py                   General entry point: compute() in memory, write() to outputs/<case>/
-app.py, app_pages.py         Streamlit front end (Workflow / Dashboard / Sources) over analyse.compute
+app.py                       Streamlit entry point (kept at the root for Streamlit Community Cloud)
+regenerate_outputs.py        Rebuild every output in dependency order; --check fails on stale outputs (CI)
 pyproject.toml, requirements*.txt  Packaging; exact tested versions
+frontend/
+  pages.py                   Streamlit pages (Workflow / Dashboard / Sources) over scripts.analysis.analyse.compute
 cases/                       One file per type of plant (names, titles and descriptions give the plant type only;
                              each file's provenance['data source'] says where the data come from)
   TEMPLATE.json              Documented template for a new site
@@ -160,32 +162,42 @@ pinch/
 tests/                       pytest suite (validation cases first, then general behaviour; incl. app smoke tests,
                              cycle model, network retrofit). Run `python -m pytest -q` for the current count
 
-ASSUMPTIONS.md               Register of every assumption: verified / decision / conservative / limitation
-ui_smoke.py                  Browser smoke test of the app (upload, bad input, cell edit)
+  ui_smoke.py                Browser smoke test of the app (upload, bad input, cell edit); not run by pytest
+
+scripts/                     Command-line scripts. Run them from the repository root as modules, e.g.
+                             python -m scripts.analysis.analyse --all
+  analysis/
+    analyse.py               General entry point: compute() in memory, write() to outputs/<case>/
+    screen_cycles.py         Step 4b: screen the fluids listed in a case file (minutes); analyse then
+                             adds the cycle-based design to the summary
+    consolidate_rq.py        RQ1-RQ3 answers for any case (cases/<plant>.json) with its sensitivities
+                             (outputs/<case>/rq_consolidated.csv/.md, rq_tornado.png)
+  checks/                    Brewery checks that read the analysis outputs
+    batch_check.py           Batch brewhouse check: HTHP capacity for the boil window (8-14 brews/day x 60-90 min)
+    mvr_check.py             Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
+    investment_check.py      IRR, estimate accuracy (AACE Class 5), grant scenarios and Monte Carlo per RQ increment
+    plant_data_check.py      Stream-data uncertainty (which data matter) and match-restriction screening
+  validation/                Paper-specific reproductions. They write tables and figures only; every comparison
+                             they report is asserted by a test (tests/test_problem_table.py, test_economics.py,
+                             test_reproductions.py, test_time_slices.py)
+    validate_targets.py                 Steps 1-2 validation report (problem tables and figures only for
+                                        reference cases no case file covers: brewery +2 K, Northwestern)
+    reproduce_padulles2026.py           The paper's three configurations (Sec. 4.3)
+    reproduce_padulles2026_economics.py The paper's economic statements (Sec. 5.2) and option maps
+    verify_padulles2026_assumptions.py  Each modelling assumption checked against the paper (brewery)
+    verify_walmsley2024.py              Targets, COP, inconsistencies and inferred variant (Walmsley et al., 2024)
+    reproduce_stampfli2019.py           Non-continuous dairy site (Stampfli et al. 2019): validates pinch/time_slices.py
+    reproduce_secondary_economics.py    Milk evaporator and four-stream example at an ASSUMED 8000 h/year
+  benchmarks/
+    benchmark_openpinch.py   Targets against OpenPinch 0.8.3 (independent tool), both directions
+    benchmark_hen.py         Network sizes, costs, synthesis and pressure-drop basis against Polley and Panjeh Shahi (1991)
+
+docs/
+  ASSUMPTIONS.md             Register of every assumption: verified / decision / conservative / limitation
+  QUALITY.md                 Quality gate, recorded type debt, release procedure
 .streamlit/config.toml       Streamlit settings and theme (light and dark; mirrors pinch/theme.py)
 static/fonts/                IBM Plex Sans and Mono (woff2) served by the app, with the SIL OFL 1.1 licence
-batch_check.py               Batch brewhouse check: HTHP capacity for the boil window (8-14 brews/day x 60-90 min)
-mvr_check.py                 Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
-investment_check.py          IRR, estimate accuracy (AACE Class 5), grant scenarios and Monte Carlo for each RQ increment
-plant_data_check.py          Stream-data uncertainty (which data matter) and match-restriction screening
-reproduce_stampfli2019.py    Non-continuous dairy site (Stampfli et al. 2019): validation of pinch/time_slices.py
-benchmark_openpinch.py       Targets against OpenPinch 0.8.3 (independent tool), both directions
-benchmark_hen.py             Network sizes, costs, synthesis and pressure-drop basis against Polley and Panjeh Shahi (1991)
-reproduce_secondary_economics.py  Milk evaporator and four-stream example at an ASSUMED 8000 h/year
-regenerate_outputs.py        Rebuild every output in dependency order; --check fails on stale outputs (CI)
-consolidate_rq.py            RQ1-RQ3 answers for any case (cases/<plant>.json) with its sensitivities
-                             (outputs/<case>/rq_consolidated.csv/.md, rq_tornado.png)
-screen_cycles.py             Step 4b: screen the fluids listed in a case file (minutes); analyse.py then
-                             adds the cycle-based design to the summary
-
-Paper-specific scripts. They write tables and figures only; every comparison they report is
-asserted by a test (tests/test_problem_table.py, test_economics.py, test_reproductions.py):
-validate_targets.py                 Steps 1-2 validation report (problem tables and figures only for
-                                    reference cases no case file covers: brewery +2 K, Northwestern)
-reproduce_padulles2026.py           Reproduces the paper's three configurations (Sec. 4.3)
-reproduce_padulles2026_economics.py Reproduces the paper's economic statements (Sec. 5.2) and option maps
-verify_padulles2026_assumptions.py  Checks each modelling assumption against the paper (brewery)
-verify_walmsley2024.py              Targets, COP, inconsistencies and inferred variant (Walmsley et al., 2024)
+outputs/                     Committed results, one folder per case (rebuilt by regenerate_outputs.py)
 ```
 
 ## Conventions
@@ -242,7 +254,7 @@ The defaults and their sources are written once, in `pinch/economics.py` (`DEFAU
 `DEFAULT_COST_FUNCTIONS`); the table below is generated from them by `regenerate_outputs.py`, whose
 `--check` (CI) fails if it is stale. Each case file overrides values in its `economics` block and
 gives their sources in `economics.sources` (e.g. the brewery's chiller COP 4.45 and its
-heat-exchanger cost law); the reasoning behind each choice is in `ASSUMPTIONS.md`.
+heat-exchanger cost law); the reasoning behind each choice is in `docs/ASSUMPTIONS.md`.
 
 <!-- BEGIN generated: pinch.economics.defaults_markdown() -->
 | Parameter | Default | Source |
@@ -280,7 +292,7 @@ the new hot-water piping cost. Price bands are checked at site level where the s
 (Table 3) stays for the brewery, whose results it reproduces.
 
 A case has one sensitivity list, `sensitivities` (`{label, kind, value, basis}` rows; kinds in
-`pinch/sensitivity.py`). `consolidate_rq.py` evaluates every row for RQ1-RQ3 against today's site;
+`pinch/sensitivity.py`). `scripts/analysis/consolidate_rq.py` evaluates every row for RQ1-RQ3 against today's site;
 the grass-roots reference of step 6 (a site already at the energy target, not the RQ1 answer)
 evaluates its `econ` rows, under the same labels. Further Lorenz efficiencies go under
 `heat_pumps.eta_lorenz_sensitivity` (heat pumps re-sized and re-costed). `heat_pump_design.csv`
@@ -323,4 +335,4 @@ A test checks that this table and the case files agree.
 ## Quality and releases
 
 What CI enforces (tests, reproducible outputs, lint, types, one version, provenance), the recorded
-type debt and the release procedure are in `QUALITY.md`; changes per version in `CHANGELOG.md`.
+type debt and the release procedure are in `docs/QUALITY.md`; changes per version in `CHANGELOG.md`.

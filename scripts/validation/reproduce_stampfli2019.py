@@ -2,7 +2,7 @@
 ``pinch.time_slices`` (workflow steps 2-4).
 
 Usage:
-    python reproduce_stampfli2019.py
+    python -m scripts.validation.reproduce_stampfli2019
 
 Source: Stampfli, Atkins, Olsen, Walmsley, Wellig (2019), "Practical heat pump and storage integration into
 non-continuous processes: A hybrid approach utilizing insight based and nonlinear programming techniques",
@@ -36,7 +36,7 @@ from pinch.time_slices import (
     tsm_targets,
 )
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 DATA = ROOT / "data" / "stampfli2019_dairy_streams.csv"
 T_CO_STAR_C, DTMIN_K = 33.8, 10.0
 #: Published values. CET 2018 = Stampfli et al. (2018), Table 2 and text; Energy 2019 = Sec. 3.2.

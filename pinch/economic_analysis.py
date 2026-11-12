@@ -2,7 +2,7 @@
 
 Grass-roots reference: the heat pumps on a site whose heat recovery is already at
 the energy target (gas supplies Q̇h,min). This is NOT the answer to RQ1 or RQ3, which
-are defined against the site as it is today and computed by ``consolidate_rq.py``
+are defined against the site as it is today and computed by ``scripts/analysis/consolidate_rq.py``
 (redundancy audit, item 1.1). For a case without a published network it is the
 lower-bound baseline of ``pinch.retrofit.retrofit_bounds``. Reported:
 
@@ -19,7 +19,7 @@ Sensitivities
 * ``econ`` rows of the case's ``sensitivities`` list (``pinch.sensitivity``):
   each overrides economic parameters and reports the full design and the
   grass-roots figures again (``grass_roots_sensitivities.csv``). The other
-  rows change the design or the network and are evaluated by consolidate_rq.py.
+  rows change the design or the network and are evaluated by scripts/analysis/consolidate_rq.py.
 * ``heat_pumps.eta_lorenz_sensitivity``: list of Lorenz efficiencies; the heat
   pumps are re-sized and re-costed for each (``eta_lorenz_sensitivity.csv``).
 """

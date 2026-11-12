@@ -266,13 +266,12 @@ def test_case_file_restrictions_need_a_reason():
 
 
 def test_brewery_plant_data_check():
-    """plant_data_check.py on the brewery: nominal targets equal the validated ones, the Qh,min ranking is
+    """scripts/checks/plant_data_check.py on the brewery: nominal targets equal the validated ones, the Qh,min ranking is
     led by the wort-cooling load, and the three hot streams above the pinch are the only ones whose
     isolation costs hot utility."""
-    from pathlib import Path
 
-    import plant_data_check
-    root = Path(plant_data_check.__file__).resolve().parent
+    from scripts.checks import plant_data_check
+    root = plant_data_check.ROOT
     ref = json.loads((root / "data" / "reference_targets.json").read_text(encoding="utf-8"))
     res = plant_data_check.check(root / "cases" / "brewery.json")
     u = res["uncertainty"]

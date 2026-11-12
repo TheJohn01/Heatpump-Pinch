@@ -1,12 +1,12 @@
 """Working-fluid screening for the heat pumps of a case (workflow step 4b).
 
 Usage:
-    python screen_cycles.py cases/brewery.json
+    python -m scripts.analysis.screen_cycles cases/brewery.json
 
-Sizes the heat pumps from the GCC (as analyse.py does), optimises every
+Sizes the heat pumps from the GCC (as scripts/analysis/analyse.py does), optimises every
 fluid/layout in the case's "heat_pumps.cycle_screening" block with the CoolProp
 cycle model, and writes outputs/<case>/cycle_screening.csv and .json.
-analyse.py then adds a cycle-based design (η_L per unit from the selected
+scripts/analysis/analyse.py then adds a cycle-based design (η_L per unit from the selected
 cycle) to the summary. Runtime: a few minutes for ten fluids and ten cascades.
 """
 
@@ -21,7 +21,7 @@ from pinch.cycle import CycleAssumptions
 from pinch.cycle_analysis import screen_design, write_screening
 from pinch.design import design_from_gcc
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 
 
 def main() -> None:

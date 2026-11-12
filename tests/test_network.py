@@ -62,8 +62,8 @@ def test_constrained_stream_set_has_network_utility(brewery, name):
 
 def test_paper_config2_heat_pump_duty(tmp_path):
     """Heat pumps on the existing network: warm-water HP 8.3 kWh/hl as in Fig. 14."""
-    from analyse import compute
     from pinch.case import load_case
+    from scripts.analysis.analyse import compute
     s = compute(load_case(ROOT / "cases" / "brewery.json")).summary["retrofit"]
     row = next(o for o in s["options"] if o["network"] == "N0 existing")
     assert "Warm-water HP 8.30" in row["heat_pumps"]
@@ -111,9 +111,9 @@ def test_infeasible_and_unbalanced_matches_are_rejected():
 # ---------------------------------------------------------------- retrofit bracket without a published network
 def test_retrofit_bounds_spray_dryer_published_no_recovery():
     """Liang et al. (2022): no air-to-air recovery today. Energy gap = steam heating below the pinch."""
-    from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
+    from scripts.analysis.analyse import compute
     s = compute(load_case(ROOT / "cases" / "spray_dryer.json")).summary["retrofit_bounds"]
     assert s["baseline_status"] == "published"
     b0 = s["no_heat_recovery"]
@@ -128,9 +128,9 @@ def test_retrofit_bounds_lower_bound_equals_step6():
     """The 'already at target' row is the grass-roots comparison of step 6."""
     from dataclasses import replace
 
-    from analyse import compute
     from pinch.case import load_case
     from pinch.validation import ROOT
+    from scripts.analysis.analyse import compute
     c = load_case(ROOT / "cases" / "milk_evaporator.json")
     s = compute(replace(c, basis={"type": "power", "operating_hours_per_year": 8000.0})).summary
     low = next(r for r in s["retrofit_bounds"]["options"] if r["option"].startswith("Lower bound"))

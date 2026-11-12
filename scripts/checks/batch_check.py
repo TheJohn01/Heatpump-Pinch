@@ -1,7 +1,7 @@
 """Batch-operation check of the time-average heat pump design (brewery case).
 
 Usage:
-    python batch_check.py cases/brewery.json
+    python -m scripts.checks.batch_check cases/brewery.json
 
 Pinch targets and heat pump sizing use time-averaged loads (MWh/year over the operating hours). A
 brewhouse is a batch process. This script checks which results survive the batch timing:
@@ -29,14 +29,14 @@ from pathlib import Path
 
 import pandas as pd
 
-from consolidate_rq import answers
 from pinch import load_streams, with_extra_shift
 from pinch.case import load_case
 from pinch.cycle_analysis import load_selected
 from pinch.research_questions import unit_names
 from pinch.sensitivity import apply
+from scripts.analysis.consolidate_rq import answers
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 BREWS_PER_DAY = (8, 10, 12, 14)
 BOIL_WINDOW_H = (1.0, 1.25, 1.5)
 HTHP = "HTHP (wort boiling)"

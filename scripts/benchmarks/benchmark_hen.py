@@ -1,7 +1,7 @@
 """Network design checks against published results (gap groups 5 and 8; workflow steps 2, 3, 5).
 
 Usage:
-    python benchmark_hen.py
+    python -m scripts.benchmarks.benchmark_hen
 
 Source: Polley and Panjeh Shahi (1991), "Interfacing heat exchanger network synthesis and detailed heat
 exchanger design", Trans IChemE 69 A, 445-457, with the four-stream problem of Sagli, Gundersen and Yee
@@ -35,7 +35,7 @@ from pinch import load_streams, problem_table
 from pinch.hen_design import CostLaw, MatchLoad, UtilityStream, evaluate_exchangers, min_units_matches, series_network
 from pinch.pressure_drop import TUBE_EXPONENT, Fluid, coefficients_from_pressure_drop, tube_side_K
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 SAGLI = ROOT / "data" / "sagli1990_four_stream.csv"
 AROMATICS = ROOT / "data" / "aromatics_plant_streams.csv"
 NETWORKS = ROOT / "data" / "benchmarks" / "sagli1990_networks.json"

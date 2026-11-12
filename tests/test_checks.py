@@ -7,8 +7,8 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from mvr_check import check, mvr_cop
 from regenerate_outputs import STEPS
+from scripts.checks.mvr_check import check, mvr_cop
 
 ROOT = Path(__file__).resolve().parents[1]
 BREWERY = ROOT / "cases" / "brewery.json"
@@ -26,7 +26,7 @@ def test_mvr_cop_below_carnot_and_paper_value_inside_range(lift_K: float) -> Non
 
 
 def test_mvr_check_config2_matches_retrofit_increment() -> None:
-    """Config. 2 in mvr_check.py must equal the HTHP increment of the retrofit table (same model, F = 1)."""
+    """Config. 2 in scripts/checks/mvr_check.py must equal the HTHP increment of the retrofit table (same model, F = 1)."""
     df = check(BREWERY)
     row = df[(df["option"].str.startswith("config. 2")) & (df["capacity_factor_F"] == 1.0)].iloc[0]
     inc = pd.read_csv(ROOT / "outputs" / "brewery" / "retrofit_increments.csv")
@@ -42,6 +42,7 @@ def test_mvr_check_config2_matches_retrofit_increment() -> None:
 
 def test_regenerate_outputs_lists_existing_scripts() -> None:
     for step in STEPS:
-        assert (ROOT / step[0]).is_file(), step
-        for arg in step[1:]:
+        assert step[0] == "-m", step                     # every step runs a module from the repository root
+        assert (ROOT / (step[1].replace(".", "/") + ".py")).is_file(), step
+        for arg in step[2:]:
             assert arg.startswith("--") or (ROOT / arg).is_file(), arg

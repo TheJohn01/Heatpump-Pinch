@@ -1,16 +1,16 @@
 """Economics of the secondary cases on an ASSUMED annual basis (supervisor review C3).
 
 Usage:
-    python reproduce_secondary_economics.py
+    python -m scripts.validation.reproduce_secondary_economics
 
 The milk evaporator (Walmsley et al. 2024) and the four-stream example publish no operating hours, so
-``analyse.py`` keeps them in kW and skips steps 3, 5 and 6. This script reruns them with an assumed
+``scripts/analysis/analyse.py`` keeps them in kW and skips steps 3, 5 and 6. This script reruns them with an assumed
 8000 h/year (the case files' ``basis_hint``: an upper bound for the seasonal milk plant; within the
 7,880-8,320 h/year of continuous plants, Sinnott and Towler 2020, Sec. 1.3.1, for the four-stream
 example), so that every step of the tool has been exercised on more than one case. The spray dryer
-already has a published basis (6000 h/year, Liang et al. 2022) and runs in ``analyse.py --all``.
+already has a published basis (6000 h/year, Liang et al. 2022) and runs in ``scripts/analysis/analyse.py --all``.
 
-The RQ1-RQ3 table (consolidate_rq.py) is written next to them on the same assumed basis.
+The RQ1-RQ3 table (scripts/analysis/consolidate_rq.py) is written next to them on the same assumed basis.
 
 These are ASSUMED-basis results, not reproductions: they are written to
 outputs/secondary_8000h_assumed/<case>/ so they cannot be mistaken for the published-basis outputs.
@@ -21,11 +21,11 @@ from __future__ import annotations
 from dataclasses import replace
 from pathlib import Path
 
-from analyse import analyse
-from consolidate_rq import write_consolidated
 from pinch.case import load_case
+from scripts.analysis.analyse import analyse
+from scripts.analysis.consolidate_rq import write_consolidated
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[2]   # repository root
 HOURS = 8000
 CASES = ("milk_evaporator", "four_stream_process")
 OUT = ROOT / "outputs" / f"secondary_{HOURS}h_assumed"

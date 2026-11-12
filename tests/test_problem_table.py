@@ -114,7 +114,7 @@ def test_rejects_negative_extra_shift():
 
 def test_brewery_reproduced_targets_pinned():
     """Supervisor review C4: reproduced values pinned exactly (the published comparison, with its known
-    rounding gap in Q̇c, is reported separately by validate_targets.py)."""
+    rounding gap in Q̇c, is reported separately by scripts/validation/validate_targets.py)."""
     from pinch import load_streams, problem_table, with_extra_shift
     from pinch.validation import ROOT
     s = load_streams(ROOT / "data" / "brewery_streams.csv")
