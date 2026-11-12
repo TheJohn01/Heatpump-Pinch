@@ -34,6 +34,9 @@ frost         {"penalty": p, "ambient_share": {unit: share}}: COP of each named 
               applied through its Lorenz efficiency; share = ambient part of the unit's source heat in the base
               design (stated in the case file, checked against heat_pump_design.csv by the tests)
 hp_dT_cont    temperature contribution [K] of every heat pump level (intermediate loops; pinch.heat_pump)
+vendor_cop    COP of every level from manufacturer data (pinch.cop_data): a number = standard deviations added to
+              the fit (0 = the fit), or {"sigma": s, "glide_gain": g} (g: gain for sink glides >= 25 K, e.g. 0.16
+              for a glide-matched blend); applied through an equivalent Lorenz efficiency; needs the streams
 area          dict of area_targeting overrides
 film          film coefficients scaled by the value
 scale         production [per year]; the retrofit storage is scaled with it
@@ -49,7 +52,7 @@ from dataclasses import dataclass, replace
 from typing import Any
 
 KINDS = ("econ", "eta", "cycle", "cycle_scaled", "hp_capex", "hx_capex", "no_om", "hthp_sink", "hp_dT_cont", "area", "film",
-         "scale", "hp_hot_utility", "frost", "piping", "combo")
+         "scale", "hp_hot_utility", "frost", "piping", "vendor_cop", "combo")
 _DICT_KINDS = ("econ", "area")
 _NUMBER_KINDS = ("eta", "cycle_scaled", "hp_capex", "hx_capex", "hthp_sink", "hp_dT_cont", "film", "scale", "piping")
 _NULL_KINDS = ("cycle", "no_om", "hp_hot_utility")
@@ -104,6 +107,14 @@ def _check(kind: str, value: Any, where: str) -> Any:
             raise ValueError(f"{where}: kind 'frost' needs {{'penalty': 0-1, 'ambient_share': {{unit: 0-1}}}}")
         return {"penalty": float(value["penalty"]),
                 "ambient_share": {k: float(v) for k, v in value["ambient_share"].items()}}
+    if kind == "vendor_cop":
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            return {"sigma": float(value), "glide_gain": 0.0}
+        if isinstance(value, dict) and set(value) <= {"sigma", "glide_gain"} \
+                and all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in value.values()):
+            return {"sigma": float(value.get("sigma", 0.0)), "glide_gain": float(value.get("glide_gain", 0.0))}
+        raise ValueError(f"{where}: kind 'vendor_cop' needs a number (standard deviations) or "
+                         "{'sigma': s, 'glide_gain': g}")
     if kind in _NULL_KINDS:
         if value is not None:
             raise ValueError(f"{where}: kind '{kind}' takes no value (null)")
@@ -139,16 +150,21 @@ def _merge(base: dict, override: dict) -> dict:
     return out
 
 
-def apply(case, kind: str, value: Any, selected: dict | None = None):
+def apply(case, kind: str, value: Any, selected: dict | None = None, streams=None):
     """Return a copy of ``case`` with one sensitivity applied.
 
     ``selected``: cycle screening per unit name (``pinch.cycle_analysis.load_selected``), needed by the
-    ``cycle`` kinds.
+    ``cycle`` kinds. ``streams``: the (shifted) stream set of the design, needed by ``vendor_cop``.
     """
     if kind == "combo":
         for k, v in value:
-            case = apply(case, k, v, selected)
+            case = apply(case, k, v, selected, streams)
         return case
+    if kind == "vendor_cop":
+        if streams is None:
+            raise ValueError("vendor_cop needs the stream set (design temperatures)")
+        from pinch.cop_data import apply_vendor
+        return apply_vendor(case, streams, value["sigma"], value["glide_gain"])
     if kind == "econ":
         eco = _merge(case.economics or {}, value)
         if "electricity_to_gas_ratio" in value:            # the ratio replaces the electricity price

@@ -10,7 +10,10 @@ Layout
   assessment report as PDF and Word (``pinch.report``, ``pinch.report_render``).
 
 Workflow step 1 opens with a simplified flowsheet of the case (``pinch.process_diagram``: the case's
-layout file, or a generic one-box-per-stream layout for uploaded tables).
+layout file, or a generic one-box-per-stream layout for uploaded tables). Its stream data can be typed,
+uploaded in any unit (``pinch.units``), built row by row with the reasoning kept (guided extraction,
+``pinch.extraction``) or proposed from an Aspen Plus export (``pinch.aspen_import``); the whole input set
+is saved to and reopened from a project file (``pinch.project``).
 * **Sources**: provenance of every input, the assumptions register, downloads.
 
 All calculation is done by the toolkit (``analyse.compute``, ``consolidate_rq``);
@@ -32,8 +35,9 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from pinch import charts, problem_table, with_extra_shift
+from pinch import aspen_import, charts, extraction, problem_table, with_extra_shift
 from pinch import process_diagram as pdg
+from pinch import project as prj
 from pinch.case import POWER_TO_MW, SinkLevelSpec, load_case
 from pinch.cycle_analysis import load_selected
 from pinch.economics import DEFAULTS
@@ -42,6 +46,7 @@ from pinch.report_render import to_docx, to_pdf
 from pinch.research_questions import unit_names
 from pinch.streams import streams_from_frame
 from pinch.theme import Palette, palette_for
+from pinch.units import needs_conversion, standardise_table
 from scripts.analysis.analyse import compute, markdown, write
 
 ROOT = Path(__file__).resolve().parents[1]   # repository root
@@ -163,6 +168,9 @@ def _scalars() -> dict:
 def init_state() -> None:
     if "choice" not in ss:
         load_inputs("brewery" if "brewery" in CASES else next(iter(CASES)))
+    ss.setdefault("extraction_df", extraction.empty_record())
+    ss.setdefault("extraction_ver", 0)
+    ss.setdefault("extraction_unit", "kW")
     ss.setdefault("step", STEPS[0])
     if "step_ctl" not in ss:
         ss.step_ctl = ss.step
@@ -455,6 +463,10 @@ def _step_streams() -> None:
             if f is not None and (ss.choice != UPLOAD or ss.get("upload_name") != f.name):
                 try:
                     df = pd.read_csv(f)
+                    if needs_conversion(df):
+                        df, ss.unit_notes = standardise_table(df)      # °F, K, Btu/h, kcal/h ... -> model units
+                    else:
+                        ss.unit_notes = []
                 except Exception as exc:
                     st.error(f"Could not read the CSV: {exc}")
                     return
@@ -462,25 +474,191 @@ def _step_streams() -> None:
                 load_inputs(UPLOAD, df, f.name)
                 st.rerun()
             if ss.choice != UPLOAD:
-                st.info("Upload a CSV to replace the published case.")
+                st.info("Upload a CSV to replace the published case, or build the table with the guided "
+                        "extraction (right).")
+            elif ss.get("unit_notes"):
+                st.caption("Converted: " + "; ".join(ss.unit_notes) + ".")
         _basis_inputs()
+        _project_file()
     with right:
         r = results()
         if r:
             st.subheader("Process diagram")
             _diagram(r, "flowsheet")
-        st.subheader("Stream table (editable)")
-        st.caption("Each change recomputes every step. Latent loads over 1 K. 'Amb.' streams use 15 °C. "
-                   f"`{H_COLUMN}`: film coefficient for ΔTmin supertargeting (step 3)"
-                   + ("; empty where the source gives none." if not (ss.base_case.area_targeting or {}) else "."))
-        _editor("streams_df", "streams_ver", num_rows="dynamic")
-        if r:
-            s = r[2]
-            t = s["targets"]
-            c = st.columns(3)
-            c[0].metric(f":red[Hot streams] [{s['energy_unit']}]", f"{t['Q_hot_total']:.4g}", border=True)
-            c[1].metric(f":blue[Cold streams] [{s['energy_unit']}]", f"{t['Q_cold_total']:.4g}", border=True)
-            c[2].metric("Net surplus (hot − cold)", f"{t['Q_hot_total'] - t['Q_cold_total']:+.4g}", border=True)
+        table_tab, guided_tab, aspen_tab = st.tabs(["Stream table", "Guided extraction", "Import from Aspen Plus"])
+        with guided_tab:
+            _guided_extraction()
+        with aspen_tab:
+            _aspen_import()
+        with table_tab:
+            _stream_table(r)
+
+
+# ------------------------------------------------------------------ step 1: project file, extraction, Aspen
+PROJECT_KEYS = ("eta", "source_T", "ambient", "run_area", "basis_on", "basis_value")
+EXTRACTION_UNITS = ("kW", "MW", "Btu/h", "kcal/h")
+
+
+def _project_inputs() -> dict:
+    keys = PROJECT_KEYS + tuple(f"econ_{k}" for k, *_ in ECON_FIELDS)
+    return {k: (bool(ss[k]) if isinstance(ss[k], bool) else float(ss[k]) if isinstance(ss[k], (int, float)) else ss[k])
+            for k in keys if k in ss}
+
+
+def _open_project(p: prj.Project) -> None:
+    """Load a validated project into the session: its case first, then every saved input."""
+    if p.choice:
+        load_inputs(p.choice)
+    else:
+        load_inputs(UPLOAD, p.streams, p.name)
+        ss.upload_name = p.name
+    ss.streams_df = p.streams.copy()
+    ss.streams_ver += 1
+    levels = p.levels.copy()
+    for c in ("T_sink_in_C", "T_sink_out_C"):
+        levels[c] = levels[c].astype(str)
+    ss.levels_df = levels
+    ss.levels_ver += 1
+    allowed = set(PROJECT_KEYS) | {f"econ_{k}" for k, *_ in ECON_FIELDS}
+    for k, v in p.inputs.items():
+        if k in allowed:
+            ss[k] = v
+    ss.basis = _basis()
+    if p.extraction is not None:
+        ss.extraction_df = extraction.normalise(p.extraction)
+        ss.extraction_ver += 1
+    for k in [k for k in ss.keys() if str(k).startswith("_w_")]:   # widgets re-read the new values
+        del ss[k]
+
+
+def _project_file() -> None:
+    """Save every input to a JSON project file, or open one (pinch.project)."""
+    with st.expander("Project file"):
+        st.caption("Saves every input: stream table, heat pump levels, temperatures, annual basis, prices and the "
+                   "guided extraction with its reasoning. Results are recomputed when the project is opened.")
+        name = ss.get("upload_name", "my_site") if ss.choice == UPLOAD else ss.choice
+        p = prj.Project("" if ss.choice == UPLOAD else ss.choice, Path(str(name)).stem, _project_inputs(),
+                        ss.streams_df, ss.levels_df, ss.extraction_df if len(ss.extraction_df) else None)
+        st.download_button("Save project (.json)", prj.dumps(p), file_name=f"{Path(str(name)).stem}_project.json",
+                           mime="application/json", width="stretch", icon=":material/save:")
+        f = st.file_uploader("Open a project", type="json", key="project_upload")
+        if f is not None and ss.get("project_loaded") != (f.name, f.size):
+            try:
+                loaded = prj.loads(f.getvalue(), tuple(CASES))
+            except ValueError as exc:
+                st.error(f"Could not open the project: {exc}")
+                return
+            ss.project_loaded = (f.name, f.size)
+            _open_project(loaded)
+            st.rerun()
+
+
+def _guided_extraction() -> None:
+    """Build the stream table row by row, keeping each stream's flowsheet link and reasoning (pinch.extraction)."""
+    st.caption("One row per candidate heating or cooling duty: the flowsheet stream(s), supply and target temperature, "
+               "and either the duty or mass flow × cp (+ latent heat). Record why each row is a genuine requirement, "
+               "and untick **include** (with a reason) for what stays out: utilities, duties that can be designed away, "
+               "parts kept separate for safety. Rules: Varbanov, Yong, Klemeš, Chin (2019), *CET* 76, 67-72.")
+    bind(st.selectbox, "Unit of the duty column", "extraction_unit", EXTRACTION_UNITS)
+    if not ss.extraction_df.dtypes.equals(extraction.empty_record().dtypes) \
+            or list(ss.extraction_df.columns) != list(extraction.COLUMNS):
+        ss.extraction_df = extraction.normalise(ss.extraction_df)       # editable types (text, ticks, numbers)
+    num = st.column_config.NumberColumn
+    _editor("extraction_df", "extraction_ver", num_rows="dynamic", hide_index=True, column_config={
+        "include": st.column_config.CheckboxColumn("include", width="small"),
+        "stream": st.column_config.TextColumn("stream", width="medium"),
+        "flowsheet_id": st.column_config.TextColumn("flowsheet in → out", help="Flowsheet stream names, 'in → out'"),
+        "T_supply_C": num("supply [°C]"), "T_target_C": num("target [°C]"),
+        "duty": num("duty", help="Signed: + heat added, − heat removed (needed at one temperature)"),
+        "mass_flow_kg_s": num("mass flow [kg/s]"), "cp_kJ_kgK": num("cp [kJ/(kg K)]"),
+        "latent_kJ_kg": num("latent [kJ/kg]"), "dT_shift_K": num("ΔT shift [K]", help="Empty: 5 K"),
+        "soft_target": st.column_config.CheckboxColumn("soft target", width="small"),
+        "reasoning": st.column_config.TextColumn("reasoning", width="large")})
+    a, b, c = st.columns(3)
+    a.download_button("Template (CSV)", extraction.empty_record().to_csv(index=False), "extraction_template.csv",
+                      mime="text/csv", width="stretch")
+    up = b.file_uploader("Load a filled table", type="csv", key="extraction_upload", label_visibility="collapsed")
+    if up is not None and ss.get("extraction_upload_name") != (up.name, up.size):
+        try:
+            df = pd.read_csv(up)
+        except Exception as exc:
+            st.error(f"Could not read the CSV: {exc}")
+            return
+        ss.extraction_upload_name = (up.name, up.size)
+        ss.extraction_df = extraction.normalise(df)
+        ss.extraction_ver += 1
+        st.rerun()
+    if c.button("Use as stream table", type="primary", width="stretch", disabled=ss.extraction_df.empty):
+        try:
+            streams, excluded, warnings = extraction.extract(ss.extraction_df, ss.extraction_unit)
+            streams_from_frame(streams, source="extracted.csv")
+        except ValueError as exc:
+            st.error(str(exc))
+            return
+        load_inputs(UPLOAD, streams, "extracted")
+        ss.upload_name = "extracted"
+        ss.extraction_result = (excluded, warnings)
+        st.rerun()
+    res = ss.get("extraction_result")
+    if res:
+        excluded, warnings = res
+        for w in warnings:
+            st.warning(w)
+        if len(excluded):
+            st.markdown("**Streams left out, with the reason**")
+            st.dataframe(excluded, width="stretch", hide_index=True)
+
+
+def _aspen_import() -> None:
+    """Candidate streams from an Aspen Plus export (pinch.aspen_import), into the guided extraction for review."""
+    st.caption("Aspen Plus is reached from Python only on the Windows machine that runs it (COM automation). Export "
+               "the simulation there with the Python-Aspen Plus interface of Maier et al. (2025, *Syst. Control Trans.* "
+               "4, 1631-1636; code on Zenodo), zip the output folder and upload it here. Every Heater block and both "
+               "sides of every HeatX block become candidate streams in **Guided extraction**, where you decide which "
+               "are genuine process duties.")
+    f = st.file_uploader("Export folder (.zip)", type="zip", key="aspen_zip")
+    if f is None:
+        return
+    data = f.getvalue()
+    try:
+        runs = aspen_import.list_runs(data)
+    except (zipfile.BadZipFile, ValueError) as exc:
+        st.error(f"Could not read the archive: {exc}")
+        return
+    if not runs:
+        st.error("No run folder with blocks/Heater.csv, blocks/HeatX.csv and streams/MATERIAL.csv in the archive.")
+        return
+    run = st.selectbox("Simulation run", runs, key="aspen_run") if len(runs) > 1 else runs[0]
+    if st.button("Load the candidate streams into Guided extraction", type="primary"):
+        try:
+            rec, notes = aspen_import.candidates(data, run)
+        except (ValueError, KeyError) as exc:
+            st.error(f"Could not read the export: {exc}")
+            return
+        ss.extraction_df = extraction.normalise(rec)
+        ss.extraction_ver += 1
+        ss.extraction_unit = "kW"
+        ss.pop("_w_extraction_unit", None)
+        ss.aspen_notes = notes
+        st.rerun()
+    if ss.get("aspen_notes"):
+        st.success(" · ".join(ss.aspen_notes) + ". Review them in **Guided extraction**.")
+
+
+def _stream_table(r) -> None:
+    """Editable stream table and the heat totals (step 1)."""
+    st.subheader("Stream table (editable)")
+    st.caption("Each change recomputes every step. Latent loads over 1 K. 'Amb.' streams use 15 °C. "
+               f"`{H_COLUMN}`: film coefficient for ΔTmin supertargeting (step 3)"
+               + ("; empty where the source gives none." if not (ss.base_case.area_targeting or {}) else "."))
+    _editor("streams_df", "streams_ver", num_rows="dynamic")
+    if r:
+        s = r[2]
+        t = s["targets"]
+        c = st.columns(3)
+        c[0].metric(f":red[Hot streams] [{s['energy_unit']}]", f"{t['Q_hot_total']:.4g}", border=True)
+        c[1].metric(f":blue[Cold streams] [{s['energy_unit']}]", f"{t['Q_cold_total']:.4g}", border=True)
+        c[2].metric("Net surplus (hot − cold)", f"{t['Q_hot_total'] - t['Q_cold_total']:+.4g}", border=True)
 
 
 def _step_targets() -> None:
@@ -501,6 +679,10 @@ def _step_targets() -> None:
         _chart(charts.composite_curves_chart(shifted, table, palette=_palette()))
     with b:
         _chart(charts.gcc_chart(table, palette=_palette()))
+    near = extraction.near_pinch(shifted, t["pinch_T_star_C"])
+    if near:
+        st.caption(f"Streams whose shifted range comes within 10 K of the pinch: {', '.join(near)}. Their temperatures "
+                   "and loads set the targets most; measure them first (Varbanov et al. 2019; Bergamini et al. 2019).")
     with st.expander("Problem table (heat cascade)"):
         st.dataframe(tables["problem_table"], width="stretch")
 
@@ -583,6 +765,13 @@ def _step_heat_pumps() -> None:
             st.dataframe(pd.DataFrame([{"unit": n, **v} for n, v in cb["units"].items()]), width="stretch")
         elif ss.choice != UPLOAD:
             st.caption("Working-fluid check applies to the unedited published case (run python -m scripts.analysis.screen_cycles for others).")
+        cr = s.get("cop_ranges")
+        if cr:
+            with st.expander("COP ranges from manufacturer and demonstration data", expanded=True):
+                st.caption(cr["note"])
+                st.dataframe(tables["cop_ranges"], width="stretch", hide_index=True)
+                st.markdown("**Design and economics on each COP basis** (heat pumps re-sized)")
+                st.dataframe(tables["cop_basis_designs"], width="stretch", hide_index=True)
 
 
 RETROFIT_NEEDS = (

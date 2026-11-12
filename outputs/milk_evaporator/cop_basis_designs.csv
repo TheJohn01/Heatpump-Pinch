@@ -1,0 +1,6 @@
+basis,COP HP warm (milk preheat),COP HTHP 105 °C,COP_system,fraction_of_Qh_min_electrified
+case basis (η_L 0.5),7.863,2.101,2.423,1.0
+manufacturer-data fit - 1 sigma,3.702,1.76,1.945,1.0
+manufacturer-data fit,3.982,1.95,2.149,1.0
+manufacturer-data fit + 1 sigma,4.262,2.14,2.353,1.0
+"manufacturer-data fit, glide-matched blend",4.619,1.95,2.179,1.0

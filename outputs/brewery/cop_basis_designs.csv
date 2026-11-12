@@ -1,0 +1,6 @@
+basis,COP Warm-water HP,COP HTHP (wort boiling),COP_system,fraction_of_Qh_min_electrified,full_capex_EUR,full_savings_EUR,full_payback_years,full_npv_EUR,full_co2_avoided_t,full_design_break_even_ratio_NPV
+case basis (η_L 0.5),3.225,1.808,2.654,1.0,1793176.0,234171.0,7.66,15027.0,1835.0,2.229
+manufacturer-data fit - 1 sigma,1.351,1.519,1.393,1.0,1793176.0,-164117.0,inf,-3060445.0,1460.0,1.039
+manufacturer-data fit,1.631,1.709,1.652,1.0,1793176.0,-26339.0,inf,-1996560.0,1590.0,1.274
+manufacturer-data fit + 1 sigma,1.911,1.899,1.908,1.0,1793176.0,66243.0,27.07,-1281667.0,1677.0,1.503
+"manufacturer-data fit, glide-matched blend",1.892,1.709,1.838,1.0,1793176.0,43551.0,41.17,-1456887.0,1656.0,1.439

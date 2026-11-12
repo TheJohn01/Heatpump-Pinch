@@ -1,0 +1,4 @@
+,aspen_id,has_hcurve,hierarchy,name,path,status,typ,F(IN),HS(IN),HS(OUT),P(OUT),"('pressure', 'bar')","('qcalc', 'cal/sec')","('qnet', 'cal/sec')","('temperature', 'C')"
+0,COOLER,False,[],COOLER,\Data\Blocks\COOLER,Available,Heater,['S1'],,,['S2'],1.0,-239005.736,-239005.736,40.0
+1,HEATER,False,[],HEATER,\Data\Blocks\HEATER,Available,Heater,['S3'],,,['S4'],1.0,119502.868,119502.868,85.0
+2,MIXHEAT,False,[],MIXHEAT,\Data\Blocks\MIXHEAT,Available,Heater,"['S5', 'S6']",,,['S11'],1.0,47801.147,47801.147,70.0

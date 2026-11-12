@@ -308,7 +308,7 @@ app does no calculation of its own):
 
 | Page | Content |
 |---|---|
-| Workflow | A step-by-step wizard following the method (1 streams, 2 targets, 3 ΔTmin, 4 heat pumps, 5 retrofit, 6 economics), inputs next to the results they drive; inputs persist across steps and pages. Step 1 opens with a simplified flowsheet of the case |
+| Workflow | A step-by-step wizard following the method (1 streams, 2 targets, 3 ΔTmin, 4 heat pumps, 5 retrofit, 6 economics), inputs next to the results they drive; inputs persist across steps and pages. Step 1 opens with a simplified flowsheet of the case; its stream data can be typed, uploaded in any unit, built by guided extraction or proposed from an Aspen Plus export, and every input is saved to and reopened from a project file. Step 4 shows each heat pump's COP on manufacturer and demonstration data next to the design basis |
 | Dashboard | RQ1-RQ3 on one screen with the consolidated sensitivities and the tornado chart; "Recompute table" re-runs every sensitivity for the current inputs (about 15 s); the streams, energy targets and heat pumps on the T* axis; the techno-economic assessment report as PDF or Word |
 | Sources | Provenance of every input, the assumptions register, downloads (all outputs as a zip, summary as Markdown/JSON) |
 
@@ -337,6 +337,34 @@ figure captions below the figure, each a bold label followed by full sentences. 
 rasterised with resvg (`resvg-py`, a self-contained wheel for Windows, macOS and Linux; fonts from
 matplotlib, so the image is the same on every machine; if the package is missing the report says so in
 place of the diagram). The files are written on click.
+
+**Data input** (step 1). Four ways in, all ending in the same stream table:
+
+* *Upload in any unit*: temperatures in °C, °F, K or R (`T_in_F`...), shifts in K or °F, heat in any unit Pint
+  knows (`Q_Btu_per_hr`, `CP_kcal_per_h_per_K`...); converted by `pinch/units.py` (powers to kW, loads per
+  product kept).
+* *Guided extraction* (`pinch/extraction.py`): one row per candidate duty with its flowsheet streams, supply and
+  target temperatures, the duty or mass flow × cp (+ latent heat), and the reasoning; rows left out keep their
+  reason. This is the record Varbanov, Yong, Klemeš and Chin (2019, *CET* 76, 67-72) propose so that extraction
+  choices can be traced. Checks: a stream taken twice, mixing at an inlet, a phase change at constant CP, a duty
+  at one temperature (modelled over 1 K). Step 2 lists the streams near the pinch, whose data matter most.
+* *Aspen Plus export* (`pinch/aspen_import.py`): the CSV folder written by the Python-Aspen Plus interface of
+  Maier et al. (2025, *Syst. Control Trans.* 4, 1631-1636), zipped. Heater blocks and both sides of HeatX blocks
+  become candidate rows in the guided extraction, units read from the headers; blocks with several inlets or no
+  duty are left out with the reason. Aspen itself runs only on the Windows machine with its licence (COM
+  automation), so the app reads the export and does not drive Aspen.
+* *Project file* (`pinch/project.py`): every input (stream table, sink levels, temperatures, basis, prices, the
+  extraction table) saved as one JSON file and validated when reopened; results are recomputed.
+
+**COP ranges** (step 4, `pinch/cop_data.py`). The design uses one Lorenz efficiency for every unit. Next to it,
+each unit's COP is shown from the manufacturer-data correlations of Jesper et al. (2021, *Renew. Sustain. Energy
+Rev.* 137, 110646; ± one standard deviation; flagged when extrapolated), a glide-matched blend (+16 %, Brendel et
+al. 2024) for sink glides of 25 K or more, a steam-generating heat pump fit (Arpagaus 2026) above 100 °C, and the
+Lorenz model with the efficiencies achieved by IEA HPT Annex 58 demonstration plants. The design is re-sized and
+re-costed on each basis, and the brewery's sensitivity list carries the manufacturer-data rows into RQ1-RQ3. The
+correlations come from small-glide machines: every closed-cycle demonstration plant beats them, by 4-13 % below
+50 K sink glide and 25-55 % above (`outputs/brewery/vendor_data_check.md`), so they bound large-glide units from
+below.
 
 Charts are interactive (Altair, `pinch/charts.py`). The theme is a plain technical-document style
 (IBM Plex Sans and Mono, served by the app) with light and dark modes; colours carry meaning: **red
@@ -901,12 +929,17 @@ data/
                              demonstration data, brewery benchmarks (FDM BREF, TNO), ERSE tariff changes
 pinch/
   streams.py                 Load, validate, shift, energy balance
+  units.py                   Stream data in any unit (°F, K, Btu/h, kcal/h, cal/s...) converted with Pint
+  extraction.py              Guided stream data extraction, reasoning and excluded streams kept (Varbanov et al. 2019)
+  aspen_import.py            Candidate streams from an Aspen Plus export (Heater and HeatX blocks, units from the headers)
+  project.py                 Project files: every app input saved to and reopened from validated JSON
   problem_table_algorithm.py Problem Table Algorithm (cascade, targets, pinch; the GCC is its feasible cascade)
   curves.py                  Composite curves (one piecewise composite sum, also used by area and network)
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
   pressure_drop.py           Film coefficients from allowable pressure drop and fouling (Polley et al. 1990, 1991)
   heat_pump.py               Lorenz COP, heat pump units, integration, GCC sizing
+  cop_data.py                COP from manufacturer and demonstration data per lift, as ranges (Jesper et al. 2021)
   design.py                  Automatic multi-level design and plausibility screening
   cycle.py                   Vapour-compression cycles with CoolProp (step 4b)
   cycle_analysis.py          Working-fluid screening of a design; selected fluid per unit

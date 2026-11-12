@@ -1,0 +1,3 @@
+unit,T_sink_in_C,T_sink_out_C,T_source_in_C,lift_K,sink_glide_K,COP_basis,eta_lorenz_basis,fit,COP_fit,COP_fit_minus_sigma,COP_fit_plus_sigma,fit_in_range,eta_equivalent_fit,COP_glide_blend,COP_sghp_fit,COP_demo_eta_min,COP_demo_eta_median,COP_demo_eta_max
+HTHP 160 °C,160.0,160.0,130.0,30.0,0.0,7.941,0.55,jesper2021_vhthp,5.681,5.491,5.871,False,0.3935,,4.636,4.996,5.349,7.869
+HTHP 200 °C,200.0,200.0,130.0,70.0,0.0,3.718,0.55,jesper2021_vhthp,2.84,2.65,3.03,False,0.4201,,2.528,2.339,2.504,3.684

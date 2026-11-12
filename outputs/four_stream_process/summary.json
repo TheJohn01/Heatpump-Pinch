@@ -64,6 +64,90 @@
   },
   "eta_lorenz_sensitivity": [],
   "cycle_based_design": {},
+  "cop_ranges": {
+    "note": "COP of each heat pump on four bases: the case's Lorenz efficiency; manufacturer-data fits (Jesper et al. 2021) at lift = sink outlet - source inlet, with their standard deviation; a glide-matched blend (+16 %, Brendel et al. 2024) for sink glides of 25 K or more; the Lorenz model with the efficiencies achieved by IEA HPT Annex 58 closed-cycle demonstration plants (min, median, max). The fits come from small-glide machines, so for a large sink glide they are a pessimistic bound. fit_in_range = False: the point is outside the data behind the fit.",
+    "units": [
+      {
+        "unit": "HTHP 160 °C",
+        "T_sink_in_C": 160.0,
+        "T_sink_out_C": 160.0,
+        "T_source_in_C": 130.0,
+        "lift_K": 30.0,
+        "sink_glide_K": 0.0,
+        "COP_basis": 7.941,
+        "eta_lorenz_basis": 0.55,
+        "fit": "jesper2021_vhthp",
+        "COP_fit": 5.681,
+        "COP_fit_minus_sigma": 5.491,
+        "COP_fit_plus_sigma": 5.871,
+        "fit_in_range": false,
+        "eta_equivalent_fit": 0.3935,
+        "COP_glide_blend": NaN,
+        "COP_sghp_fit": 4.636,
+        "COP_demo_eta_min": 4.996,
+        "COP_demo_eta_median": 5.349,
+        "COP_demo_eta_max": 7.869
+      },
+      {
+        "unit": "HTHP 200 °C",
+        "T_sink_in_C": 200.0,
+        "T_sink_out_C": 200.0,
+        "T_source_in_C": 130.0,
+        "lift_K": 70.0,
+        "sink_glide_K": 0.0,
+        "COP_basis": 3.718,
+        "eta_lorenz_basis": 0.55,
+        "fit": "jesper2021_vhthp",
+        "COP_fit": 2.84,
+        "COP_fit_minus_sigma": 2.65,
+        "COP_fit_plus_sigma": 3.03,
+        "fit_in_range": false,
+        "eta_equivalent_fit": 0.4201,
+        "COP_glide_blend": NaN,
+        "COP_sghp_fit": 2.528,
+        "COP_demo_eta_min": 2.339,
+        "COP_demo_eta_median": 2.504,
+        "COP_demo_eta_max": 3.684
+      }
+    ],
+    "designs": [
+      {
+        "basis": "case basis (η_L 0.55)",
+        "COP HTHP 160 °C": 7.941,
+        "COP HTHP 200 °C": 3.718,
+        "COP_system": 4.722,
+        "fraction_of_Qh_min_electrified": 0.5
+      },
+      {
+        "basis": "manufacturer-data fit - 1 sigma",
+        "COP HTHP 160 °C": 5.491,
+        "COP HTHP 200 °C": 2.65,
+        "COP_system": 3.342,
+        "fraction_of_Qh_min_electrified": 0.5
+      },
+      {
+        "basis": "manufacturer-data fit",
+        "COP HTHP 160 °C": 5.681,
+        "COP HTHP 200 °C": 2.84,
+        "COP_system": 3.55,
+        "fraction_of_Qh_min_electrified": 0.5
+      },
+      {
+        "basis": "manufacturer-data fit + 1 sigma",
+        "COP HTHP 160 °C": 5.871,
+        "COP HTHP 200 °C": 3.03,
+        "COP_system": 3.757,
+        "fraction_of_Qh_min_electrified": 0.5
+      },
+      {
+        "basis": "manufacturer-data fit, glide-matched blend",
+        "COP HTHP 160 °C": 5.681,
+        "COP HTHP 200 °C": 2.84,
+        "COP_system": 3.55,
+        "fraction_of_Qh_min_electrified": 0.5
+      }
+    ]
+  },
   "area_targeting": {
     "skipped": "no annual basis (needed to convert loads to kW)"
   }

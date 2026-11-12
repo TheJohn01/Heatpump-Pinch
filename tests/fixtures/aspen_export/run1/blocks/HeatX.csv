@@ -1,0 +1,2 @@
+,aspen_id,has_hcurve,hierarchy,name,path,status,typ,C(IN),C(OUT),H(IN),H(OUT),"('area', 'sqm')","('duty', 'cal/sec')"
+0,HX1,False,[],HX1,\Data\Blocks\HX1,Available,HeatX,['S9'],['S10'],['S7'],['S8'],20.0,59751.434

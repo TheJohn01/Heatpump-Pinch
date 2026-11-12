@@ -189,6 +189,43 @@ def eta_lorenz_sensitivity(case: Case, streams, energy_unit: str, out: Path | No
     return rows
 
 
+#: COP bases of ``cop_basis_designs``: label -> (sigma, glide gain); see pinch.cop_data
+COP_BASES = {"manufacturer-data fit - 1 sigma": (-1.0, 0.0), "manufacturer-data fit": (0.0, 0.0),
+             "manufacturer-data fit + 1 sigma": (1.0, 0.0), "manufacturer-data fit, glide-matched blend": (0.0, 0.16)}
+
+
+def cop_basis_designs(case: Case, streams, energy_unit: str) -> list[dict]:
+    """Re-size and re-cost the design with each COP basis of ``COP_BASES`` (manufacturer data, pinch.cop_data),
+    after the case's own basis. Rows: basis, unit COPs, system COP and the headline economics (if a basis)."""
+    from pinch.cop_data import apply_vendor
+    from pinch.design import design_from_gcc
+    bases: list[tuple[str, Case]] = [(f"case basis (η_L {case.eta_lorenz:g})", case)]
+    for label, (sigma, gain) in COP_BASES.items():
+        try:
+            bases.append((label, apply_vendor(case, streams, sigma, gain)))
+        except ValueError as exc:      # e.g. a fit below COP 1 at a very large lift: reported, not computed
+            bases.append((f"{label} (not computed: {exc})", None))      # type: ignore[arg-type]
+    econ = case.basis is not None and bool(case.economics)
+    if econ:
+        _, params, to_MWh = _params_and_converter(case, energy_unit)
+    rows = []
+    for label, c in bases:
+        if c is None:
+            rows.append({"basis": label})
+            continue
+        d = design_from_gcc(streams, c.sink_levels, c.eta_lorenz, c.source_T_C)
+        row = {"basis": label, **{f"COP {u.name}": round(u.COP, 3) for u in d.units},
+               "COP_system": round(d.COP_system, 3),
+               "fraction_of_Qh_min_electrified": round(d.fraction_electrified, 4)}
+        if econ:
+            core = _core(d, to_MWh(d.Qh_before), to_MWh, params, streams, case.ambient_T_C)
+            h = _headline(core, params)
+            row |= {k: h[k] for k in ("full_capex_EUR", "full_savings_EUR", "full_payback_years", "full_npv_EUR",
+                                      "full_co2_avoided_t", "full_design_break_even_ratio_NPV")}
+        rows.append(row)
+    return rows
+
+
 def cycle_based_design(case: Case, streams, energy_unit: str, selected: dict | None) -> dict:
     """Re-size and re-cost the design with the cycle-based Lorenz efficiency of each unit (step 4b).
 

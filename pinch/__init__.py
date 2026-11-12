@@ -3,11 +3,16 @@
 Modules (a test checks that this list and README.md name every module)
 -------
 streams                  Stream data loading, validation and energy-balance checks (step 1).
+units                    Stream data in any unit (°F, K, Btu/h, kcal/h, cal/s...) converted with Pint (step 1).
+extraction               Guided stream data extraction with the reasoning kept (Varbanov et al. 2019) (step 1).
+aspen_import             Candidate streams from an Aspen Plus export (Python-Aspen interface of Maier et al. 2025).
+project                  Project files: every input of an app session saved and reopened as JSON (step 1).
 problem_table_algorithm  Problem Table Algorithm: heat cascade, targets, pinch; the GCC (step 2).
 curves                   Composite curves; the one piecewise composite sum (step 2).
 area                     Area and units targets, ΔTmin supertargeting (step 3).
 area_analysis            Per-case supertargeting, RQ2 (step 3).
 heat_pump                Lorenz COP, heat pump units, integration, sizing read from the GCC (step 4).
+cop_data                 COP from manufacturer and demonstration data per lift, as ranges (Jesper et al. 2021) (step 4).
 design                   Multi-level design from the GCC, partial designs, plausibility screening (step 4).
 cycle                    Vapour-compression cycles with CoolProp (step 4b).
 cycle_analysis           Working-fluid screening of a design (step 4b).

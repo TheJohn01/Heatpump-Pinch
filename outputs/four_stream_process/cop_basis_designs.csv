@@ -1,0 +1,6 @@
+basis,COP HTHP 160 °C,COP HTHP 200 °C,COP_system,fraction_of_Qh_min_electrified
+case basis (η_L 0.55),7.941,3.718,4.722,0.5
+manufacturer-data fit - 1 sigma,5.491,2.65,3.342,0.5
+manufacturer-data fit,5.681,2.84,3.55,0.5
+manufacturer-data fit + 1 sigma,5.871,3.03,3.757,0.5
+"manufacturer-data fit, glide-matched blend",5.681,2.84,3.55,0.5

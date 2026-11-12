@@ -118,7 +118,7 @@ def consolidate_case(case: Case, streams, selected: dict | None) -> pd.DataFrame
         if sens.uses_cycle_screening and not selected:
             continue
         rows.append({"sensitivity": sens.label, "basis": basis,
-                     **answers(apply(case, kind, value, selected), streams, unit, selected)})
+                     **answers(apply(case, kind, value, selected, streams), streams, unit, selected)})
     return pd.DataFrame(rows)
 
 

@@ -1,0 +1,6 @@
+basis,COP HP warm (milk preheat),COP HTHP 105 °C,COP_system,fraction_of_Qh_min_electrified,full_capex_EUR,full_savings_EUR,full_payback_years,full_npv_EUR,full_co2_avoided_t,full_design_break_even_ratio_NPV
+case basis (η_L 0.5),7.863,2.101,2.423,1.0,5104568.0,286496.0,17.82,-2892318.0,4852.0,1.373
+manufacturer-data fit - 1 sigma,3.702,1.76,1.945,1.0,5104568.0,28918.0,176.52,-4881269.0,4545.0,1.102
+manufacturer-data fit,3.982,1.95,2.149,1.0,5104568.0,152828.0,33.4,-3924472.0,4693.0,1.218
+manufacturer-data fit + 1 sigma,4.262,2.14,2.353,1.0,5104568.0,255142.0,20.01,-3134431.0,4815.0,1.333
+"manufacturer-data fit, glide-matched blend",4.619,1.95,2.179,1.0,5104568.0,168813.0,30.24,-3801040.0,4712.0,1.235

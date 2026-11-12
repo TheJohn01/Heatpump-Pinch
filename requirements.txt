@@ -17,3 +17,4 @@ tabulate==0.10.0
 reportlab==5.0.1
 python-docx==1.2.0
 resvg-py==0.5.0
+pint==0.25.3

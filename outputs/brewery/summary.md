@@ -100,6 +100,23 @@ Existing network 'N0 existing': Q̇h 11.3 (target 10.0424), energy gap 1.2577 = 
 
 System COP 2.676; full-design payback 7.54 y, NPV 42,454 EUR; grass-roots HP share of Q̇h,min with payback ≤ threshold 72.5 %; full-design break-even ratio 2.252.
 
+## COP ranges from manufacturer and demonstration data (step 4, pinch.cop_data)
+
+COP of each heat pump on four bases: the case's Lorenz efficiency; manufacturer-data fits (Jesper et al. 2021) at lift = sink outlet - source inlet, with their standard deviation; a glide-matched blend (+16 %, Brendel et al. 2024) for sink glides of 25 K or more; the Lorenz model with the efficiencies achieved by IEA HPT Annex 58 closed-cycle demonstration plants (min, median, max). The fits come from small-glide machines, so for a large sink glide they are a pessimistic bound. fit_in_range = False: the point is outside the data behind the fit.
+
+| Unit | Lift [K] | Sink glide [K] | Case basis | Fit −σ / fit / +σ | In fit range | Glide blend | Demonstration η_L min / median / max |
+|---|---|---|---|---|---|---|---|
+| Warm-water HP | 83 | 64 | 3.23 | 1.35 / 1.63 / 1.91 | no (extrapolated) | 1.89 | 2.23 / 2.39 / 3.52 |
+| HTHP (wort boiling) | 104 | 0 | 1.81 | 1.52 / 1.71 / 1.90 | no (extrapolated) | – | 1.25 / 1.34 / 1.97 |
+
+| COP basis | System COP | Full-design payback [y] | NPV [EUR] | Break-even ratio (NPV = 0) |
+|---|---|---|---|---|
+| case basis (η_L 0.5) | 2.654 | 7.66 | 15,027 | 2.229 |
+| manufacturer-data fit - 1 sigma | 1.393 | inf | -3,060,445 | 1.039 |
+| manufacturer-data fit | 1.652 | inf | -1,996,560 | 1.274 |
+| manufacturer-data fit + 1 sigma | 1.908 | 27.07 | -1,281,667 | 1.503 |
+| manufacturer-data fit, glide-matched blend | 1.838 | 41.17 | -1,456,887 | 1.439 |
+
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 
 | η_L | System COP | Full-design payback [y] | NPV [EUR] | Grass-roots HP share, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |

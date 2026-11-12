@@ -21,6 +21,11 @@ and ``CP_MW_per_K`` -> heat loads in "MW". Extra columns (e.g. ``note``) are kep
 out of the calculation. An Excel workbook (.xlsx) with the same columns is read
 from its sheet "streams", or from the first sheet if there is none.
 
+Other units
+-----------
+Temperatures in °F, K or R (``T_in_F``...), shifts in °F (``dT_shift_F``) and heat in any unit Pint knows
+(``Q_Btu_per_hr``, ``CP_kcal_per_h_per_K``...) are converted first (``pinch.units.standardise_table``).
+
 Segmented streams (variable heat capacity)
 ------------------------------------------
 A stream whose CP changes with temperature is entered as several rows, one per
@@ -175,6 +180,9 @@ def streams_from_frame(df: pd.DataFrame, source: str = "table") -> StreamSet:
     df = df.copy()
     path = Path(source)
 
+    from pinch.units import needs_conversion, standardise_table
+    if needs_conversion(df):                           # other units (°F, K, Btu/h, ...): converted first
+        df, _ = standardise_table(df)
     missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
     if missing:
         raise ValueError(f"{path.name}: missing columns {missing}")

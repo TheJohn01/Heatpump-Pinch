@@ -613,6 +613,23 @@ def build_report(case: Case, streams: StreamSet, summary: dict, tables: dict[str
             f"{u}: {d.get('fluid', 'n/a')}, {d.get('layout', '')}, COP {num(d.get('COP'), 2)} (η_{{L}} "
             f"{num(d.get('eta_lorenz'), 2)})" for u, d in cyc["units"].items())
             + f". System COP with the cycle model: {num(cyc.get('COP_system'), 2)}.")
+    cr = s.get("cop_ranges") or {}
+    if cr.get("units"):
+        b.p("COP from published data. The Lorenz efficiency of the design is one number for every unit, whereas the "
+            "second-law efficiency of real heat pumps varies with the lift (Jesper et al. 2021). Table "
+            f"{_count(rep, Table) + 1} sets each unit's COP against manufacturer-data fits (lift = sink outlet − "
+            "source inlet; ± one standard deviation), a glide-matched blend (+16 % for sink glides of 25 K or more, "
+            "Brendel et al. 2024) and the Lorenz model with the efficiencies achieved by IEA HPT Annex 58 "
+            "demonstration plants. The fits come from small-glide machines, so they bound a large-glide unit from "
+            "below; 'no' in the range column means the fit is extrapolated.")
+        b.table("COP of each heat pump on each basis: case basis, manufacturer-data fit (−σ / fit / +σ), glide-matched "
+                "blend and demonstration-plant Lorenz efficiencies (min / median / max).",
+                ("Unit", "Lift [K]", "Case basis", "Fit −σ / fit / +σ", "In range", "Glide blend", "Demonstrations"),
+                [(u["unit"], f"{u['lift_K']:g}", num(u["COP_basis"], 2),
+                  f"{num(u['COP_fit_minus_sigma'], 2)} / {num(u['COP_fit'], 2)} / {num(u['COP_fit_plus_sigma'], 2)}",
+                  "yes" if u["fit_in_range"] else "no", num(u["COP_glide_blend"], 2),
+                  " / ".join(num(u.get(k), 2) for k in ("COP_demo_eta_min", "COP_demo_eta_median", "COP_demo_eta_max")))
+                 for u in cr["units"]], (0.2, 0.09, 0.11, 0.2, 0.09, 0.11, 0.2))
     at = s.get("area_targeting") or {}
     if at.get("RQ2"):
         b.h("2.4 Minimum approach temperature (supertargeting)", 2)
@@ -800,6 +817,12 @@ def build_report(case: Case, streams: StreamSet, summary: dict, tables: dict[str
                       ratio(gr.get("full_design_break_even_ratio_NPV")))]
                     + [(r["sensitivity"], years(r["full_payback_years"]), eur(r["full_npv_EUR"]),
                         ratio(r["full_design_break_even_ratio_NPV"])) for r in sens], (0.5, 0.16, 0.18, 0.16))
+        designs = [d for d in (s.get("cop_ranges") or {}).get("designs", []) if "full_npv_EUR" in d]
+        if designs:
+            b.table("Heat pumps re-sized on each COP basis (section 2.3): system COP, payback, NPV and break-even price "
+                    "ratio of the full design.", ("COP basis", "System COP", "Payback", "NPV", "Break-even ratio"),
+                    [(d["basis"], num(d["COP_system"], 2), years(d["full_payback_years"]), eur(d["full_npv_EUR"]),
+                      ratio(d["full_design_break_even_ratio_NPV"])) for d in designs], (0.4, 0.14, 0.14, 0.17, 0.15))
         eta = s.get("eta_lorenz_sensitivity") or []
         if eta:
             b.table("Heat pumps re-sized for each Lorenz efficiency: system COP, payback and NPV of the full design.",
@@ -832,8 +855,15 @@ def build_report(case: Case, streams: StreamSet, summary: dict, tables: dict[str
                  ("CO2 avoided", f"{num(per['co2_avoided_kg_per_MWh'], 0)} kg/MWh"),
                  ("Primary energy saved", f"{num(per['pe_saved_per_MWh'], 2)} MWh/MWh")], (0.65, 0.35))
         top = ", ".join(swings["input"].head(3))
-        b.p(f"**Significant issues.** The inputs that move the NPV most are: {top}. The result also depends on the "
-            "heat pump efficiency (Lorenz efficiency, section 5), which is not measured at the site.")
+        issue = (f"**Significant issues.** The inputs that move the NPV most are: {top}. The result also depends on "
+                 "the heat pump efficiency (Lorenz efficiency, section 5), which is not measured at the site.")
+        fit_row = next((d for d in (s.get("cop_ranges") or {}).get("designs", [])
+                        if d.get("basis") == "manufacturer-data fit" and "full_npv_EUR" in d), None)
+        if fit_row:
+            issue += (f" With COPs from manufacturer-data fits instead of the case basis, the full design's NPV is "
+                      f"{eur(fit_row['full_npv_EUR'])} (payback {years(fit_row['full_payback_years'])}); the fits are a "
+                      "lower bound for large-glide units (section 2.3).")
+        b.p(issue)
         b.p("**Limitations.** Stream data are steady averages over the operating hours, so batch timing and storage "
             "are not captured unless the case models them; prices and efficiencies are constant over the horizon; "
             "capital costs come from generic cost functions (study-estimate accuracy); the electrical connection, "
@@ -882,6 +912,11 @@ def build_report(case: Case, streams: StreamSet, summary: dict, tables: dict[str
                 seen.add(v)
                 b.p(f"- {k}: {_short(v, 600)}")
     return rep
+
+
+def _count(rep: Report, kind: type) -> int:
+    """Number of blocks of ``kind`` so far (the next one gets this number + 1)."""
+    return sum(isinstance(b, kind) for b in rep.blocks)
 
 
 def _table_number(rep: Report, prefix: str) -> str:

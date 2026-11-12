@@ -318,3 +318,35 @@ def test_dashboard_offers_the_tea_report_as_pdf_and_word():
     _ok(at)
     labels = [b.proto.label for b in at.get("download_button")]
     assert "TEA report (PDF)" in labels and "TEA report (Word)" in labels
+
+
+def test_guided_extraction_builds_the_stream_table():
+    """Step 1, Guided extraction: records with reasoning -> 'Use as stream table' -> targets in step 2."""
+    import math
+
+    from pinch.extraction import COLUMNS
+    at = _app()
+    base = {c: math.nan for c in COLUMNS} | {"include": True, "soft_target": False, "reasoning": "process need"}
+    at.session_state["extraction_df"] = pd.DataFrame([
+        base | {"stream": "Feed", "T_supply_C": 20, "T_target_C": 180, "duty": 32},          # Kemp's four streams, MW
+        base | {"stream": "Product 1", "T_supply_C": 250, "T_target_C": 40, "duty": -31.5},
+        base | {"stream": "Feed 2", "T_supply_C": 140, "T_target_C": 230, "duty": 27},
+        base | {"stream": "Product 2", "T_supply_C": 200, "T_target_C": 80, "duty": -30},
+        base | {"include": False, "stream": "Cooling water", "reasoning": "utility"}])
+    at.session_state["extraction_unit"] = "MW"
+    at.run()
+    _ok(at)
+    next(b for b in at.button if b.label == "Use as stream table").click().run()
+    _ok(at)
+    assert at.session_state["choice"].startswith("Upload")
+    at = _goto(at, STEPS[1])
+    _ok(at)
+    shown = {m.label: m.value for m in at.metric}
+    assert shown[":red[Q̇h,min] [MW]"] == "7.5"          # the four-stream answer with ΔT_shift 5 K
+
+
+def test_project_save_button(brewery):
+    """Step 1 offers the project file (round trip and validation: tests/test_data_input.py)."""
+    at = _goto(brewery, STEPS[0])
+    _ok(at)
+    assert "Save project (.json)" in [b.proto.label for b in at.get("download_button")]

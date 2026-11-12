@@ -27,9 +27,10 @@ import pandas as pd
 from pinch import energy_balance, load_streams, problem_table, with_extra_shift
 from pinch.area_analysis import area_targeting_outputs
 from pinch.case import Case, load_case, to_MWh_per_year
+from pinch.cop_data import COP_RANGES_NOTE, cop_ranges, demonstration_eta_range
 from pinch.cycle_analysis import load_selected
 from pinch.design import HeatPumpDesign, design_from_gcc, plausibility_warnings, source_warnings
-from pinch.economic_analysis import cycle_based_design, economics_outputs, eta_lorenz_sensitivity
+from pinch.economic_analysis import cop_basis_designs, cycle_based_design, economics_outputs, eta_lorenz_sensitivity
 from pinch.heat_pump import andersen2024_eta_lorenz
 from pinch.plotting import composite_curves_figure, gcc_figure, gcc_with_units_figure
 from pinch.provenance import deterministic_record, write_run_record
@@ -151,6 +152,12 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
     eta_rows = eta_lorenz_sensitivity(case, streams, unit)
     summary["eta_lorenz_sensitivity"] = eta_rows
     summary["cycle_based_design"] = cycle_based_design(case, streams, unit, cycle_selected)
+    ranges = cop_ranges(case, streams, demonstration_eta_range())
+    if len(ranges):
+        tables["cop_ranges"] = ranges
+        designs = cop_basis_designs(case, streams, unit)
+        tables["cop_basis_designs"] = pd.DataFrame(designs)
+        summary["cop_ranges"] = {"note": COP_RANGES_NOTE, "units": ranges.to_dict("records"), "designs": designs}
     if case.retrofit and case.basis is not None:
         from pinch.economic_analysis import _params_and_converter
         from pinch.retrofit import run_retrofit
@@ -302,6 +309,25 @@ def markdown(s: dict) -> str:
                           f"NPV {e['full_npv_EUR']:,.0f} EUR; grass-roots HP share of Q̇h,min with payback ≤ threshold "
                           f"{100 * e['grass_roots_hp_share_payback_ok']:.1f} %; full-design break-even ratio "
                           f"{e['full_design_break_even_ratio_NPV']}."]
+    cr = s.get("cop_ranges")
+    if cr:
+        lines += ["", "## COP ranges from manufacturer and demonstration data (step 4, pinch.cop_data)", "",
+                  cr["note"], "",
+                  "| Unit | Lift [K] | Sink glide [K] | Case basis | Fit −σ / fit / +σ | In fit range | Glide blend | "
+                  "Demonstration η_L min / median / max |", "|---|---|---|---|---|---|---|---|"]
+        for u in cr["units"]:
+            blend = "–" if u["COP_glide_blend"] != u["COP_glide_blend"] else f"{u['COP_glide_blend']:.2f}"
+            demo = (f"{u['COP_demo_eta_min']:.2f} / {u['COP_demo_eta_median']:.2f} / {u['COP_demo_eta_max']:.2f}"
+                    if "COP_demo_eta_min" in u else "–")
+            lines.append(f"| {u['unit']} | {u['lift_K']:g} | {u['sink_glide_K']:g} | {u['COP_basis']:.2f} | "
+                         f"{u['COP_fit_minus_sigma']:.2f} / {u['COP_fit']:.2f} / {u['COP_fit_plus_sigma']:.2f} | "
+                         f"{'yes' if u['fit_in_range'] else 'no (extrapolated)'} | {blend} | {demo} |")
+        if any("full_payback_years" in d for d in cr["designs"]):
+            lines += ["", "| COP basis | System COP | Full-design payback [y] | NPV [EUR] | Break-even ratio (NPV = 0) |",
+                      "|---|---|---|---|---|"]
+            lines += [f"| {d['basis']} | {d.get('COP_system', '–')} | {d.get('full_payback_years', '–')} | "
+                      f"{d['full_npv_EUR']:,.0f} | {d.get('full_design_break_even_ratio_NPV', '–')} |"
+                      if "full_npv_EUR" in d else f"| {d['basis']} | – | – | – | – |" for d in cr["designs"]]
     if s.get("eta_lorenz_sensitivity"):
         lines += ["", "### Lorenz-efficiency sensitivity (heat pumps re-sized)", "",
                   "| η_L | System COP | Full-design payback [y] | NPV [EUR] | Grass-roots HP share, payback ≤ threshold | "

@@ -60,7 +60,7 @@
   "run": {
     "tool_version": "0.10.0",
     "inputs_sha256": {
-      "cases/brewery.json": "bb0a21f528af44ad5bc37a0e5fe9cc16c0be324390aa894faddd7839b576f94d",
+      "cases/brewery.json": "fef3b5c694519d08082f7a144cb9aad1b749bb605dfad40e09f42b0e60e05365",
       "data/brewery_networks.json": "2b5fe7b9fefc0f82dfb1acba833bbcb54c7cbe9080f375c66c3093b5d01b406e",
       "data/brewery_streams.csv": "70a7b23ff21b25cdd95413a64ba682fdef48d53692456ebde9efa368e11daec2"
     }
@@ -732,6 +732,120 @@
       "full_design_break_even_ratio_NPV": 2.252,
       "full_design_break_even_ratio_payback": 1.437
     }
+  },
+  "cop_ranges": {
+    "note": "COP of each heat pump on four bases: the case's Lorenz efficiency; manufacturer-data fits (Jesper et al. 2021) at lift = sink outlet - source inlet, with their standard deviation; a glide-matched blend (+16 %, Brendel et al. 2024) for sink glides of 25 K or more; the Lorenz model with the efficiencies achieved by IEA HPT Annex 58 closed-cycle demonstration plants (min, median, max). The fits come from small-glide machines, so for a large sink glide they are a pessimistic bound. fit_in_range = False: the point is outside the data behind the fit.",
+    "units": [
+      {
+        "unit": "Warm-water HP",
+        "T_sink_in_C": 18.0,
+        "T_sink_out_C": 82.0,
+        "T_source_in_C": -1.0,
+        "lift_K": 83.0,
+        "sink_glide_K": 64.0,
+        "COP_basis": 3.225,
+        "eta_lorenz_basis": 0.5,
+        "fit": "jesper2021_hthp",
+        "COP_fit": 1.631,
+        "COP_fit_minus_sigma": 1.351,
+        "COP_fit_plus_sigma": 1.911,
+        "fit_in_range": false,
+        "eta_equivalent_fit": 0.2529,
+        "COP_glide_blend": 1.892,
+        "COP_sghp_fit": NaN,
+        "COP_demo_eta_min": 2.232,
+        "COP_demo_eta_median": 2.39,
+        "COP_demo_eta_max": 3.515
+      },
+      {
+        "unit": "HTHP (wort boiling)",
+        "T_sink_in_C": 103.0,
+        "T_sink_out_C": 103.0,
+        "T_source_in_C": -1.0,
+        "lift_K": 104.0,
+        "sink_glide_K": 0.0,
+        "COP_basis": 1.808,
+        "eta_lorenz_basis": 0.5,
+        "fit": "jesper2021_vhthp",
+        "COP_fit": 1.709,
+        "COP_fit_minus_sigma": 1.519,
+        "COP_fit_plus_sigma": 1.899,
+        "fit_in_range": false,
+        "eta_equivalent_fit": 0.4724,
+        "COP_glide_blend": NaN,
+        "COP_sghp_fit": 1.904,
+        "COP_demo_eta_min": 1.251,
+        "COP_demo_eta_median": 1.34,
+        "COP_demo_eta_max": 1.971
+      }
+    ],
+    "designs": [
+      {
+        "basis": "case basis (η_L 0.5)",
+        "COP Warm-water HP": 3.225,
+        "COP HTHP (wort boiling)": 1.808,
+        "COP_system": 2.654,
+        "fraction_of_Qh_min_electrified": 1.0,
+        "full_capex_EUR": 1793176.0,
+        "full_savings_EUR": 234171.0,
+        "full_payback_years": 7.66,
+        "full_npv_EUR": 15027.0,
+        "full_co2_avoided_t": 1835.0,
+        "full_design_break_even_ratio_NPV": 2.229
+      },
+      {
+        "basis": "manufacturer-data fit - 1 sigma",
+        "COP Warm-water HP": 1.351,
+        "COP HTHP (wort boiling)": 1.519,
+        "COP_system": 1.393,
+        "fraction_of_Qh_min_electrified": 1.0,
+        "full_capex_EUR": 1793176.0,
+        "full_savings_EUR": -164117.0,
+        "full_payback_years": Infinity,
+        "full_npv_EUR": -3060445.0,
+        "full_co2_avoided_t": 1460.0,
+        "full_design_break_even_ratio_NPV": 1.039
+      },
+      {
+        "basis": "manufacturer-data fit",
+        "COP Warm-water HP": 1.631,
+        "COP HTHP (wort boiling)": 1.709,
+        "COP_system": 1.652,
+        "fraction_of_Qh_min_electrified": 1.0,
+        "full_capex_EUR": 1793176.0,
+        "full_savings_EUR": -26339.0,
+        "full_payback_years": Infinity,
+        "full_npv_EUR": -1996560.0,
+        "full_co2_avoided_t": 1590.0,
+        "full_design_break_even_ratio_NPV": 1.274
+      },
+      {
+        "basis": "manufacturer-data fit + 1 sigma",
+        "COP Warm-water HP": 1.911,
+        "COP HTHP (wort boiling)": 1.899,
+        "COP_system": 1.908,
+        "fraction_of_Qh_min_electrified": 1.0,
+        "full_capex_EUR": 1793176.0,
+        "full_savings_EUR": 66243.0,
+        "full_payback_years": 27.07,
+        "full_npv_EUR": -1281667.0,
+        "full_co2_avoided_t": 1677.0,
+        "full_design_break_even_ratio_NPV": 1.503
+      },
+      {
+        "basis": "manufacturer-data fit, glide-matched blend",
+        "COP Warm-water HP": 1.892,
+        "COP HTHP (wort boiling)": 1.709,
+        "COP_system": 1.838,
+        "fraction_of_Qh_min_electrified": 1.0,
+        "full_capex_EUR": 1793176.0,
+        "full_savings_EUR": 43551.0,
+        "full_payback_years": 41.17,
+        "full_npv_EUR": -1456887.0,
+        "full_co2_avoided_t": 1656.0,
+        "full_design_break_even_ratio_NPV": 1.439
+      }
+    ]
   },
   "retrofit": {
     "baseline": {

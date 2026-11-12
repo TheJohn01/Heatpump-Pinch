@@ -26,6 +26,20 @@ MVR (open cycle, no evaporator) is shown for context; W1 uses the closed-cycle c
 
 Supplier figures exclude installation and integration; the case cost function includes them.
 
+## Manufacturer-data COP fits against the demonstration plants
+
+Fits of Jesper et al. (2021) (`pinch.cop_data`) at lift = sink outlet - source inlet, against the reported COP of the closed-cycle vapour-compression plants. Deviation = (reported - fit) / fit.
+
+| No. | Refrigerant | Lift [K] | Sink glide [K] | Fit | In data range | COP reported | COP fit | Deviation |
+|---|---|---|---|---|---|---|---|---|
+| 2 | R744 | 90 | 100 | jesper2021_vhthp | yes | 3.1 | 2.00 | +55 % |
+| 3 | R-1336mzz(Z) | 62 | 42 | jesper2021_vhthp | yes | 3.2 | 2.88 | +11 % |
+| 6 | R245fa | 50 | 5 | jesper2021_vhthp | yes | 3.5 | 3.35 | +4 % |
+| 7 | R134a | 75 | 60 | jesper2021_vhthp | yes | 3 | 2.40 | +25 % |
+| 9 | R-1336mzz(Z) | 37 | 25 | jesper2021_vhthp | yes | 5 | 4.42 | +13 % |
+
+All 5 plants reach or beat the fit: those with sink glides below 50 K by 4 to 13 %, those with 50 K or more by 25 to 55 %. The fits come from small-glide machines and bound large-glide units from below (pinch.cop_data).
+
 ## Verdicts
 
 | Verdict | Passed | Detail |

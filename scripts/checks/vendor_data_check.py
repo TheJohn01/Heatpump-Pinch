@@ -28,22 +28,17 @@ from pathlib import Path
 
 import pandas as pd
 
+from pinch import cop_data
 from pinch.case import load_case
 from pinch.economics import load_economics
-from pinch.heat_pump import lorenz_cop
 
 ROOT = Path(__file__).resolve().parents[2]   # repository root
 SRC = ROOT / "data" / "sources"
 
 
 def demonstration_eta() -> pd.DataFrame:
-    """Demonstration cases with their Lorenz COP and achieved Lorenz efficiency."""
-    d = pd.read_csv(SRC / "annex58_demonstration_cases.csv", comment="#")
-    cop_l = [lorenz_cop(r.T_sink_in_C, r.T_sink_out_C, r.T_source_in_C, r.T_source_out_C, 1.0) for r in d.itertuples()]
-    d["COP_Lorenz"] = [round(c, 3) for c in cop_l]
-    d["eta_lorenz"] = (d["COP_heating"] / d["COP_Lorenz"]).round(3)
-    d["closed_cycle"] = ~d["hp_type"].str.startswith("MVR")
-    return d
+    """Demonstration cases with their Lorenz COP and achieved Lorenz efficiency (pinch.cop_data)."""
+    return cop_data.demonstration_eta(SRC / "annex58_demonstration_cases.csv")
 
 
 def checks(case_file: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
@@ -104,6 +99,23 @@ def markdown(demo: pd.DataFrame, cost: pd.DataFrame, verdicts: pd.DataFrame) -> 
             lines.append(f"| {r.unit} | {r.Q_sink_kW:,.0f} | {r.T_sink_out_C:g} | {r.case_EUR_per_kW:,.0f} | "
                          f"{r.suppliers_covering_sink} | {r.supplier_EUR_per_kW_min:,.0f}-{r.supplier_EUR_per_kW_max:,.0f} |")
         lines += ["", "Supplier figures exclude installation and integration; the case cost function includes them.", ""]
+    fits = cop_data.check_against_demonstrations(demo)
+    if len(fits):
+        lines += ["## Manufacturer-data COP fits against the demonstration plants", "",
+                  "Fits of Jesper et al. (2021) (`pinch.cop_data`) at lift = sink outlet - source inlet, against the "
+                  "reported COP of the closed-cycle vapour-compression plants. Deviation = (reported - fit) / fit.", "",
+                  "| No. | Refrigerant | Lift [K] | Sink glide [K] | Fit | In data range | COP reported | COP fit "
+                  "| Deviation |", "|---|---|---|---|---|---|---|---|---|"]
+        for r in fits.itertuples():
+            lines.append(f"| {r.no} | {r.refrigerant} | {r.lift_K:g} | {r.sink_glide_K:g} | {r.fit} | "
+                         f"{'yes' if r.fit_in_range else 'no'} | {r.COP_reported:g} | {r.COP_fit:.2f} | "
+                         f"{100 * r.deviation:+.0f} % |")
+        small = fits[fits["sink_glide_K"] < 50]
+        large = fits[fits["sink_glide_K"] >= 50]
+        lines += ["", f"All {len(fits)} plants reach or beat the fit: those with sink glides below 50 K by "
+                  f"{100 * small['deviation'].min():.0f} to {100 * small['deviation'].max():.0f} %, those with 50 K or "
+                  f"more by {100 * large['deviation'].min():.0f} to {100 * large['deviation'].max():.0f} %. The fits come "
+                  "from small-glide machines and bound large-glide units from below (pinch.cop_data).", ""]
     lines += ["## Verdicts", "", "| Verdict | Passed | Detail |", "|---|---|---|"]
     lines += [f"| {v.verdict} | {'yes' if v.passed else 'NO'} | {v.detail} |" for v in verdicts.itertuples()]
     return "\n".join(lines) + "\n"

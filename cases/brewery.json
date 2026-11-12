@@ -289,6 +289,30 @@
       "basis": "median achieved Lorenz efficiency of six closed-cycle HTHP demonstration cases (89-2,250 kW), IEA HPT Annex 58 Task 1, Zühlsdorf, Poulsen, Schlosser (2022), symposium presentation, supplier-reported (outputs/brewery/vendor_data_check.md)"
     },
     {
+      "label": "COP from manufacturer data (Jesper et al. 2021 fits)",
+      "kind": "vendor_cop",
+      "value": 0,
+      "basis": "Jesper et al. (2021), Renew. Sustain. Energy Rev. 137, 110646, Tables 6-7 (manufacturer data, small sink glides; pinch.cop_data); HP1 at an 83 K lift is 5 K beyond the data (78 K)"
+    },
+    {
+      "label": "COP from manufacturer data, fit - 1 standard deviation",
+      "kind": "vendor_cop",
+      "value": -1,
+      "basis": "Jesper et al. (2021), Renew. Sustain. Energy Rev. 137, 110646, Tables 6-7 (manufacturer data, small sink glides; pinch.cop_data): sigma 0.28 (sink up to 100 °C), 0.19 (above)"
+    },
+    {
+      "label": "COP from manufacturer data, fit + 1 standard deviation",
+      "kind": "vendor_cop",
+      "value": 1,
+      "basis": "Jesper et al. (2021), Renew. Sustain. Energy Rev. 137, 110646, Tables 6-7 (manufacturer data, small sink glides; pinch.cop_data): sigma 0.28 (sink up to 100 °C), 0.19 (above)"
+    },
+    {
+      "label": "COP from manufacturer data, glide-matched blend (+16 % for sink glides of 25 K or more)",
+      "kind": "vendor_cop",
+      "value": {"sigma": 0, "glide_gain": 0.16},
+      "basis": "Brendel et al. (2024), Int. J. Refrig. 165, 84-96: best high-glide blend 2.96 vs best pure fluid 2.55 at 35 K glides (+16 %); applied to HP1 (18-82 °C sink) only"
+    },
+    {
       "label": "Lorenz efficiency 0.45",
       "kind": "eta",
       "value": 0.45,

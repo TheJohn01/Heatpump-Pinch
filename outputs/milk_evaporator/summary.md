@@ -28,6 +28,15 @@ No annual basis given: results stay in the stream-data unit.
 
 Economics skipped: no annual basis in the case file.
 
+## COP ranges from manufacturer and demonstration data (step 4, pinch.cop_data)
+
+COP of each heat pump on four bases: the case's Lorenz efficiency; manufacturer-data fits (Jesper et al. 2021) at lift = sink outlet - source inlet, with their standard deviation; a glide-matched blend (+16 %, Brendel et al. 2024) for sink glides of 25 K or more; the Lorenz model with the efficiencies achieved by IEA HPT Annex 58 closed-cycle demonstration plants (min, median, max). The fits come from small-glide machines, so for a large sink glide they are a pessimistic bound. fit_in_range = False: the point is outside the data behind the fit.
+
+| Unit | Lift [K] | Sink glide [K] | Case basis | Fit −σ / fit / +σ | In fit range | Glide blend | Demonstration η_L min / median / max |
+|---|---|---|---|---|---|---|---|
+| HP warm (milk preheat) | 40 | 40 | 7.86 | 3.70 / 3.98 / 4.26 | yes | 4.62 | 5.44 / 5.83 / 8.57 |
+| HTHP 105 °C | 90 | 0 | 2.10 | 1.76 / 1.95 / 2.14 | no (extrapolated) | – | 1.45 / 1.56 / 2.29 |
+
 ## Sources and provenance
 
 - **data source**: Walmsley, Lincoln, Padullés, Cleland (2024), Energies 17, 2838, Table 2.

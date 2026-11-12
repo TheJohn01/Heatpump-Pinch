@@ -1,0 +1,6 @@
+basis,COP HTHP 120 °C (fluid beds),COP HTHP 200 °C (main air),COP_system,fraction_of_Qh_min_electrified,full_capex_EUR,full_savings_EUR,full_payback_years,full_npv_EUR,full_co2_avoided_t,full_design_break_even_ratio_NPV
+case basis (η_L 0.5),1.872,1.279,1.526,0.8047,6134727.0,-199641.0,inf,-7676306.0,3253.0,0.494
+manufacturer-data fit - 1 sigma,1.556,1.006,1.227,0.8047,6134727.0,-519992.0,inf,-10149967.0,2871.0,0.397
+manufacturer-data fit,1.746,1.196,1.425,0.8047,6134727.0,-292861.0,inf,-8396122.0,3142.0,0.461
+manufacturer-data fit + 1 sigma,1.936,1.386,1.621,0.8047,6134727.0,-122429.0,inf,-7080092.0,3345.0,0.525
+"manufacturer-data fit, glide-matched blend",1.746,1.196,1.425,0.8047,6134727.0,-292861.0,inf,-8396122.0,3142.0,0.461

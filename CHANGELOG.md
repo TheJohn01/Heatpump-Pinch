@@ -18,8 +18,25 @@ committed outputs change only where an entry says so.
   figures, so the report could otherwise lose them).
 - Dependencies: reportlab, python-docx, resvg-py (`requirements.txt`; extras `app` and `report`).
 - Browser smoke test: both report downloads return a valid file (check 0b).
+- COP from manufacturer and demonstration data, per lift and as ranges (`pinch.cop_data`): the correlations of
+  Jesper et al. (2021, Tables 6-8, with their standard deviations and data ranges) and Arpagaus (2026, steam-
+  generating heat pumps), a glide-matched blend (+16 %, Brendel et al. 2024) and the Lorenz efficiencies achieved
+  by IEA HPT Annex 58 demonstration plants. New outputs `cop_ranges.csv` and `cop_basis_designs.csv` (design
+  re-sized and re-costed on each basis) for every case; step 4 of the app and section 2.3 of the TEA report show
+  them. Sensitivity kind `vendor_cop`; the brewery gains four rows (fit, ±1σ, glide-matched blend).
+  `vendor_data_check.md` compares the fits with the demonstration plants: all five closed-cycle plants beat them.
+- Data input (step 1): stream tables in any unit (`pinch.units`, Pint); guided extraction with the reasoning and
+  the excluded streams kept (`pinch.extraction`, after Varbanov et al. 2019); candidate streams from an Aspen Plus
+  export (`pinch.aspen_import`, file layout of the Python-Aspen Plus interface of Maier et al. 2025); project files
+  that save and reopen every input (`pinch.project`); step 2 lists the streams near the pinch. Test fixture:
+  `tests/fixtures/aspen_export` (synthetic values in that layout).
+- Dependency: pint (core).
 
-No committed output changes.
+### Changed outputs
+- `outputs/brewery/rq_consolidated.*` and `rq_tornado.png`: four new rows (COP from manufacturer data). With the
+  fits, RQ1 is 0 % (HP1 incremental payback 120.7 y at the fit, 15.2 y at +1σ); every earlier row is unchanged.
+- `summary.json` / `summary.md` of every case: new section "COP ranges"; `vendor_data_check.md`: new section.
+  No earlier number changes.
 
 ## 0.10.0 (2026-11-12)
 

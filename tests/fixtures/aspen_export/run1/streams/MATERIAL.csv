@@ -1,0 +1,11 @@
+,hierarchy,name,path,aspen_id,typ,status,direction,source,destination,"('mass_flow', 'kg/hr')","('vfrac', '1')","('temperature', '1')","('temperature', 'C')"
+0,[],S1,\Data\Streams\S1,S1,MATERIAL,Available,Input,,COOLER,3600.0,1.0,,120.0
+1,[],S2,\Data\Streams\S2,S2,MATERIAL,Available,Output,COOLER,,3600.0,0.0,,40.0
+2,[],S3,\Data\Streams\S3,S3,MATERIAL,Available,Input,,HEATER,7200.0,0.0,,25.0
+3,[],S4,\Data\Streams\S4,S4,MATERIAL,Available,Output,HEATER,,7200.0,0.0,,85.0
+4,[],S5,\Data\Streams\S5,S5,MATERIAL,Available,Input,,MIXHEAT,1000.0,0.0,,20.0
+5,[],S6,\Data\Streams\S6,S6,MATERIAL,Available,Input,,MIXHEAT,1000.0,0.0,,60.0
+6,[],S7,\Data\Streams\S7,S7,MATERIAL,Available,Input,,HX1,5000.0,0.0,,150.0
+7,[],S8,\Data\Streams\S8,S8,MATERIAL,Available,Output,HX1,,5000.0,0.0,,110.0
+8,[],S9,\Data\Streams\S9,S9,MATERIAL,Available,Input,,HX1,8000.0,0.0,,60.0
+9,[],S10,\Data\Streams\S10,S10,MATERIAL,Available,Output,HX1,,8000.0,0.0,,90.0

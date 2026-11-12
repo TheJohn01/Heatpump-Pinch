@@ -57,6 +57,23 @@ Same rows and labels as rq_consolidated.md, which gives RQ1-RQ3 against today's 
 |---|---|---|---|---|---|---|
 | with hot-water piping (indirect cost) | 2.016 | inf | -8,534,782 | 3,253 | 0.0 % | 0.324 |
 
+## COP ranges from manufacturer and demonstration data (step 4, pinch.cop_data)
+
+COP of each heat pump on four bases: the case's Lorenz efficiency; manufacturer-data fits (Jesper et al. 2021) at lift = sink outlet - source inlet, with their standard deviation; a glide-matched blend (+16 %, Brendel et al. 2024) for sink glides of 25 K or more; the Lorenz model with the efficiencies achieved by IEA HPT Annex 58 closed-cycle demonstration plants (min, median, max). The fits come from small-glide machines, so for a large sink glide they are a pessimistic bound. fit_in_range = False: the point is outside the data behind the fit.
+
+| Unit | Lift [K] | Sink glide [K] | Case basis | Fit −σ / fit / +σ | In fit range | Glide blend | Demonstration η_L min / median / max |
+|---|---|---|---|---|---|---|---|
+| HTHP 120 °C (fluid beds) | 105 | 0 | 1.87 | 1.56 / 1.75 / 1.94 | no (extrapolated) | – | 1.30 / 1.39 / 2.04 |
+| HTHP 200 °C (main air) | 185 | 0 | 1.28 | 1.01 / 1.20 / 1.39 | no (extrapolated) | – | 0.89 / 0.95 / 1.39 |
+
+| COP basis | System COP | Full-design payback [y] | NPV [EUR] | Break-even ratio (NPV = 0) |
+|---|---|---|---|---|
+| case basis (η_L 0.5) | 1.526 | inf | -7,676,306 | 0.494 |
+| manufacturer-data fit - 1 sigma | 1.227 | inf | -10,149,967 | 0.397 |
+| manufacturer-data fit | 1.425 | inf | -8,396,122 | 0.461 |
+| manufacturer-data fit + 1 sigma | 1.621 | inf | -7,080,092 | 0.525 |
+| manufacturer-data fit, glide-matched blend | 1.425 | inf | -8,396,122 | 0.461 |
+
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 
 | η_L | System COP | Full-design payback [y] | NPV [EUR] | Grass-roots HP share, payback ≤ threshold | Full-design break-even ratio (NPV = 0) |

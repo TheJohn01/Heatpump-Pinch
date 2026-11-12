@@ -8,6 +8,8 @@ Checks: (0) the process diagrams are drawn as inline SVG in the browser (Workflo
 Dashboard T* diagram); ``st.html`` sanitises ``<svg>`` away, which streamlit.testing does not see.
 (0b) the two TEA report buttons of the Dashboard download a PDF and a Word file (written on click, in a
 separate thread, which streamlit.testing does not run).
+Data input: (4) a saved project file reopens the edited inputs after a case change; (5) an Aspen Plus export
+(zip of tests/fixtures/aspen_export) goes through Guided extraction to a stream table with the known Q̇c,min.
 Workflow page: (1) uploading a stream CSV gives targets; (2) a CSV with missing columns
 gives an input message, not a crash; (3) editing a cell of the stream table
 re-computes the targets (four-stream example: CP of Reactor 1 feed 0.2 -> 0.3
@@ -17,6 +19,7 @@ Verified 2026-10-14.
 
 import asyncio
 import tempfile
+import zipfile
 from pathlib import Path
 
 from playwright.async_api import async_playwright
@@ -33,6 +36,11 @@ async def _metric(pg) -> str:
 
 async def _svgs(pg) -> list[str]:
     return await pg.evaluate("Array.from(document.querySelectorAll('svg[role=img] > title')).map(t => t.textContent)")
+
+
+def _uploader(pg, label: str):
+    """The file input of the uploader whose label contains ``label`` (several uploaders share the page)."""
+    return pg.locator('[data-testid="stFileUploader"]').filter(has_text=label).locator('input[type="file"]')
 
 
 async def main() -> None:
@@ -59,7 +67,7 @@ async def main() -> None:
         await case_box.click()
         await pg.get_by_text("Upload my own stream table").click()
         await pg.wait_for_timeout(3000)
-        await pg.locator('input[type="file"]').set_input_files(str(ROOT / "data" / "four_stream_process_streams.csv"))
+        await _uploader(pg, "Stream table (CSV)").set_input_files(str(ROOT / "data" / "four_stream_process_streams.csv"))
         await pg.wait_for_timeout(9000)
         await pg.get_by_text("2 Targets", exact=True).first.click()
         await pg.wait_for_timeout(7000)
@@ -68,7 +76,7 @@ async def main() -> None:
         await pg.wait_for_timeout(4000)
         bad = Path(tempfile.mkdtemp()) / "bad.csv"
         bad.write_text("stream,type,T_in_C\nA,hot,100\n")
-        await pg.locator('input[type="file"]').set_input_files(str(bad))
+        await _uploader(pg, "Stream table (CSV)").set_input_files(str(bad))
         await pg.wait_for_timeout(7000)
         t = await pg.inner_text("body")
         assert "Input problem" in t and "missing columns" in t, "bad CSV not reported"
@@ -77,7 +85,7 @@ async def main() -> None:
         await pg.get_by_role("option", name="Four-stream chemical process").click()
         await pg.wait_for_timeout(9000)
         assert "Four-stream chemical process" in await pg.inner_text("body")
-        grid = await pg.locator('[data-testid="stDataFrameResizable"]').last.bounding_box()
+        grid = await pg.locator('[data-testid="stDataFrameResizable"]:visible').last.bounding_box()
         await pg.mouse.click(grid["x"] + 80, grid["y"] + 54)          # first cell of the first row
         await pg.wait_for_timeout(500)
         for _ in range(4):                                             # -> CP column (5th)
@@ -92,8 +100,49 @@ async def main() -> None:
         await pg.get_by_text("2 Targets", exact=True).first.click()
         await pg.wait_for_timeout(7000)
         assert "13.5" in await _metric(pg), await _metric(pg)
+        # 4: save the edited project, switch case, reopen it
+        await pg.get_by_text("1 Streams", exact=True).first.click()
+        await pg.wait_for_timeout(5000)
+        await pg.get_by_text("Project file", exact=True).first.click()
+        await pg.wait_for_timeout(1000)
+        async with pg.expect_download(timeout=60000) as dl:
+            await pg.get_by_role("button", name="Save project (.json)").click()
+        saved = Path(tempfile.mkdtemp()) / "four_stream_project.json"
+        saved.write_bytes(Path(await (await dl.value).path()).read_bytes())
+        assert b'"format": "heatpump-pinch project"' in saved.read_bytes()
+        await case_box.click()
+        await pg.get_by_role("option", name="Brewery").first.click()
+        await pg.wait_for_timeout(9000)
+        await _uploader(pg, "Open a project").set_input_files(str(saved))
+        await pg.wait_for_timeout(9000)
+        await pg.get_by_text("2 Targets", exact=True).first.click()
+        await pg.wait_for_timeout(7000)
+        assert "13.5" in await _metric(pg), ("project not reopened", await _metric(pg))
+        # 5: Aspen Plus export -> guided extraction -> stream table
+        await pg.get_by_text("1 Streams", exact=True).first.click()
+        await pg.wait_for_timeout(5000)
+        export = ROOT / "tests" / "fixtures" / "aspen_export"
+        zpath = Path(tempfile.mkdtemp()) / "export.zip"
+        with zipfile.ZipFile(zpath, "w") as z:
+            for f in export.rglob("*.csv"):
+                z.write(f, f"export/{f.relative_to(export).as_posix()}")
+        await pg.get_by_role("tab", name="Import from Aspen Plus").click()
+        await _uploader(pg, "Export folder (.zip)").set_input_files(str(zpath))
+        await pg.wait_for_timeout(4000)
+        await pg.get_by_role("button", name="Load the candidate streams into Guided extraction").click()
+        await pg.wait_for_timeout(5000)
+        assert "4 candidate streams, 1 left out" in await pg.inner_text("body")
+        await pg.get_by_role("tab", name="Guided extraction").click()
+        await pg.get_by_role("button", name="Use as stream table").click()
+        await pg.wait_for_timeout(9000)
+        await pg.get_by_text("2 Targets", exact=True).first.click()
+        await pg.wait_for_timeout(7000)
+        body = await pg.inner_text("body")
+        i = body.find("Q̇c,min")
+        assert i >= 0 and "500" in body[i:i + 30], body[i:i + 30]
         await b.close()
-    print("UI smoke test passed: diagrams, TEA report downloads, upload, bad input, cell edit")
+    print("UI smoke test passed: diagrams, TEA report downloads, upload, bad input, cell edit, project file, "
+          "Aspen import")
 
 
 if __name__ == "__main__":
