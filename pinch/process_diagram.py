@@ -27,7 +27,7 @@ grey for material flow and reference lines.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from html import escape
 from pathlib import Path
 from typing import Literal
@@ -109,7 +109,7 @@ class Flowsheet:
 
     case: str
     steps: tuple[Step, ...]
-    flows: tuple[tuple[str, str], ...]   # (from step, to step); "" = feed or product
+    flows: tuple[tuple[str, str, str], ...]   # (from step, to step, label); "" = feed or product
     feed_label: str = ""
     product_label: str = ""
     heat_pumps: tuple[HeatPumpLink, ...] = ()
@@ -143,7 +143,7 @@ def load_flowsheet(path: str | Path) -> Flowsheet:
                        width=int(s.get("width", _BOX_W))) for s in raw["steps"])
     hps = tuple(HeatPumpLink(unit=h["unit"], label=h["label"], row=int(h["row"]), col=int(h["col"]),
                              serves=tuple(h.get("serves", []))) for h in raw.get("heat_pumps", []))
-    fs = Flowsheet(case=raw["case"], steps=steps, flows=tuple((a, b) for a, b in raw["flows"]),
+    fs = Flowsheet(case=raw["case"], steps=steps, flows=tuple((f[0], f[1], f[2] if len(f) > 2 else "") for f in raw["flows"]),
                    feed_label=raw.get("feed_label", ""), product_label=raw.get("product_label", ""),
                    heat_pumps=hps, process_sources=tuple(raw.get("process_sources", [])),
                    source_label=raw.get("source_label", "Process heat below the pinch"),
@@ -167,7 +167,9 @@ def check_flowsheet(fs: Flowsheet) -> None:
         if not 0 <= h.col <= 3 or h.row < 0:
             raise ValueError(f"heat pump '{h.unit}' is off the grid (columns 0-3)")
     known = set(names) | {""}
-    for a, b in fs.flows:
+    for a, b, _ in fs.flows:
+        if b and not a and fs.step(b).col != 0:
+            raise ValueError(f"feed into '{b}': feeds enter from the left, so the step must be in column 0")
         if a not in known or b not in known or a == b == "":
             raise ValueError(f"flow {a!r} -> {b!r} names an unknown step")
     for h in fs.heat_pumps:
@@ -182,6 +184,46 @@ def check_flowsheet(fs: Flowsheet) -> None:
         raise ValueError("a stream row is assigned to two steps")
 
 
+GENERIC_NOTE = ("Generic layout: one box per stream (cold streams above, hot streams below); the stream table has no "
+                "material connections, so none are drawn. Heat pump links are indicative.")
+
+
+def generic_flowsheet(stream_set: StreamSet, heat_pumps: pd.DataFrame | None = None,
+                      case: str = "uploaded table") -> Flowsheet:
+    """Flowsheet for a stream table without a layout file (uploads): one box per stream row.
+
+    Cold streams fill the rows above the heat pump row, four per row, hot streams the rows below it.
+    A heat pump is linked to the cold streams in the row just above it whose temperature range
+    overlaps its sink range (indicative); its process source is shown as a labelled stub.
+    """
+    def rows_of(streams: list[Stream], first_row: int) -> list[Step]:
+        return [Step(name=s.name if len(s.name) <= 16 else s.name[:15] + "…", row=first_row + i // 4, col=i % 4,
+                     streams=(s.name,)) for i, s in enumerate(streams)]
+
+    cold, hot = list(stream_set.cold), list(stream_set.hot)
+    n_cold_rows = max(1, -(-len(cold) // 4))
+    hp_row = n_cold_rows
+    units = [] if heat_pumps is None else [r for _, r in heat_pumps.head(4).iterrows()]
+    hot_first = hp_row + (1 if units else 0)
+    cold_steps, hot_steps = rows_of(cold, 0), rows_of(hot, hot_first)
+    names: set[str] = set()
+    steps = []
+    for st in cold_steps + hot_steps:           # truncated names must stay unique
+        name, i = st.name, 2
+        while name in names:
+            name, i = f"{st.name[:13]} {i}", i + 1
+        names.add(name)
+        steps.append(replace(st, name=name))
+    by_stream = {st.streams[0]: st for st in steps}
+    links = []
+    for k, r in enumerate(units):
+        lo, hi = float(r["T_sink_in_C"]), float(r["T_sink_out_C"])
+        serves = tuple(by_stream[s.name].name for s in cold
+                       if by_stream[s.name].row == hp_row - 1 and s.T_in_C < hi and s.T_out_C > lo - 20)
+        links.append(HeatPumpLink(unit=str(r["unit"]), label=f"HP{k + 1}", row=hp_row, col=k, serves=serves))
+    return Flowsheet(case=case, steps=tuple(steps), flows=(), heat_pumps=tuple(links), note=GENERIC_NOTE)
+
+
 def unassigned_streams(fs: Flowsheet, stream_set: StreamSet) -> list[str]:
     """Stream rows of the table that no step owns (e.g. rows added by the user)."""
     owned = {r for s in fs.steps for r in s.streams}
@@ -190,7 +232,25 @@ def unassigned_streams(fs: Flowsheet, stream_set: StreamSet) -> list[str]:
 
 # ------------------------------------------------------------------ SVG helpers
 def _fmt(x: float) -> str:
+    """Three significant figures, without scientific notation (kW cases reach 10^4)."""
+    if abs(x) >= 1000:
+        return f"{x:,.0f}"
     return f"{x:.3g}"
+
+
+def _id_list(ids: list[str]) -> str:
+    """'H2+H7–11' for H2, H7, H8, H9, H10, H11: consecutive identifiers collapse into a range."""
+    nums = sorted((i[0], int(i[1:])) for i in ids)
+    parts, run = [], [nums[0]]
+    for prev, cur in zip(nums, nums[1:]):
+        if cur[0] == prev[0] and cur[1] == prev[1] + 1:
+            run.append(cur)
+            continue
+        parts.append(run)
+        run = [cur]
+    parts.append(run)
+    return "+".join("+".join(f"{k}{n}" for k, n in r) if len(r) < 3 else f"{r[0][0]}{r[0][1]}–{r[-1][1]}"
+                    for r in parts)
 
 
 def _txt(x: float, y: float, s: str, fill: str, size: int = 12, anchor: str = "middle",
@@ -293,27 +353,34 @@ def flowsheet_svg(fs: Flowsheet, stream_set: StreamSet, heat_pumps: pd.DataFrame
             rows = [x for x in own if x.kind == kind]
             if not rows:
                 continue
-            label = "+".join(ids[x.name] for x in rows) + f" {sign}{_fmt(sum(x.Q for x in rows))}"
+            label = _id_list([ids[x.name] for x in rows]) + f" {sign}{_fmt(sum(x.Q for x in rows))}"
+            tw = max(96.0, min(float(s.width), 7.0 * len(label) + 10))
             ty = s.y - 24 if s.row == 0 else s.y + _BOX_H + 8
             tx = s.x
             if any(x.kind == "cold" for x in own) and kind == "hot":
                 ty += -20 if s.row == 0 else 20
             energy.append(f"<g><title>{escape(('Heat demand' if kind == 'cold' else 'Heat release') + f' [{u}]')}"
-                          f"</title><rect x='{tx:.1f}' y='{ty:.1f}' width='96' height='18' rx='4' "
+                          f"</title><rect x='{tx:.1f}' y='{ty:.1f}' width='{tw:.0f}' height='18' rx='4' "
                           f"fill='{p.background}' stroke='{colour}' stroke-width='1'/>"
-                          + _txt(tx + 48, ty + 9, label, colour, 12) + "</g>")
+                          + _txt(tx + tw / 2, ty + 9, label, colour, 12) + "</g>")
 
-    for a, b in fs.flows:
+    for a, b, label in fs.flows:
         if a and b:
             base.append(_path(_flow_path(fs.step(a), fs.step(b)), p.grey, "a-flow"))
-        elif b:                                         # feed
+        elif b:                                         # feed, from the left margin
             t = fs.step(b)
             base.append(_path(f"M12 {t.y + _BOX_H / 2:.1f} L{t.x - 2:.1f} {t.y + _BOX_H / 2:.1f}", p.grey, "a-flow"))
-            base.append(_txt(10, t.y + _BOX_H / 2 - 12, fs.feed_label, p.grey, 12, "start"))
-        else:                                           # product
+            base.append(_txt(10, t.y + _BOX_H / 2 - 12, label or fs.feed_label, p.grey, 12, "start"))
+        elif fs.step(a).col == 0:                       # product, to the left margin
             f = fs.step(a)
             base.append(_path(f"M{f.x:.1f} {f.y + _BOX_H / 2:.1f} L14 {f.y + _BOX_H / 2:.1f}", p.grey, "a-flow"))
-            base.append(_txt(10, f.y + _BOX_H / 2 + 14, fs.product_label, p.grey, 12, "start"))
+            base.append(_txt(10, f.y + _BOX_H / 2 + 14, label or fs.product_label, p.grey, 12, "start"))
+        else:                                           # product, to the right of the step
+            f = fs.step(a)
+            x0 = f.x + f.width
+            base.append(_path(f"M{x0:.1f} {f.y + _BOX_H / 2:.1f} L{x0 + 26:.1f} {f.y + _BOX_H / 2:.1f}", p.grey,
+                              "a-flow"))
+            base.append(_txt(x0 + 4, f.y + _BOX_H / 2 - 12, label or fs.product_label, p.grey, 12, "start"))
 
     rows_hp = {} if heat_pumps is None else {r["unit"]: r for _, r in heat_pumps.iterrows()}
     links = [h for h in fs.heat_pumps if h.unit in rows_hp]
@@ -349,8 +416,13 @@ def flowsheet_svg(fs: Flowsheet, stream_set: StreamSet, heat_pumps: pd.DataFrame
         if src_y is not None and r[f"source_from_process_{u}"] > 1e-9:
             sx = hcx + 30
             hp.append(_path(f"M{sx:.1f} {src_y:.1f} L{sx:.1f} {hy + _BOX_H + 2:.1f}", p.accent, "a-hp", "4 3"))
+        elif r[f"source_from_process_{u}"] > 1e-9:      # no source steps in the layout: a labelled stub
+            sx = hcx + 30
+            hp.append(_path(f"M{sx:.1f} {hy + _BOX_H + 28:.1f} L{sx:.1f} {hy + _BOX_H + 2:.1f}", p.accent, "a-hp",
+                            "4 3", tip=f"Process source {_fmt(r[f'source_from_process_{u}'])} {u}"))
+            hp.append(_txt(sx + 6, hy + _BOX_H + 20, "+ process", p.accent, 12, "start"))
         if r[f"source_external_{u}"] > 1e-9:
-            ex = hcx + (-40 if r[f"source_from_process_{u}"] > 1e-9 else 20)
+            ex = hcx + (-40 if r[f"source_from_process_{u}"] > 1e-9 else -20)
             hp.append(_path(f"M{ex:.1f} {hy + _BOX_H + 28:.1f} L{ex:.1f} {hy + _BOX_H + 2:.1f}", p.accent, "a-hp",
                             "4 3", tip=f"External (ambient) source {_fmt(r[f'source_external_{u}'])} {u}"))
             hp.append(_txt(ex + 6, hy + _BOX_H + 20, "+ ambient", p.accent, 12, "start"))
@@ -359,7 +431,7 @@ def flowsheet_svg(fs: Flowsheet, stream_set: StreamSet, heat_pumps: pd.DataFrame
         for n in fs.process_sources:
             s = fs.step(n)
             # below the header: riser from the box top; above it: from the bottom right, clear of the tag
-            sx = s.cx if s.y > src_y else s.x + s.width - 8
+            sx = s.cx + 20 if s.y > src_y else s.x + s.width - 8   # clear of a vertical material flow at cx
             y_to = s.y if s.y > src_y else s.y + _BOX_H
             hp.append(_path(f"M{sx:.1f} {y_to:.1f} L{sx:.1f} {src_y:.1f}", p.accent, dash="4 3"))
             xs.append(sx)

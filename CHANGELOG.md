@@ -4,6 +4,23 @@ Versions follow semantic versioning. Each release is a git tag `vX.Y.Z` whose ve
 `pinch.__version__`, `pyproject.toml` and `CITATION.cff` (checked by `tests/test_quality.py`). Numbers in
 committed outputs change only where an entry says so.
 
+## Unreleased
+
+### Added
+- Flowsheet layouts for the other three cases (`data/milk_evaporator_flowsheet.json`,
+  `spray_dryer_flowsheet.json`, `four_stream_process_flowsheet.json`), built from the stream names and roles
+  in the source tables; step 1 no longer shows the T* diagram for them. Uploaded tables get a generic
+  flowsheet (`pinch.process_diagram.generic_flowsheet`: one box per stream, no material connections).
+- Flowsheet drawing: per-flow feed and product labels, products leaving to the right, a "+ process" stub
+  for heat pump process sources when the layout has no source steps, duties with thousands separators
+  instead of scientific notation (kW cases), and runs of stream identifiers collapsed (H2+H7–11).
+
+### Fixed
+- CI: `outputs-reproducible` failed on every figure after 0.9.0. GitHub's runner renders text with a
+  different FreeType build, which moves plot areas beyond any useful pixel tolerance. `--check` now
+  reports figure changes and fails only on CSV/JSON/Markdown/README changes (all data outputs reproduced
+  on the runner); the tolerance still restores rasterisation-only differences locally.
+
 ## 0.9.0 (2026-11-12)
 
 ### Added

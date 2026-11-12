@@ -318,9 +318,10 @@ box per process step, with each step's heat demand (+, blue) or release (−, re
 stream table, and the step 4 heat pumps with their sink and source connections. Its layout comes from
 `data/<case>_flowsheet.json` (steps on a four-column grid, material flows, which steps each heat pump
 serves), because a stream table has no material connections; the heat pump connections are
-indicative until the network design (step 5) fixes the matches. Cases without a layout file, and
-uploaded tables, show the T* stream diagram instead: streams as arrows on the shifted-temperature axis
-with the pinch, Q̇h,min, Q̇c,min, recovery and the heat pumps. Stream identifiers (H1, C1, ...) follow
+indicative until the network design (step 5) fixes the matches. Every published case has a layout
+file; uploaded tables get a generic layout (one box per stream, no material connections). The
+Dashboard shows the T* stream diagram: streams as arrows on the shifted-temperature axis with the
+pinch, Q̇h,min, Q̇c,min, recovery and the heat pumps. Stream identifiers (H1, C1, ...) follow
 the stream table and are the same in both diagrams.
 
 Charts are interactive (Altair, `pinch/charts.py`). The theme is a plain technical-document style
@@ -878,7 +879,7 @@ cases/                       One file per type of plant (names, titles and descr
 data/
   <plant>_streams.csv        Stream table of each case (brewery, milk_evaporator, spray_dryer, four_stream_process)
   brewery_networks.json      Existing brewery network and the condensate retrofit (step 5)
-  brewery_flowsheet.json     Layout of the brewery's simplified flowsheet (process steps, flows, heat pump links)
+  <case>_flowsheet.json      Layout of each case's simplified flowsheet (process steps, flows, heat pump links)
   brewery_configurations.json  Heat pump configurations of the brewery source; values tagged published/figure/assumed
   reference_targets.json     Published/textbook targets used by the validation tests, with their sources
   benchmarks/                Published networks and exchanger designs, OpenPinch results, Letsios et al. instances

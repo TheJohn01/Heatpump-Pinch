@@ -8,8 +8,8 @@ Layout
 * **Dashboard**: RQ1-RQ3 on one screen (consolidated sensitivity table, tornado) and the
   streams, targets and heat pumps on the shifted-temperature axis.
 
-Workflow step 1 opens with a simplified flowsheet of the case (``pinch.process_diagram``; cases
-without a layout file show the T* stream diagram instead).
+Workflow step 1 opens with a simplified flowsheet of the case (``pinch.process_diagram``: the case's
+layout file, or a generic one-box-per-stream layout for uploaded tables).
 * **Sources**: provenance of every input, the assumptions register, downloads.
 
 All calculation is done by the toolkit (``analyse.compute``, ``consolidate_rq``);
@@ -344,18 +344,21 @@ def _svg(svg: str) -> None:
 
 
 def _diagram(r, kind: str) -> None:
-    """Process diagram with its view selector: ``kind`` = "flowsheet" (falls back to T*) or "tstar"."""
+    """Process diagram with its view selector: ``kind`` = "flowsheet" (layout file, else generic) or "tstar"."""
     case, streams, s, tables, *_ = r
     hp = tables.get("heat_pump_design")
     if hp is not None and f"Q_sink_{streams.energy_unit}" not in hp.columns:
         hp = None
-    layout = pdg.flowsheet_path(ROOT, case.name)
     fs = None
-    if kind == "flowsheet" and layout.exists() and ss.choice != UPLOAD:
-        try:
-            fs = pdg.load_flowsheet(layout)
-        except (ValueError, KeyError) as exc:
-            st.caption(f"Flowsheet layout ignored ({exc}); showing the T* diagram.")
+    if kind == "flowsheet":
+        layout = pdg.flowsheet_path(ROOT, case.name)
+        if layout.exists() and ss.choice != UPLOAD:
+            try:
+                fs = pdg.load_flowsheet(layout)
+            except (ValueError, KeyError) as exc:
+                st.caption(f"Flowsheet layout ignored ({exc}); showing a generic layout.")
+        if fs is None:
+            fs = pdg.generic_flowsheet(streams, hp, case.name)
     labels = {v: pdg.VIEW_LABELS[v] for v in pdg.VIEWS}
     key = f"diagram_view_{kind}"
     ss.setdefault(key, "all")
@@ -364,9 +367,11 @@ def _diagram(r, kind: str) -> None:
     if fs is not None:
         _svg(pdg.flowsheet_svg(fs, streams, hp, view, _palette()))
         missing = pdg.unassigned_streams(fs, streams)
-        st.caption("Simplified flowsheet: one box per process step; tags give each step's heat demand (+) or "
-                   f"release (−) in {streams.energy_unit} from the stream table below. Heat pump connections are "
-                   "indicative (fixed by the network design, step 5). Hover for details."
+        lead = (pdg.GENERIC_NOTE if fs.note == pdg.GENERIC_NOTE else
+                "Simplified flowsheet: one box per process step; heat pump connections are indicative (fixed by "
+                "the network design, step 5).")
+        st.caption(f"{lead} Tags give each step's heat demand (+) or release (−) in {streams.energy_unit} from the "
+                   "stream table below. Hover for details."
                    + (f" Not on the flowsheet: {', '.join(missing)}." if missing else ""))
     else:
         _svg(pdg.stream_diagram_svg(streams, s["targets"], hp, view, _palette()))

@@ -1,0 +1,25 @@
+{
+  "case": "milk_evaporator",
+  "note": "Simplified flowsheet of the milk evaporator of Walmsley et al. (2024), Energies 17, 2838, Table 2: raw milk heated to heat treatment, flash cooling, two MVR evaporator effects, concentrate heating before the dryer; evaporator condensate (COW) cooled; CIP, direct-use hot water and chilled water as utility streams. One box per group of Table 2 rows; the grouping is ours. Heat pump links are indicative (fixed by the network design, step 5).",
+  "steps": [
+    {"name": "Milk heating", "row": 0, "col": 0, "streams": ["Raw Milk"], "subtitle": "Raw milk 8→95 °C"},
+    {"name": "Flash cooling", "row": 0, "col": 1, "streams": ["HT Flash", "HT Flash 2"], "subtitle": "Vapour 87, 79 °C"},
+    {"name": "Evaporator 1", "row": 0, "col": 2, "streams": ["E1 Vapour Bleed"], "subtitle": "Vapour bleed 72 °C"},
+    {"name": "Evaporator 2", "row": 0, "col": 3, "streams": ["E2 Condenser"], "subtitle": "Condenser 72 °C"},
+    {"name": "Hot water", "row": 1, "col": 2, "streams": ["Direct Use"], "subtitle": "Direct use 15→55 °C"},
+    {"name": "Concentrate", "row": 1, "col": 3, "streams": ["Milk Concentrate"], "subtitle": "65→70 °C"},
+    {"name": "CIP water", "row": 2, "col": 0, "streams": ["CIP Water"]},
+    {"name": "Chilled water", "row": 2, "col": 1, "streams": ["Chiller Water"]},
+    {"name": "Condensate", "row": 2, "col": 2, "streams": ["Preheat COW 1", "Preheat COW 2", "Preheat COW 3", "Preheat COW 4", "Preheat COW 5", "Cow Heat"], "subtitle": "COW 87→13 °C"}
+  ],
+  "flows": [
+    ["", "Milk heating", "Raw milk"], ["Milk heating", "Flash cooling"], ["Flash cooling", "Evaporator 1"],
+    ["Evaporator 1", "Evaporator 2"], ["Evaporator 2", "Concentrate"], ["Concentrate", "", "To dryer"],
+    ["Evaporator 1", "Condensate"]
+  ],
+  "heat_pumps": [
+    {"unit": "HP warm (milk preheat)", "label": "HP1 · warm", "row": 1, "col": 0, "serves": ["Milk heating", "Hot water"]},
+    {"unit": "HTHP 105 °C", "label": "HP2 · 105 °C", "row": 1, "col": 1, "serves": ["Milk heating"]}
+  ],
+  "process_sources": []
+}

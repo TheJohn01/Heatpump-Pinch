@@ -6,11 +6,13 @@ Usage:
 
 The CI workflow runs ``--check``: a result in outputs/ that no longer follows from the code and the case
 files fails the build. The same holds for the generated blocks of README.md (the table of economic
-defaults, written from ``pinch.economics``). PNG figures are compared with a tolerance: font rasterisation
-(FreeType version and hinting) differs between machines and moves only text edges, so a figure counts as
-changed when, after averaging over 8 x 8 pixel blocks, some block differs by more than 40 grey levels
-(``png_change``). Text antialiasing alone stays below 16; a moved curve or bar, or a changed label, exceeds it.
-A regenerated PNG within the tolerance is restored to the committed file, so a rerun leaves no spurious diffs.
+defaults, written from ``pinch.economics``). PNG figures are compared with a tolerance (``png_change``): after
+averaging over 8 x 8 pixel blocks, a block differing by more than 40 grey levels counts as a change. On the
+machine that produced the committed figures, text antialiasing stays below 16, so a rerun restores every figure
+whose only difference is rasterisation and leaves no spurious diffs. Across machines the tolerance cannot
+decide: a different FreeType build changes text metrics, and tight layout then moves whole plot areas (GitHub's
+runner exceeds the tolerance on every figure). So ``--check`` reports changed figures but fails only on CSV,
+JSON, Markdown and README changes; every figure's data are in a CSV file that is checked.
 
 Order: step-1/2 validation and reproductions, cycle screening (read by scripts/analysis/analyse.py), all cases, then the
 brewery checks that read scripts/analysis/analyse.py's outputs.
@@ -113,27 +115,33 @@ def settle_pngs() -> list[str]:
     return changed
 
 
-def changed_outputs() -> list[str]:
-    """Committed outputs and README.md that differ from HEAD (PNGs beyond the tolerance), plus untracked new ones."""
-    real_pngs = settle_pngs()
-    return [line for line in _status() if not line.rstrip().endswith(".png")] + real_pngs
+def changed_outputs() -> tuple[list[str], list[str]]:
+    """(data, figures): committed CSV/JSON/MD outputs and README.md that differ from HEAD (plus untracked new
+    outputs), and PNG figures that differ beyond the rasterisation tolerance (reported, not failed)."""
+    figures = settle_pngs()
+    data = [line for line in _status() if not line.rstrip().endswith(".png")]
+    return data, figures
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--check", action="store_true", help="fail if a committed output changed")
+    parser.add_argument("--check", action="store_true", help="fail if a committed CSV/JSON/MD output changed")
     args = parser.parse_args()
     run_all()
     update_readme()
-    real = settle_pngs()
-    if real and not args.check:
-        print("Figures that changed (beyond rasterisation):\n" + "\n".join(real))
     if args.check:
-        changed = changed_outputs()
-        if changed:
-            print("Outputs are stale (rerun python regenerate_outputs.py and commit):\n" + "\n".join(changed))
+        data, figures = changed_outputs()
+        if figures:
+            print("Figures differ beyond the rasterisation tolerance (reported only; their data are checked "
+                  "through the CSV files):\n" + "\n".join(figures))
+        if data:
+            print("Outputs are stale (rerun python regenerate_outputs.py and commit):\n" + "\n".join(data))
             sys.exit(1)
         print("All committed outputs are reproducible.")
+    else:
+        figures = settle_pngs()
+        if figures:
+            print("Figures that changed (beyond rasterisation):\n" + "\n".join(figures))
 
 
 if __name__ == "__main__":

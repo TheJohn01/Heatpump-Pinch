@@ -1,0 +1,21 @@
+{
+  "case": "spray_dryer",
+  "note": "Simplified flowsheet of the milk powder spray dryer of Walmsley et al. (2024), Energies 17, 2838, Table 1 (case of Liang et al.): air heaters for the vibrating and static fluid beds and the main air chamber, the dryer, and heat recovery from the exhaust air. Table 1 gives the air duties only, so the air paths from the bed heaters to the dryer are not drawn. Heat pump links are indicative (fixed by the network design, step 5).",
+  "steps": [
+    {"name": "Vibrating bed", "row": 0, "col": 0, "streams": ["Vibrating Fluidised Bed"], "subtitle": "Air 15→60 °C"},
+    {"name": "Static bed 1", "row": 0, "col": 1, "streams": ["Static Fluid Bed 1"], "subtitle": "Air 60→86.5 °C"},
+    {"name": "Static bed 2", "row": 0, "col": 2, "streams": ["Static Fluid Bed 2"], "subtitle": "Air 86.5→114 °C"},
+    {"name": "Main air", "row": 0, "col": 3, "streams": ["Main Air Chamber"], "subtitle": "Air 114→236 °C"},
+    {"name": "Spray dryer", "row": 1, "col": 3, "subtitle": "chamber and beds"},
+    {"name": "Exhaust air", "row": 2, "col": 3, "streams": ["Exhaust 1 (above dew point)", "Exhaust 2 (below dew point)"], "subtitle": "67→15 °C"}
+  ],
+  "flows": [
+    ["", "Vibrating bed", "Ambient air"], ["Main air", "Spray dryer"], ["Spray dryer", "Exhaust air"], ["Exhaust air", "", "Stack"]
+  ],
+  "heat_pumps": [
+    {"unit": "HTHP 120 °C (fluid beds)", "label": "HP1 · 120 °C", "row": 1, "col": 1, "serves": ["Vibrating bed", "Static bed 1", "Static bed 2"]},
+    {"unit": "HTHP 200 °C (main air)", "label": "HP2 · 200 °C", "row": 1, "col": 2, "serves": ["Main air"]}
+  ],
+  "process_sources": ["Exhaust air"],
+  "source_label": "Exhaust heat below the pinch"
+}

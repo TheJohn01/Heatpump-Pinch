@@ -137,3 +137,47 @@ def test_layout_errors_are_reported(tmp_path, change, message):
 def test_unknown_view_is_rejected(fs, brewery):
     with pytest.raises(ValueError):
         pdg.flowsheet_svg(fs, brewery, view="sideways")
+
+
+CASES = ["brewery", "milk_evaporator", "spray_dryer", "four_stream_process"]
+
+
+@pytest.mark.parametrize("case", CASES)
+def test_every_case_layout_owns_every_stream_and_names_real_units(case):
+    """Each published case: every stream row on exactly one step; every heat pump link names a unit of the
+    committed design; the flowsheet renders in every view."""
+    c = load_case(ROOT / "cases" / f"{case}.json")
+    streams = load_streams(c.stream_file)
+    fs = pdg.load_flowsheet(pdg.flowsheet_path(ROOT, case))
+    assert pdg.unassigned_streams(fs, streams) == []
+    design = pd.read_csv(ROOT / "outputs" / case / "heat_pump_design.csv")
+    assert {h.unit for h in fs.heat_pumps} == set(design["unit"])
+    for view in pdg.VIEWS:
+        ET.fromstring(pdg.flowsheet_svg(fs, streams, design, view))
+
+
+def test_duties_without_scientific_notation():
+    """kW cases: the milk evaporator raw milk heating is 22,835 kW, the condensate group H2+H7-11."""
+    c = load_case(ROOT / "cases" / "milk_evaporator.json")
+    streams = load_streams(c.stream_file)
+    fs = pdg.load_flowsheet(pdg.flowsheet_path(ROOT, "milk_evaporator"))
+    txt = _text(pdg.flowsheet_svg(fs, streams, view="energy"))
+    assert "C4 +22,835" in txt and "e+0" not in txt
+    assert "H2+H7–11 −12,373" in txt
+    assert pdg._id_list(["C4", "C5"]) == "C4+C5" and pdg._id_list(["H1", "H2", "H3"]) == "H1–3"
+
+
+def test_generic_flowsheet_for_uploaded_tables():
+    """A table without a layout file: one box per stream, cold rows above the heat pumps, hot rows below."""
+    c = load_case(ROOT / "cases" / "milk_evaporator.json")
+    streams = load_streams(c.stream_file)
+    design = pd.read_csv(ROOT / "outputs" / "milk_evaporator" / "heat_pump_design.csv")
+    fs = pdg.generic_flowsheet(streams, design)
+    assert len(fs.steps) == len(streams.streams) and pdg.unassigned_streams(fs, streams) == []
+    hp_row = fs.heat_pumps[0].row
+    assert all(s.row < hp_row for s in fs.steps if streams.cold and s.streams[0] in {x.name for x in streams.cold})
+    assert all(s.row > hp_row for s in fs.steps if s.streams[0] in {x.name for x in streams.hot})
+    assert fs.flows == () and fs.note == pdg.GENERIC_NOTE
+    svg = pdg.flowsheet_svg(fs, streams, design, "all")
+    ET.fromstring(svg)
+    assert "+ ambient" in svg

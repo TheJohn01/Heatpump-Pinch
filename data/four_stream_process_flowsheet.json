@@ -1,0 +1,22 @@
+{
+  "case": "four_stream_process",
+  "note": "Simplified flowsheet of the four-stream process (University of Oklahoma ChE design notes, Example 1.1): two reactor trains, each with a feed heated to reaction temperature and a product cooled afterwards. The source describes the streams only; the reactors are drawn to show where the feeds go and add no duty. Heat pump links are indicative (fixed by the network design, step 5).",
+  "steps": [
+    {"name": "Feed 1 heater", "row": 0, "col": 0, "streams": ["Reactor 1 feed"]},
+    {"name": "Reactor 1", "row": 0, "col": 1, "subtitle": "no duty in the table"},
+    {"name": "Product 1 cooler", "row": 0, "col": 2, "streams": ["Reactor 1 product"]},
+    {"name": "Feed 2 heater", "row": 2, "col": 0, "streams": ["Reactor 2 feed"]},
+    {"name": "Reactor 2", "row": 2, "col": 1, "subtitle": "no duty in the table"},
+    {"name": "Product 2 cooler", "row": 2, "col": 2, "streams": ["Reactor 2 product"]}
+  ],
+  "flows": [
+    ["", "Feed 1 heater", "Feed 1"], ["Feed 1 heater", "Reactor 1"], ["Reactor 1", "Product 1 cooler"], ["Product 1 cooler", "", "Product 1"],
+    ["", "Feed 2 heater", "Feed 2"], ["Feed 2 heater", "Reactor 2"], ["Reactor 2", "Product 2 cooler"], ["Product 2 cooler", "", "Product 2"]
+  ],
+  "heat_pumps": [
+    {"unit": "HTHP 160 °C", "label": "HP1 · 160 °C", "row": 1, "col": 1, "serves": ["Feed 1 heater"]},
+    {"unit": "HTHP 200 °C", "label": "HP2 · 200 °C", "row": 1, "col": 3, "serves": ["Feed 2 heater"]}
+  ],
+  "process_sources": ["Product 1 cooler", "Product 2 cooler"],
+  "source_label": "Product heat below the pinch"
+}

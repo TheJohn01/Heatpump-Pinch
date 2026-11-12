@@ -289,9 +289,9 @@ def test_step1_shows_the_flowsheet_above_the_stream_table(brewery):
     at.run()
 
 
-@pytest.mark.parametrize("case", ["four_stream_process", "spray_dryer"])
-def test_step1_falls_back_to_the_tstar_diagram_without_a_layout(case):
-    """Cases without data/<case>_flowsheet.json show the T* stream diagram instead."""
+@pytest.mark.parametrize("case", ["four_stream_process", "spray_dryer", "milk_evaporator"])
+def test_step1_shows_each_case_flowsheet(case):
+    """Every published case has its own layout file and step 1 draws it (not the T* diagram)."""
 
     def page(case):
         import streamlit as st
@@ -302,8 +302,10 @@ def test_step1_falls_back_to_the_tstar_diagram_without_a_layout(case):
             app_pages.load_inputs(case)
         app_pages.workflow_page()
 
-    assert not (ROOT / "data" / f"{case}_flowsheet.json").exists()
+    assert (ROOT / "data" / f"{case}_flowsheet.json").exists()
     at = st_testing.AppTest.from_function(page, args=(case,), default_timeout=300)
     at.run()
     _ok(at)
-    assert any(m.value.startswith("<svg") and "shifted-temperature axis" in m.value for m in at.markdown)
+    svgs = [m.value for m in at.markdown if m.value.startswith("<svg")]
+    assert svgs and f"Simplified flowsheet: {case}" in svgs[0]
+    assert "shifted-temperature axis" not in svgs[0]
