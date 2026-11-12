@@ -6,6 +6,27 @@ committed outputs change only where an entry says so.
 
 ## Unreleased
 
+### Added
+- Third-party integrations, each credited in `docs/THIRD_PARTY.md` (register items 66-71). No existing
+  result changes; new outputs only.
+  - `pinch/exchanger_rating.py` (ht, fluids): shells in series from the LMTD correction factor, rated area
+    and cost, tube-side h and ΔP. `scripts/benchmarks/benchmark_exchanger_rating.py` against the detailed
+    designs of Polley and Panjeh Shahi (1991): shells 11 of 11, h_io ≤ 0.3 %, ΔP_t ≤ 3.7 %, area from their U
+    and our F ≤ 1.2 % (`data/benchmarks/polley1991_exchanger_designs.json`, transcribed from Tables 4-5).
+  - `pinch/tariffs.py`: effective electricity price over the operating hours (fixed window or cheapest
+    hours per day), network adders and demand charge; `scripts/data/fetch_entsoe_prices.py` (entsoe-py,
+    needs an ENTSO-E API key) and `scripts/checks/tariff_check.py` against the RQ3 break-even ratios.
+  - `pinch/tespy_heat_pump.py` (TESPy): rebuild of single-stage cycles, design COP equal to `pinch.cycle`
+    (brewery warm-water unit 3.3546 both), part load 100-60 % with TESPy's default lines, component cost
+    after Kosmadakis et al. (2020) as implemented in heatpumps (0.98 M€ against 1.07 M€ from Padullés'
+    cost function). `scripts/analysis/heat_pump_partload.py` writes `outputs/brewery/heat_pump_partload.csv`
+    and `heat_pump_cost_check.csv`.
+  - `scripts/benchmarks/benchmark_min_matches.py`: the minimum-units MILP on 20 Furman and Sahinidis
+    instances digitised by Letsios et al. (2018) (Apache 2.0, `data/benchmarks/letsios2018/`): 20 of 20
+    equal to the published minimum.
+- Dependencies pinned: ht 1.2.0, fluids 1.3.1, tespy 0.12.0.post1, entsoe-py 0.8.1, tabulate 0.10.0;
+  optional extras `rating`, `tespy`, `prices` in `pyproject.toml`.
+
 ### Changed
 - Repository layout: the 18 scripts that sat in the root move into folders; only `app.py` (Streamlit Cloud
   entry point) and `regenerate_outputs.py` stay in the root. Scripts now run from the root as modules.

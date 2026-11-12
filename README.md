@@ -157,6 +157,9 @@ pinch/
   provenance.py              Tool version and input hashes in summary.json; run metadata (git-ignored)
   hen_design.py              Network synthesis (minimum units), series placement, sizing and cost; validated on Sagli et al. (1990)
   pressure_drop.py           Film coefficients from allowable pressure drop and fouling (Polley et al. 1990, 1991)
+  exchanger_rating.py        Shell-and-tube rating with ht: shells in series, F, tube-side h and ΔP (Polley 1991 designs)
+  tariffs.py                 Hourly electricity prices: effective price over the operating hours, network adders
+  tespy_heat_pump.py         TESPy rebuild of single-stage cycles: design-COP check, part load, component cost
   area.py                    Area target (Bath formula), units target, ΔTmin supertargeting
   area_analysis.py           Per-case supertargeting (RQ2) from the case's area_targeting block
 tests/                       pytest suite (validation cases first, then general behaviour; incl. app smoke tests,
@@ -172,11 +175,13 @@ scripts/                     Command-line scripts. Run them from the repository 
                              adds the cycle-based design to the summary
     consolidate_rq.py        RQ1-RQ3 answers for any case (cases/<plant>.json) with its sensitivities
                              (outputs/<case>/rq_consolidated.csv/.md, rq_tornado.png)
+    heat_pump_partload.py    TESPy check of the selected single-stage cycles: design COP, part load, component cost
   checks/                    Brewery checks that read the analysis outputs
     batch_check.py           Batch brewhouse check: HTHP capacity for the boil window (8-14 brews/day x 60-90 min)
     mvr_check.py             Padullés config. 3: MVR for wort boiling + booster vs the HTHP (CoolProp MVR COP)
     investment_check.py      IRR, estimate accuracy (AACE Class 5), grant scenarios and Monte Carlo per RQ increment
     plant_data_check.py      Stream-data uncertainty (which data matter) and match-restriction screening
+    tariff_check.py          Effective electricity price of the heat pumps (hourly prices) against the RQ3 ratios
   validation/                Paper-specific reproductions. They write tables and figures only; every comparison
                              they report is asserted by a test (tests/test_problem_table.py, test_economics.py,
                              test_reproductions.py, test_time_slices.py)
@@ -191,10 +196,15 @@ scripts/                     Command-line scripts. Run them from the repository 
   benchmarks/
     benchmark_openpinch.py   Targets against OpenPinch 0.8.3 (independent tool), both directions
     benchmark_hen.py         Network sizes, costs, synthesis and pressure-drop basis against Polley and Panjeh Shahi (1991)
+    benchmark_min_matches.py Minimum number of units on 20 instances of Letsios et al. (2018)
+    benchmark_exchanger_rating.py  Shells, tube-side h and ΔP against Polley and Panjeh Shahi's detailed designs
+  data/
+    fetch_entsoe_prices.py   Hourly day-ahead prices from ENTSO-E (entsoe-py; needs an API key; not in the regeneration)
 
 docs/
   ASSUMPTIONS.md             Register of every assumption: verified / decision / conservative / limitation
   QUALITY.md                 Quality gate, recorded type debt, release procedure
+  THIRD_PARTY.md             Third-party libraries and data this project uses, with licences and what each does
 .streamlit/config.toml       Streamlit settings and theme (light and dark; mirrors pinch/theme.py)
 static/fonts/                IBM Plex Sans and Mono (woff2) served by the app, with the SIL OFL 1.1 licence
 outputs/                     Committed results, one folder per case (rebuilt by regenerate_outputs.py)
@@ -241,6 +251,9 @@ outputs/                     Committed results, one folder per case (rebuilt by 
 | Brewery, condensate into the tank | Q̇h vs indirect target (+2 K) | 10.5 (paper), 10.48 (ours) | 10.485 | 0 vs ours |
 | Brewery, heat pumps on the existing network | Warm-water heat pump duty (Fig. 14) | 8.3 | 8.30 | 0 |
 | Brewery, Appendix B Case DK1 | NPV10 and payback of 8 options (Table B.4) from their OPEX and CAPEX | Table B.4 | all within rounding | ≤ 0.08 M EUR |
+| Minimum matches (Letsios et al. 2018, Furman and Sahinidis set) | Units, 20 instances | published optima | 20 of 20 equal | 0 |
+| Shell-and-tube designs (Polley and Panjeh Shahi 1991, Tables 4-5) | Shells / tube-side h_io / ΔP_t / area from their U and our F | 11 exchangers / 6 / 6 / 6 | 11 of 11 / ≤ 0.3 % / ≤ 3.7 % / ≤ 1.2 % | see `outputs/benchmark_exchanger_rating.md` |
+| Brewery warm-water heat pump, TESPy rebuild | Design COP (same assumptions) | 3.3546 (`pinch.cycle`) | 3.3546 (TESPy) | < 0.02 % |
 
 ### Known inconsistencies in the source papers (reported, not corrected)
 

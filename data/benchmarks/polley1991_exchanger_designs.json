@@ -1,0 +1,21 @@
+{
+  "_source": "Polley and Panjeh Shahi (1991), Trans IChemE 69 A, 445-457, Table 4 (Network 6.1) and Table 5 (Network 5.1): results of the detailed (Bell-Delaware) exchanger designs for the four-stream problem; physical properties in Table 3 (all streams rho 800 kg/m3, cp 2600 J/kgK, mu 0.5 cP, k 0.12 W/mK, Rf 0.00018 m2K/W). Transcribed from the scanned paper (project file G5.5); exchanger labels E1-E4, C and H1-H2 mapped to matches by their expected size, which equals the 'published_expected_area_m2' of sagli1990_networks.json.",
+  "_columns": "shells: number of shells ('1(J)' recorded as 1, J shell); tubes per shell; passes: tube passes; d_o_mm / d_i_mm / pitch_mm; length_mm: tube length; h_io and h_o in W/m2K; U in W/m2K; dP_t and dP_s in kPa. Tube-side stream: the cold stream in every process exchanger, the only assignment that keeps both published pressure drops within the allowables of Table 3 for E1 (6.1), E4 (6.1), E2 (5.1) and E3 (5.1); taken as the same for the two exchangers where both assignments fit (E3 of 6.1, E4 of 5.1). Coolers (C) and heaters (H1, H2): shells only (cooling-water and steam properties are not published).",
+  "networks": {
+    "6.1": {
+      "H1-C1": {"label": "E1", "shells": 3, "tube_stream": "C1", "tubes": 206, "passes": 2, "d_o_mm": 19.1, "d_i_mm": 15.4, "pitch_mm": 25.4, "length_mm": 4956, "expected_area_m2": 1175.6, "actual_area_m2": 184.0, "h_io": 618.9, "h_o": 937.7, "U": 372.8, "dP_t_kPa": 8.15, "dP_s_kPa": 20.00},
+      "H2-C1": {"label": "E3", "shells": 1, "tube_stream": "C1", "tubes": 412, "passes": 4, "d_o_mm": 19.1, "d_i_mm": 15.4, "pitch_mm": 25.4, "length_mm": 1123, "expected_area_m2": 225.6, "actual_area_m2": 27.7, "h_io": 618.3, "h_o": 1277.2, "U": 416.6, "dP_t_kPa": 1.22, "dP_s_kPa": 5.40},
+      "H2-C2": {"label": "E4", "shells": 2, "tube_stream": "C2", "tubes": 201, "passes": 4, "d_o_mm": 19.1, "d_i_mm": 15.4, "pitch_mm": 25.4, "length_mm": 4916, "expected_area_m2": 1209.1, "actual_area_m2": 118.3, "h_io": 1109.1, "h_o": 1073.8, "U": 545.6, "dP_t_kPa": 54.12, "dP_s_kPa": 22.41},
+      "H2-CW": {"label": "C", "shells": 1},
+      "ST-C1": {"label": "H1", "shells": 1},
+      "ST-C2": {"label": "H2", "shells": 1}
+    },
+    "5.1": {
+      "H1-C2": {"label": "E2", "shells": 3, "tube_stream": "C2", "tubes": 104, "passes": 2, "d_o_mm": 19.1, "d_i_mm": 15.4, "pitch_mm": 25.4, "length_mm": 6492, "expected_area_m2": 1099.5, "actual_area_m2": 122.2, "h_io": 1085.7, "h_o": 919.2, "U": 497.8, "dP_t_kPa": 50.60, "dP_s_kPa": 20.00},
+      "H2-C1": {"label": "E3", "shells": 2, "tube_stream": "C1", "tubes": 403, "passes": 4, "d_o_mm": 19.1, "d_i_mm": 15.4, "pitch_mm": 25.4, "length_mm": 3735, "expected_area_m2": 1342.2, "actual_area_m2": 180.3, "h_io": 627.7, "h_o": 1233.3, "U": 416.0, "dP_t_kPa": 8.46, "dP_s_kPa": 25.22},
+      "H2-C2": {"label": "E4", "shells": 1, "tube_stream": "C2", "tubes": 315, "passes": 6, "d_o_mm": 19.1, "d_i_mm": 15.4, "pitch_mm": 25.4, "length_mm": 1233, "expected_area_m2": 256.5, "actual_area_m2": 23.3, "h_io": 1079.7, "h_o": 1150.5, "U": 557.0, "dP_t_kPa": 9.40, "dP_s_kPa": 3.22},
+      "H2-CW": {"label": "C", "shells": 1},
+      "ST-C1": {"label": "H1", "shells": 1}
+    }
+  }
+}

@@ -1,0 +1,2 @@
+unit,fluid,Q_sink_kW,V_suction_m3_h,A_evaporator_m2,A_condenser_m2,components_EUR,equipment_EUR,total_capital_EUR,cost_year,case_cost_function_EUR,ratio_total_to_case,method
+Warm-water HP,n-Propane,910.3,878.1,96.3,31.6,124217,155271,981315,2023,1066176,0.92,"Kosmadakis et al. (2020), Energy Convers. Manag. 226, 113488, as implemented in heatpumps (Freißmann and Fritz, MIT), HeatPumpBase.calc_cost"

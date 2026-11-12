@@ -201,3 +201,15 @@ def test_openpinch_conversion_round_trip():
     assert [(x.T_in_C, x.T_out_C, x.Q, x.dT_shift_K) for x in back.streams] == \
         pytest.approx([(x.T_in_C, x.T_out_C, x.Q, x.dT_shift_K) for x in s.streams])
     assert isinstance(b.from_openpinch(json.load(open(b.SAMPLES / "basic_pinch.json"))), pd.DataFrame)
+
+
+def test_letsios2018_benchmark_subset():
+    """Published minimum numbers of matches (Letsios et al. 2018, proven optimal except 28sp-as1)."""
+    from scripts.benchmarks.benchmark_min_matches import run
+    df = run(["4sp1", "6sp-gg1", "7sp-cm1", "8sp-fs1", "15sp-tkm", "28sp-as1"])
+    assert df["agrees"].all(), df[["instance", "units_here", "units_published"]]
+
+
+def test_letsios2018_committed_benchmark_agrees():
+    df = pd.read_csv("outputs/benchmark_min_matches.csv")
+    assert len(df) == 20 and df["agrees"].all()

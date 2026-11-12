@@ -28,6 +28,9 @@ refrigerants             Working-fluid GWP, safety group and EU F-gas prohibitio
 provenance               Tool version and input hashes in outputs; run metadata (QA).
 hen_design               Network synthesis (minimum units), series placement, exchanger sizing and cost (step 5).
 pressure_drop            Film coefficients from allowable pressure drop; fouling (steps 3 and 5).
+exchanger_rating         Shell-and-tube rating with ht: shells in series, F correction, tube-side h and ΔP (step 5).
+tariffs                  Hourly electricity prices: effective price over the operating hours (step 6, RQ3).
+tespy_heat_pump          TESPy rebuild of single-stage cycles: design check, part load, component cost (4b, 6).
 case                     Case files and annual conversion.
 validation               Reference targets vs computed values.
 results                  Outputs container (summary, tables, figures).

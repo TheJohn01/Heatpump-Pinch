@@ -1,0 +1,15 @@
+{
+  "_source": "Letsios, Kouyialis, Misener (2018), Heuristics with performance guarantees for the minimum number of matches problem in heat recovery network design, Computers and Chemical Engineering 113, 57-85. Values from data/tex_tables/exact_methods.tex of github.com/TYT0710/min_matches_heuristics (commit 60894d2), column 'Gurobi Transshipment' (all four solver columns agree for these instances).",
+  "_solver_gap": "Solved with relative gap 4 % (table caption). A value v reported without a remaining gap is therefore proven optimal when 0.04 v < 1, i.e. v <= 24; above that it is within 4 % of the optimum.",
+  "_instances": "Furman and Sahinidis (2004) test set, digitised by Letsios et al. (Apache License 2.0, see LICENSE-Apache-2.0 and references.txt). Line endings converted from CRLF to LF; content unchanged.",
+  "_excluded": {
+    "22sp-ph": "infeasible here: HS9 is cooled to 8 °C but the only cold utility enters at 20 °C, so at ΔTmin 10 K that heat has nowhere to go under the shifted-temperature convention; the original code must treat the instance differently (not investigated)",
+    "14sp1": "published 14 (proven, CPLEX 41 s); HiGHS reaches 14 but does not prove it within 60 s, too slow for the regeneration run",
+    "37sp-yfyv": "published 36 (within 4 %); HiGHS stops at 37 after 60 s"
+  },
+  "minimum_matches": {
+    "4sp1": 5, "6sp-cf1": 6, "6sp-gg1": 3, "6sp1": 6, "7sp-cm1": 10, "7sp-s1": 10, "7sp-torw1": 10,
+    "7sp1": 7, "7sp2": 7, "7sp4": 8, "8sp-fs1": 11, "8sp1": 9, "9sp-al1": 12, "9sp-has1": 13,
+    "10sp-la1": 12, "10sp-ol1": 14, "10sp1": 10, "12sp1": 12, "15sp-tkm": 19, "28sp-as1": 30
+  }
+}

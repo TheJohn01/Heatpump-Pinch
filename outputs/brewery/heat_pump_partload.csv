@@ -1,0 +1,7 @@
+unit,fluid,load_fraction,COP_pinch_cycle,COP_tespy,eta_s_tespy,note
+Warm-water HP,n-Propane,1.0,3.3546,3.3546,0.7,design point
+Warm-water HP,n-Propane,0.9,,3.349,0.687,TESPy default characteristic lines
+Warm-water HP,n-Propane,0.8,,3.295,0.659,TESPy default characteristic lines
+Warm-water HP,n-Propane,0.7,,3.205,0.62,TESPy default characteristic lines
+Warm-water HP,n-Propane,0.6,,3.09,0.577,TESPy default characteristic lines
+HTHP (wort boiling),n-Propane / n-Butane,,,,,not rebuilt: selected layout 'cascade (SLHX top)'

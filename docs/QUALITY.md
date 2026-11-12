@@ -20,7 +20,7 @@ Tool versions are pinned in `requirements.txt` and `requirements-dev.txt`.
 
 ## Recorded debt
 
-- **Types.** 12 modules are outside `TYPED_MODULES` (`charts` joined after 0.8.0): `area_analysis`, `cycle`, `cycle_analysis`, `design`, `economic_analysis`, `economics`, `heat_pump`, `network`,
+- **Types.** 12 modules are outside `TYPED_MODULES` (`charts` joined after 0.8.0; the new `exchanger_rating`, `tariffs` and `tespy_heat_pump` are typed from the start): `area_analysis`, `cycle`, `cycle_analysis`, `design`, `economic_analysis`, `economics`, `heat_pump`, `network`,
   `refrigeration`, `research_questions`, `retrofit`, `sensitivity`. Most are `float | None` arguments
   passed on without a check and untyped dicts. Rule: a module joins the list when it is clean and never
   leaves it.
