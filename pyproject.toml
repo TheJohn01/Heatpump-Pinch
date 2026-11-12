@@ -19,7 +19,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-app = ["streamlit>=1.50", "altair>=5"]
+app = ["streamlit>=1.50", "altair>=5", "reportlab>=4", "python-docx>=1.1", "cairosvg>=2.7"]
+report = ["reportlab>=4", "python-docx>=1.1", "cairosvg>=2.7"]   # TEA report (pinch.report_render)
 cycle = ["CoolProp>=6.6", "scipy>=1.10"]   # step 4b: working-fluid cycle model
 excel = ["openpyxl>=3.1"]                   # stream tables from .xlsx workbooks
 rating = ["ht>=1.2", "fluids>=1.3"]         # step 5: shell-and-tube rating (pinch.exchanger_rating)

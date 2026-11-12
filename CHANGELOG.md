@@ -4,6 +4,23 @@ Versions follow semantic versioning. Each release is a git tag `vX.Y.Z` whose ve
 `pinch.__version__`, `pyproject.toml` and `CITATION.cff` (checked by `tests/test_quality.py`). Numbers in
 committed outputs change only where an entry says so.
 
+## Unreleased
+
+### Added
+- Techno-economic assessment report of the current run, as PDF and Word: two buttons on the Dashboard
+  (`pinch.report` builds the content once, `pinch.report_render` writes both files; written on click).
+  Structure of ISO/TS 14076:2025 (goal and scope, technical, economic, environmental screening,
+  sensitivity, interpretation, documentation), labelled "not critically reviewed" on every page. It includes
+  every chart and diagram of the run (flowsheet and T* diagram rasterised with CairoSVG) plus a discounted
+  cash-flow chart, a ±20 % NPV tornado and the RQ3 tornado. Tables and figures are numbered separately; table
+  captions above, figure captions below; in Word the captions use the Caption style and SEQ fields.
+- `Outputs.snapshot_pngs`: PNG copies of a run's figures that survive `write` (the zip download releases the
+  figures, so the report could otherwise lose them).
+- Dependencies: reportlab, python-docx, cairosvg (`requirements.txt`; extras `app` and `report`).
+- Browser smoke test: both report downloads return a valid file (check 0b).
+
+No committed output changes.
+
 ## 0.10.0 (2026-11-12)
 
 ### Added

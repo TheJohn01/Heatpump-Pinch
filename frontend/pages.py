@@ -5,8 +5,9 @@ Layout
 * **Workflow**: a step-by-step wizard following the method (1
   streams, 2 targets, 3 ΔTmin, 4 heat pumps, 5 retrofit, 6 economics). Steps
   with many inputs use a split workspace: inputs on the left, results on the right.
-* **Dashboard**: RQ1-RQ3 on one screen (consolidated sensitivity table, tornado) and the
-  streams, targets and heat pumps on the shifted-temperature axis.
+* **Dashboard**: RQ1-RQ3 on one screen (consolidated sensitivity table, tornado), the
+  streams, targets and heat pumps on the shifted-temperature axis, and the techno-economic
+  assessment report as PDF and Word (``pinch.report``, ``pinch.report_render``).
 
 Workflow step 1 opens with a simplified flowsheet of the case (``pinch.process_diagram``: the case's
 layout file, or a generic one-box-per-stream layout for uploaded tables).
@@ -36,6 +37,8 @@ from pinch import process_diagram as pdg
 from pinch.case import POWER_TO_MW, SinkLevelSpec, load_case
 from pinch.cycle_analysis import load_selected
 from pinch.economics import DEFAULTS
+from pinch.report import build_report
+from pinch.report_render import to_docx, to_pdf
 from pinch.research_questions import unit_names
 from pinch.streams import streams_from_frame
 from pinch.theme import Palette, palette_for
@@ -275,7 +278,9 @@ def _key(case, streams_df) -> str:
 
 @st.cache_resource(max_entries=8, show_spinner=False)
 def _compute(key: str, _case, _streams, _selected):
-    return compute(_case, _streams, cycle_selected=_selected)
+    res = compute(_case, _streams, cycle_selected=_selected)
+    res.snapshot_pngs()      # PNGs for the TEA report; the zip download releases the figures afterwards
+    return res
 
 
 @st.cache_data(max_entries=8, show_spinner=False)
@@ -343,6 +348,19 @@ def _svg(svg: str) -> None:
     st.markdown(svg, unsafe_allow_html=True)
 
 
+def _layout(case, show_error: bool = False) -> pdg.Flowsheet | None:
+    """The case's flowsheet layout file, or None (uploaded table, no file, or a file that does not load)."""
+    path = pdg.flowsheet_path(ROOT, case.name)
+    if ss.choice == UPLOAD or not path.exists():
+        return None
+    try:
+        return pdg.load_flowsheet(path)
+    except (ValueError, KeyError) as exc:
+        if show_error:
+            st.caption(f"Flowsheet layout ignored ({exc}); showing a generic layout.")
+        return None
+
+
 def _diagram(r, kind: str) -> None:
     """Process diagram with its view selector: ``kind`` = "flowsheet" (layout file, else generic) or "tstar"."""
     case, streams, s, tables, *_ = r
@@ -351,14 +369,7 @@ def _diagram(r, kind: str) -> None:
         hp = None
     fs = None
     if kind == "flowsheet":
-        layout = pdg.flowsheet_path(ROOT, case.name)
-        if layout.exists() and ss.choice != UPLOAD:
-            try:
-                fs = pdg.load_flowsheet(layout)
-            except (ValueError, KeyError) as exc:
-                st.caption(f"Flowsheet layout ignored ({exc}); showing a generic layout.")
-        if fs is None:
-            fs = pdg.generic_flowsheet(streams, hp, case.name)
+        fs = _layout(case, show_error=True) or pdg.generic_flowsheet(streams, hp, case.name)
     labels = {v: pdg.VIEW_LABELS[v] for v in pdg.VIEWS}
     key = f"diagram_view_{kind}"
     ss.setdefault(key, "all")
@@ -840,6 +851,33 @@ def dashboard_page() -> None:
             _chart(g)
             _chart(pb)
     st.dataframe(rq, width="stretch", hide_index=True)
+    _report_downloads(r, rq)
+
+
+@st.cache_resource(max_entries=4, show_spinner=False)
+def _report(key: str, rq_key: str, _r, _rq, edited: bool):
+    """TEA report content of one run (figures rendered once; both files are written from it)."""
+    case, streams, s, tables, _, res = _r
+    return build_report(case, streams, s, tables, res.pngs, _rq, _layout(case), edited=edited)
+
+
+def _report_downloads(r, rq: pd.DataFrame) -> None:
+    """Two buttons: the techno-economic assessment report as PDF and as Word (``pinch.report``)."""
+    case, *_ = r
+    rq_key = str(pd.util.hash_pandas_object(rq, index=True).sum())
+    with st.container(border=True):
+        st.markdown("**Techno-economic assessment report**")
+        st.caption("Structure of ISO/TS 14076:2025 (not critically reviewed): goal and scope, technical, economic "
+                   "and environmental analysis, sensitivity, interpretation and documentation, with every diagram "
+                   "and chart of this run. The file is written when you click.")
+        with st.spinner("Preparing the report..."):
+            rep = _report(_key(case, ss.streams_df), rq_key, r, rq, not _unedited())
+        a, b = st.columns(2)
+        a.download_button("TEA report (PDF)", lambda: to_pdf(rep), file_name=f"{case.name}_TEA_report.pdf",
+                          mime="application/pdf", width="stretch", icon=":material/picture_as_pdf:")
+        b.download_button("TEA report (Word)", lambda: to_docx(rep), file_name=f"{case.name}_TEA_report.docx",
+                          mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                          width="stretch", icon=":material/description:")
 
 
 # ================================================================== sources

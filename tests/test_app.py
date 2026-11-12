@@ -309,3 +309,12 @@ def test_step1_shows_each_case_flowsheet(case):
     svgs = [m.value for m in at.markdown if m.value.startswith("<svg")]
     assert svgs and f"Simplified flowsheet: {case}" in svgs[0]
     assert "shifted-temperature axis" not in svgs[0]
+
+
+def test_dashboard_offers_the_tea_report_as_pdf_and_word():
+    """Two download buttons (PDF, Word); the files are written on click (deferred), tested in test_report.py."""
+    at = st_testing.AppTest.from_function(_dashboard, default_timeout=180)
+    at.run()
+    _ok(at)
+    labels = [b.proto.label for b in at.get("download_button")]
+    assert "TEA report (PDF)" in labels and "TEA report (Word)" in labels

@@ -309,7 +309,7 @@ app does no calculation of its own):
 | Page | Content |
 |---|---|
 | Workflow | A step-by-step wizard following the method (1 streams, 2 targets, 3 ΔTmin, 4 heat pumps, 5 retrofit, 6 economics), inputs next to the results they drive; inputs persist across steps and pages. Step 1 opens with a simplified flowsheet of the case |
-| Dashboard | RQ1-RQ3 on one screen with the consolidated sensitivities and the tornado chart; "Recompute table" re-runs every sensitivity for the current inputs (about 15 s); the streams, energy targets and heat pumps on the T* axis |
+| Dashboard | RQ1-RQ3 on one screen with the consolidated sensitivities and the tornado chart; "Recompute table" re-runs every sensitivity for the current inputs (about 15 s); the streams, energy targets and heat pumps on the T* axis; the techno-economic assessment report as PDF or Word |
 | Sources | Provenance of every input, the assumptions register, downloads (all outputs as a zip, summary as Markdown/JSON) |
 
 **Process diagrams** (`pinch/process_diagram.py`) draw the case in four views: *Process*, *Energy
@@ -323,6 +323,19 @@ file; uploaded tables get a generic layout (one box per stream, no material conn
 Dashboard shows the T* stream diagram: streams as arrows on the shifted-temperature axis with the
 pinch, Q̇h,min, Q̇c,min, recovery and the heat pumps. Stream identifiers (H1, C1, ...) follow
 the stream table and are the same in both diagrams.
+
+**TEA report** (`pinch/report.py`, `pinch/report_render.py`). Two Dashboard buttons write a
+techno-economic assessment report of the current run, as PDF or Word, with the same content and layout.
+It follows the structure of ISO/TS 14076:2025 and says on every page that it is not critically reviewed:
+title page, abstract, goal and scope (functional unit: 1 MWh of heat from the heat pumps; system
+boundary table), technical analysis, economic analysis (inputs with their sources, cash flows by year,
+results, electrification curve, research questions, retrofit), screening of CO₂ and primary energy,
+sensitivity (±20 % one at a time, the case's scenario rows, Lorenz efficiency, RQ table), interpretation
+and documentation (assumptions, input hashes, references). Every chart and diagram of the run is
+included. Tables and figures are numbered separately from 1; table captions stand above the table and
+figure captions below the figure, each a bold label followed by full sentences. The diagrams are
+rasterised with CairoSVG (needs the Cairo library; without it the report says so in place of the
+diagram). The files are written on click.
 
 Charts are interactive (Altair, `pinch/charts.py`). The theme is a plain technical-document style
 (IBM Plex Sans and Mono, served by the app) with light and dark modes; colours carry meaning: **red
@@ -921,6 +934,8 @@ pinch/
   plotting.py                Figures (returned, or saved to file)
   charts.py                  Interactive charts for the front end (Altair), light or dark palette
   process_diagram.py         Simplified flowsheet (layout file per case) and T* stream diagram, as SVG in four views
+  report.py                  TEA report content (ISO/TS 14076 structure): sections, tables, figures and captions of one run
+  report_render.py           TEA report as PDF (ReportLab) and Word (python-docx), with one shared layout
   theme.py                   Light and dark palettes of the front end, colour meaning, WCAG contrast check
 scripts/                     Command-line scripts, run from the root as modules (Section 11.2)
   analysis/                  analyse, screen_cycles, consolidate_rq, heat_pump_partload
@@ -929,7 +944,7 @@ scripts/                     Command-line scripts, run from the root as modules 
   benchmarks/                OpenPinch, published networks, minimum matches, exchanger rating
   data/                      ENTSO-E price download (needs network and an API key)
 tests/                       pytest suite (validation cases first, then general behaviour)
-  ui_smoke.py                Browser smoke test of the app (upload, bad input, cell edit); not run by pytest
+  ui_smoke.py                Browser smoke test of the app (diagrams, report downloads, upload, bad input, cell edit); not run by pytest
 docs/
   ASSUMPTIONS.md             Register of every assumption: verified / decision / conservative / limitation
   QUALITY.md                 Quality gate, recorded type debt, release procedure

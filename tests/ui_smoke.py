@@ -6,6 +6,8 @@ Usage (needs Playwright + Chromium):
 
 Checks: (0) the process diagrams are drawn as inline SVG in the browser (Workflow step 1 flowsheet,
 Dashboard T* diagram); ``st.html`` sanitises ``<svg>`` away, which streamlit.testing does not see.
+(0b) the two TEA report buttons of the Dashboard download a PDF and a Word file (written on click, in a
+separate thread, which streamlit.testing does not run).
 Workflow page: (1) uploading a stream CSV gives targets; (2) a CSV with missing columns
 gives an input message, not a crash; (3) editing a cell of the stream table
 re-computes the targets (four-stream example: CP of Reactor 1 feed 0.2 -> 0.3
@@ -44,6 +46,12 @@ async def main() -> None:
         await pg.get_by_text("Dashboard", exact=True).first.click()
         await pg.wait_for_timeout(20000)
         assert any(t.startswith("Streams on the shifted") for t in await _svgs(pg)), await _svgs(pg)
+        # 0b: TEA report downloads
+        for label, magic in (("TEA report (PDF)", b"%PDF-"), ("TEA report (Word)", b"PK")):
+            async with pg.expect_download(timeout=120000) as dl:
+                await pg.get_by_role("button", name=label).click()
+            data = Path(await (await dl.value).path()).read_bytes()
+            assert data[:len(magic)] == magic and len(data) > 100_000, (label, len(data))
         await pg.get_by_text("Workflow", exact=True).first.click()
         await pg.wait_for_timeout(8000)
         case_box = pg.locator('[data-testid="stSelectbox"]').first
@@ -85,7 +93,7 @@ async def main() -> None:
         await pg.wait_for_timeout(7000)
         assert "13.5" in await _metric(pg), await _metric(pg)
         await b.close()
-    print("UI smoke test passed: diagrams, upload, bad input, cell edit")
+    print("UI smoke test passed: diagrams, TEA report downloads, upload, bad input, cell edit")
 
 
 if __name__ == "__main__":

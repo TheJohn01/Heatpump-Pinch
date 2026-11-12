@@ -37,6 +37,8 @@ results                  Outputs container (summary, tables, figures).
 plotting                 Matplotlib figures for files and reports.
 charts                   Altair charts for the app, in the light or dark palette.
 process_diagram          Simplified flowsheet and T* stream diagram as SVG, four views (step 1; Dashboard).
+report                   TEA report content, ISO/TS 14076 structure: sections, tables, figures, captions (Dashboard).
+report_render            TEA report as PDF (ReportLab) and Word (python-docx), one shared layout (Dashboard).
 theme                    Light and dark colour palettes, colour meaning, WCAG contrast (front end).
 """
 

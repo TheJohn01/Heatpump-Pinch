@@ -25,11 +25,25 @@ class Outputs:
         File stem -> DataFrame (written as <stem>.csv).
     figures : dict
         File stem -> matplotlib Figure (written as <stem>.png).
+    pngs : dict
+        File stem -> PNG bytes, filled by ``snapshot_pngs`` (kept after ``write`` releases the figures,
+        for the TEA report of ``pinch.report``).
     """
 
     summary: dict
     tables: dict[str, pd.DataFrame] = field(default_factory=dict)
     figures: dict[str, Figure] = field(default_factory=dict)
+    pngs: dict[str, bytes] = field(default_factory=dict)
+
+    def snapshot_pngs(self, dpi: int = 200) -> dict[str, bytes]:
+        """Render every open figure to PNG bytes (once per stem) and return all snapshots."""
+        import io
+        for stem, fig in self.figures.items():
+            if stem not in self.pngs:
+                buf = io.BytesIO()
+                fig.savefig(buf, format="png", dpi=dpi)
+                self.pngs[stem] = buf.getvalue()
+        return self.pngs
 
     def write(self, out: str | Path, json_name: str | None = None) -> None:
         """Write tables (CSV), figures (PNG, then closed) and optionally the summary (JSON)."""
