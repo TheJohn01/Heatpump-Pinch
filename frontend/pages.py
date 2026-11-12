@@ -5,7 +5,11 @@ Layout
 * **Workflow**: a step-by-step wizard following the dissertation method (1
   streams, 2 targets, 3 ΔTmin, 4 heat pumps, 5 retrofit, 6 economics). Steps
   with many inputs use a split workspace: inputs on the left, results on the right.
-* **Dashboard**: RQ1-RQ3 on one screen (consolidated sensitivity table, tornado).
+* **Dashboard**: RQ1-RQ3 on one screen (consolidated sensitivity table, tornado) and the
+  streams, targets and heat pumps on the shifted-temperature axis.
+
+Workflow step 1 opens with a simplified flowsheet of the case (``pinch.process_diagram``; cases
+without a layout file show the T* stream diagram instead).
 * **Sources**: provenance of every input, the assumptions register, downloads.
 
 All calculation is done by the toolkit (``analyse.compute``, ``consolidate_rq``);
@@ -28,6 +32,7 @@ import pandas as pd
 import streamlit as st
 
 from pinch import charts, problem_table, with_extra_shift
+from pinch import process_diagram as pdg
 from pinch.case import POWER_TO_MW, SinkLevelSpec, load_case
 from pinch.cycle_analysis import load_selected
 from pinch.economics import DEFAULTS
@@ -332,6 +337,40 @@ def _chart(ch) -> None:
     st.altair_chart(ch, width="stretch")
 
 
+def _diagram(r, kind: str) -> None:
+    """Process diagram with its view selector: ``kind`` = "flowsheet" (falls back to T*) or "tstar"."""
+    case, streams, s, tables, *_ = r
+    hp = tables.get("heat_pump_design")
+    if hp is not None and f"Q_sink_{streams.energy_unit}" not in hp.columns:
+        hp = None
+    layout = pdg.flowsheet_path(ROOT, case.name)
+    fs = None
+    if kind == "flowsheet" and layout.exists() and ss.choice != UPLOAD:
+        try:
+            fs = pdg.load_flowsheet(layout)
+        except (ValueError, KeyError) as exc:
+            st.caption(f"Flowsheet layout ignored ({exc}); showing the T* diagram.")
+    labels = {v: pdg.VIEW_LABELS[v] for v in pdg.VIEWS}
+    key = f"diagram_view_{kind}"
+    ss.setdefault(key, "all")
+    view = st.segmented_control("Diagram view", list(labels), format_func=labels.get, key=key,
+                                label_visibility="collapsed") or "all"
+    if fs is not None:
+        st.html(pdg.flowsheet_svg(fs, streams, hp, view, _palette()))
+        missing = pdg.unassigned_streams(fs, streams)
+        st.caption("Simplified flowsheet: one box per process step; tags give each step's heat demand (+) or "
+                   f"release (−) in {streams.energy_unit} from the stream table below. Heat pump connections are "
+                   "indicative (fixed by the network design, step 5). Hover for details."
+                   + (f" Not on the flowsheet: {', '.join(missing)}." if missing else ""))
+    else:
+        st.html(pdg.stream_diagram_svg(streams, s["targets"], hp, view, _palette()))
+        st.caption("Streams on the shifted-temperature axis T*: hot streams point down, cold streams up. Energy "
+                   f"targets and heat pumps (step 4) in {streams.energy_unit}; streams of 1 K are drawn at a "
+                   "minimum length. Hover for details.")
+    with st.expander("Stream key"):
+        st.dataframe(pdg.legend_rows(streams), width="stretch", hide_index=True)
+
+
 # ================================================================== workflow (wizard)
 def workflow_page() -> None:
     init_state()
@@ -404,12 +443,15 @@ def _step_streams() -> None:
                 st.info("Upload a CSV to replace the published case.")
         _basis_inputs()
     with right:
+        r = results()
+        if r:
+            st.subheader("Process diagram")
+            _diagram(r, "flowsheet")
         st.subheader("Stream table (editable)")
         st.caption("Each change recomputes every step. Latent loads over 1 K. 'Amb.' streams use 15 °C. "
                    f"`{H_COLUMN}`: film coefficient for ΔTmin supertargeting (step 3)"
                    + ("; empty where the source gives none." if not (ss.base_case.area_targeting or {}) else "."))
         _editor("streams_df", "streams_ver", num_rows="dynamic")
-        r = results()
         if r:
             s = r[2]
             t = s["targets"]
@@ -763,6 +805,9 @@ def dashboard_page() -> None:
                 delta=f"today {b['price_ratio']:.2f}", delta_color="off", border=True,
                 help=f"Electricity-to-gas price ratio at which each unit's increment has NPV = 0. {legend}.")
     st.caption(f"Heat pumps, in order of decreasing COP: {legend}.")
+    with st.container(border=True):
+        st.markdown("**Streams, targets and heat pumps on the T\\* axis**")
+        _diagram(r, "tstar")
     prod = ROOT / "outputs" / case.name / "rq1_production_threshold.json"
     if origin.startswith("published") and prod.exists():
         t = json.loads(prod.read_text()).get("threshold")

@@ -1,0 +1,30 @@
+{
+  "case": "brewery",
+  "note": "Simplified flowsheet of the generalised brewery of Padullés et al. (2026): one box per process step of the stream table (data/brewery_streams.csv), not an equipment list. Grouping of rows into steps (wort kettle = preheating + boiling; condenser = boil-off condensation + condensate cooling) is our simplification. Heat pump connections are indicative: the units serve the steps whose demand lies in their sink range, and draw process heat from the steps releasing heat below the pinch; the actual matches are fixed by the network design (step 5).",
+  "feed_label": "Water, malt",
+  "product_label": "Beer",
+  "steps": [
+    {"name": "Pre-mashing", "row": 0, "col": 0, "streams": ["Pre-mashing"]},
+    {"name": "Mashing", "row": 0, "col": 1, "streams": ["Mashing"]},
+    {"name": "Lautering", "row": 0, "col": 2, "streams": ["Lautering/Filtering"], "subtitle": "Sparge 15→75 °C"},
+    {"name": "Wort kettle", "row": 0, "col": 3, "streams": ["Wortboiling (preheating)", "Wortboiling (boiling)"]},
+    {"name": "CIP", "row": 1, "col": 0, "streams": ["CIP"], "subtitle": "Water 15→78 °C"},
+    {"name": "Condenser", "row": 1, "col": 3, "streams": ["Boiloff condensation", "Condensate cooling"], "subtitle": "Vapour 101→15 °C"},
+    {"name": "Wort cooler", "row": 2, "col": 3, "streams": ["Wortcooling"]},
+    {"name": "Fermenter", "row": 2, "col": 2, "streams": ["Fermentation"]},
+    {"name": "Beer cooling", "row": 2, "col": 1, "streams": ["Beer cooling"]},
+    {"name": "Filtration", "row": 2, "col": 0, "streams": ["Filtration/centrifugation"]}
+  ],
+  "flows": [
+    ["", "Pre-mashing"], ["Pre-mashing", "Mashing"], ["Mashing", "Lautering"], ["Lautering", "Wort kettle"],
+    ["Wort kettle", "Condenser"], ["Wort kettle", "Wort cooler"], ["Wort cooler", "Fermenter"],
+    ["Fermenter", "Beer cooling"], ["Beer cooling", "Filtration"], ["Filtration", ""]
+  ],
+  "heat_pumps": [
+    {"unit": "Warm-water HP", "label": "HP1 · water", "row": 1, "col": 1,
+     "serves": ["Pre-mashing", "Mashing", "Lautering", "CIP"]},
+    {"unit": "HTHP (wort boiling)", "label": "HP2 · HTHP", "row": 1, "col": 2, "serves": ["Wort kettle"]}
+  ],
+  "process_sources": ["Filtration", "Beer cooling", "Fermenter", "Wort cooler", "Condenser"],
+  "source_label": "Process heat below the pinch"
+}

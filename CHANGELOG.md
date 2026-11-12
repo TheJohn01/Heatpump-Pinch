@@ -7,6 +7,17 @@ committed outputs change only where an entry says so.
 ## Unreleased
 
 ### Added
+- Process diagrams (`pinch/process_diagram.py`), each in four views (Process, Energy balance, With heat
+  pumps, All at once). No computed result changes.
+  - Workflow step 1 opens with a simplified flowsheet above the stream table: one box per process step,
+    heat demand and release per step from the current stream table, the step 4 heat pumps with indicative
+    sink and source connections. Layout file `data/brewery_flowsheet.json` (steps grouped from the
+    stream table; wort kettle = preheating + boiling, condenser = boil-off condensation + condensate
+    cooling).
+  - T* stream diagram (streams on the shifted-temperature axis with pinch, energy targets and heat pumps)
+    on the Dashboard, and in step 1 for cases without a layout file and for uploaded tables.
+  - `tests/test_process_diagram.py`: duties against the brewery table, heat pump COP and work against
+    `outputs/brewery/heat_pump_design.csv`, layout validation, well-formed SVG in every view and theme.
 - Third-party integrations, each credited in `docs/THIRD_PARTY.md` (register items 66-71). No existing
   result changes; new outputs only.
   - `pinch/exchanger_rating.py` (ht, fluids): shells in series from the LMTD correction factor, rated area

@@ -287,7 +287,7 @@ flowchart BT
     eco["economics.py, economic_analysis.py,<br/>investment.py, tariffs.py, refrigeration.py"]
     rq["research_questions.py, sensitivity.py"]
     ext["utilities.py, time_slices.py,<br/>restricted_matches.py, reconciliation.py,<br/>uncertainty.py, tespy_heat_pump.py"]
-    io["case.py, results.py, provenance.py,<br/>plotting.py, charts.py, theme.py"]
+    io["case.py, results.py, provenance.py,<br/>plotting.py, charts.py, theme.py,<br/>process_diagram.py"]
     app["app.py + frontend/pages.py"]
     cli["scripts/analysis/analyse.py"]
     streams --> pta --> area
@@ -309,9 +309,20 @@ app does no calculation of its own):
 
 | Page | Content |
 |---|---|
-| Workflow | A step-by-step wizard following the method (1 streams, 2 targets, 3 ΔTmin, 4 heat pumps, 5 retrofit, 6 economics), inputs next to the results they drive; inputs persist across steps and pages |
-| Dashboard | RQ1-RQ3 on one screen with the consolidated sensitivities and the tornado chart; "Recompute table" re-runs every sensitivity for the current inputs (about 15 s) |
+| Workflow | A step-by-step wizard following the method (1 streams, 2 targets, 3 ΔTmin, 4 heat pumps, 5 retrofit, 6 economics), inputs next to the results they drive; inputs persist across steps and pages. Step 1 opens with a simplified flowsheet of the case |
+| Dashboard | RQ1-RQ3 on one screen with the consolidated sensitivities and the tornado chart; "Recompute table" re-runs every sensitivity for the current inputs (about 15 s); the streams, energy targets and heat pumps on the T* axis |
 | Sources | Provenance of every input, the assumptions register, downloads (all outputs as a zip, summary as Markdown/JSON) |
+
+**Process diagrams** (`pinch/process_diagram.py`) draw the case in four views: *Process*, *Energy
+balance*, *With heat pumps* and *All at once* (every layer overlaid). The flowsheet in step 1 has one
+box per process step, with each step's heat demand (+, blue) or release (−, red) taken from the current
+stream table, and the step 4 heat pumps with their sink and source connections. Its layout comes from
+`data/<case>_flowsheet.json` (steps on a four-column grid, material flows, which steps each heat pump
+serves), because a stream table has no material connections; the heat pump connections are
+indicative until the network design (step 5) fixes the matches. Cases without a layout file, and
+uploaded tables, show the T* stream diagram instead: streams as arrows on the shifted-temperature axis
+with the pinch, Q̇h,min, Q̇c,min, recovery and the heat pumps. Stream identifiers (H1, C1, ...) follow
+the stream table and are the same in both diagrams.
 
 Charts are interactive (Altair, `pinch/charts.py`). The theme is a plain technical-document style
 (IBM Plex Sans and Mono, served by the app) with light and dark modes; colours carry meaning: **red
@@ -868,6 +879,7 @@ cases/                       One file per type of plant (names, titles and descr
 data/
   <plant>_streams.csv        Stream table of each case (brewery, milk_evaporator, spray_dryer, four_stream_process)
   brewery_networks.json      Existing brewery network and the condensate retrofit (step 5)
+  brewery_flowsheet.json     Layout of the brewery's simplified flowsheet (process steps, flows, heat pump links)
   brewery_configurations.json  Heat pump configurations of the brewery source; values tagged published/figure/assumed
   reference_targets.json     Published/textbook targets used by the validation tests, with their sources
   benchmarks/                Published networks and exchanger designs, OpenPinch results, Letsios et al. instances
@@ -907,6 +919,7 @@ pinch/
   provenance.py              Tool version and input hashes in summary.json; run metadata (git-ignored)
   plotting.py                Figures (returned, or saved to file)
   charts.py                  Interactive charts for the front end (Altair), light or dark palette
+  process_diagram.py         Simplified flowsheet (layout file per case) and T* stream diagram, as SVG in four views
   theme.py                   Light and dark palettes of the front end, colour meaning, WCAG contrast check
 scripts/                     Command-line scripts, run from the root as modules (Section 11.2)
   analysis/                  analyse, screen_cycles, consolidate_rq, heat_pump_partload
@@ -962,7 +975,7 @@ follows from the code and the inputs. Highlights:
 | `test_network.py`, `test_checks.py`, `test_reproductions.py` | Existing network and retrofit; MVR COP below Carnot; reproductions of the papers |
 | `test_time_slices.py`, `test_plant_data.py`, `test_utilities.py`, `test_refrigeration.py` | Stampfli et al.; reconciliation, uncertainty, restricted matches; utility levels; refrigeration credit |
 | `test_exchanger_rating.py` | F against the closed-form 1-2 shell solution; N-shell relation; published shell counts; tube-side benchmark tolerances |
-| `test_app.py`, `test_theme.py` | Every page, step and case of the front end; theme contrast and palette |
+| `test_app.py`, `test_theme.py`, `test_process_diagram.py` | Every page, step and case of the front end; theme contrast and palette; diagram duties, heat pump figures and layout checks |
 | `test_quality.py` | ruff clean, mypy on the typed modules, one version everywhere, provenance in the outputs |
 
 ### 11.4 Reproducibility and quality

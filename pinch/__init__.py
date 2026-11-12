@@ -36,6 +36,7 @@ validation               Reference targets vs computed values.
 results                  Outputs container (summary, tables, figures).
 plotting                 Matplotlib figures for files and the dissertation.
 charts                   Altair charts for the app, in the light or dark palette.
+process_diagram          Simplified flowsheet and T* stream diagram as SVG, four views (step 1; Dashboard).
 theme                    Light and dark colour palettes, colour meaning, WCAG contrast (front end).
 """
 
