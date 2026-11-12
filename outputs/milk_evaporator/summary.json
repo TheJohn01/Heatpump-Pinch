@@ -50,7 +50,7 @@
     "steam sink": "verified: the 105 °C level supplies the Direct Steam Injection that follows the 8 -> 95 °C preheat (Walmsley et al. 2024, Sec. 3.2), so the DEA steam-generation add-on applies"
   },
   "run": {
-    "tool_version": "0.8.0",
+    "tool_version": "0.9.0",
     "inputs_sha256": {
       "cases/milk_evaporator.json": "3c7dfff060ec4fb71607c3d5e0a5c3c662032cf92d2ddeb6be2481d5fc61f4d4",
       "data/milk_evaporator_streams.csv": "401ee249e813da36fe9aeaaad48a6415623b4d08b4083d71279cc65c40712b41"

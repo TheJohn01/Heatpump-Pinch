@@ -1,0 +1,30 @@
+section,unit,quantity,method,eta_lorenz,value,status,source,verdict,passed
+1 COP,Warm-water HP,COP,Reversible Lorenz COP (second-law bound),1.0,6.4494,bound,"pinch.heat_pump.lorenz_cop, η_L = 1",,
+1 COP,Warm-water HP,COP,"Lorenz model, case η_L (basis of the economics)",0.5,3.225,basis,cases/<case>.json heat_pumps.eta_lorenz; provenance.eta_lorenz,,
+1 COP,Warm-water HP,COP,"Lorenz model, paper η_L 0.55",0.55,3.5472,sensitivity row,"Padullés et al. (2026), Sec. 4.3.1",,
+1 COP,Warm-water HP,COP,Andersen et al. (2024) polynomial,0.5728,3.694,"extrapolated, not a check","Applied Energy 376, 124312, Sec. 3.2 (T_source_in_C = -1 outside fitted range (0.0, 100.0); source_glide_K = 0 outside fitted range (-50.0, -10.0))",,
+1 COP,Warm-water HP,COP,"Cycle model with losses (n-Propane, single stage, SLHX)",0.4821,3.1092,check; 'Cycle-based COP' sensitivity row,outputs/<case>/cycle_screening.json,,
+1 COP,Warm-water HP,COP,"Idealised single-stage cycle, pinch.cycle",0.5201,3.3546,"model check (no losses, no SLHX)",outputs/<case>/heat_pump_partload.csv,,
+1 COP,Warm-water HP,COP,"Idealised single-stage cycle, TESPy",0.5201,3.3546,"model check (no losses, no SLHX)",outputs/<case>/heat_pump_partload.csv,,
+1 COP,HTHP (wort boiling),COP,Reversible Lorenz COP (second-law bound),1.0,3.6168,bound,"pinch.heat_pump.lorenz_cop, η_L = 1",,
+1 COP,HTHP (wort boiling),COP,"Lorenz model, case η_L (basis of the economics)",0.4999,1.808,basis,cases/<case>.json heat_pumps.eta_lorenz; provenance.eta_lorenz,,
+1 COP,HTHP (wort boiling),COP,"Lorenz model, paper η_L 0.55",0.55,1.9893,sensitivity row,"Padullés et al. (2026), Sec. 4.3.1",,
+1 COP,HTHP (wort boiling),COP,Andersen et al. (2024) polynomial,0.6337,2.292,"extrapolated, not a check","Applied Energy 376, 124312, Sec. 3.2 (T_source_in_C = -1 outside fitted range (0.0, 100.0); source_glide_K = 0 outside fitted range (-50.0, -10.0))",,
+1 COP,HTHP (wort boiling),COP,"Cycle model with losses (n-Propane / n-Butane, cascade (SLHX top))",0.5408,1.956,check; 'Cycle-based COP' sensitivity row,outputs/<case>/cycle_screening.json,,
+2 CAPEX,Warm-water HP,CAPEX_EUR,Case cost function (Padullés Table 3),,1066176.0,basis,cases/<case>.json economics,,
+2 CAPEX,Warm-water HP,CAPEX_EUR,Kosmadakis et al. (2020) component cost (heatpumps),,981315.0,check; 'Heat pump CAPEX -8 %' sensitivity row,"Kosmadakis et al. (2020), Energy Convers. Manag. 226, 113488, as implemented in heatpumps (Freißmann and Fritz, MIT), HeatPumpBase.calc_cost",,
+3 vs paper config. 2,Warm-water HP,Q_sink,Published: CO2 HP,,8.3,published,"Padullés et al. (2026), Fig. 14",,
+3 vs paper config. 2,Warm-water HP,Q_sink,Case design (GCC sizing),,7.2824,reproduced,outputs/<case>/heat_pump_design.csv,,
+3 vs paper config. 2,Warm-water HP,W,Published: CO2 HP,,2.4,published,"Padullés et al. (2026), Fig. 14",,
+3 vs paper config. 2,Warm-water HP,W,Case design (GCC sizing),,2.2583,reproduced,outputs/<case>/heat_pump_design.csv,,
+3 vs paper config. 2,HTHP (wort boiling),Q_sink,Published: HTHP,,2.4,published,"Padullés et al. (2026), Fig. 14",,
+3 vs paper config. 2,HTHP (wort boiling),Q_sink,Case design (GCC sizing),,2.76,reproduced,outputs/<case>/heat_pump_design.csv,,
+3 vs paper config. 2,HTHP (wort boiling),W,Published: HTHP,,1.2,published,"Padullés et al. (2026), Fig. 14",,
+3 vs paper config. 2,HTHP (wort boiling),W,Case design (GCC sizing),,1.5262,reproduced,outputs/<case>/heat_pump_design.csv,,
+verdict,Warm-water HP,,,,,,max COP 3.694 < reversible 6.449,V1,True
+verdict,Warm-water HP,,,,,,TESPy/pinch.cycle - 1 = 0.000 %,V2,True
+verdict,Warm-water HP,,,,,,"basis 3.225 vs defensible range [3.109, 3.547] (cycle with losses, paper η_L): within the range",V3,True
+verdict,HTHP (wort boiling),,,,,,max COP 2.292 < reversible 3.617,V1,True
+verdict,HTHP (wort boiling),,,,,,"basis 1.808 vs defensible range [1.956, 1.989] (cycle with losses, paper η_L): conservative, 7.6 % below",V3,True
+verdict,Warm-water HP,,,,,,Kosmadakis / case = 0.920 (band ±25%),V4,True
+verdict,configuration 2,,,,,,W reproduced 3.546 vs published 3.600 (-1.49 %),V5,True

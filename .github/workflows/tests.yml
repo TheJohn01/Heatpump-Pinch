@@ -39,7 +39,7 @@ jobs:
           cache-dependency-path: requirements*.txt
       - name: Install exact tested versions
         run: pip install -r requirements-dev.txt
-      - name: Regenerate outputs and compare with the committed ones (PNG excluded)
+      - name: Regenerate outputs and compare with the committed ones (PNG with a rasterisation tolerance)
         env:
           MPLBACKEND: Agg
         run: python regenerate_outputs.py --check

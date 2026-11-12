@@ -40,12 +40,13 @@ process_diagram          Simplified flowsheet and T* stream diagram as SVG, four
 theme                    Light and dark colour palettes, colour meaning, WCAG contrast (front end).
 """
 
-__version__ = "0.8.0"   # keep equal to pyproject.toml and CITATION.cff (tests/test_quality.py)
+__version__ = "0.9.0"   # keep equal to pyproject.toml and CITATION.cff (tests/test_quality.py)
 
 import matplotlib as _mpl
 
 # Deterministic figures on every machine: DejaVu Sans ships with matplotlib, so PNG outputs do not depend on
-# the fonts installed locally (design review C2).
+# the fonts installed locally (design review C2). The FreeType version can still move text edges by a few
+# pixels; regenerate_outputs.py compares PNGs with a tolerance for that.
 _mpl.rcParams["font.family"] = "DejaVu Sans"
 
 from pinch.curves import composite_curve  # noqa: E402 (after the font setting, by design)

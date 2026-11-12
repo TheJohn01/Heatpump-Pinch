@@ -944,6 +944,7 @@ outputs/                     Committed results, one folder per case (rebuilt by 
 | `scripts/analysis/analyse.py` | Steps 1-6 for one case or all → outputs/&lt;case&gt;/ (summary, tables, figures) |
 | `scripts/analysis/screen_cycles.py` | Working-fluid screening (step 4b; minutes) → cycle_screening.csv/.json |
 | `scripts/analysis/consolidate_rq.py` | RQ1-RQ3 for every sensitivity row → rq_consolidated.csv/.md, rq_tornado.png |
+| `scripts/checks/design_consistency_check.py` | Which heat pump COP and CAPEX is the basis and how the cycle model, TESPy, the paper's η_L and Andersen et al. relate → design_consistency.csv/.md (verdicts V1-V5) |
 | `scripts/analysis/heat_pump_partload.py` | TESPy design check, part load, component cost → heat_pump_partload.csv, heat_pump_cost_check.csv |
 | `scripts/checks/batch_check.py` | HTHP capacity for the boil window (8-14 brews/day × 60-90 min) |
 | `scripts/checks/mvr_check.py` | Padullés configuration 3 (MVR + booster) against the HTHP |

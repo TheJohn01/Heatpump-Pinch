@@ -325,6 +325,12 @@
       "basis": "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"
     },
     {
+      "label": "Heat pump CAPEX -8 % (component cost, Kosmadakis 2020)",
+      "kind": "hp_capex",
+      "value": 0.92,
+      "basis": "Kosmadakis et al. (2020), Energy Convers. Manag. 226, 113488, component cost as implemented in heatpumps: 0.98 MEUR vs 1.07 MEUR from the case cost function for the warm-water unit (outputs/brewery/heat_pump_cost_check.csv, design_consistency.md)"
+    },
+    {
       "label": "Retrofit exchanger CAPEX x3",
       "kind": "hx_capex",
       "value": 3.0,

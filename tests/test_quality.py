@@ -71,3 +71,34 @@ def test_run_metadata_is_ignored_by_git():
         pytest.skip("not a git checkout")
     r = subprocess.run(["git", "check-ignore", "-q", "outputs/brewery/run_metadata.json"], cwd=ROOT)
     assert r.returncode == 0
+
+
+def test_png_tolerance_separates_rasterisation_from_real_changes():
+    """regenerate_outputs.png_change: text antialiasing passes, a moved curve or a size change fails."""
+    import io as _io
+
+    import numpy as np
+    from PIL import Image, ImageDraw
+
+    import regenerate_outputs as reg
+
+    def png(img: Image.Image) -> bytes:
+        buf = _io.BytesIO()
+        img.save(buf, "PNG")
+        return buf.getvalue()
+
+    base = Image.new("L", (400, 300), 255)
+    d = ImageDraw.Draw(base)
+    d.line([(20, 250), (380, 40)], fill=0, width=2)
+    d.text((50, 40), "Q_h,min 10.04 kWh/hl", fill=0)
+    a = png(base)
+    noisy = np.asarray(base, dtype=int).copy()
+    rng = np.random.default_rng(0)                      # antialiasing: edge pixels shift by up to 60 levels
+    edges = np.argwhere(noisy < 255)
+    for y, x in edges[rng.choice(len(edges), len(edges) // 2, replace=False)]:
+        noisy[y, x] = min(255, noisy[y, x] + 60)
+    assert reg.png_change(a, png(Image.fromarray(noisy.astype("uint8")))) <= reg.PNG_TOLERANCE
+    moved = base.copy()
+    ImageDraw.Draw(moved).line([(20, 200), (380, 60)], fill=0, width=3)
+    assert reg.png_change(a, png(moved)) > reg.PNG_TOLERANCE
+    assert reg.png_change(a, png(base.resize((401, 300)))) == float("inf")

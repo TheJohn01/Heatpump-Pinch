@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import math
 from pathlib import Path
 
 import pandas as pd
@@ -91,7 +92,10 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
             f"source_from_process_{unit}": round(r.Q_source_process.get(u.name, 0.0), 4),
             f"source_external_{unit}": round(r.Q_source_external.get(u.name, 0.0), 4),
             "placement": r.placement[u.name],
-            "eta_lorenz_Andersen2024_check": round(eta_A, 3),
+            # Andersen et al. (2024) is a check only inside its fitted range; outside it the value is an
+            # extrapolation and is reported in its own column (scripts/checks/design_consistency_check.py).
+            "eta_lorenz_Andersen2024_check": math.nan if eta_A_warn else round(eta_A, 3),
+            "eta_lorenz_Andersen2024_extrapolated": round(eta_A, 3) if eta_A_warn else math.nan,
             "Andersen2024_validity": "; ".join(eta_A_warn) or "within fitted range",
             "warnings": "; ".join(plausibility_warnings(u, case.screening) + src_warn.get(u.name, [])),
         })

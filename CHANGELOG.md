@@ -4,9 +4,15 @@ Versions follow semantic versioning. Each release is a git tag `vX.Y.Z` whose ve
 `pinch.__version__`, `pyproject.toml` and `CITATION.cff` (checked by `tests/test_quality.py`). Numbers in
 committed outputs change only where an entry says so.
 
-## Unreleased
+## 0.9.0 (2026-11-12)
 
 ### Added
+- `scripts/checks/design_consistency_check.py` → `outputs/brewery/design_consistency.csv/.md`: one table
+  of every COP and CAPEX reported for the brewery heat pumps (basis, cycle model, idealised cycle in
+  pinch.cycle and TESPy, paper's η_L, Andersen et al. 2024, reversible bound; case cost function and
+  Kosmadakis component cost; case design against the paper's configuration 2) with verdicts V1-V5. Finding:
+  the HTHP basis COP (η_L 0.50) is 7.6 % below our cascade-cycle model, i.e. conservative.
+- Sensitivity row "Heat pump CAPEX −8 % (component cost, Kosmadakis 2020)" (HP1 payback 3.95 y; base 4.29 y).
 - Process diagrams (`pinch/process_diagram.py`), each in four views (Process, Energy balance, With heat
   pumps, All at once). No computed result changes.
   - Workflow step 1 opens with a simplified flowsheet above the stream table: one box per process step,
@@ -39,6 +45,11 @@ committed outputs change only where an entry says so.
   optional extras `rating`, `tespy`, `prices` in `pyproject.toml`.
 
 ### Changed
+- `heat_pump_design.csv`: the Andersen et al. (2024) value moves to `eta_lorenz_Andersen2024_extrapolated`
+  when the unit is outside the fitted range (every committed case); `eta_lorenz_Andersen2024_check` is
+  then empty. No other number changes.
+- `regenerate_outputs.py` compares PNG figures with a rasterisation tolerance instead of skipping them,
+  and restores figures that differ only by font rasterisation; Pillow pinned in `requirements.txt`.
 - Wording only: the project no longer refers to an academic programme or institution; review notes
   are called "design review" (same item codes A1-C4). Committed outputs change only in these text
   fields and in the input hashes of `summary.json`; no number changes.

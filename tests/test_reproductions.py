@@ -46,3 +46,19 @@ def test_padulles2026_assumption_verdicts():
     widths = {q: verdict for (c, q), verdict in got.items() if c == "A2"}
     assert len({v for q, v in widths.items() if "2.0 K" not in q}) == 1
     assert widths["min-energy design W_total, width 2.0 K [kWh/hl]"] != widths["min-energy design W_total, width 1.0 K [kWh/hl]"]
+
+
+def test_design_consistency_verdicts():
+    """Which heat pump number is the basis, and how the others relate (scripts/checks/design_consistency_check.py)."""
+    from pinch.validation import ROOT
+    from scripts.checks import design_consistency_check as v
+    table, verdicts = v.checks(ROOT / "cases" / "brewery.json")
+    assert verdicts["passed"].all(), verdicts[~verdicts["passed"]]
+    assert sorted(verdicts["verdict"].unique()) == ["V1", "V2", "V3", "V4", "V5"]
+    v3 = dict(zip(verdicts.loc[verdicts["verdict"] == "V3", "unit"], verdicts.loc[verdicts["verdict"] == "V3", "detail"]))
+    assert v3["Warm-water HP"].endswith("within the range")
+    assert v3["HTHP (wort boiling)"].endswith("conservative, 7.6 % below")
+    andersen = table[(table["unit"] == "Warm-water HP") & (table["method"] == "Andersen et al. (2024) polynomial")]
+    assert andersen["status"].tolist() == ["extrapolated, not a check"]
+    basis = table[table["status"] == "basis"]
+    assert set(basis["quantity"]) == {"COP", "CAPEX_EUR"} and (basis["quantity"] == "COP").sum() == 2

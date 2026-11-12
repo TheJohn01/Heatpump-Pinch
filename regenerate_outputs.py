@@ -6,8 +6,11 @@ Usage:
 
 The CI workflow runs ``--check``: a result in outputs/ that no longer follows from the code and the case
 files fails the build. The same holds for the generated blocks of README.md (the table of economic
-defaults, written from ``pinch.economics``). PNG files are regenerated but excluded from the comparison (font rasterisation
-differs between machines); their data are in the CSV files next to them.
+defaults, written from ``pinch.economics``). PNG figures are compared with a tolerance: font rasterisation
+(FreeType version and hinting) differs between machines and moves only text edges, so a figure counts as
+changed when, after averaging over 8 x 8 pixel blocks, some block differs by more than 40 grey levels
+(``png_change``). Text antialiasing alone stays below 16; a moved curve or bar, or a changed label, exceeds it.
+A regenerated PNG within the tolerance is restored to the committed file, so a rerun leaves no spurious diffs.
 
 Order: step-1/2 validation and reproductions, cycle screening (read by scripts/analysis/analyse.py), all cases, then the
 brewery checks that read scripts/analysis/analyse.py's outputs.
@@ -16,10 +19,14 @@ brewery checks that read scripts/analysis/analyse.py's outputs.
 from __future__ import annotations
 
 import argparse
+import io
 import os
 import subprocess
 import sys
 from pathlib import Path
+
+import numpy as np
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parent
 BREWERY = "cases/brewery.json"
@@ -43,6 +50,7 @@ STEPS: tuple[tuple[str, ...], ...] = (
     ("-m", "scripts.checks.mvr_check", BREWERY),
     ("-m", "scripts.checks.investment_check", BREWERY),
     ("-m", "scripts.checks.plant_data_check", BREWERY),
+    ("-m", "scripts.checks.design_consistency_check", BREWERY),
     ("-m", "scripts.validation.reproduce_secondary_economics"),
 )
 
@@ -67,19 +75,59 @@ def update_readme() -> None:
     README.write_text(f"{head}{BEGIN}\n{defaults_markdown()}{END}{tail}", encoding="utf-8")
 
 
-def changed_outputs() -> list[str]:
-    """Committed outputs (excluding PNG) and README.md that differ from HEAD, plus untracked new outputs."""
-    diff = subprocess.run(["git", "status", "--porcelain", "--", "outputs", "README.md"], cwd=ROOT, check=True,
+PNG_BLOCK_PX = 8
+PNG_TOLERANCE = 40.0       # grey levels, on block means (0-255)
+
+
+def png_change(old: bytes, new: bytes, block: int = PNG_BLOCK_PX) -> float:
+    """Largest block-mean grey-level difference between two PNG images (inf if the sizes differ)."""
+    a = np.asarray(Image.open(io.BytesIO(old)).convert("L"), dtype=float)
+    b = np.asarray(Image.open(io.BytesIO(new)).convert("L"), dtype=float)
+    if a.shape != b.shape:
+        return float("inf")
+    h, w = (a.shape[0] // block) * block, (a.shape[1] // block) * block
+
+    def means(x: np.ndarray) -> np.ndarray:
+        return x[:h, :w].reshape(h // block, block, w // block, block).mean(axis=(1, 3))
+
+    return float(np.abs(means(a) - means(b)).max())
+
+
+def _status() -> list[str]:
+    return subprocess.run(["git", "status", "--porcelain", "--", "outputs", "README.md"], cwd=ROOT, check=True,
                           capture_output=True, text=True).stdout.splitlines()
-    return [line for line in diff if not line.rstrip().endswith(".png")]
+
+
+def settle_pngs() -> list[str]:
+    """Restore modified PNGs that differ from HEAD only by rasterisation; return the ones that really changed."""
+    changed = []
+    for line in _status():
+        path = line[3:].strip()
+        if not (line.startswith(" M") and path.endswith(".png")):
+            continue
+        old = subprocess.run(["git", "show", f"HEAD:{path}"], cwd=ROOT, check=True, capture_output=True).stdout
+        if png_change(old, (ROOT / path).read_bytes()) <= PNG_TOLERANCE:
+            subprocess.run(["git", "checkout", "--", path], cwd=ROOT, check=True)
+        else:
+            changed.append(line)
+    return changed
+
+
+def changed_outputs() -> list[str]:
+    """Committed outputs and README.md that differ from HEAD (PNGs beyond the tolerance), plus untracked new ones."""
+    real_pngs = settle_pngs()
+    return [line for line in _status() if not line.rstrip().endswith(".png")] + real_pngs
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--check", action="store_true", help="fail if a committed non-PNG output changed")
+    parser.add_argument("--check", action="store_true", help="fail if a committed output changed")
     args = parser.parse_args()
     run_all()
     update_readme()
+    real = settle_pngs()
+    if real and not args.check:
+        print("Figures that changed (beyond rasterisation):\n" + "\n".join(real))
     if args.check:
         changed = changed_outputs()
         if changed:

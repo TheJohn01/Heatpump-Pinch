@@ -58,9 +58,9 @@
     "warm-water heat pump name": "'Warm-water HP' = the CO2 heat pump of Padullés et al. (2026, config. 2); our cycle screening selects propane with SLHX as the practical fluid (step 4b), so the unit is named by its duty"
   },
   "run": {
-    "tool_version": "0.8.0",
+    "tool_version": "0.9.0",
     "inputs_sha256": {
-      "cases/brewery.json": "452d1b586b368e0703e442a4549dd5e34ce8d7fe77706dee576e5be3578bfb18",
+      "cases/brewery.json": "4ea9775f3e5fd993cce65df472bfb526de1b95db5e918cd261719ff695628a67",
       "data/brewery_networks.json": "2b5fe7b9fefc0f82dfb1acba833bbcb54c7cbe9080f375c66c3093b5d01b406e",
       "data/brewery_streams.csv": "70a7b23ff21b25cdd95413a64ba682fdef48d53692456ebde9efa368e11daec2"
     }
