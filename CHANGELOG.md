@@ -28,6 +28,11 @@ committed outputs change only where an entry says so.
   optional extras `rating`, `tespy`, `prices` in `pyproject.toml`.
 
 ### Changed
+- README rewritten as a structured technical document: abstract with the RQ answers, introduction
+  (motivation, objectives, scope, contributions), architecture diagrams, one section per workflow step
+  with its equations, results for the brewery with sensitivities, validation and limitations, software
+  and tests, conclusions and future work, credits, numbered references and nomenclature. The economic
+  defaults block, the module list and the data-sources table keep their tested formats.
 - Repository layout: the 18 scripts that sat in the root move into folders; only `app.py` (Streamlit Cloud
   entry point) and `regenerate_outputs.py` stay in the root. Scripts now run from the root as modules.
   No output changes (all committed outputs regenerate byte for byte).
