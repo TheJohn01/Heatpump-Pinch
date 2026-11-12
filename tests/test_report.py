@@ -144,22 +144,36 @@ def test_caption_rules(brewery):
 
 
 def test_every_figure_of_the_run_is_in_the_report(brewery):
-    """All matplotlib figures of the run, the cash flow and ±20 % figures, the RQ tornado and (with CairoSVG)
-    the flowsheet and T* diagram."""
+    """All matplotlib figures of the run, the cash flow and ±20 % figures, the RQ tornado, the flowsheet and the
+    T* diagram (resvg is a requirement, so the diagrams must be drawn, not replaced by the note)."""
     *_, res, rep = brewery
     figs = [b.png for b in rep.blocks if isinstance(b, rp.Figure)]
     for stem, png in res.pngs.items():
         assert png in figs, stem
-    svg = 2 if rp.svg_png("<svg xmlns='http://www.w3.org/2000/svg' width='2' height='2'/>") else 0
-    assert len(figs) == len(res.pngs) + 3 + svg
+    assert len(figs) == len(res.pngs) + 3 + 2
+    text = " ".join(b.text for b in rep.blocks if isinstance(b, rp.Para))
+    assert "could not be drawn" not in text
 
 
-def test_missing_cairo_gives_a_note(brewery, monkeypatch):
+def test_svg_png_draws_the_diagrams():
+    """resvg renders the diagram SVGs (arrow markers included) to PNG without any system library."""
+    pytest.importorskip("resvg_py")
+    png = rp.svg_png("<svg xmlns='http://www.w3.org/2000/svg' width='40' height='20'><text x='2' y='15'>Q ≤ 1</text>"
+                     "</svg>", width_px=400)
+    assert png[:8] == b"\x89PNG\r\n\x1a\n"
+    from PIL import Image
+    im = Image.open(io.BytesIO(png))
+    assert im.size == (400, 200)
+    assert im.convert("L").getextrema()[0] < 128         # the text is drawn (fonts found)
+
+
+def test_missing_renderer_gives_a_note(brewery, monkeypatch):
     case, streams, res, _ = brewery
     monkeypatch.setattr(rp, "svg_png", lambda svg, width_px=2000: None)
     rep = rp.build_report(case, streams, res.summary, res.tables, res.pngs)
     text = " ".join(b.text for b in rep.blocks if isinstance(b, rp.Para))
     assert "flowsheet could not be drawn" in text and "T* diagram could not be drawn" in text
+    assert "resvg-py" in text
 
 
 def test_numbers_in_the_abstract_match_the_run(brewery):

@@ -334,8 +334,9 @@ sensitivity (±20 % one at a time, the case's scenario rows, Lorenz efficiency, 
 and documentation (assumptions, input hashes, references). Every chart and diagram of the run is
 included. Tables and figures are numbered separately from 1; table captions stand above the table and
 figure captions below the figure, each a bold label followed by full sentences. The diagrams are
-rasterised with CairoSVG (needs the Cairo library; without it the report says so in place of the
-diagram). The files are written on click.
+rasterised with resvg (`resvg-py`, a self-contained wheel for Windows, macOS and Linux; fonts from
+matplotlib, so the image is the same on every machine; if the package is missing the report says so in
+place of the diagram). The files are written on click.
 
 Charts are interactive (Altair, `pinch/charts.py`). The theme is a plain technical-document style
 (IBM Plex Sans and Mono, served by the app) with light and dark modes; colours carry meaning: **red

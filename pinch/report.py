@@ -47,6 +47,8 @@ PROGRAM = "Heatpump-Pinch"
 #: Source of the default cost functions (pinch.economics.DEFAULT_COST_FUNCTIONS, module comment)
 DEFAULT_COST_SOURCE = ("Padullés et al. (2026), Table 3, from the Danish Energy Agency Technology Catalogue; O&M from "
                        "the Danish Energy Agency, Technology Data - Industrial Process Heat (2025)")
+MISSING_DIAGRAM = ("The {} could not be drawn here: the package resvg-py is not installed "
+                   "(pip install -r requirements.txt). It is shown in the app.")
 SWING = 0.20   # one-at-a-time change of each input in the sensitivity table (as in the reference layout)
 
 
@@ -276,12 +278,23 @@ def figure_png(fig, dpi: int = 200) -> bytes:
 
 
 def svg_png(svg: str, width_px: int = 2000) -> bytes | None:
-    """PNG of an SVG diagram with CairoSVG; None if CairoSVG or the Cairo library is not installed."""
+    """PNG of an SVG diagram with resvg (``resvg-py``); None if that package is not installed.
+
+    resvg ships as a self-contained wheel for Windows, macOS and Linux (no system library, unlike CairoSVG,
+    which needs Cairo and fails on a plain Windows install). Text is set in DejaVu Sans from matplotlib's
+    data folder and system fonts are skipped, so the image is the same on every machine.
+    """
     try:
-        import cairosvg  # optional dependency (requirements.txt); needs the Cairo C library
-    except (ImportError, OSError):
+        import resvg_py  # dependency of the report (requirements.txt)
+    except ImportError:
         return None
-    return bytes(cairosvg.svg2png(bytestring=svg.encode("utf-8"), output_width=width_px, background_color="white"))
+    from pathlib import Path
+
+    import matplotlib
+    fonts = str(Path(matplotlib.get_data_path()) / "fonts" / "ttf")
+    return bytes(resvg_py.svg_to_bytes(svg_string=svg, width=width_px, background="white", skip_system_fonts=True,
+                                       font_dirs=[fonts], font_family="DejaVu Sans",
+                                       sans_serif_family="DejaVu Sans"))
 
 
 def cash_flow_figure(cf: pd.DataFrame, rate: float):
@@ -567,8 +580,7 @@ def build_report(case: Case, streams: StreamSet, summary: dict, tables: dict[str
              + f". Tags give each step's heat demand (+) or release (−) in {unit}; heat pumps and their "
                "connections are shown in teal, and the connections are indicative (fixed by the network design).",
              svg_png(_flowsheet(case, streams, hp_ok, layout)), 0.95,
-             missing="The flowsheet could not be drawn here (CairoSVG and the Cairo library are not installed); "
-                     "it is shown in the app.")
+             missing=MISSING_DIAGRAM.format("flowsheet"))
     leg = pdg.legend_rows(streams)
     b.table(f"Process streams: supply and target temperatures and heat loads ({unit}).",
             leg.columns, leg.astype(str).itertuples(index=False), (0.09, 0.39, 0.1, 0.24, 0.18))
@@ -576,8 +588,7 @@ def build_report(case: Case, streams: StreamSet, summary: dict, tables: dict[str
     b.figure("Streams, energy targets and heat pumps on the shifted-temperature axis T*: hot streams point down, "
              "cold streams up, and the dashed line is the pinch. Streams of 1 K (latent loads) are drawn at a minimum "
              "length.", svg_png(pdg.stream_diagram_svg(shifted, t, hp_ok, "all", LIGHT)), 0.95,
-             missing="The T* diagram could not be drawn here (CairoSVG and the Cairo library are not installed); it "
-                     "is shown in the app.")
+             missing=MISSING_DIAGRAM.format("T* diagram"))
     b.h("2.2 Energy targets", 2)
     b.figure("Shifted composite curves: the horizontal overlap is the heat recovered, the overhang at the top the "
              "minimum hot utility and at the bottom the minimum cold utility.", pngs.get("composite_curves"))

@@ -11,12 +11,12 @@ committed outputs change only where an entry says so.
   (`pinch.report` builds the content once, `pinch.report_render` writes both files; written on click).
   Structure of ISO/TS 14076:2025 (goal and scope, technical, economic, environmental screening,
   sensitivity, interpretation, documentation), labelled "not critically reviewed" on every page. It includes
-  every chart and diagram of the run (flowsheet and T* diagram rasterised with CairoSVG) plus a discounted
+  every chart and diagram of the run (flowsheet and T* diagram rasterised with resvg, a self-contained wheel on every platform) plus a discounted
   cash-flow chart, a ±20 % NPV tornado and the RQ3 tornado. Tables and figures are numbered separately; table
   captions above, figure captions below; in Word the captions use the Caption style and SEQ fields.
 - `Outputs.snapshot_pngs`: PNG copies of a run's figures that survive `write` (the zip download releases the
   figures, so the report could otherwise lose them).
-- Dependencies: reportlab, python-docx, cairosvg (`requirements.txt`; extras `app` and `report`).
+- Dependencies: reportlab, python-docx, resvg-py (`requirements.txt`; extras `app` and `report`).
 - Browser smoke test: both report downloads return a valid file (check 0b).
 
 No committed output changes.
