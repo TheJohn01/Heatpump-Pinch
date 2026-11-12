@@ -12,7 +12,7 @@ abstract: >-
 authors:
   - family-names: Caldas
     given-names: Tomás
-version: 0.9.0
+version: 0.10.0
 date-released: 2026-11-12
 license: MIT
 repository-code: "https://github.com/TheJohn01/Heatpump-Pinch"

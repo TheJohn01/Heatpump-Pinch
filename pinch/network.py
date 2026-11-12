@@ -169,7 +169,8 @@ def _residual(streams: StreamSet, network: Network) -> dict[str, list[tuple[floa
     used: dict[str, list[tuple[float, float]]] = {}
     for m in network.matches:
         for seg in m.hot + m.cold:
-            used.setdefault(seg.stream, []).append(tuple(sorted((seg.T_from_C, seg.T_to_C))))
+            lo, hi = sorted((seg.T_from_C, seg.T_to_C))
+            used.setdefault(seg.stream, []).append((lo, hi))
     out = {}
     for s in streams.streams:
         lo, hi = sorted((s.T_in_C, s.T_out_C))

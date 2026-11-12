@@ -1,0 +1,15 @@
+# ERSE (Entidade Reguladora dos Serviços Energéticos), annual change of the network access tariffs (Tarifas de Acesso às Redes) by voltage level, mainland Portugal.
+# 2026: "Tarifas e Preços para a Energia Elétrica em 2026", communiqué, Lisbon, 15 December 2025 (approved).
+# 2027: "Proposta de Tarifas e Preços para a Energia Elétrica em 2027", communiqué, Lisbon, 15 October 2026 (proposal; final decision due by 15 December 2026).
+# These are average changes of the tariff level, not tariff prices: apply them to the network-cost share of a delivered price (Eurostat nrg_pc_205_c, component NETC).
+year,voltage,code,change_pct,status
+2026,Muito Alta Tensão,MAT,-2.9,approved
+2026,Alta Tensão,AT,-0.8,approved
+2026,Média Tensão,MT,1.8,approved
+2026,Baixa Tensão Especial,BTE,2.7,approved
+2026,Baixa Tensão Normal,BTN,3.5,approved
+2027,Muito Alta Tensão,MAT,-1.3,proposal
+2027,Alta Tensão,AT,-8.1,proposal
+2027,Média Tensão,MT,-13.5,proposal
+2027,Baixa Tensão Especial,BTE,-13.2,proposal
+2027,Baixa Tensão Normal,BTN,-13.7,proposal

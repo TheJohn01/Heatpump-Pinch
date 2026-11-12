@@ -33,7 +33,7 @@ import math
 from dataclasses import dataclass
 
 from pinch.area_analysis import area_targeting_outputs
-from pinch.case import Case, to_MWh_per_year
+from pinch.case import Case, annual_converter
 from pinch.design import design_from_gcc, partial_designs
 from pinch.economics import EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment
 from pinch.heat_pump import HeatPump
@@ -73,7 +73,7 @@ def build_site(case: Case, streams: StreamSet, params: EconomicParameters) -> Si
     from pinch.retrofit import network_cooling, new_network_at_target, new_recovery_equipment
     if case.basis is None:
         raise ValueError("RQ1-RQ3 need an annual basis (Workflow, step 1)")
-    to_MWh = lambda x: to_MWh_per_year(x, streams.energy_unit, case.basis)  # noqa: E731
+    to_MWh = annual_converter(streams.energy_unit, case.basis)
 
     if case.retrofit:
         block = case.retrofit
@@ -132,7 +132,7 @@ def _payback(x: float) -> float:
     return round(x, 2) if math.isfinite(x) else x
 
 
-def answers(case: Case, streams: StreamSet, params: EconomicParameters, source_limited: bool = False) -> dict:
+def answers(case: Case, streams: StreamSet, params: EconomicParameters, source_limited: bool = False) -> dict | None:
     """RQ1, RQ2, RQ3 for one case variant (definitions in the module docstring).
 
     ``source_limited``: no ambient heat source (design review B2). HP1 may take as its source only the
@@ -141,7 +141,7 @@ def answers(case: Case, streams: StreamSet, params: EconomicParameters, source_l
     left out. Returns None when the site has no refrigeration at all.
     """
     site = build_site(case, streams, params)
-    to_MWh = lambda x: to_MWh_per_year(x, streams.energy_unit, case.basis)  # noqa: E731
+    to_MWh = annual_converter(streams.energy_unit, case.basis)
     thr = params.payback_threshold_years
     nan = math.nan
     ev_ref = evaluate(site.reference, site.baseline, params)
@@ -196,7 +196,7 @@ def answers(case: Case, streams: StreamSet, params: EconomicParameters, source_l
     full = options[-1]
     ev_full = evaluate(full, site.baseline, params)
     rq2 = _rq2(case, streams)
-    out = {"RQ1_HP_gas_share": round(hp_share, 4),
+    out: dict[str, float | str] = {"RQ1_HP_gas_share": round(hp_share, 4),
            "HR_retrofit_gas_share": round(ev_ref.gas_reduction, 4) if site.has_hr_step else nan,
            "HR_retrofit_payback_y": _payback(ev_ref.payback_years) if site.has_hr_step else nan}
     for i, (u, row) in enumerate(zip(units, inc), start=1):
@@ -228,7 +228,8 @@ def _rq2(case: Case, streams: StreamSet) -> dict | None:
 
 def unit_names(row: dict | object) -> list[str]:
     """HP1, HP2, ... names present in a result row (dict or DataFrame row)."""
-    names, i = [], 1
+    names: list[str] = []
+    i = 1
     while True:
         key = f"HP{i}_name"
         v = row.get(key) if hasattr(row, "get") else None

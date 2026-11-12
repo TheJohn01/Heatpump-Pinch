@@ -136,3 +136,22 @@ def effective_price(prices: pd.Series, pattern: OperatingPattern,
     hours_per_year = float(on.sum()) / years
     demand = tariff.demand_charge_EUR_per_kW_year / hours_per_year
     return EffectivePrice(energy, demand, hours_per_year, float(prices.mean()) / 1000.0)
+
+
+def access_tariff_change(year: int, voltage: str, path: Path | None = None) -> tuple[float, str]:
+    """(change as a fraction, status) of the ERSE network access tariffs for a year and voltage code
+    (MAT, AT, MT, BTE, BTN), from data/sources/erse_access_tariff_changes.csv."""
+    path = path or Path(__file__).resolve().parents[1] / "data" / "sources" / "erse_access_tariff_changes.csv"
+    df = pd.read_csv(path, comment="#")
+    row = df[(df["year"] == year) & (df["code"] == voltage)]
+    if row.empty:
+        raise ValueError(f"no ERSE access tariff change for {year} {voltage} in {path.name}")
+    return float(row["change_pct"].iloc[0]) / 100, str(row["status"].iloc[0])
+
+
+def with_network_change(price_EUR_per_kWh: float, network_share: float, change: float) -> float:
+    """Delivered price after the network-cost part (``network_share`` of the price, 0-1) changes by ``change``
+    (fraction, e.g. -0.135). Energy, supply and taxes are left as they are."""
+    if not 0 <= network_share <= 1:
+        raise ValueError("network_share must be between 0 and 1")
+    return price_EUR_per_kWh * (1 + network_share * change)

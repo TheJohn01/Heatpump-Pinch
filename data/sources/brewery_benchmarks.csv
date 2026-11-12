@@ -1,0 +1,19 @@
+# External benchmarks for the brewery stream table. Transcribed 2026-11-12.
+# FDM BREF = Santonja G.G., Karlis P., Stubdrup K.R., Brinkmann T., Roudier S. (2019), Best Available Techniques (BAT) Reference Document for the Food, Drink and Milk Industries, EUR 29978 EN, JRC118627, Publications Office of the EU.
+# TNO = Marina A., Spoelstra S., Zondag H.A., Wemmers A.K. (2021), "An estimation of the European industrial heat pump market potential", Renewable and Sustainable Energy Reviews 139, 110545; dataset "Industrial process and waste heat" (Mendeley Data), sheet Dataset, product "Beer" (anonymised plant data [a], EU-28).
+source,item,quantity,low,mean,high,unit,note
+FDM BREF,Table 4.1 brewhouse heat (literature),heat_brewhouse,23.33,,31.39,kWh/hl beer,"Germany 2002; 20,000-500,000 hl/yr"
+FDM BREF,Table 4.1 brewhouse heat (measured),heat_brewhouse,13.89,,22.22,kWh/hl beer,"300,000-500,000 hl/yr"
+FDM BREF,Table 4.1 brewhouse heat (min/mean/max),heat_brewhouse,24.17,25.56,33.61,kWh/hl beer,
+FDM BREF,Table 4.3 brewhouse wort preparation heat (infusion mashing),heat_brewhouse,,10.2,,kWh/hl,large German brewery with mash infusion (COM 2006)
+FDM BREF,Table 4.3 whole-site heat (same brewery),heat_site,,28.3,,kWh/hl,
+FDM BREF,Table 17.5 indicative BAT level (yearly average),energy_site,20,,50,kWh/hl products,"0.02-0.05 MWh/hl; heat and electricity, whole site"
+FDM BREF,Sec. 4.2.1.6 wort boiling duration,boil_duration,0.5,,1.5,h,"3-8 % evaporation per hour"
+TNO,Beer process heat: steam,process_heat_TJ,,14895,,TJ/a,135 °C steam (hot utility)
+TNO,Beer process heat: water 15-70 °C,process_heat_TJ,,1984.9284,,TJ/a,
+TNO,Beer process heat: water 12-75 °C,process_heat_TJ,,238.191408,,TJ/a,
+TNO,Beer waste heat 15-200 °C: condensate 45-12 °C,waste_heat_TJ,,4330.752873,,TJ/a,
+TNO,Beer waste heat 15-200 °C: condensate 22-12 °C,waste_heat_TJ,,54.841321,,TJ/a,
+TNO,Beer waste heat 15-200 °C: condensate 75-12 °C,waste_heat_TJ,,151.23264,,TJ/a,
+TNO,Beer waste heat 15-200 °C: spent grain 76-12 °C,waste_heat_TJ,,1891.884881,,TJ/a,
+TNO,Beer waste heat 15-200 °C: vapour 100-12 °C,waste_heat_TJ,,1917.260386,,TJ/a,

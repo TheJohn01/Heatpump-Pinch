@@ -100,7 +100,7 @@
     "stream data": "published (Table 2); 'Amb.' taken as 15 °C (Sec. 4.3.1), an inference",
     "eta_lorenz": "EDUCATED APPROXIMATION (author decision, 2026-10-17): 0.50, not a published or measured value. It lies inside the range implied by the Danish Energy Agency HTHP sheets (0.45-0.52) and between our cycle model's warm-water heat pump (0.48-0.49) and high-temperature cascade (0.54-0.56). Padullés et al. (2026, Sec. 4.3.1) use 0.55 (kept for the paper reproduction and as a sensitivity row)",
     "source_T_C": "published cold-utility temperature (Sec. 4.1); used for all sources, which bounds W from above",
-    "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
+    "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* = 103 °C (assumed, consistent with COP 2); 103 °C equals the wort temperature under dynamic low-pressure boiling (JRC Best Environmental Management Practice, food and beverage, wort boiling), so the 110 and 120 °C rows bound the driving force",
     "basis": "assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)",
     "ambient_T_C": "published: Sec. 4.3.1",
     "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1, mapping assumed; cost laws: Sinnott and Towler (2020) Table 6.6 plate and frame (primary) and Stampfli et al. (2018) Table 2, bare and x3.5 (Hand factor, Towler Table 6.3); cold utility cost from chiller COP",
@@ -283,6 +283,12 @@
       "basis": "DEA sheet 2.a: HTHP technical lifetime 20 y"
     },
     {
+      "label": "Lorenz efficiency 0.37 (Annex 58 demonstration median)",
+      "kind": "eta",
+      "value": 0.37,
+      "basis": "median achieved Lorenz efficiency of six closed-cycle HTHP demonstration cases (89-2,250 kW), IEA HPT Annex 58 Task 1, Zühlsdorf, Poulsen, Schlosser (2022), symposium presentation, supplier-reported (outputs/brewery/vendor_data_check.md)"
+    },
+    {
       "label": "Lorenz efficiency 0.45",
       "kind": "eta",
       "value": 0.45,
@@ -325,6 +331,24 @@
       "basis": "DEA sheet 2.a: 0.9-1.5 vs 1.2 MEUR/MW"
     },
     {
+      "label": "Ambient-source defrost: COP -2.5 % on the ambient share",
+      "kind": "frost",
+      "value": {"penalty": 0.025, "ambient_share": {"Warm-water HP": 0.3148, "HTHP (wort boiling)": 1.0}},
+      "basis": "Danish Energy Agency, Technology Data for Generation of Electricity and District Heating, ch. 40 Heat pumps, pp. 197-201: earlier air-source plants used 2-2.5 % of the annual heat production for defrosting, recent ones about 1 %, large plants with refrigerant in the air coolers none; ambient shares from outputs/brewery/heat_pump_design.csv (HP1 1.58 of 5.02 kWh/hl)"
+    },
+    {
+      "label": "Ambient-source frost: COP -13 % on the ambient share (upper bound)",
+      "kind": "frost",
+      "value": {"penalty": 0.13, "ambient_share": {"Warm-water HP": 0.3148, "HTHP (wort boiling)": 1.0}},
+      "basis": "Lu, Huang, Woods (2024), NREL/CP-5500-89649, Sec. 1, citing Vocale et al. (2014): frosting-defrosting cycles cause up to 13 % seasonal COP degradation for (residential) air-source heat pumps; an upper bound for an industrial evaporator at -1 °C"
+    },
+    {
+      "label": "Retrofit piping 200 m",
+      "kind": "piping",
+      "value": 200,
+      "basis": "round trip across a site instead of 50 m within the brewhouse (assumed); Lal et al. (2018) report 130-1,638 m between zones of a large pulp mill; affects the heat-recovery retrofit, which the heat pump increments share"
+    },
+    {
       "label": "Heat pump CAPEX -8 % (component cost, Kosmadakis 2020)",
       "kind": "hp_capex",
       "value": 0.92,
@@ -340,7 +364,7 @@
       "label": "HTHP sink 110 °C (boiling driving force)",
       "kind": "hthp_sink",
       "value": 110.0,
-      "basis": "103 °C leaves 2 K to boiling wort; nucleate boiling needs some K of wall superheat plus hydrostatic boiling-point rise (no sourced value); Padullés Fig. 11 spans 100-180 °C (design review B1)"
+      "basis": "103 °C is the wort's own boiling temperature under dynamic low-pressure boiling (150 mbar overpressure: JRC, Best Environmental Management Practice for the Food and Beverage Manufacturing Sector, wort boiling); the heating medium must exceed it (wall superheat, hydrostatic rise; no sourced value); wort kettles are mostly steam-heated (EU FDM BREF 2019, Sec. 4.2.1.6); Padullés Fig. 11 spans 100-180 °C (design review B1)"
     },
     {
       "label": "HTHP sink 120 °C (boiling driving force)",
@@ -371,12 +395,18 @@
       "basis": "Electricity Maps, Portugal, 2025 (as in the previous scenario list); affects CO2 avoided only"
     },
     {
-      "label": "Grid emission factor 0.367 (marginal gas CCGT, assumed)",
+      "label": "Grid emission factor 0.367 (marginal gas CCGT, 55 %)",
       "kind": "econ",
       "value": {
         "grid_EF_kg_per_kWh": 0.367
       },
-      "basis": "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 55 % efficiency (assumed, not sourced); affects CO2 avoided only (design review B5)"
+      "basis": "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 0.55; 0.55 = 58 % (Oresundsverket, 2009) less about 3 points of lifetime degradation (DEA, Technology Data for Generation of Electricity and District Heating, p. 23: 2.5-3.5 points; ch. 05, p. 56); affects CO2 avoided only (design review B5)"
+    },
+    {
+      "label": "Grid emission factor 0.337 (marginal gas CCGT, new plant 60 %)",
+      "kind": "econ",
+      "value": {"grid_EF_kg_per_kWh": 0.337},
+      "basis": "0.202 kg/kWh (IPCC 2006, NCV) / 0.60: large CC-GT units have demonstrated 60 % electrical efficiency, LHV (DEA, Technology Data for Generation of Electricity and District Heating, ch. 05, p. 55); affects CO2 avoided only"
     },
     {
       "label": "Batch: HTHP sized for the boil window, F = 1.14",
@@ -602,6 +632,10 @@
     "storage": {
       "kind": "hr_tank",
       "size_baseline": 520.8
+    },
+    "piping": {
+      "length_m": 50,
+      "_length_m": "assumed round trip from the condensate cooler to the hot-water tank inside the brewhouse (no published brewery layout); cost law and 2 m/s sizing from Lal et al. (2018), CET 70, Eq. 2 (pinch.retrofit.piping_cost_EUR); row 'Retrofit piping 200 m' for a site-crossing run"
     },
     "new_exchanger": {
       "kind": "plate_hex",

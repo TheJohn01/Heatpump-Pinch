@@ -30,10 +30,14 @@ hp_capex      heat pump cost function alpha and beta scaled by the value
 hx_capex      plate exchanger cost function alpha and beta scaled by the value
 no_om         operation and maintenance costs set to zero (as Padullés et al., 2026); value null
 hthp_sink     isothermal sink temperature [°C] of every level whose name contains "HTHP"
+frost         {"penalty": p, "ambient_share": {unit: share}}: COP of each named unit scaled by (1 - p x share),
+              applied through its Lorenz efficiency; share = ambient part of the unit's source heat in the base
+              design (stated in the case file, checked against heat_pump_design.csv by the tests)
 hp_dT_cont    temperature contribution [K] of every heat pump level (intermediate loops; pinch.heat_pump)
 area          dict of area_targeting overrides
 film          film coefficients scaled by the value
 scale         production [per year]; the retrofit storage is scaled with it
+piping        round-trip length [m] of the retrofit's new piping (pinch.retrofit.piping_cost_EUR)
 hp_hot_utility  RQ2 with heat-pump heat as the hot utility; the value is computed by consolidate_rq
 combo         list of {"kind", "value"} applied in order
 """
@@ -45,9 +49,9 @@ from dataclasses import dataclass, replace
 from typing import Any
 
 KINDS = ("econ", "eta", "cycle", "cycle_scaled", "hp_capex", "hx_capex", "no_om", "hthp_sink", "hp_dT_cont", "area", "film",
-         "scale", "hp_hot_utility", "combo")
+         "scale", "hp_hot_utility", "frost", "piping", "combo")
 _DICT_KINDS = ("econ", "area")
-_NUMBER_KINDS = ("eta", "cycle_scaled", "hp_capex", "hx_capex", "hthp_sink", "hp_dT_cont", "film", "scale")
+_NUMBER_KINDS = ("eta", "cycle_scaled", "hp_capex", "hx_capex", "hthp_sink", "hp_dT_cont", "film", "scale", "piping")
 _NULL_KINDS = ("cycle", "no_om", "hp_hot_utility")
 
 
@@ -92,6 +96,14 @@ def _check(kind: str, value: Any, where: str) -> Any:
         if not isinstance(value, (int, float)) or isinstance(value, bool):
             raise ValueError(f"{where}: kind '{kind}' needs a number")
         return float(value)
+    if kind == "frost":
+        ok = (isinstance(value, dict) and isinstance(value.get("penalty"), (int, float))
+              and isinstance(value.get("ambient_share"), dict)
+              and all(isinstance(v, (int, float)) and 0 <= v <= 1 for v in value["ambient_share"].values()))
+        if not ok or not 0 <= value["penalty"] < 1:
+            raise ValueError(f"{where}: kind 'frost' needs {{'penalty': 0-1, 'ambient_share': {{unit: 0-1}}}}")
+        return {"penalty": float(value["penalty"]),
+                "ambient_share": {k: float(v) for k, v in value["ambient_share"].items()}}
     if kind in _NULL_KINDS:
         if value is not None:
             raise ValueError(f"{where}: kind '{kind}' takes no value (null)")
@@ -164,6 +176,14 @@ def apply(case, kind: str, value: Any, selected: dict | None = None):
         for k, v in NO_OM["cost_functions"].items():
             cf[k] = {**cf.get(k, {}), **v}
         return replace(case, economics={**case.economics, "cost_functions": cf, "boiler_variable_om_EUR_per_MWh": 0.0})
+    if kind == "frost":
+        shares = value["ambient_share"]
+        unknown = set(shares) - {lv.name for lv in case.sink_levels}
+        if unknown:
+            raise ValueError(f"frost: no heat pump level named {sorted(unknown)}")
+        return replace(case, sink_levels=tuple(
+            replace(lv, eta_lorenz=(lv.eta_lorenz or case.eta_lorenz) * (1 - value["penalty"] * shares[lv.name]))
+            if lv.name in shares else lv for lv in case.sink_levels))
     if kind == "hthp_sink":
         return replace(case, sink_levels=tuple(replace(lv, T_sink_in_C=float(value), T_sink_out_C=float(value))
                                                if "HTHP" in lv.name else lv for lv in case.sink_levels))
@@ -175,6 +195,10 @@ def apply(case, kind: str, value: Any, selected: dict | None = None):
         at = dict(case.area_targeting)
         at["film_coefficients_kW_per_m2K"] = {k: v * float(value) for k, v in at["film_coefficients_kW_per_m2K"].items()}
         return replace(case, area_targeting=at)
+    if kind == "piping":
+        retro = copy.deepcopy(case.retrofit)
+        retro["piping"] = {**(retro.get("piping") or {}), "length_m": float(value)}
+        return replace(case, retrofit=retro)
     if kind == "scale":
         f = value / case.basis["production_per_year"]
         retro = copy.deepcopy(case.retrofit)

@@ -62,7 +62,7 @@
     "COP check": "HTHP 120 °C (105 K lift): COP 1.87 vs DEA sheet 2.a about 1.96 at 105 K (-4.6 %, conservative). HTHP 200 °C: COP 1.28 from a 15 °C source; Liang et al. (2022) use the exhaust (via water loops) as source and reach COP 2.61 for the steam heat pump, Liang et al. (2023, IIR ICR) a total COP of 2.68 with a transcritical CO2 cycle: the illustrative isothermal design here is pessimistic"
   },
   "run": {
-    "tool_version": "0.9.0",
+    "tool_version": "0.10.0",
     "inputs_sha256": {
       "cases/spray_dryer.json": "7785a870c860b33fa1acf8827c6ac8996362de8a3dc69dec818fb86bafbdbab4",
       "data/spray_dryer_streams.csv": "56159468809a92d875c564926641a9675dd39a9492ded59cfc228c421edc3693"

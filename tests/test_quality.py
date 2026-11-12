@@ -3,8 +3,8 @@ provenance records.
 
 * One version in pinch/__init__.py, pyproject.toml and CITATION.cff (FAIR4RS: Barker et al. 2022).
 * ruff with the rule set in pyproject.toml over the whole repository.
-* mypy over the modules that are type-clean (TYPED_MODULES); the others carry the recorded debt in
-  docs/QUALITY.md, and this list may only grow.
+* mypy over the whole pinch package (every module type-clean since 0.10.0; a new module is checked from
+  its first commit).
 * Provenance: deterministic records in summary.json match the input files; run metadata is git-ignored.
 """
 
@@ -21,11 +21,7 @@ import pinch
 from pinch.provenance import deterministic_record, file_sha256
 
 ROOT = Path(__file__).resolve().parent.parent
-TYPED_MODULES = ("area", "case", "charts", "curves", "exchanger_rating", "hen_design", "investment", "plotting",
-                 "pressure_drop", "process_diagram",
-                 "problem_table_algorithm", "provenance",
-                 "reconciliation", "refrigerants", "restricted_matches", "results", "streams", "tariffs", "tespy_heat_pump", "theme",
-                 "time_slices", "uncertainty", "utilities", "validation")
+
 
 
 def test_one_version_everywhere():
@@ -42,10 +38,9 @@ def test_ruff_clean():
     assert r.returncode == 0, r.stdout
 
 
-def test_mypy_typed_modules():
+def test_mypy_whole_package():
     pytest.importorskip("mypy")
-    files = [str(ROOT / "pinch" / f"{m}.py") for m in TYPED_MODULES]
-    r = subprocess.run([sys.executable, "-m", "mypy", "--follow-imports=silent", *files], cwd=ROOT,
+    r = subprocess.run([sys.executable, "-m", "mypy", "--follow-imports=silent", str(ROOT / "pinch")], cwd=ROOT,
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout
 

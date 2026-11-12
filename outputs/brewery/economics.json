@@ -463,7 +463,7 @@
       "basis": "Electricity Maps, Portugal, 2025 (as in the previous scenario list); affects CO2 avoided only"
     },
     {
-      "sensitivity": "Grid emission factor 0.367 (marginal gas CCGT, assumed)",
+      "sensitivity": "Grid emission factor 0.367 (marginal gas CCGT, 55 %)",
       "price_ratio": 2.217,
       "boiler_efficiency": 0.845,
       "gas_EF_kg_per_kWh": 0.182,
@@ -480,7 +480,27 @@
       "grass_roots_hp_share_max_NPV": 0.725,
       "full_design_break_even_ratio_NPV": 2.229,
       "full_design_break_even_ratio_payback": 1.423,
-      "basis": "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 55 % efficiency (assumed, not sourced); affects CO2 avoided only (design review B5)"
+      "basis": "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 0.55; 0.55 = 58 % (Oresundsverket, 2009) less about 3 points of lifetime degradation (DEA, Technology Data for Generation of Electricity and District Heating, p. 23: 2.5-3.5 points; ch. 05, p. 56); affects CO2 avoided only (design review B5)"
+    },
+    {
+      "sensitivity": "Grid emission factor 0.337 (marginal gas CCGT, new plant 60 %)",
+      "price_ratio": 2.217,
+      "boiler_efficiency": 0.845,
+      "gas_EF_kg_per_kWh": 0.182,
+      "grid_EF_kg_per_kWh": 0.337,
+      "co2_price_EUR_per_t": 0.0,
+      "chiller_cop": 4.45,
+      "full_capex_EUR": 1793176.0,
+      "full_savings_EUR": 234171.0,
+      "full_payback_years": 7.66,
+      "full_npv_EUR": 15027.0,
+      "full_co2_avoided_t": 1132.0,
+      "full_primary_energy_reduction": 0.4043,
+      "grass_roots_hp_share_payback_ok": 0.725,
+      "grass_roots_hp_share_max_NPV": 0.725,
+      "full_design_break_even_ratio_NPV": 2.229,
+      "full_design_break_even_ratio_payback": 1.423,
+      "basis": "0.202 kg/kWh (IPCC 2006, NCV) / 0.60: large CC-GT units have demonstrated 60 % electrical efficiency, LHV (DEA, Technology Data for Generation of Electricity and District Heating, ch. 05, p. 55); affects CO2 avoided only"
     },
     {
       "sensitivity": "Batch: HTHP sized for the boil window, F = 1.14",

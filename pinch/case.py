@@ -20,6 +20,7 @@ Without a basis, results stay in the stream-data unit.
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -234,6 +235,25 @@ def _check_basis(basis: dict, file_name: str) -> None:
             raise ValueError(f"{file_name}: power basis needs 0 < operating_hours_per_year <= 8784")
     else:
         raise ValueError(f"{file_name}: basis type must be 'per_product' or 'power'")
+
+
+def annual_converter(energy_unit: str, basis: dict | None) -> Callable[[float], float]:
+    """``to_MWh_per_year`` bound to one unit and basis, for code that needs an annual basis.
+
+    Raises
+    ------
+    ValueError
+        If the case has no annual basis.
+    """
+    if basis is None:
+        raise ValueError("this calculation needs an annual basis (case file 'basis' block)")
+    b = basis
+
+    def convert(value: float) -> float:
+        out = to_MWh_per_year(value, energy_unit, b)
+        assert out is not None                      # basis is set
+        return out
+    return convert
 
 
 def to_MWh_per_year(value: float, energy_unit: str, basis: dict | None) -> float | None:

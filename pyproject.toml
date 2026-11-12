@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "heatpump-pinch"
-version = "0.9.0"
+version = "0.10.0"
 description = "Pinch analysis, heat pump integration and techno-economics for industrial process-heat electrification"
 readme = "README.md"
 license = "MIT"

@@ -185,7 +185,8 @@ class HeatPump:
         has_source = self.T_source_in_C is not None and self.T_source_out_C is not None
         if not has_source and self.cop_fixed != 1:
             raise ValueError(f"{self.name}: source temperatures required unless cop_fixed == 1")
-        if has_source and self.T_source_out_C > self.T_source_in_C:
+        if self.T_source_in_C is not None and self.T_source_out_C is not None \
+                and self.T_source_out_C > self.T_source_in_C:
             raise ValueError(f"{self.name}: source must be cooled (T_source_out <= T_source_in)")
         if self.cop_fixed is not None and has_source and self.cop_fixed > self.cop_reversible:
             raise ValueError(
@@ -197,13 +198,19 @@ class HeatPump:
     def has_source(self) -> bool:
         return self.T_source_in_C is not None
 
+    def source_temperatures(self) -> tuple[float, float]:
+        """(T_source_in_C, T_source_out_C); raises for a unit without a source (electric heater)."""
+        if self.T_source_in_C is None or self.T_source_out_C is None:
+            raise ValueError(f"{self.name}: no source temperatures (electric heater)")
+        return self.T_source_in_C, self.T_source_out_C
+
     @property
     def cop_reversible(self) -> float:
         """Second-law upper bound (Lorenz COP with eta = 1) [-]."""
         if not self.has_source:
             return float("inf")
-        return lorenz_cop(self.T_sink_in_C, self.T_sink_out_C,
-                          self.T_source_in_C, self.T_source_out_C, 1.0)
+        src_in, src_out = self.source_temperatures()
+        return lorenz_cop(self.T_sink_in_C, self.T_sink_out_C, src_in, src_out, 1.0)
 
     @property
     def COP(self) -> float:
@@ -211,8 +218,9 @@ class HeatPump:
         if self.cop_fixed is not None:
             return self.cop_fixed
         d = self.dT_cont_K
-        return lorenz_cop(self.T_sink_in_C + d, self.T_sink_out_C + d,
-                          self.T_source_in_C - d, self.T_source_out_C - d, self.eta_lorenz)
+        src_in, src_out = self.source_temperatures()
+        assert self.eta_lorenz is not None                  # __post_init__: exactly one of eta_lorenz, cop_fixed
+        return lorenz_cop(self.T_sink_in_C + d, self.T_sink_out_C + d, src_in - d, src_out - d, self.eta_lorenz)
 
     @property
     def W(self) -> float:
@@ -239,8 +247,8 @@ def _sink_stream(unit: HeatPump) -> Stream:
 
 def _source_stream(unit: HeatPump, Q_from_process: float) -> Stream:
     """Evaporator as a cold stream (dT_shift = 0) taking Q_from_process."""
-    T_lo = unit.T_source_out_C
-    T_hi = unit.T_source_in_C if unit.T_source_in_C > T_lo else T_lo + unit.isothermal_width_K
+    src_in, T_lo = unit.source_temperatures()
+    T_hi = src_in if src_in > T_lo else T_lo + unit.isothermal_width_K
     return Stream(f"{unit.name} source", "cold", T_lo, T_hi, Q_from_process, 0.0)
 
 
@@ -273,8 +281,8 @@ def classify_placement(unit: HeatPump, pinch_T_star_C: float) -> str:
     sink_lo = min(unit.T_sink_in_C, unit.T_sink_out_C)
     if not unit.has_source:
         return "no source"
-    source_hi = max(unit.T_source_in_C, unit.T_source_out_C)
-    source_lo = min(unit.T_source_in_C, unit.T_source_out_C)
+    source_hi = max(unit.source_temperatures())
+    source_lo = min(unit.source_temperatures())
     sink_hi = max(unit.T_sink_in_C, unit.T_sink_out_C)
     if sink_lo >= pinch_T_star_C and source_hi <= pinch_T_star_C:
         return "across pinch"

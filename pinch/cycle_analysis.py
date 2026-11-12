@@ -99,6 +99,8 @@ def screen_design(design: HeatPumpDesign, block: dict,
     layouts = block.get("layouts", ["std", "slhx"])
     cascade_units = block.get("units")
     for u in design.units:
+        if u.T_source_in_C is None or u.T_source_out_C is None or u.eta_lorenz is None:
+            raise ValueError(f"heat pump '{u.name}' has no source (or no Lorenz efficiency): no cycle to screen")
         source = SecondaryStream(u.T_source_in_C, u.T_source_out_C)
         sink = SecondaryStream(u.T_sink_in_C, u.T_sink_out_C)
         results: list[CycleResult] = []

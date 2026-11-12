@@ -4,9 +4,24 @@ Versions follow semantic versioning. Each release is a git tag `vX.Y.Z` whose ve
 `pinch.__version__`, `pyproject.toml` and `CITATION.cff` (checked by `tests/test_quality.py`). Numbers in
 committed outputs change only where an entry says so.
 
-## Unreleased
+## 0.10.0 (2026-11-12)
 
 ### Added
+- Sources for the limitations (design review groups B and C), each with a check or a sensitivity row:
+  - Frost and defrost of the ambient-air source: sensitivity kind `frost` and rows −2.5 % (Danish Energy Agency,
+    el & DH catalogue, ch. 40) and −13 % (NREL review, upper bound) on the ambient share of each unit's source.
+  - Retrofit piping: `pinch.retrofit.piping_cost_EUR` (Lal et al. 2018, CET 70, Eq. 2), 50 m assumed in the base
+    case and a 200 m row (sensitivity kind `piping`).
+  - `scripts/checks/vendor_data_check.py`: Lorenz efficiency achieved by IEA HPT Annex 58 demonstration cases and
+    supplier cost ranges (`data/sources/annex58_*.csv`). Finding: closed-cycle median η_L 0.37 < basis 0.50; new
+    row "Lorenz efficiency 0.37" gives HP1 payback 6.78 y and RQ1 0 %.
+  - `scripts/checks/benchmark_check.py`: the brewery stream table against the EU FDM BREF 2019 and the TNO process
+    and waste heat dataset (`data/sources/brewery_benchmarks.csv`).
+  - ERSE network access-tariff changes (`data/sources/erse_access_tariff_changes.csv`), `pinch.tariffs.
+    access_tariff_change` and `with_network_change`, `tariff_check.py --erse`.
+  - Grid factor row for a new 60 % CCGT (0.337 kg/kWh); the 55 % marginal plant and the 103 °C wort-boiling sink
+    are now sourced (DEA; JRC best practice and FDM BREF); boil window 0.5–1.5 h from the FDM BREF.
+
 - Flowsheet layouts for the other three cases (`data/milk_evaporator_flowsheet.json`,
   `spray_dryer_flowsheet.json`, `four_stream_process_flowsheet.json`), built from the stream names and roles
   in the source tables; step 1 no longer shows the T* diagram for them. Uploaded tables get a generic
@@ -20,6 +35,12 @@ committed outputs change only where an entry says so.
   different FreeType build, which moves plot areas beyond any useful pixel tolerance. `--check` now
   reports figure changes and fails only on CSV/JSON/Markdown/README changes (all data outputs reproduced
   on the runner); the tolerance still restores rasterisation-only differences locally.
+
+### Changed
+- Type checking covers the whole `pinch` package (101 errors fixed in 12 modules; `case.annual_converter`; one
+  wrong annotation in `pinch.cycle`). `test_mypy_typed_modules` became `test_mypy_whole_package`.
+- Heat-recovery retrofit N1 now includes piping: capex 56.0 → 76.1 k€, payback 1.11 → 1.51 y. RQ1-RQ3 unchanged
+  (the heat pump increments share the N1 step).
 
 ## 0.9.0 (2026-11-12)
 

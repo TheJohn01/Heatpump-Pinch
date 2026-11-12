@@ -16,8 +16,8 @@ brewhouse is a batch process. This script checks which results survive the batch
 
 Schedule ranges (stated, not from the case paper): 8-14 brews/day for large brewhouses (Briggs of Burton,
 'Brewery Sustainability and Energy Integration', Brewing Engineers Association technical day, 2017: an
-industry presentation, not peer-reviewed); boil window 60-90 min (typical practice; assumption, no
-peer-reviewed source found). The HTHP's extra capacity is added as investment only (heat_pump_equipment).
+industry presentation, not peer-reviewed); boil window 0.5-1.5 h: "the wort is normally boiled for 0.5-1.5 h"
+(EU Food, Drink and Milk Industries BREF 2019, JRC118627, Sec. 4.2.1.6). The HTHP's extra capacity is added as investment only (heat_pump_equipment).
 
 Writes outputs/<case>/batch_check.csv and .md.
 """
@@ -38,7 +38,7 @@ from scripts.analysis.consolidate_rq import answers
 
 ROOT = Path(__file__).resolve().parents[2]   # repository root
 BREWS_PER_DAY = (8, 10, 12, 14)
-BOIL_WINDOW_H = (1.0, 1.25, 1.5)
+BOIL_WINDOW_H = (0.5, 1.0, 1.25, 1.5)   # FDM BREF 2019, Sec. 4.2.1.6: 0.5-1.5 h
 HTHP = "HTHP (wort boiling)"
 WARM_WATER = "Warm-water HP"
 

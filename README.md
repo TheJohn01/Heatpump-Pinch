@@ -883,7 +883,8 @@ data/
   brewery_configurations.json  Heat pump configurations of the brewery source; values tagged published/figure/assumed
   reference_targets.json     Published/textbook targets used by the validation tests, with their sources
   benchmarks/                Published networks and exchanger designs, OpenPinch results, Letsios et al. instances
-  sources/                   Price and exchange-rate tables behind the economic inputs
+  sources/                   Transcribed external data: prices, exchange rates, Annex 58 supplier and
+                             demonstration data, brewery benchmarks (FDM BREF, TNO), ERSE tariff changes
 pinch/
   streams.py                 Load, validate, shift, energy balance
   problem_table_algorithm.py Problem Table Algorithm (cascade, targets, pinch; the GCC is its feasible cascade)
@@ -946,6 +947,8 @@ outputs/                     Committed results, one folder per case (rebuilt by 
 | `scripts/analysis/screen_cycles.py` | Working-fluid screening (step 4b; minutes) → cycle_screening.csv/.json |
 | `scripts/analysis/consolidate_rq.py` | RQ1-RQ3 for every sensitivity row → rq_consolidated.csv/.md, rq_tornado.png |
 | `scripts/checks/design_consistency_check.py` | Which heat pump COP and CAPEX is the basis and how the cycle model, TESPy, the paper's η_L and Andersen et al. relate → design_consistency.csv/.md (verdicts V1-V5) |
+| `scripts/checks/vendor_data_check.py` | Lorenz efficiency achieved by IEA HPT Annex 58 demonstration cases and supplier cost ranges against the case's basis → vendor_data_check.csv/.md |
+| `scripts/checks/benchmark_check.py` | Brewery stream table against the EU FDM BREF (brewhouse and site heat per hl, BAT level) and the TNO process and waste heat dataset → benchmark_check.md |
 | `scripts/analysis/heat_pump_partload.py` | TESPy design check, part load, component cost → heat_pump_partload.csv, heat_pump_cost_check.csv |
 | `scripts/checks/batch_check.py` | HTHP capacity for the boil window (8-14 brews/day × 60-90 min) |
 | `scripts/checks/mvr_check.py` | Padullés configuration 3 (MVR + booster) against the HTHP |

@@ -32,7 +32,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from pinch.case import Case, to_MWh_per_year
+from pinch.case import Case, annual_converter
 from pinch.design import HeatPumpDesign, partial_designs
 from pinch.economics import (
     ANNOTATION_KEYS,
@@ -160,12 +160,14 @@ GRASS_ROOTS_DEFINITION = ("grass-roots reference, not the answer to RQ1 or RQ3: 
 
 def _params_and_converter(case: Case, energy_unit: str):
     block = dict(case.economics or {})
+    if case.basis is None:
+        raise ValueError("economics need an annual basis (case file 'basis' block)")
     if case.basis["type"] == "power":  # one set of operating hours for the whole case
         block.setdefault("operating_hours_per_year", case.basis["operating_hours_per_year"])
         if block["operating_hours_per_year"] != case.basis["operating_hours_per_year"]:
             raise ValueError("economics.operating_hours_per_year must equal basis.operating_hours_per_year")
     params = load_economics({k: v for k, v in block.items() if k not in NON_PARAMETER_KEYS})
-    to_MWh = lambda x: to_MWh_per_year(x, energy_unit, case.basis)  # noqa: E731
+    to_MWh = annual_converter(energy_unit, case.basis)
     return block, params, to_MWh
 
 
@@ -199,7 +201,7 @@ def cycle_based_design(case: Case, streams, energy_unit: str, selected: dict | N
     levels = tuple(replace(lv, eta_lorenz=selected[lv.name]["eta_lorenz_cycle"]) if lv.name in selected else lv
                    for lv in case.sink_levels)
     d = design_from_gcc(streams, levels, case.eta_lorenz, case.source_T_C)
-    out = {"units": {u.name: {"COP": round(u.COP, 3), "eta_lorenz": round(u.eta_lorenz, 4),
+    out = {"units": {u.name: {"COP": round(u.COP, 3), "eta_lorenz": round(u.eta_lorenz or case.eta_lorenz, 4),
                               **({k: selected[u.name][k] for k in ("fluid", "layout")} if u.name in selected else {})}
                      for u in d.units},
            "COP_system": round(d.COP_system, 3), "W_total": round(d.W_total, 4),
@@ -232,9 +234,9 @@ def economics_outputs(case: Case, design: HeatPumpDesign, Q_cold_total: float, e
     hr_equipment = tuple(tuple(x) for x in block.get("heat_recovery_equipment", []))
     if hr_equipment:  # second baseline: no heat recovery yet
         E_noHR = 0.0
-        if params.chiller_cop and streams is not None:
-            E_noHR = to_MWh(cooling_cascade(streams, case.ambient_T_C, heat_recovery=False).refrigeration) \
-                / params.chiller_cop
+        no_hr = cooling_cascade(streams, case.ambient_T_C, heat_recovery=False) if streams is not None else None
+        if params.chiller_cop and no_hr is not None:
+            E_noHR = to_MWh(no_hr.refrigeration) / params.chiller_cop
         base_noHR = Option("baseline: gas boiler, no heat recovery", to_MWh(Q_cold_total), E_noHR)
         hr_only = Option("heat recovery only", Qh_MWh, baseline.electricity_MWh, hr_equipment)
         hr_hp = replace(full_option, name="heat recovery + heat pumps", equipment=hr_equipment + full_option.equipment)

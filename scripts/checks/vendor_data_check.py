@@ -1,0 +1,125 @@
+"""The case's heat pump COP and cost basis against supplier and demonstration data (step 4b, 6).
+
+Usage:
+    python -m scripts.checks.vendor_data_check cases/brewery.json
+
+Data: IEA HPT Annex 58 Task 1, presented by Zühlsdorf, Poulsen, Schlosser (2022) (data/sources/
+annex58_demonstration_cases.csv and annex58_supplier_technologies.csv; supplier-reported, not peer-reviewed).
+
+1. Lorenz efficiency achieved in the demonstration cases: η_L = COP_heating / COP_Lorenz, from each case's
+   source and sink inlet and outlet temperatures (pinch.heat_pump.lorenz_cop). Closed-cycle cases are the
+   comparison for the case's η_L; open-cycle MVR is listed for context only (no evaporator).
+2. Specific investment cost of the case's heat pumps (case cost function, per kW of sink duty) against the
+   supplier range for closed-cycle units whose maximum supply temperature covers the unit's sink. The
+   supplier figures exclude installation and integration, the case cost function includes them, so the case
+   value is expected at or above the supplier range.
+
+Verdicts (pinned in tests/test_reproductions.py):
+    W1 the case's η_L basis is not above the median of the closed-cycle demonstration cases;
+    W2 every demonstration COP is below its Lorenz COP (consistency of the transcription).
+Writes outputs/<case>/vendor_data_check.csv and .md.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+import pandas as pd
+
+from pinch.case import load_case
+from pinch.economics import load_economics
+from pinch.heat_pump import lorenz_cop
+
+ROOT = Path(__file__).resolve().parents[2]   # repository root
+SRC = ROOT / "data" / "sources"
+
+
+def demonstration_eta() -> pd.DataFrame:
+    """Demonstration cases with their Lorenz COP and achieved Lorenz efficiency."""
+    d = pd.read_csv(SRC / "annex58_demonstration_cases.csv", comment="#")
+    cop_l = [lorenz_cop(r.T_sink_in_C, r.T_sink_out_C, r.T_source_in_C, r.T_source_out_C, 1.0) for r in d.itertuples()]
+    d["COP_Lorenz"] = [round(c, 3) for c in cop_l]
+    d["eta_lorenz"] = (d["COP_heating"] / d["COP_Lorenz"]).round(3)
+    d["closed_cycle"] = ~d["hp_type"].str.startswith("MVR")
+    return d
+
+
+def checks(case_file: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """(demonstration table, cost table, verdicts)."""
+    case = load_case(case_file)
+    out = ROOT / "outputs" / case.name
+    design = pd.read_csv(out / "heat_pump_design.csv")
+    eta_case = float(json.loads(Path(case_file).read_text(encoding="utf-8"))["heat_pumps"]["eta_lorenz"])
+    demo = demonstration_eta()
+    closed = demo[demo["closed_cycle"]]
+    median = float(closed["eta_lorenz"].median())
+    verdicts = [
+        {"verdict": "W1", "passed": bool(eta_case <= median + 1e-9),
+         "detail": f"case η_L {eta_case:g} vs median {median:.3f} of {len(closed)} closed-cycle cases "
+                   f"(range {closed['eta_lorenz'].min():.3f}-{closed['eta_lorenz'].max():.3f})"},
+        {"verdict": "W2", "passed": bool((demo["eta_lorenz"] < 1).all()),
+         "detail": f"max achieved η_L {demo['eta_lorenz'].max():.3f} < 1"},
+    ]
+    sup = pd.read_csv(SRC / "annex58_supplier_technologies.csv", comment="#")
+    sup = sup[(sup["closed_cycle"] == "yes") & sup["cost_EUR_per_kW_min"].notna()]
+    params = load_economics(case.economics)
+    cost_rows = []
+    cost_file = out / "heat_pump_cost_check.csv"
+    q_col = next(c for c in design.columns if c.startswith("Q_sink_"))
+    if cost_file.exists():
+        ref = pd.read_csv(cost_file).iloc[0]
+        kw_per_unit = ref["Q_sink_kW"] / float(design.loc[design["unit"] == ref["unit"], q_col].iloc[0])
+        for _, u in design.iterrows():
+            q_kW = float(u[q_col]) * kw_per_unit
+            capex = params.cost_functions["heat_pump"].cost(q_kW)
+            cover = sup[sup["T_supply_max_C"] >= u["T_sink_out_C"]]
+            cost_rows.append({"unit": u["unit"], "Q_sink_kW": round(q_kW, 1), "T_sink_out_C": u["T_sink_out_C"],
+                              "case_EUR_per_kW": round(capex / q_kW, 0),
+                              "suppliers_covering_sink": len(cover),
+                              "supplier_EUR_per_kW_min": float(cover["cost_EUR_per_kW_min"].min()),
+                              "supplier_EUR_per_kW_median_of_midpoints": float(
+                                  ((cover["cost_EUR_per_kW_min"] + cover["cost_EUR_per_kW_max"]) / 2).median()),
+                              "supplier_EUR_per_kW_max": float(cover["cost_EUR_per_kW_max"].max())})
+    return demo, pd.DataFrame(cost_rows), pd.DataFrame(verdicts)
+
+
+def markdown(demo: pd.DataFrame, cost: pd.DataFrame, verdicts: pd.DataFrame) -> str:
+    lines = ["# Heat pump basis against IEA HPT Annex 58 supplier and demonstration data", "",
+             "Source: Zühlsdorf, Poulsen, Schlosser (2022), IEA HPT Annex 58 Task 1 symposium presentation "
+             "(supplier-reported data, not peer-reviewed). Generated by `scripts/checks/vendor_data_check.py`.", "",
+             "## Achieved Lorenz efficiency of the demonstration cases", "",
+             "| No. | Supplier | Type | Source in→out [°C] | Sink in→out [°C] | COP | COP_Lorenz | η_L |",
+             "|---|---|---|---|---|---|---|---|"]
+    for r in demo.itertuples():
+        lines.append(f"| {r.no} | {r.supplier} | {r.hp_type} | {r.T_source_in_C:g}→{r.T_source_out_C:g} | "
+                     f"{r.T_sink_in_C:g}→{r.T_sink_out_C:g} | {r.COP_heating:g} | {r.COP_Lorenz:.2f} | {r.eta_lorenz:.3f} |")
+    lines += ["", "MVR (open cycle, no evaporator) is shown for context; W1 uses the closed-cycle cases only.", ""]
+    if len(cost):
+        lines += ["## Specific investment cost", "",
+                  "| Unit | Q_sink [kW] | Sink [°C] | Case [€/kW] | Suppliers covering the sink | Supplier range [€/kW] |",
+                  "|---|---|---|---|---|---|"]
+        for r in cost.itertuples():
+            lines.append(f"| {r.unit} | {r.Q_sink_kW:,.0f} | {r.T_sink_out_C:g} | {r.case_EUR_per_kW:,.0f} | "
+                         f"{r.suppliers_covering_sink} | {r.supplier_EUR_per_kW_min:,.0f}-{r.supplier_EUR_per_kW_max:,.0f} |")
+        lines += ["", "Supplier figures exclude installation and integration; the case cost function includes them.", ""]
+    lines += ["## Verdicts", "", "| Verdict | Passed | Detail |", "|---|---|---|"]
+    lines += [f"| {v.verdict} | {'yes' if v.passed else 'NO'} | {v.detail} |" for v in verdicts.itertuples()]
+    return "\n".join(lines) + "\n"
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("case", type=Path)
+    args = parser.parse_args()
+    case = load_case(args.case)
+    demo, cost, verdicts = checks(args.case)
+    out = ROOT / "outputs" / case.name
+    demo.to_csv(out / "vendor_data_check.csv", index=False)
+    (out / "vendor_data_check.md").write_text(markdown(demo, cost, verdicts), encoding="utf-8")
+    print(f"{case.name}: {int(verdicts['passed'].sum())} of {len(verdicts)} verdicts pass")
+
+
+if __name__ == "__main__":
+    main()

@@ -53,6 +53,8 @@ STEPS: tuple[tuple[str, ...], ...] = (
     ("-m", "scripts.checks.investment_check", BREWERY),
     ("-m", "scripts.checks.plant_data_check", BREWERY),
     ("-m", "scripts.checks.design_consistency_check", BREWERY),
+    ("-m", "scripts.checks.vendor_data_check", BREWERY),
+    ("-m", "scripts.checks.benchmark_check", BREWERY),
     ("-m", "scripts.validation.reproduce_secondary_economics"),
 )
 

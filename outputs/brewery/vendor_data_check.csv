@@ -1,0 +1,9 @@
+no,supplier,industry,process,hp_type,refrigerant,compressor,capacity_kW,COP_heating,T_source_in_C,T_source_out_C,T_sink_in_C,T_sink_out_C,operating_hours_per_year,COP_Lorenz,eta_lorenz,closed_cycle
+2,Mayekawa,electronic,coil drying,CCHP,R744,piston,89,3.1,30,25,20,120,,8.504,0.365,True
+3,AMT,food,starch drying,CCHP,R-1336mzz(Z),screw,374,3.2,76,72,96,138,4000.0,9.144,0.35,True
+4,Olvondo,pharmaceutical,recooling,Stirling HP,R704,piston,2250,1.7,36,34,178,183,6100.0,3.118,0.545,True
+5,Kobelco,sewage,sludge drying,MVR,R718,twin-screw + roots blower,675,2.9,93,93,160,160,,6.465,0.449,False
+6,Kobelco,refinery,bioethanol distillation,CCHP + flash tank,R245fa,twin-screw,1850,3.5,65,60,110,115,,7.713,0.454,True
+7,MHI,electronic,coil drying,CCHP,R134a,centrifugal,627,3.0,55,50,70,130,,7.973,0.376,True
+8,Piller,plastics,thermal separation,MVR,R718,turbo (8 blowers),10000,4.4,60,60,126,131,8000.0,5.864,0.75,False
+9,Viking,minerals,brick drying,CCHP,R-1336mzz(Z),piston (8 compressors),296,5.0,84,80,96,121,4000.0,14.469,0.346,True

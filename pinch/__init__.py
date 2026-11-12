@@ -40,7 +40,7 @@ process_diagram          Simplified flowsheet and T* stream diagram as SVG, four
 theme                    Light and dark colour palettes, colour meaning, WCAG contrast (front end).
 """
 
-__version__ = "0.9.0"   # keep equal to pyproject.toml and CITATION.cff (tests/test_quality.py)
+__version__ = "0.10.0"   # keep equal to pyproject.toml and CITATION.cff (tests/test_quality.py)
 
 import matplotlib as _mpl
 

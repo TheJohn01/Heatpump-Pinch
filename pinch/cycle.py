@@ -187,7 +187,7 @@ class _State:
 
 
 def _evaluate(f: _Fluid, T_e: float, P_hi: float, sink_T: Callable[[float], float], T_sink_in: float,
-              a: CycleAssumptions, slhx: bool, expander: bool) -> _State:
+              a: CycleAssumptions, slhx: bool, expander: bool | tuple[str, float]) -> _State:
     """Cycle states for given evaporation temperature [K] and high pressure [Pa]; condenser checked.
 
     A state outside the equation of state's range (CoolProp error) is infeasible.
@@ -322,7 +322,7 @@ def _evaporator_ok_raw(f: _Fluid, s: _State, source_T: Callable[[float], float],
 
 
 def _best_T_evap(f: _Fluid, P_hi: float, source_T, T_source_hot_K: float, sink_T, T_sink_in: float,
-                 a: CycleAssumptions, slhx: bool, expander: bool, T_e_fixed: float | None) -> _State:
+                 a: CycleAssumptions, slhx: bool, expander: bool | tuple[str, float], T_e_fixed: float | None) -> _State:
     """Highest evaporation temperature feasible for the evaporator at this high pressure."""
     def state(T_e):
         return _evaluate(f, T_e, P_hi, sink_T, T_sink_in, a, slhx, expander)
@@ -350,7 +350,7 @@ def _best_T_evap(f: _Fluid, P_hi: float, source_T, T_source_hot_K: float, sink_T
 
 
 def _solve_single(fluid: str, source: SecondaryStream | None, sink_T: Callable[[float], float], T_sink_hot: float,
-                  T_sink_in: float, a: CycleAssumptions, slhx: bool, expander: bool,
+                  T_sink_in: float, a: CycleAssumptions, slhx: bool, expander: bool | tuple[str, float],
                   T_e_fixed: float | None = None) -> _State:
     """Optimise the high pressure (and evaporation temperature) for maximum COP."""
     f = _Fluid(fluid)
@@ -362,7 +362,9 @@ def _solve_single(fluid: str, source: SecondaryStream | None, sink_T: Callable[[
 
     def at(P_hi: float) -> _State:
         if source_T is None:
+            assert T_e_fixed is not None                  # cascade top cycle
             return _evaluate(f, T_e_fixed, P_hi, sink_T, T_sink_in, a, slhx, expander)
+        assert T_source_hot_K is not None
         return _best_T_evap(f, P_hi, source_T, T_source_hot_K, sink_T, T_sink_in, a, slhx, expander, None)
 
     # lowest high pressure at which the condenser respects the pinch
@@ -529,6 +531,8 @@ def cascade(fluid_low: str, fluid_high: str, source: SecondaryStream, sink: Seco
     cop_L = _lorenz(source, sink)
     if cop >= cop_L:
         raise AssertionError("second-law violation: cascade COP above the Lorenz COP")
+    if top is None or bottom is None:
+        raise AssertionError("cascade: a finite COP needs both stage states")
     f_lo = _Fluid(fluid_low)
     stages = [
         CycleResult(fluid_low, "bottom", True, COP=bottom.COP, T_evap_C=bottom.T_e - KELVIN,

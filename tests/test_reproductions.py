@@ -4,6 +4,7 @@ The scripts compute the comparisons once (``checks()``) and only write the table
 every verdict, so a change in the code that alters a conclusion stated in the README fails here.
 """
 
+import pytest
 
 
 def _verdicts(module) -> dict[tuple[str, str], str]:
@@ -62,3 +63,28 @@ def test_design_consistency_verdicts():
     assert andersen["status"].tolist() == ["extrapolated, not a check"]
     basis = table[table["status"] == "basis"]
     assert set(basis["quantity"]) == {"COP", "CAPEX_EUR"} and (basis["quantity"] == "COP").sum() == 2
+
+
+def test_vendor_data_check_values():
+    """IEA HPT Annex 58 demonstration cases: achieved Lorenz efficiency, hand-checked for case 9 (Viking:
+    sink 96->121 °C, source 84->80 °C, COP 5.0 -> COP_Lorenz 14.47, η_L 0.346). The case's η_L 0.50 is above the
+    closed-cycle median 0.370 (W1 fails: recorded finding, sensitivity row 'Lorenz efficiency 0.37')."""
+    from pinch.validation import ROOT
+    from scripts.checks import vendor_data_check as v
+    demo, cost, verdicts = v.checks(ROOT / "cases" / "brewery.json")
+    viking = demo[demo["no"] == 9].iloc[0]
+    assert viking["COP_Lorenz"] == pytest.approx(14.47, abs=0.01) and viking["eta_lorenz"] == pytest.approx(0.346, abs=1e-3)
+    closed = demo[demo["closed_cycle"]]
+    assert len(closed) == 6 and closed["eta_lorenz"].median() == pytest.approx(0.370, abs=1e-3)
+    got = dict(zip(verdicts["verdict"], verdicts["passed"]))
+    assert got == {"W1": False, "W2": True}
+    assert cost.set_index("unit").loc["Warm-water HP", "case_EUR_per_kW"] == pytest.approx(1171, abs=1)
+
+
+def test_benchmark_check_verdicts():
+    from pinch.validation import ROOT
+    from scripts.checks import benchmark_check as b
+    table, verdicts = b.checks(ROOT / "cases" / "brewery.json")
+    assert verdicts["passed"].all()
+    assert table.iloc[0]["case"] == pytest.approx(19.3)
+    assert table.iloc[3]["case"] == pytest.approx(4.7 / 11.3, abs=1e-3)

@@ -73,7 +73,8 @@ Same rows and labels as rq_consolidated.md, which gives RQ1-RQ3 against today's 
 | Horizon 20 years | 2.217 | 7.66 | 1,125,107 | 1,835 | 72.5 % | 2.793 |
 | Grid emission factor 0.167 (5-year average) | 2.217 | 7.66 | 15,027 | 1,652 | 72.5 % | 2.229 |
 | Grid emission factor 0.1172 (2025 estimate) | 2.217 | 7.66 | 15,027 | 1,804 | 72.5 % | 2.229 |
-| Grid emission factor 0.367 (marginal gas CCGT, assumed) | 2.217 | 7.66 | 15,027 | 1,040 | 72.5 % | 2.229 |
+| Grid emission factor 0.367 (marginal gas CCGT, 55 %) | 2.217 | 7.66 | 15,027 | 1,040 | 72.5 % | 2.229 |
+| Grid emission factor 0.337 (marginal gas CCGT, new plant 60 %) | 2.217 | 7.66 | 15,027 | 1,132 | 72.5 % | 2.229 |
 | Batch: HTHP sized for the boil window, F = 1.14 | 2.217 | 7.78 | -14,544 | 1,835 | 72.5 % | 2.205 |
 | Batch: HTHP sized for the boil window, F = 1.75 | 2.217 | 8.32 | -139,282 | 1,835 | 72.5 % | 2.102 |
 | Batch: HTHP sized for the boil window, F = 3.0 | 2.217 | 9.43 | -398,973 | 1,835 | 72.5 % | 1.887 |
@@ -84,11 +85,11 @@ Existing network 'N0 existing': Q̇h 11.3 (target 10.0424), energy gap 1.2577 = 
 
 | Option | Q̇h network | Heat pumps | CAPEX [EUR] | Payback [y] | NPV [EUR] | Gas reduction vs existing |
 |---|---|---|---|---|---|---|
-| N1: condensate into tank | 10.4847 | none | 55,972 | 1.11 | 333,235 | 7.2 % |
+| N1: condensate into tank | 10.4847 | none | 76,108 | 1.51 | 313,099 | 7.2 % |
 | N0 + both heat pumps (Padulles config. 2) | 11.3 | Warm-water HP 8.30 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81) | 1,887,500 | 7.37 | 90,195 | 100.0 % |
-| N1 + both heat pumps | 10.4847 | Warm-water HP 7.48 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81) | 1,882,325 | 6.54 | 341,578 | 100.0 % |
-| N1 + warm-water heat pump only | 10.4847 | Warm-water HP 7.48 (COP 3.22) | 1,137,325 | 3.76 | 1,198,981 | 73.5 % |
-| N1 + both heat pumps, cycle-based COP | 10.4847 | Warm-water HP 7.48 (COP 3.11), HTHP (wort boiling) 3.00 (COP 1.96) | 1,882,325 | 6.44 | 375,737 | 100.0 % |
+| N1 + both heat pumps | 10.4847 | Warm-water HP 7.48 (COP 3.22), HTHP (wort boiling) 3.00 (COP 1.81) | 1,902,461 | 6.61 | 321,442 | 100.0 % |
+| N1 + warm-water heat pump only | 10.4847 | Warm-water HP 7.48 (COP 3.22) | 1,157,461 | 3.83 | 1,178,845 | 73.5 % |
+| N1 + both heat pumps, cycle-based COP | 10.4847 | Warm-water HP 7.48 (COP 3.11), HTHP (wort boiling) 3.00 (COP 1.96) | 1,902,461 | 6.51 | 355,602 | 100.0 % |
 
 ## Cycle-based design (step 4b: η_L from the working-fluid cycle model)
 
@@ -129,7 +130,7 @@ Hot utility 484.73 EUR/kW-year; cold utility 204.04494382022472 EUR/kW-year; CRF
 - **stream data**: published (Table 2); 'Amb.' taken as 15 °C (Sec. 4.3.1), an inference
 - **eta_lorenz**: EDUCATED APPROXIMATION (author decision, 2026-10-17): 0.50, not a published or measured value. It lies inside the range implied by the Danish Energy Agency HTHP sheets (0.45-0.52) and between our cycle model's warm-water heat pump (0.48-0.49) and high-temperature cascade (0.54-0.56). Padullés et al. (2026, Sec. 4.3.1) use 0.55 (kept for the paper reproduction and as a sensitivity row)
 - **source_T_C**: published cold-utility temperature (Sec. 4.1); used for all sources, which bounds W from above
-- **sink levels**: published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)
+- **sink levels**: published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* = 103 °C (assumed, consistent with COP 2); 103 °C equals the wort temperature under dynamic low-pressure boiling (JRC Best Environmental Management Practice, food and beverage, wort boiling), so the 110 and 120 °C rows bound the driving force
 - **basis**: assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)
 - **ambient_T_C**: published: Sec. 4.3.1
 - **area_targeting**: film coefficients: Stampfli et al. (2018) Table 1, mapping assumed; cost laws: Sinnott and Towler (2020) Table 6.6 plate and frame (primary) and Stampfli et al. (2018) Table 2, bare and x3.5 (Hand factor, Towler Table 6.3); cold utility cost from chiller COP

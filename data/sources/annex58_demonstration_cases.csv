@@ -1,0 +1,11 @@
+# Zühlsdorf B., Poulsen J.L., Schlosser F. (2022), "IEA HPT Annex 58 about HTHPs: state of the art review, demonstration cases and development perspectives", High-Temperature Heat Pump Symposium, Copenhagen, 29 March 2022 (presentation of IEA HPT Annex 58 Task 1; not peer-reviewed). Slide "Overview of collected demonstration cases" (14 cases). Transcribed 2026-11-12. Reported values (supplier/plant data), not independently measured by the Annex.
+# Kept: cases with all four source and sink temperatures. Left out: no. 1, 10, 11, 12 (sink inlet n.a.), 13 (source temperatures not legible in the table layout), 14 (heat transformer, temperature ranges).
+no,supplier,industry,process,hp_type,refrigerant,compressor,capacity_kW,COP_heating,T_source_in_C,T_source_out_C,T_sink_in_C,T_sink_out_C,operating_hours_per_year
+2,Mayekawa,electronic,coil drying,CCHP,R744,piston,89,3.1,30,25,20,120,
+3,AMT,food,starch drying,CCHP,R-1336mzz(Z),screw,374,3.2,76,72,96,138,4000
+4,Olvondo,pharmaceutical,recooling,Stirling HP,R704,piston,2250,1.7,36,34,178,183,6100
+5,Kobelco,sewage,sludge drying,MVR,R718,twin-screw + roots blower,675,2.9,93,93,160,160,
+6,Kobelco,refinery,bioethanol distillation,CCHP + flash tank,R245fa,twin-screw,1850,3.5,65,60,110,115,
+7,MHI,electronic,coil drying,CCHP,R134a,centrifugal,627,3.0,55,50,70,130,
+8,Piller,plastics,thermal separation,MVR,R718,turbo (8 blowers),10000,4.4,60,60,126,131,8000
+9,Viking,minerals,brick drying,CCHP,R-1336mzz(Z),piston (8 compressors),296,5.0,84,80,96,121,4000

@@ -49,7 +49,7 @@
     "stream data": "published (Table 2); 'Amb.' taken as 15 °C (Sec. 4.3.1), an inference",
     "eta_lorenz": "EDUCATED APPROXIMATION (author decision, 2026-10-17): 0.50, not a published or measured value. It lies inside the range implied by the Danish Energy Agency HTHP sheets (0.45-0.52) and between our cycle model's warm-water heat pump (0.48-0.49) and high-temperature cascade (0.54-0.56). Padullés et al. (2026, Sec. 4.3.1) use 0.55 (kept for the paper reproduction and as a sensitivity row)",
     "source_T_C": "published cold-utility temperature (Sec. 4.1); used for all sources, which bounds W from above",
-    "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* (assumed, consistent with COP 2)",
+    "sink levels": "published warm-water tank 18-82 °C (Fig. 14); HTHP at GCC maximum T* = 103 °C (assumed, consistent with COP 2); 103 °C equals the wort temperature under dynamic low-pressure boiling (JRC Best Environmental Management Practice, food and beverage, wort boiling), so the 110 and 120 °C rows bound the driving force",
     "basis": "assumed: 1.0 million hl/year, within the published range of Table 1 (0.25-1.5 million hl/year); economics at 8000 h/year (published)",
     "ambient_T_C": "published: Sec. 4.3.1",
     "area_targeting": "film coefficients: Stampfli et al. (2018) Table 1, mapping assumed; cost laws: Sinnott and Towler (2020) Table 6.6 plate and frame (primary) and Stampfli et al. (2018) Table 2, bare and x3.5 (Hand factor, Towler Table 6.3); cold utility cost from chiller COP",
@@ -58,9 +58,9 @@
     "warm-water heat pump name": "'Warm-water HP' = the CO2 heat pump of Padullés et al. (2026, config. 2); our cycle screening selects propane with SLHX as the practical fluid (step 4b), so the unit is named by its duty"
   },
   "run": {
-    "tool_version": "0.9.0",
+    "tool_version": "0.10.0",
     "inputs_sha256": {
-      "cases/brewery.json": "4ea9775f3e5fd993cce65df472bfb526de1b95db5e918cd261719ff695628a67",
+      "cases/brewery.json": "bb0a21f528af44ad5bc37a0e5fe9cc16c0be324390aa894faddd7839b576f94d",
       "data/brewery_networks.json": "2b5fe7b9fefc0f82dfb1acba833bbcb54c7cbe9080f375c66c3093b5d01b406e",
       "data/brewery_streams.csv": "70a7b23ff21b25cdd95413a64ba682fdef48d53692456ebde9efa368e11daec2"
     }
@@ -530,7 +530,7 @@
         "basis": "Electricity Maps, Portugal, 2025 (as in the previous scenario list); affects CO2 avoided only"
       },
       {
-        "sensitivity": "Grid emission factor 0.367 (marginal gas CCGT, assumed)",
+        "sensitivity": "Grid emission factor 0.367 (marginal gas CCGT, 55 %)",
         "price_ratio": 2.217,
         "boiler_efficiency": 0.845,
         "gas_EF_kg_per_kWh": 0.182,
@@ -547,7 +547,27 @@
         "grass_roots_hp_share_max_NPV": 0.725,
         "full_design_break_even_ratio_NPV": 2.229,
         "full_design_break_even_ratio_payback": 1.423,
-        "basis": "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 55 % efficiency (assumed, not sourced); affects CO2 avoided only (design review B5)"
+        "basis": "marginal plant = gas combined cycle: 0.202 kg/kWh (IPCC 2006, NCV) / 0.55; 0.55 = 58 % (Oresundsverket, 2009) less about 3 points of lifetime degradation (DEA, Technology Data for Generation of Electricity and District Heating, p. 23: 2.5-3.5 points; ch. 05, p. 56); affects CO2 avoided only (design review B5)"
+      },
+      {
+        "sensitivity": "Grid emission factor 0.337 (marginal gas CCGT, new plant 60 %)",
+        "price_ratio": 2.217,
+        "boiler_efficiency": 0.845,
+        "gas_EF_kg_per_kWh": 0.182,
+        "grid_EF_kg_per_kWh": 0.337,
+        "co2_price_EUR_per_t": 0.0,
+        "chiller_cop": 4.45,
+        "full_capex_EUR": 1793176.0,
+        "full_savings_EUR": 234171.0,
+        "full_payback_years": 7.66,
+        "full_npv_EUR": 15027.0,
+        "full_co2_avoided_t": 1132.0,
+        "full_primary_energy_reduction": 0.4043,
+        "grass_roots_hp_share_payback_ok": 0.725,
+        "grass_roots_hp_share_max_NPV": 0.725,
+        "full_design_break_even_ratio_NPV": 2.229,
+        "full_design_break_even_ratio_payback": 1.423,
+        "basis": "0.202 kg/kWh (IPCC 2006, NCV) / 0.60: large CC-GT units have demonstrated 60 % electrical efficiency, LHV (DEA, Technology Data for Generation of Electricity and District Heating, ch. 05, p. 55); affects CO2 avoided only"
       },
       {
         "sensitivity": "Batch: HTHP sized for the boil window, F = 1.14",
@@ -769,10 +789,10 @@
         "Qh_residual": 10.4847,
         "W_heat_pumps": 0.0,
         "refrigeration_taken_over": 0.0,
-        "capex_EUR": 55972.0,
+        "capex_EUR": 76108.0,
         "savings_EUR": 50404.0,
-        "payback_years": 1.11,
-        "npv_EUR": 333235.0,
+        "payback_years": 1.51,
+        "npv_EUR": 313099.0,
         "gas_reduction_vs_baseline": 0.0722,
         "co2_avoided_t": 176.0,
         "primary_energy_reduction": 0.0648,
@@ -833,14 +853,14 @@
         "Qh_residual": 0.0,
         "W_heat_pumps": 3.98,
         "refrigeration_taken_over": 3.2212,
-        "capex_EUR": 1882325.0,
+        "capex_EUR": 1902461.0,
         "savings_EUR": 288006.0,
-        "payback_years": 6.54,
-        "npv_EUR": 341578.0,
+        "payback_years": 6.61,
+        "npv_EUR": 321442.0,
         "gas_reduction_vs_baseline": 1.0,
         "co2_avoided_t": 2085.0,
         "primary_energy_reduction": 0.4361,
-        "break_even_ratio_NPV": 2.482
+        "break_even_ratio_NPV": 2.466
       },
       {
         "option": "N1 + warm-water heat pump only",
@@ -859,14 +879,14 @@
         "Qh_residual": 3.0,
         "W_heat_pumps": 2.321,
         "refrigeration_taken_over": 3.2212,
-        "capex_EUR": 1137325.0,
+        "capex_EUR": 1157461.0,
         "savings_EUR": 302562.0,
-        "payback_years": 3.76,
-        "npv_EUR": 1198981.0,
+        "payback_years": 3.83,
+        "npv_EUR": 1178845.0,
         "gas_reduction_vs_baseline": 0.7345,
         "co2_avoided_t": 1617.0,
         "primary_energy_reduction": 0.4329,
-        "break_even_ratio_NPV": 4.116
+        "break_even_ratio_NPV": 4.084
       },
       {
         "option": "N1 + both heat pumps, cycle-based COP",
@@ -891,14 +911,14 @@
         "Qh_residual": 0.0,
         "W_heat_pumps": 3.941,
         "refrigeration_taken_over": 3.2212,
-        "capex_EUR": 1882325.0,
+        "capex_EUR": 1902461.0,
         "savings_EUR": 292429.0,
-        "payback_years": 6.44,
-        "npv_EUR": 375737.0,
+        "payback_years": 6.51,
+        "npv_EUR": 355602.0,
         "gas_reduction_vs_baseline": 1.0,
         "co2_avoided_t": 2090.0,
         "primary_energy_reduction": 0.4417,
-        "break_even_ratio_NPV": 2.512
+        "break_even_ratio_NPV": 2.496
       }
     ],
     "heat_pump_reference": "N1: condensate into tank",
@@ -937,19 +957,19 @@
       "N1 + both heat pumps": {
         "max_gas_reduction_payback_ok": 0.7309,
         "gas_reduction_at_max_NPV": 0.7309,
-        "max_NPV_EUR": 1194914.0,
+        "max_NPV_EUR": 1174778.0,
         "heat_pump_share_incremental_payback_ok": 0.6588
       },
       "N1 + warm-water heat pump only": {
         "max_gas_reduction_payback_ok": 0.7345,
         "gas_reduction_at_max_NPV": 0.7345,
-        "max_NPV_EUR": 1198986.0,
+        "max_NPV_EUR": 1178850.0,
         "heat_pump_share_incremental_payback_ok": 0.6624
       },
       "N1 + both heat pumps, cycle-based COP": {
         "max_gas_reduction_payback_ok": 0.7309,
         "gas_reduction_at_max_NPV": 0.7309,
-        "max_NPV_EUR": 1119795.0,
+        "max_NPV_EUR": 1099659.0,
         "heat_pump_share_incremental_payback_ok": 0.6588
       }
     },

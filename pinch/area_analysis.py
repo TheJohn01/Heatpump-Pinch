@@ -24,7 +24,7 @@ import numpy as np
 import pandas as pd
 
 from pinch.area import CostLaw, supertarget
-from pinch.case import Case, to_MWh_per_year
+from pinch.case import Case, annual_converter
 from pinch.economics import load_economics
 from pinch.plotting import supertargeting_figure
 from pinch.results import Outputs
@@ -33,7 +33,7 @@ from pinch.streams import StreamSet
 
 def to_kW(stream_set: StreamSet, case: Case, hours: float) -> StreamSet:
     """Rescale loads to kW of continuous duty."""
-    factor = to_MWh_per_year(1.0, stream_set.energy_unit, case.basis) * 1000 / hours
+    factor = annual_converter(stream_set.energy_unit, case.basis)(1.0) * 1000 / hours
     return replace(stream_set, energy_unit="kW",
                    streams=tuple(replace(s, Q=s.Q * factor) for s in stream_set.streams))
 
@@ -67,7 +67,7 @@ def area_targeting_outputs(case: Case, streams: StreamSet) -> Outputs:
     laws: list[CostLaw] = []
     given = block.get("cost_law") or []
     for cl in ([given] if isinstance(given, dict) else given):
-        laws.append(CostLaw(float(cl["a"]), float(cl["b"]), float(cl["c"]), cl.get("label", cl["source"])))
+        laws.append(CostLaw(float(cl["a"]), float(cl["b"]), float(cl["c"]), str(cl.get("label", cl["source"]))))
     for b in block.get("specific_area_cost_sweep_EUR_per_m2", []):
         laws.append(CostLaw(0.0, float(b), 1.0, f"sweep: {b} EUR/m2 installed, linear (not a sourced estimate)"))
     if not laws:

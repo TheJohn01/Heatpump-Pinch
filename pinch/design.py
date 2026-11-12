@@ -185,7 +185,7 @@ def plausibility_warnings(unit: HeatPump, screening: dict | None = None) -> list
         warnings.append(f"sink {T_sink:.0f} °C above {s['sink_max_C']:.0f} °C: beyond near-term commercial availability (Annex 58: up to 280 °C at TRL 4-9)")
     elif T_sink > s["sink_warn_C"]:
         warnings.append(f"sink {T_sink:.0f} °C above {s['sink_warn_C']:.0f} °C: limited commercial availability")
-    if unit.has_source:
+    if unit.T_source_in_C is not None and unit.T_source_out_C is not None:   # has_source
         lift = T_sink - min(unit.T_source_in_C, unit.T_source_out_C)
         if lift > s["lift_max_K"]:
             warnings.append(f"lift {lift:.0f} K above {s['lift_max_K']:.0f} K: beyond reported COP data")
@@ -206,7 +206,8 @@ def source_warnings(design: HeatPumpDesign, ambient_T_C: float | None) -> dict[s
         return flags
     for u in design.units:
         ext = design.integration.Q_source_external.get(u.name, 0.0)
-        T_src = max(u.T_source_in_C, u.T_source_out_C) if u.has_source else None
+        T_src = (max(u.T_source_in_C, u.T_source_out_C)
+                 if u.T_source_in_C is not None and u.T_source_out_C is not None else None)
         if ext > 0 and T_src is not None and T_src > ambient_T_C:
             flags.setdefault(u.name, []).append(
                 f"external source {ext:.4g} at {T_src:.0f} °C above ambient {ambient_T_C:.0f} °C: "

@@ -1,13 +1,13 @@
 increment,scenario,investment_MEUR,grant_MEUR,savings_kEUR_per_y,payback_y,discounted_payback_y,IRR,NPV_MEUR,NPV_capex_low_narrow_MEUR,NPV_capex_high_narrow_MEUR,NPV_capex_low_wide_MEUR,NPV_capex_high_wide_MEUR,MC_NPV_p5_MEUR,MC_NPV_p50_MEUR,MC_NPV_p95_MEUR,MC_prob_NPV_positive,MC_prob_payback_within_threshold
-Heat-recovery step over today's site,no grant,0.056,0.0,50.4,1.11,1.17,0.899,0.333,0.344,0.316,0.361,0.277,0.205,0.377,0.601,1.0,1.0
-Heat-recovery step over today's site,"grant 30 % (energy efficiency, large firm)",0.056,0.017,50.4,0.78,0.82,1.2861,0.35,0.358,0.338,0.37,0.311,0.225,0.396,0.621,1.0,1.0
-Heat-recovery step over today's site,"grant 45 % (same, 'a' region)",0.056,0.025,50.4,0.61,0.64,1.6372,0.358,0.365,0.349,0.374,0.328,0.235,0.405,0.63,1.0,1.0
+Heat-recovery step over today's site,no grant,0.076,0.0,50.4,1.51,1.61,0.6581,0.313,0.328,0.29,0.351,0.237,0.18,0.353,0.579,1.0,1.0
+Heat-recovery step over today's site,"grant 30 % (energy efficiency, large firm)",0.076,0.023,50.4,1.06,1.12,0.9449,0.336,0.347,0.32,0.363,0.283,0.208,0.379,0.604,1.0,1.0
+Heat-recovery step over today's site,"grant 45 % (same, 'a' region)",0.076,0.034,50.4,0.83,0.87,1.2037,0.347,0.356,0.335,0.368,0.305,0.222,0.392,0.617,1.0,1.0
 HP1 (Warm-water HP) over the previous step,no grant,1.081,0.0,252.2,4.29,4.95,0.1934,0.866,1.082,0.541,1.406,-0.216,-0.291,0.875,2.342,0.882,0.588
 HP1 (Warm-water HP) over the previous step,"grant 30 % (energy efficiency, large firm)",1.081,0.324,252.2,3.0,3.34,0.3109,1.19,1.342,0.963,1.569,0.433,0.182,1.239,2.675,0.978,0.845
 HP1 (Warm-water HP) over the previous step,"grant 45 % (same, 'a' region)",1.081,0.487,252.2,2.36,2.58,0.4104,1.352,1.471,1.174,1.65,0.758,0.396,1.427,2.849,0.997,0.941
 HP2 (HTHP (wort boiling)) over the previous step,no grant,0.745,0.0,-14.6,inf,inf,,-0.857,-0.708,-1.081,-0.485,-1.602,-1.87,-1.079,-0.425,0.003,0.0
 HP2 (HTHP (wort boiling)) over the previous step,"grant 30 % (energy efficiency, large firm)",0.745,0.224,-14.6,inf,inf,,-0.634,-0.53,-0.79,-0.373,-1.155,-1.562,-0.817,-0.212,0.013,0.002
 HP2 (HTHP (wort boiling)) over the previous step,"grant 45 % (same, 'a' region)",0.745,0.335,-14.6,inf,inf,,-0.522,-0.44,-0.645,-0.317,-0.932,-1.408,-0.683,-0.097,0.025,0.005
-Full design over today's site,no grant,1.882,0.0,288.0,6.54,8.11,0.0859,0.342,0.718,-0.223,1.283,-1.541,-1.568,0.141,2.303,0.553,0.236
-Full design over today's site,"grant 30 % (energy efficiency, large firm)",1.882,0.565,288.0,4.57,5.33,0.175,0.906,1.17,0.511,1.565,-0.411,-0.732,0.776,2.863,0.776,0.49
-Full design over today's site,"grant 45 % (same, 'a' region)",1.882,0.847,288.0,3.59,4.06,0.2478,1.189,1.396,0.878,1.706,0.153,-0.337,1.098,3.143,0.882,0.662
+Full design over today's site,no grant,1.902,0.0,288.0,6.61,8.22,0.0835,0.321,0.702,-0.249,1.273,-1.581,-1.599,0.118,2.284,0.545,0.23
+Full design over today's site,"grant 30 % (energy efficiency, large firm)",1.902,0.571,288.0,4.62,5.39,0.1721,0.892,1.159,0.493,1.558,-0.44,-0.748,0.763,2.848,0.771,0.483
+Full design over today's site,"grant 45 % (same, 'a' region)",1.902,0.856,288.0,3.63,4.11,0.2443,1.178,1.387,0.864,1.701,0.131,-0.351,1.084,3.131,0.878,0.655

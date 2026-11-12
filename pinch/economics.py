@@ -28,6 +28,7 @@ from __future__ import annotations
 import difflib
 import math
 from dataclasses import dataclass, field, replace
+from typing import Any
 
 #: Cost functions C = beta + alpha * X**gamma [EUR]. Source: Padullés et al. (2026),
 #: Table 3, taken from the Danish Energy Agency Technology Catalogue.
@@ -35,7 +36,7 @@ from dataclasses import dataclass, field, replace
 #: sheet 2.a (2,494 EUR/MW/y, 3.6 EUR/MWh; both brewery heat pumps deliver <= 125 °C), MVR sheet 4
 #: (2,345 EUR/MW/y, 2.1 EUR/MWh), electric boiler sheet 5.1a (1,442 EUR/MW/y, 0.674 EUR/MWh).
 #: Padullés et al. (2026) include no O&M: their reproduction scripts set it to zero.
-DEFAULT_COST_FUNCTIONS = {
+DEFAULT_COST_FUNCTIONS: dict[str, dict[str, Any]] = {
     "hr_tank": {"alpha": 7450.0, "beta": 0.0, "gamma": 0.65, "size_unit": "m3"},
     "heat_pump": {"alpha": 600.0, "beta": 520_000.0, "gamma": 1.0, "size_unit": "kW",
                   "fixed_om_EUR_per_unit_year": 2.494, "variable_om_EUR_per_MWh": 3.6},
@@ -207,7 +208,7 @@ def load_economics(block: dict | None) -> EconomicParameters:
             hints.append(f"'{k}'" + (f" (did you mean '{close[0]}'?)" if close else ""))
         raise ValueError("economics: unknown key " + ", ".join(hints)
                          + ". A misspelt key would otherwise be ignored and the default used")
-    values = {k: block.get(k, v[0]) for k, v in DEFAULTS.items()}
+    values: dict[str, Any] = {k: block.get(k, v[0]) for k, v in DEFAULTS.items()}
     if "electricity_price_EUR_per_kWh" in block:
         p_el = float(block["electricity_price_EUR_per_kWh"])
     else:
@@ -385,7 +386,7 @@ def capacity_kW(heat_MWh_per_year: float, params: EconomicParameters) -> float:
 
 
 #: Padullés et al. (2026) include no operation and maintenance costs: overrides that reproduce their convention
-NO_OM = {"boiler_variable_om_EUR_per_MWh": 0.0,
+NO_OM: dict[str, Any] = {"boiler_variable_om_EUR_per_MWh": 0.0,
          "cost_functions": {k: {"fixed_om_EUR_per_unit_year": 0.0, "variable_om_EUR_per_MWh": 0.0}
                             for k in ("heat_pump", "mvr", "electric_boiler")}}
 

@@ -42,9 +42,10 @@ from dataclasses import replace
 
 import pandas as pd
 
-from pinch.case import Case, to_MWh_per_year
+from pinch.case import Case, annual_converter
 from pinch.design import design_from_gcc, partial_designs
 from pinch.economics import Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment
+from pinch.heat_pump import HeatPump
 from pinch.network import NetworkResult, constrained_streams, evaluate_network, load_networks
 from pinch.plotting import retrofit_options_figure
 from pinch.problem_table_algorithm import problem_table
@@ -70,6 +71,24 @@ def _indirect_duty(streams: StreamSet, net) -> float:
     return total
 
 
+# Installed carbon-steel piping, PC = a L d^b [NZD] with L the round-trip length [m] and d the diameter [mm]
+# (Lal, Walmsley, Atkins, Walmsley, Neale 2018, CET 70, 1951-1956, Eq. 2, after Sinnott 1999); diameter sized
+# for 2 m/s (ibid.). Basis year unverified: taken as 2017 NZD, like the plate exchanger law of the case file,
+# / 1.5897 NZD/EUR (ECB, EXR.A.NZD.EUR.SP00.A, 2017) x CEPCI 797.9/567.5 (2023/2017).
+PIPING_A_NZD, PIPING_B = 105.83, 0.55
+PIPE_VELOCITY_M_S = 2.0
+NZD_PER_EUR_2017, CEPCI_2023_OVER_2017 = 1.5897, 797.9 / 567.5
+WATER_CP_KJ_PER_KGK, WATER_RHO_KG_PER_M3 = 4.18, 1000.0    # piped fluid taken as water (condensate, tank water)
+
+
+def piping_cost_EUR(Q_kW: float, dT_K: float, length_m: float) -> tuple[float, float]:
+    """(installed piping cost [EUR 2023], pipe diameter [mm]) for a water stream carrying ``Q_kW`` over ``dT_K``."""
+    m_kg_s = Q_kW / (WATER_CP_KJ_PER_KGK * dT_K)
+    d_mm = 1000 * (4 * m_kg_s / WATER_RHO_KG_PER_M3 / (3.141592653589793 * PIPE_VELOCITY_M_S)) ** 0.5
+    nzd = PIPING_A_NZD * length_m * d_mm ** PIPING_B
+    return nzd / NZD_PER_EUR_2017 * CEPCI_2023_OVER_2017, d_mm
+
+
 def new_recovery_equipment(case: Case, streams: StreamSet, base_net, net, params, to_MWh,
                            option_name: str = "") -> tuple[list[tuple[str, float]], list[dict]]:
     """New heat-recovery equipment of a retrofit network against the baseline network.
@@ -77,8 +96,11 @@ def new_recovery_equipment(case: Case, streams: StreamSet, base_net, net, params
     Returns (equipment items for ``pinch.economics``, one table row per item). Each new hot segment of an
     indirect match gets an exchanger to the storage medium (U from the film coefficients and the medium's h,
     approach = stream shift + half the indirect extra approach); the storage grows in proportion to the heat
-    it receives. Used by ``run_retrofit`` and by ``pinch.research_questions``.
+    it receives. With ``retrofit.piping.length_m`` in the case file, each new segment also gets installed
+    piping (``piping_cost_EUR``). Used by ``run_retrofit`` and by ``pinch.research_questions``.
     """
+    if not case.retrofit:
+        raise ValueError("new_recovery_equipment needs the case's retrofit block")
     block = case.retrofit
     h = (case.area_targeting or {}).get("film_coefficients_kW_per_m2K", {})
     medium_h = float(block.get("new_exchanger", {}).get("medium_h_kW_per_m2K", 2.0))
@@ -95,6 +117,13 @@ def new_recovery_equipment(case: Case, streams: StreamSet, base_net, net, params
         equipment.append((hx_kind, A))
         hx_rows.append({"option": option_name, "segment": f"{g.stream} {g.T_from_C:g}->{g.T_to_C:g} °C",
                         "Q_kW": round(Q_kW, 1), "U_kW_per_m2K": round(U, 3), "approach_K": dT, "area_m2": round(A, 1)})
+        L = float((block.get("piping") or {}).get("length_m", 0.0))
+        if L > 0:
+            pc, d_mm = piping_cost_EUR(Q_kW, abs(g.T_from_C - g.T_to_C), L)
+            equipment.append(("lump_sum_EUR", pc))
+            hx_rows.append({"option": option_name, "segment": f"piping {L:g} m, {d_mm:.0f} mm ({g.stream})",
+                            "Q_kW": None, "U_kW_per_m2K": None, "approach_K": None, "area_m2": None,
+                            "cost_EUR": round(pc, 0)})
     if storage and _indirect_duty(streams, net) > base_indirect + 1e-9:
         V0 = float(storage["size_baseline"])
         V1 = V0 * _indirect_duty(streams, net) / base_indirect
@@ -115,7 +144,7 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
         return Outputs({"skipped": "no annual basis"})
     nets = load_networks(block["network_file_resolved"])
     base_net = nets[block["baseline"]]
-    to_MWh = lambda x: to_MWh_per_year(x, energy_unit, case.basis)  # noqa: E731
+    to_MWh = annual_converter(energy_unit, case.basis)
     medium_h = float(block.get("new_exchanger", {}).get("medium_h_kW_per_m2K", 2.0))
     hx_kind = block.get("new_exchanger", {}).get("kind", "plate_hex")
     cop_ch = params.chiller_cop
@@ -125,7 +154,9 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
     baseline = Option(f"baseline: {base_net.name}", to_MWh(base_res.Qh), E_base)
 
     tables, rows, networks_out, curves = {}, [], {}, {}
-    option_objs, option_net, curve_args = {}, {}, {}
+    option_objs: dict[str, Option] = {}
+    option_net: dict[str, str] = {}
+    curve_args: dict[str, tuple] = {}
     for opt in block["options"]:
         net = nets[opt["network"]]
         res = evaluate_network(streams, net, case.ambient_T_C)
@@ -141,7 +172,8 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
 
         # heat pumps on the network-constrained stream set
         hp = opt.get("heat_pumps", False)
-        units, Qh_after, W = (), res.Qh, 0.0
+        units: tuple[HeatPump, ...] = ()
+        Qh_after, W = res.Qh, 0.0
         cs = constrained_streams(streams, net)
         Qh_cs = problem_table(cs).Qh_min
         if abs(Qh_cs - res.Qh) > 1e-3:
@@ -178,7 +210,7 @@ def run_retrofit(case: Case, streams: StreamSet, energy_unit: str, params, cycle
             curve_args[opt["name"]] = (units, res, cooling, tuple(equipment))
 
     # heat pumps judged on their own: increments over the heat-recovery-only reference option (RQ1, RQ3 per unit)
-    ref_name = block.get("heat_pump_reference")
+    ref_name = str(block.get("heat_pump_reference", ""))
     ref = option_objs.get(ref_name)
     for name, (units, res, cooling, equipment) in curve_args.items():
         same_net = ref is not None and option_net[name] == option_net[ref_name]
@@ -249,7 +281,7 @@ def _curve(units, res: NetworkResult, cooling: CoolingCascade | None, baseline, 
         ev = evaluate(point, baseline, params)
         row = {"heat_pump_heat": round(target, 4), "payback_years": ev.payback_years, "npv_EUR": ev.npv_EUR,
                "gas_reduction_vs_baseline": ev.gas_reduction, "capex_EUR": ev.capex_EUR}
-        if ev_ref is not None:
+        if ev_ref is not None and reference is not None:
             inc = evaluate(point, reference, params)
             row.update({"hp_gas_share_of_today": ev.gas_reduction - ev_ref.gas_reduction,
                         "incremental_payback_years": inc.payback_years, "incremental_npv_EUR": inc.npv_EUR})
@@ -284,7 +316,7 @@ def _hen_cost_law(block: dict, override_EUR_per_m2: float | None = None, overrid
     laws = [given] if isinstance(given, dict) else list(given)
     if laws:
         pick = next((cl for cl in laws if "3.5" in cl.get("label", "")), laws[0])
-        return CostLaw(float(pick["a"]), float(pick["b"]), float(pick["c"]), pick.get("label", pick.get("source", ""))), \
+        return CostLaw(float(pick["a"]), float(pick["b"]), float(pick["c"]), str(pick.get("label", pick.get("source", "")))), \
             pick.get("label", pick.get("source", ""))
     sweep = sorted(block.get("specific_area_cost_sweep_EUR_per_m2") or [])
     if sweep:
@@ -339,7 +371,7 @@ def retrofit_bounds(case: Case, streams: StreamSet, energy_unit: str, params) ->
         return Outputs({"skipped": "no annual basis"})
     info = dict(getattr(case, "retrofit_bounds", None) or {})
     status = info.get("baseline_status", "upper_bound")
-    to_MWh = lambda x: to_MWh_per_year(x, energy_unit, case.basis)  # noqa: E731
+    to_MWh = annual_converter(energy_unit, case.basis)
     cop_ch, frac = params.chiller_cop, params.refrigeration_credit_fraction
 
     b0_net = Network("no heat recovery (all utilities)", ())

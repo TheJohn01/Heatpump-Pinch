@@ -1,0 +1,25 @@
+# Zühlsdorf, Poulsen, Schlosser (2022), IEA HPT Annex 58 symposium presentation (see annex58_demonstration_cases.csv), slide "Overview of collected information": supplier-reported data. Specific investment cost excludes installation and integration ("disregarding installation and integration cost"). Transcribed 2026-11-12; n/a = not given.
+supplier,compressor,working_fluid,capacity_MW_min,capacity_MW_max,T_supply_max_C,TRL,cost_EUR_per_kW_min,cost_EUR_per_kW_max,closed_cycle
+Fuji Electric,reciprocating,R-245fa,0.03,0.03,120,9,,,yes
+Emerson,scroll and EVI scroll,"R-245fa, R410a, R-718",0.03,0.03,120,6,,,yes
+Mayekawa,reciprocating,R-744,0.1,0.1,120,8-9,,,yes
+Skala Fabrikk,piston,R-290+R-600,0.3,0.3,115,7,500,700,yes
+Kobelco Compressor,twin-screw,R-245fa/R-134a+R-718,0.37,0.40,175,9,,,yes
+Mitsubishi Heavy Ind.,two-stage centrifugal,R-134a,0.6,0.6,130,9,,,yes
+ecop,centrifugal compression,ecop fluid 1,0.7,0.7,150,6-7,700,700,yes
+Fenagy,reciprocating,R-744,0.3,1.8,120,5-6,250,425,yes
+Rank,screw,"R-245fa, R-1336mzz(Z), R-1233zd(E)",0.12,2.0,160,7,200,400,yes
+SRM,screw,R-718,0.25,2.0,165,5,,,no
+Johnson Controls,reciprocating,R-717+R-600 (cascade),0.5,5.0,120,7-8,,,yes
+Sustainable Process Heat,piston,HFOs,0.3,5.0,165,6-8,150,1000,yes
+ToCircle,rotary vane,R-717+R-718,1.0,5.0,188,6-7,250,430,yes
+Weel & Sandvig,turbo,R-718,1.0,5.0,160,4-9,150,250,no
+Olvondo,piston (double acting),R-704,5.0,5.0,200,9,1200,1200,yes
+Heaten,"reciprocating, custom design",HFOs,1.0,6.0,165,7-9,250,350,yes
+Enerin,piston,R-704,0.3,10.0,250,6,600,800,yes
+Spilling,piston,R-718,1.0,15.0,280,9,100,400,no
+Epcon,high-pressure centrifugal fan,R-718,0.5,30.0,150,9,200,400,no
+Turboden,turbo,application specific,3.0,30.0,200,7-9,300,700,yes
+MAN Energy Solutions,centrifugal turbo-compressor with expander,R-744,10.0,50.0,150,7-8,300,500,yes
+Piller,turbo,R-718,1.0,70.0,212,8-9,850,850,no
+Siemens Energy,turbo (geared or single-shaft),R-1233zd(E)/R-1234ze(E),8.0,70.0,160,9 (up to 90 °C),250,800,yes

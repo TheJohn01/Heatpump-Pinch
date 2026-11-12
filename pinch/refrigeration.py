@@ -146,6 +146,8 @@ class CoolingCascade:
 
 def _source_T(unit: HeatPump) -> float:
     """Source temperature used for the credit: the inlet (warmest) end."""
+    if unit.T_source_in_C is None or unit.T_source_out_C is None:
+        raise ValueError(f"heat pump '{unit.name}' has no source temperatures")
     return max(unit.T_source_in_C, unit.T_source_out_C)
 
 
