@@ -31,6 +31,23 @@ committed outputs change only where an entry says so.
   that save and reopen every input (`pinch.project`); step 2 lists the streams near the pinch. Test fixture:
   `tests/fixtures/aspen_export` (synthetic values in that layout).
 - Dependency: pint (core).
+- COP from market products (`pinch.cop_data.SupplierMap`): 135 closed-cycle operating points of 38 products from
+  the IEA HPT Annex 58 / Project 68 supplier sheets (`data/sources/annex58_supplier_operating_points.csv`); per
+  product, Lorenz efficiency interpolated in the mean-temperature lift inside its own points, steam sinks on water
+  properties. New basis "market products" in `cop_basis_designs.csv`, `vendor_cop` sensitivity key `fit`, supplier
+  columns in `cop_ranges.csv`. A unit no supplier product reaches (sink outlet and lift) is flagged and left out of
+  RQ1 (`units_without_market_product`); none of the four cases has one.
+- Cost bases as data (`data/sources/cost_bases.json`, `economics.cost_basis`): Padullés et al. (2026), the DEA 2025
+  catalogue (moved out of the dairy and four-stream case files, same parameters) and the supplier prices of 24
+  closed-cycle products (median 560 EUR/kW, `annex58_supplier_costs.csv`) × 2 for integration.
+  `CostFunction.install_factor`; `economics.estimate_class` (AACE class, read by the investment check).
+- Prices and tariffs for Portugal, Spain and Germany: Eurostat prices and price components through the
+  dissemination API (`scripts/data/fetch_eurostat_prices.py`; `eurostat_prices.csv` replaces the hand-parsed
+  `eurostat_portugal_prices.csv`, every value of which it reproduces); 2025 hourly day-ahead prices from Ember
+  (`scripts/data/fetch_ember_prices.py`, CC BY 4.0); the 2026 network tariffs of ERSE (MT), CNMC (6.1TD) and SWM
+  Infrastruktur (MS) with their time-of-use calendars and capacity charges (`pinch.tariffs.PeriodTariff`).
+  `pinch.tariffs.delivered_price` and `economics.tariff`: the band price reshaped for an operating pattern. The
+  access-tariff check takes its network share from Eurostat by default.
 - Pinch Design Method (`pinch.hen_design.pinch_design`): MER networks with the CP and number-of-streams rules,
   stream splits and tick-off; `break_loops` (loops broken smallest unit first, energy relaxation along utility
   paths), `find_loop`, `units_target_mer`, `series_to_network`. Network files: split branches
@@ -48,6 +65,14 @@ committed outputs change only where an entry says so.
   fits, RQ1 is 0 % (HP1 incremental payback 120.7 y at the fit, 15.2 y at +1σ); every earlier row is unchanged.
 - `summary.json` / `summary.md` of every case: new section "COP ranges"; `vendor_data_check.md`: new section.
   No earlier number changes.
+- `outputs/brewery/rq_consolidated.*`: eight new rows, no earlier row changes. Market products (supplier operating
+  points, median COP 2.80 / 1.92): RQ1 0 % (HP1 incremental payback 5.10 y), RQ3 2.94 for HP1. Cost bases: DEA
+  2025 RQ1 65.6 % (HP1 5.01 y); supplier prices × 2 RQ1 66.2 % (4.16 y). Hourly PT prices with the ERSE network
+  tariff (delivered ratio 2.11): HP1 4.15 y. Spain 4.73 y (4.48 y with the CNMC tolls); Germany 3.54 y (3.03 y with
+  the SWM charges); RQ1 66.2 % in all four.
+- `cop_ranges.csv`, `cop_basis_designs.csv` of every case: supplier columns and the market-products basis.
+  `economics.json` and `summary.*` of the dairy, four-stream and spray-dryer cases: source text only (price file
+  name); input hashes of every case file.
 
 ## 0.10.0 (2026-11-12)
 

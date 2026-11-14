@@ -73,6 +73,7 @@ COP of each heat pump on four bases: the case's Lorenz efficiency; manufacturer-
 | manufacturer-data fit | 1.425 | inf | -8,396,122 | 0.461 |
 | manufacturer-data fit + 1 sigma | 1.621 | inf | -7,080,092 | 0.525 |
 | manufacturer-data fit, glide-matched blend | 1.425 | inf | -8,396,122 | 0.461 |
+| market products, supplier operating points (median) | 1.898 | 104.34 | -5,680,740 | 0.614 |
 
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 

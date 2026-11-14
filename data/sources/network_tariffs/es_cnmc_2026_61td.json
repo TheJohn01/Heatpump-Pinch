@@ -1,0 +1,255 @@
+{
+  "_source": "CNMC, Resolución de 18 de diciembre de 2025 (BOE-A-2025-26348, BOE núm. 306, 22 Dec 2025, p. 171351-171352): peaje de transporte y distribución 6.1 TD (1-30 kV), power EUR/(kW year) and energy EUR/kWh per period P1-P6. Tolls only (network); the 'cargos' (policy costs) are left in Eurostat's other components. Periods: Circular 3/2020 de la CNMC (BOE-A-2020-1066), Article 7, Península: seasons alta (Jan, Feb, Jul, Dec), media alta (Mar, Nov), media (Jun, Aug, Sep), baja (Apr, May, Oct); day type D = Saturdays, Sundays, 6 January and national fixed-date holidays not substitutable. Contracted power per period P(n+1) >= P(n). Transcribed 2026-11-14.",
+  "country": "ES",
+  "voltage": "6.1TD",
+  "year": 2026,
+  "timezone": "Europe/Madrid",
+  "energy_EUR_per_kWh": {
+    "P1": 0.026785,
+    "P2": 0.012281,
+    "P3": 0.005133,
+    "P4": 0.00278,
+    "P5": 0.00012,
+    "P6": 2.9e-05
+  },
+  "capacity": [
+    {
+      "basis": "period_max_nondecreasing",
+      "period": "P1",
+      "EUR_per_kW_year": 23.946498
+    },
+    {
+      "basis": "period_max_nondecreasing",
+      "period": "P2",
+      "EUR_per_kW_year": 12.687713
+    },
+    {
+      "basis": "period_max_nondecreasing",
+      "period": "P3",
+      "EUR_per_kW_year": 4.747747
+    },
+    {
+      "basis": "period_max_nondecreasing",
+      "period": "P4",
+      "EUR_per_kW_year": 3.339695
+    },
+    {
+      "basis": "period_max_nondecreasing",
+      "period": "P5",
+      "EUR_per_kW_year": 0.070979
+    },
+    {
+      "basis": "period_max_nondecreasing",
+      "period": "P6",
+      "EUR_per_kW_year": 0.062703
+    }
+  ],
+  "holidays_as": "sunday",
+  "holidays": {
+    "2025": [
+      "2025-01-01",
+      "2025-01-06",
+      "2025-05-01",
+      "2025-08-15",
+      "2025-10-12",
+      "2025-11-01",
+      "2025-12-06",
+      "2025-12-08",
+      "2025-12-25"
+    ],
+    "2026": [
+      "2026-01-01",
+      "2026-01-06",
+      "2026-05-01",
+      "2026-08-15",
+      "2026-10-12",
+      "2026-11-01",
+      "2026-12-06",
+      "2026-12-08",
+      "2026-12-25"
+    ]
+  },
+  "_holidays": "national fixed-date holidays (Estatuto de los Trabajadores art. 37.2) and 6 January; Good Friday has no fixed date and is excluded by the Circular",
+  "calendar": [
+    {
+      "days": "weekday",
+      "months": [
+        1,
+        2,
+        7,
+        12
+      ],
+      "periods": [
+        [
+          "00:00",
+          "08:00",
+          "P6"
+        ],
+        [
+          "08:00",
+          "09:00",
+          "P2"
+        ],
+        [
+          "09:00",
+          "14:00",
+          "P1"
+        ],
+        [
+          "14:00",
+          "18:00",
+          "P2"
+        ],
+        [
+          "18:00",
+          "22:00",
+          "P1"
+        ],
+        [
+          "22:00",
+          "24:00",
+          "P2"
+        ]
+      ]
+    },
+    {
+      "days": "weekday",
+      "months": [
+        3,
+        11
+      ],
+      "periods": [
+        [
+          "00:00",
+          "08:00",
+          "P6"
+        ],
+        [
+          "08:00",
+          "09:00",
+          "P3"
+        ],
+        [
+          "09:00",
+          "14:00",
+          "P2"
+        ],
+        [
+          "14:00",
+          "18:00",
+          "P3"
+        ],
+        [
+          "18:00",
+          "22:00",
+          "P2"
+        ],
+        [
+          "22:00",
+          "24:00",
+          "P3"
+        ]
+      ]
+    },
+    {
+      "days": "weekday",
+      "months": [
+        6,
+        8,
+        9
+      ],
+      "periods": [
+        [
+          "00:00",
+          "08:00",
+          "P6"
+        ],
+        [
+          "08:00",
+          "09:00",
+          "P4"
+        ],
+        [
+          "09:00",
+          "14:00",
+          "P3"
+        ],
+        [
+          "14:00",
+          "18:00",
+          "P4"
+        ],
+        [
+          "18:00",
+          "22:00",
+          "P3"
+        ],
+        [
+          "22:00",
+          "24:00",
+          "P4"
+        ]
+      ]
+    },
+    {
+      "days": "weekday",
+      "months": [
+        4,
+        5,
+        10
+      ],
+      "periods": [
+        [
+          "00:00",
+          "08:00",
+          "P6"
+        ],
+        [
+          "08:00",
+          "09:00",
+          "P5"
+        ],
+        [
+          "09:00",
+          "14:00",
+          "P4"
+        ],
+        [
+          "14:00",
+          "18:00",
+          "P5"
+        ],
+        [
+          "18:00",
+          "22:00",
+          "P4"
+        ],
+        [
+          "22:00",
+          "24:00",
+          "P5"
+        ]
+      ]
+    },
+    {
+      "days": "saturday",
+      "periods": [
+        [
+          "00:00",
+          "24:00",
+          "P6"
+        ]
+      ]
+    },
+    {
+      "days": "sunday",
+      "periods": [
+        [
+          "00:00",
+          "24:00",
+          "P6"
+        ]
+      ]
+    }
+  ]
+}

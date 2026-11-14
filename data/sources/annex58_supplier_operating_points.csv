@@ -1,0 +1,161 @@
+# Supplier technology sheets of IEA HPT Annex 58 / Project 68 ("Industrial High-Temperature Heat Pumps", Task 1), https://heatpumpingtechnologies.org/project68/task1/ (sheet = file name of the PDF under /content/uploads/sites/81/2026/07/). Each sheet's Table 1 "Performance", transcribed 2026-11-14.
+# "All information were provided by the supplier without third-party validation" (every sheet). basis: measured = the sheet says the COP was measured; calculated = the sheet says calculated, simulated, estimated or predicted; supplier = not stated.
+# cycle: closed = closed working-fluid cycle (vapour compression, Stirling, Brayton); open = direct compression of process steam or vapour (MVR). COP_min = COP_max unless the sheet gives a range. Only COPheating is kept (Rank also gives cooling and combined COPs).
+# sink: steam = the sheet says the unit generates steam (feed water at T_sink_in_C heated, evaporated and delivered saturated at T_sink_out_C; T_sink_in_C = T_sink_out_C when only the latent temperature is given); water = liquid or air sink heated from T_sink_in_C to T_sink_out_C. Left out: rows with a missing temperature (Epcon rows 1, 3, 4), Piller (process vapours, mixed sink definitions), Standard Fasel row 1 (dual steam outlet), Kobelco MSRC (table in pressures), Emerson (hot-air table without source outlet).
+# Enerin rows are kept as published (source outlet above inlet, 16 -> 24 °C); pinch.cop_data drops rows whose source warms up.
+sheet,supplier,product,refrigerant,cycle,sink,basis,T_source_in_C,T_source_out_C,T_sink_in_C,T_sink_out_C,COP_min,COP_max
+a58supplier100everllence20251028,Everllence,CO2 heat pump,R-744,closed,water,calculated,10,7,40,110,3.05,3.05
+a58supplier100everllence20251028,Everllence,CO2 heat pump,R-744,closed,water,calculated,2,-1,30,95,3.25,3.25
+a58supplier100everllence20251028,Everllence,CO2 heat pump,R-744,closed,water,calculated,20,17,50,150,2.85,2.85
+a58supplier12kobelcosgh12020251028,Kobelco,SGH120,R-245fa,closed,steam,supplier,65,60,20,120,3.5,3.5
+a58supplier12kobelcosgh12020251028,Kobelco,SGH120,R-245fa,closed,steam,supplier,55,55,20,120,3.1,3.1
+a58supplier12kobelcosgh12020251028,Kobelco,SGH120,R-245fa,closed,steam,supplier,45,45,20,120,2.7,2.7
+a58supplier12kobelcosgh12020251028,Kobelco,SGH120,R-245fa,closed,steam,supplier,35,35,20,120,2.4,2.4
+a58supplier13kobelcosgh16520251028,Kobelco,SGH165,R-245fa+R-134a,closed,steam,supplier,70,65,20,165,2.5,2.5
+a58supplier13kobelcosgh16520251028,Kobelco,SGH165,R-245fa+R-134a,closed,steam,supplier,70,65,20,135,3.0,3.0
+a58supplier13kobelcosgh16520251028,Kobelco,SGH165,R-245fa+R-134a,closed,steam,supplier,50,45,20,165,1.9,1.9
+a58supplier13kobelcosgh16520251028,Kobelco,SGH165,R-245fa+R-134a,closed,steam,supplier,50,45,20,135,2.2,2.2
+a58supplier14fujielectric20251028,Fuji Electric,steam-generating heat pump,R-245fa,closed,steam,supplier,80,70,20,120,3.5,3.5
+a58supplier14fujielectric20251028,Fuji Electric,steam-generating heat pump,R-245fa,closed,steam,supplier,70,62,20,120,2.8,2.8
+a58supplier14fujielectric20251028,Fuji Electric,steam-generating heat pump,R-245fa,closed,steam,supplier,60,54,20,120,2.5,2.5
+a58supplier16mayekawaecosirocco20251028,Mayekawa,Eco Sirocco,R-744,closed,water,supplier,30,25,20,120,3.1,3.1
+a58supplier16mayekawaecosirocco20251028,Mayekawa,Eco Sirocco,R-744,closed,water,supplier,30,25,20,100,3.7,3.7
+a58supplier16mayekawaecosirocco20251028,Mayekawa,Eco Sirocco,R-744,closed,water,supplier,30,25,20,80,4.5,4.5
+a58supplier16mayekawaecosirocco20251028,Mayekawa,Eco Sirocco,R-744,closed,water,supplier,30,25,20,60,5.5,5.5
+a58supplier19mhi20251028,Mitsubishi Heavy Industries,ETW-L,R-134a,closed,water,supplier,55,50,70,130,3.0,3.0
+a58supplier23ochsner20251028,Ochsner,ultra-high temperature heat pump,R-1233zd,closed,water,supplier,45,40,125,130,1.6,1.6
+a58supplier23ochsner20251028,Ochsner,ultra-high temperature heat pump,R-1233zd,closed,water,supplier,60,55,125,130,2.3,2.3
+a58supplier23ochsner20251028,Ochsner,ultra-high temperature heat pump,R-1233zd,closed,water,supplier,55,50,100,110,3.2,3.2
+a58supplier30combitherm20251028,Combitherm,HWW,R-1233zd(E),closed,water,measured,45,40,110,120,2.2,2.2
+a58supplier30combitherm20251028,Combitherm,HWW,R-1233zd(E),closed,water,measured,45,40,70,80,4.7,4.7
+a58supplier30combitherm20251028,Combitherm,HWW,R-1233zd(E),closed,water,measured,50,45,110,120,2.4,2.4
+a58supplier30combitherm20251028,Combitherm,HWW,R-1233zd(E),closed,water,measured,50,45,70,80,5.3,5.3
+a58supplier38futraheat20251028,Futraheat,TurboClaw,R-1233zd,closed,water,supplier,100,95.9,121,125.3,6.5,6.5
+a58supplier38futraheat20251028,Futraheat,TurboClaw,R-1233zd,closed,water,supplier,85,80,85,143.6,2.8,2.8
+a58supplier3turboden20251028,Turboden,large heat pump,application specific,closed,water,supplier,15,8,104,170,2.0,2.0
+a58supplier3turboden20251028,Turboden,large heat pump,application specific,closed,water,supplier,75,70,65,95,8.2,8.2
+a58supplier43mayekawaecocircuit20251028,Mayekawa,Eco Circuit,R-1234ze(E),closed,water,supplier,30,25,90,100,2.6,2.6
+a58supplier43mayekawaecocircuit20251028,Mayekawa,Eco Circuit,R-1234ze(E),closed,water,supplier,30,25,80,90,2.8,2.8
+a58supplier43mayekawaecocircuit20251028,Mayekawa,Eco Circuit,R-1234ze(E),closed,water,supplier,30,25,70,80,3.2,3.2
+a58supplier46spilling20251028,Spilling,steam piston compressor,R-718,open,steam,calculated,125,125,151,151,9.5,9.5
+a58supplier46spilling20251028,Spilling,steam piston compressor,R-718,open,steam,calculated,133,133,230,230,3.5,3.5
+a58supplier46spilling20251028,Spilling,steam piston compressor,R-718,open,steam,calculated,148,148,175,175,10.3,10.3
+a58supplier46spilling20251028,Spilling,steam piston compressor,R-718,open,steam,calculated,152,152,211,211,5.3,5.3
+a58supplier46spilling20251028,Spilling,steam piston compressor,R-718,open,steam,calculated,175,175,215,215,8.4,8.4
+a58supplier4fenagyco220251028,Fenagy,H-series CO2,R-744,closed,water,calculated,0,-5,30,120,2.46,2.46
+a58supplier4fenagyco220251028,Fenagy,H-series CO2 with expander,R-744,closed,water,calculated,0,-5,30,120,2.61,2.61
+a58supplier4fenagyco220251028,Fenagy,H-series CO2,R-744,closed,water,calculated,5,0,30,120,2.63,2.63
+a58supplier4fenagyco220251028,Fenagy,H-series CO2 with expander,R-744,closed,water,calculated,5,0,30,110,2.91,2.91
+a58supplier51mayekawahs20251028,Mayekawa,HS hydrocarbon heat pump,R-600,closed,water,calculated,72,65,70,120,4.8,4.8
+a58supplier51mayekawahs20251028,Mayekawa,HS hydrocarbon heat pump,R-600,closed,water,calculated,72,60,70,120,4.4,4.4
+a58supplier51mayekawahs20251028,Mayekawa,HS hydrocarbon heat pump,R-600,closed,water,calculated,72,55,70,120,4.0,4.0
+a58supplier51mayekawahs20251028,Mayekawa,HS hydrocarbon heat pump,R-600,closed,water,calculated,72,50,70,120,3.7,3.7
+a58supplier51mayekawahs20251028,Mayekawa,HS hydrocarbon heat pump,R-600,closed,water,calculated,72,45,70,120,3.2,3.2
+a58supplier52mayekawafc20251028,Mayekawa,FC hydrocarbon heat pump,R-601,closed,steam,calculated,90,85,90,145,2.6,2.6
+supplier101dutekht20251020,Dutek,HT,R-600a,closed,water,supplier,12,6,100,110,1.45,1.45
+supplier101dutekht20251020,Dutek,HT,R-600a,closed,water,supplier,30,20,100,110,1.95,1.95
+supplier101dutekht20251020,Dutek,HT,R-600a,closed,water,supplier,50,40,100,110,2.79,2.79
+supplier101dutekht20251020,Dutek,HT,R-600a,closed,water,supplier,60,50,100,110,3.27,3.27
+supplier107yanmar20260710,Yanmar,HydrYa-HHP,hydrocarbons,closed,water,calculated,20,15,85,90,2.4,2.4
+supplier107yanmar20260710,Yanmar,HydrYa-HHP,hydrocarbons,closed,water,calculated,35,30,90,95,2.9,2.9
+supplier107yanmar20260710,Yanmar,HydrYa-HHP,hydrocarbons,closed,water,calculated,40,35,65,70,5.2,5.2
+supplier107yanmar20260710,Yanmar,HydrYa-HHP,hydrocarbons,closed,water,calculated,20,15,105,110,1.7,1.7
+supplier10johnsoncontrolshyepac20251013,Johnson Controls,HyePAC,R-717+R-718 (absorption-compression),closed,water,measured,77,69,77,95,8.1,8.1
+supplier10johnsoncontrolshyepac20251013,Johnson Controls,HyePAC,R-717+R-718 (absorption-compression),closed,water,measured,80,60,80,95,7.0,7.0
+supplier10johnsoncontrolshyepac20251013,Johnson Controls,HyePAC,R-717+R-718 (absorption-compression),closed,water,calculated,80,70,80,95,7.70,7.70
+supplier10johnsoncontrolshyepac20251013,Johnson Controls,HyePAC,R-717+R-718 (absorption-compression),closed,water,calculated,80,65,80,100,6.7,6.7
+supplier10johnsoncontrolshyepac20251013,Johnson Controls,HyePAC,R-717+R-718 (absorption-compression),closed,water,calculated,80,70,85,100,6.6,6.6
+supplier10johnsoncontrolshyepac20251013,Johnson Controls,HyePAC,R-717+R-718 (absorption-compression),closed,water,calculated,80,65,85,110,5.5,5.5
+supplier10johnsoncontrolshyepac20251013,Johnson Controls,HyePAC,R-717+R-718 (absorption-compression),closed,water,calculated,80,70,90,110,5.5,5.5
+supplier1johnsoncontrolshitemhp20251023,Johnson Controls,HiTemHP,R-600,closed,water,calculated,50,45,100,120,3.0,3.0
+supplier1johnsoncontrolshitemhp20251023,Johnson Controls,HiTemHP,R-600,closed,water,calculated,50,45,65,103,4.3,4.3
+supplier22ecop20251022,ecop,Rotation Heat Pump,ecop fluid 1 (He/Ar/Kr/Xe),closed,water,supplier,140,120,180,200,4.1,4.1
+supplier22ecop20251022,ecop,Rotation Heat Pump,ecop fluid 1 (He/Ar/Kr/Xe),closed,water,supplier,120,102,120,150,6.2,6.2
+supplier22ecop20251022,ecop,Rotation Heat Pump,ecop fluid 1 (He/Ar/Kr/Xe),closed,water,supplier,90,58,95,130,4.8,4.8
+supplier22ecop20251022,ecop,Rotation Heat Pump,ecop fluid 1 (He/Ar/Kr/Xe),closed,water,supplier,85,67,90,120,5.5,5.5
+supplier22ecop20251022,ecop,Rotation Heat Pump,ecop fluid 1 (He/Ar/Kr/Xe),closed,water,supplier,50,33,70,90,4.6,4.6
+supplier28geaammoniahp20250926,GEA,ammonia steam-generating heat pump,R-717+R-718,closed,steam,supplier,55,50,90,140,2.7,2.7
+supplier28geaammoniahp20250926,GEA,ammonia steam-generating heat pump,R-717+R-718,closed,steam,supplier,45,40,90,140,2.5,2.5
+supplier28geaammoniahp20250926,GEA,ammonia steam-generating heat pump,R-717+R-718,closed,steam,supplier,35,30,90,140,2.3,2.3
+supplier28geaammoniahp20250926,GEA,ammonia steam-generating heat pump,R-717+R-718,closed,steam,supplier,25,20,90,140,2.1,2.1
+supplier32epcon20251016,Epcon,MVR heat pump,R-718,open,steam,measured,80,80,85,85,13,13
+supplier33heaten20251003,Heaten,HeatBooster,HFOs,closed,water,supplier,25,20,45,95,3.2,3.2
+supplier33heaten20251003,Heaten,HeatBooster,HFOs,closed,steam,supplier,102,100,128,130,6,6
+supplier33heaten20251003,Heaten,HeatBooster,HFOs,closed,water,supplier,70,55,110,125,3.6,3.6
+supplier33heaten20251003,Heaten,HeatBooster,HFOs,closed,steam,supplier,40,35,95,120,2.5,2.5
+supplier44enerin20251205,Enerin,HoegTemp,R-704,closed,water,measured,16,24,148,152,1.80,1.80
+supplier44enerin20251205,Enerin,HoegTemp,R-704,closed,water,measured,16,24,163,167,1.74,1.74
+supplier44enerin20251205,Enerin,HoegTemp,R-704,closed,water,measured,64,72,148,152,2.34,2.34
+supplier44enerin20251205,Enerin,HoegTemp,R-704,closed,water,measured,64,72,163,167,2.16,2.16
+supplier45srm20250926,SRM,STC300 steam screw compressor,R-718,open,steam,supplier,115,110,145,150,7.1,7.1
+supplier45srm20250926,SRM,STC300 steam screw compressor,R-718,open,steam,supplier,115,110,160,165,4.0,4.0
+supplier45srm20250926,SRM,STC300 steam screw compressor,R-718,open,steam,supplier,105,100,145,150,4.5,4.5
+supplier45srm20250926,SRM,STC300 steam screw compressor,R-718,open,steam,supplier,105,100,160,165,3.1,3.1
+supplier47rank20251013,Rank,HTHP,HFO,closed,water,supplier,25,20,35,90,3.1,3.1
+supplier47rank20251013,Rank,HTHP,HFO,closed,water,supplier,50,45,45,105,4.0,4.0
+supplier47rank20251013,Rank,HTHP,HFO,closed,water,supplier,75,70,80,120,5.0,5.0
+supplier47rank20251013,Rank,HTHP,HFO,closed,water,supplier,100,95,100,135,6.3,6.3
+supplier47rank20251013,Rank,HTHP,HFO,closed,water,supplier,125,120,130,150,6.8,6.8
+supplier48heatlift20250925,Heatlift,HTHP (case 1 includes an additional MVR),R-1233zd(E)/steam/butane/cyclopentane,closed,steam,calculated,55,40,90,152,2.38,2.38
+supplier48heatlift20250925,Heatlift,HTHP,R-1233zd(E)/steam/butane/cyclopentane,closed,water,calculated,50,40,50,110,3.63,3.63
+supplier48heatlift20250925,Heatlift,HTHP,R-1233zd(E)/steam/butane/cyclopentane,closed,water,calculated,95,38,95,105,3.54,3.54
+supplier48heatlift20250925,Heatlift,HTHP,R-1233zd(E)/steam/butane/cyclopentane,closed,water,calculated,65,55,115,120,3.24,3.24
+supplier49geaco2hp20251015,GEA,CO2 heat pump,R-744,closed,water,calculated,6,4,35,120,2.46,2.46
+supplier49geaco2hp20251015,GEA,CO2 heat pump,R-744,closed,water,calculated,12,8,11,90,4.07,4.07
+supplier49geaco2hp20251015,GEA,CO2 heat pump,R-744,closed,water,calculated,10,5,10,95,3.82,3.82
+supplier49geaco2hp20251015,GEA,CO2 heat pump,R-744,closed,water,calculated,20,11,10,95,4.04,4.04
+supplier49geaco2hp20251015,GEA,CO2 heat pump,R-744,closed,water,calculated,10,5,15,98,3.13,3.13
+supplier49geaco2hp20251015,GEA,CO2 heat pump,R-744,closed,water,calculated,6,4,20,130,3.13,3.13
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,R-717+R-718,closed,steam,calculated,40,30,120,120,3.1,3.1
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,R-717+R-718,closed,steam,calculated,40,30,150,150,2.4,2.4
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,R-717+R-718,closed,steam,calculated,40,30,190,190,1.7,1.7
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,R-717+R-718,closed,steam,calculated,60,40,120,120,3.4,3.4
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,R-717+R-718,closed,steam,calculated,60,40,150,150,2.6,2.6
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,R-717+R-718,closed,steam,calculated,60,40,190,190,1.9,1.9
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,R-717+R-718,closed,steam,calculated,90,80,120,120,6.9,6.9
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,R-717+R-718,closed,steam,calculated,90,80,150,150,4.1,4.1
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,R-717+R-718,closed,steam,calculated,90,80,190,190,2.5,2.5
+supplier56atmoszero20260130,AtmosZero,air-source steam heat pump,R-1234ze(E)/R-515B + R-1233zd(E),closed,steam,measured,-13,-10,90,150,1.30,1.30
+supplier56atmoszero20260130,AtmosZero,air-source steam heat pump,R-1234ze(E)/R-515B + R-1233zd(E),closed,steam,measured,12,9,90,150,1.73,1.73
+supplier56atmoszero20260130,AtmosZero,air-source steam heat pump,R-1234ze(E)/R-515B + R-1233zd(E),closed,steam,measured,35,32,90,150,2.04,2.04
+supplier56atmoszero20260130,AtmosZero,air-source steam heat pump,R-1234ze(E)/R-515B + R-1233zd(E),closed,steam,calculated,15,12,90,120,1.9,2.0
+supplier56atmoszero20260130,AtmosZero,air-source steam heat pump,R-1234ze(E)/R-515B + R-1233zd(E),closed,steam,calculated,40,12,90,120,2.3,2.5
+supplier5olvondo20250926,Olvondo,HighLift,R-704,closed,steam,supplier,50,45,105,148,1.8,1.8
+supplier5olvondo20250926,Olvondo,HighLift,R-704,closed,steam,supplier,45,30,105,170,1.6,1.6
+supplier5olvondo20250926,Olvondo,HighLift,R-704,closed,steam,supplier,70,60,105,170,1.8,1.8
+supplier5olvondo20250926,Olvondo,HighLift,R-704,closed,steam,supplier,85,80,105,184,1.7,1.7
+supplier62solidenergy20251107,Solid Energy,HTHP,hydrocarbons,closed,water,supplier,42.3,25.0,41.0,80.0,5.01,5.01
+supplier62solidenergy20251107,Solid Energy,HTHP,hydrocarbons,closed,water,supplier,32.0,28.0,55.6,75.0,4.83,4.83
+supplier64parsmakina20250924,Pars Makina,HTHP,R-1233zd(E),closed,water,measured,94.9,86.4,89.5,108.6,8.67,8.67
+supplier64parsmakina20250924,Pars Makina,HTHP,R-1233zd(E),closed,water,measured,103.3,86.4,91.8,127.2,5.79,5.79
+supplier64parsmakina20250924,Pars Makina,HTHP,R-1233zd(E),closed,water,measured,102.9,84.4,92.2,129.2,5.06,5.06
+supplier65airthium20250929,Airthium,ultra-high temperature heat pump,R-704/R-728,closed,water,calculated,165,145,290,300,2.2,2.6
+supplier65airthium20250929,Airthium,ultra-high temperature heat pump,R-704/R-728,closed,water,calculated,85,65,206,212,2.0,2.4
+supplier65airthium20250929,Airthium,ultra-high temperature heat pump,R-704/R-728,closed,water,calculated,16,12,206,212,1.6,2.0
+supplier65airthium20250929,Airthium,ultra-high temperature heat pump,R-704/R-728,closed,water,calculated,135,115,155,160,3.1,3.7
+supplier67upheat20250924,Upheat,HTHP,R-601/R-601a,closed,water,calculated,40,37,110,115,4.0,4.0
+supplier67upheat20250924,Upheat,HTHP,R-601/R-601a,closed,water,calculated,60,55,150,165,2.8,2.8
+supplier67upheat20250924,Upheat,HTHP,R-601/R-601a,closed,water,calculated,45,42,140,150,2.9,2.9
+supplier67upheat20250924,Upheat,HTHP,R-601/R-601a,closed,water,calculated,65,60,130,140,3.8,3.8
+supplier6wseturbo20250926,WSE-Turbo,steam turbo compressor,R-718,open,steam,calculated,65,64,89,89,10,10
+supplier6wseturbo20250926,WSE-Turbo,steam turbo compressor,R-718,open,steam,calculated,101,100,150,150,5,5
+supplier6wseturbo20250926,WSE-Turbo,steam turbo compressor,R-718,open,steam,calculated,101,100,180,180,3.4,3.4
+supplier70cta20260710,CTA,HTHP,R-600a,closed,water,supplier,50,40,65,105,3.67,3.67
+supplier70cta20260710,CTA,HTHP,R-600a,closed,water,supplier,40,30,65,105,3.12,3.12
+supplier81dutekxt20251020,Dutek,XT,R-600,closed,water,supplier,40,30,110,120,2.3,2.3
+supplier81dutekxt20251020,Dutek,XT,R-600,closed,water,supplier,50,40,110,120,2.75,2.75
+supplier81dutekxt20251020,Dutek,XT,R-600,closed,water,supplier,60,50,110,120,3.25,3.25
+supplier81dutekxt20251020,Dutek,XT,R-600,closed,water,supplier,70,60,110,120,3.8,3.8
+supplier84heckkaeltetechnik20250926,Heck Kaeltetechnik,HTHP,HFO/HFC blends,closed,water,supplier,44,40,65,70,5.63,5.63
+supplier84heckkaeltetechnik20250926,Heck Kaeltetechnik,HTHP,HFO/HFC blends,closed,water,supplier,44,40,65,115,2.88,2.88
+supplier84heckkaeltetechnik20250926,Heck Kaeltetechnik,HTHP,HFO/HFC blends,closed,water,supplier,37,33,80,90,2.99,2.99
+supplier84heckkaeltetechnik20250926,Heck Kaeltetechnik,HTHP,HFO/HFC blends,closed,water,supplier,0,-3,70,85,1.95,1.95
+supplier85thermodraft20250926,ThermoDraft,HTHP,R-1233zd(E)/R-245fa/R-1234ze(E),closed,water,measured,70.0,63.1,102.0,110.0,3.2,3.2
+supplier85thermodraft20250926,ThermoDraft,HTHP,R-1233zd(E)/R-245fa/R-1234ze(E),closed,water,measured,80.0,70.8,100.0,110.0,4.0,4.0
+supplier85thermodraft20250926,ThermoDraft,HTHP,R-1233zd(E)/R-245fa/R-1234ze(E),closed,water,measured,70.0,63.9,112.0,120.0,2.6,2.6
+supplier85thermodraft20250926,ThermoDraft,HTHP,R-1233zd(E)/R-245fa/R-1234ze(E),closed,water,measured,80.0,72.5,110.7,120.0,3.1,3.1
+supplier85thermodraft20250926,ThermoDraft,HTHP,R-1233zd(E)/R-245fa/R-1234ze(E),closed,water,measured,90.0,80.9,109.6,120.0,3.5,3.5
+supplier98standardfasel20251009,Standard Fasel,steam compression heat pump,R-718,open,steam,supplier,90,80,165,165,3.0,3.0
+supplier98standardfasel20251009,Standard Fasel,steam compression heat pump,R-718,open,steam,supplier,60,50,134,134,2.8,2.8
+supplier99afenergy20251010,AF-Energy,two-stage HTHP,R-1234ze(E)+R-1233zd,closed,water,supplier,37,32,70,75,3.37,3.37
+supplier99afenergy20251010,AF-Energy,two-stage HTHP,R-1234ze(E)+R-1233zd,closed,water,supplier,75,70,110,120,3.58,3.58

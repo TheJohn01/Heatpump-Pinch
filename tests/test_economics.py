@@ -237,3 +237,43 @@ def test_spray_dryer_steam_add_on_only_for_steam_heat_pump():
     cls = compute(c).summary["economics"]["heat_pump_cost_class"]
     assert "steam" not in cls["HTHP 120 °C (fluid beds)"]
     assert "dea_steam" in cls["HTHP 200 °C (main air)"]
+
+
+# ---------------------------------------------------------------- cost bases and installation factors
+
+def test_install_factor_multiplies_the_cost_law():
+    from pinch.economics import CostFunction
+    assert CostFunction(600, 520_000, 1, "kW", install_factor=2).cost(1000) == pytest.approx(2 * (520_000 + 600_000))
+    assert CostFunction(600, 520_000, 1, "kW", install_factor=2).cost(0) == 0
+    with pytest.raises(ValueError):
+        CostFunction(1, 0, 1, install_factor=0.5).cost(1)
+
+
+def test_cost_basis_dea_equals_the_former_case_blocks():
+    """dea2025 holds the DEA block the dairy cases carried before (same numbers, one place)."""
+    from pinch.economics import cost_basis, load_economics
+    p = load_economics({"cost_basis": "dea2025"})
+    assert [k for _, k in p.heat_pump_cost_classes] == ["hp_dea_1_1", "hp_dea_2a", "hp_dea_2b"]
+    assert p.cost_functions["hp_dea_2a"].alpha == 1200.0 and p.cost_functions["dea_steam"].alpha == 200.0
+    own = load_economics({"cost_basis": "dea2025", "cost_functions": {"hp_dea_2a": {"alpha": 1000.0}}})
+    assert own.cost_functions["hp_dea_2a"].alpha == 1000.0 and own.cost_functions["hp_dea_2a"].variable_om_EUR_per_MWh == 3.6
+    with pytest.raises(ValueError, match="unknown basis"):
+        cost_basis("nope")
+
+
+def test_supplier_cost_basis_is_the_median_of_the_supplier_data():
+    import pandas as pd
+
+    from pinch.economics import COST_BASES_FILE, load_economics
+    d = pd.read_csv(COST_BASES_FILE.parent / "annex58_supplier_costs.csv", comment="#").query("cycle == 'closed'")
+    hp = load_economics({"cost_basis": "annex58_suppliers"}).cost_functions["heat_pump"]
+    assert hp.alpha == pytest.approx(((d.cost_EUR_per_kW_min + d.cost_EUR_per_kW_max) / 2).median())
+    assert hp.install_factor == 2.0 and hp.beta == 0.0 and hp.fixed_om_EUR_per_unit_year == 2.494
+
+
+def test_estimate_class_is_validated():
+    from pinch.economics import load_economics
+    assert load_economics({}).estimate_class == 5
+    assert load_economics({"estimate_class": 4}).estimate_class == 4
+    with pytest.raises(ValueError, match="estimate_class"):
+        load_economics({"estimate_class": 6})

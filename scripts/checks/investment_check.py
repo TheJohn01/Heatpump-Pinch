@@ -9,7 +9,7 @@ and the full design against today's site (``pinch.research_questions``), this sc
 
 * internal rate of return and discounted payback (Towler and Sinnott 2013, Sec. 9.6);
 * the NPV at the low and high ends of the capital estimate's accuracy range. The cost functions are
-  parametric, so the estimate is taken as AACE Class 5 (RP 18R-97, Table 1: -20 to -50 % low, +30 to
+  parametric, so the estimate is taken as AACE Class 5 unless the case sets economics.estimate_class (RP 18R-97, Table 1: -20 to -50 % low, +30 to
   +100 % high). The classification is ours; both ends of the band are reported;
 * grant scenarios under Portaria n.º 325-A/2021, Annex I (energy efficiency, 30 % of eligible cost;
   +15 points in Norte, Centro, Alentejo and the islands). The firm is taken as large (no size bonus) and
@@ -43,20 +43,19 @@ from pinch.economic_analysis import _params_and_converter
 from pinch.economics import evaluate
 
 ROOT = Path(__file__).resolve().parents[2]   # repository root
-ESTIMATE_CLASS = 5
 GRANTS = (("no grant", 0.0),
           ("grant 30 % (energy efficiency, large firm)", inv.prr_aid_intensity("energy_efficiency", "large", "none")),
           ("grant 45 % (same, 'a' region)", inv.prr_aid_intensity("energy_efficiency", "large", "a")))
 N_SAMPLES, SEED = 5000, 0
-PRICE_FILE = ROOT / "data" / "sources" / "eurostat_portugal_prices.csv"
+PRICE_FILE = ROOT / "data" / "sources" / "eurostat_prices.csv"
 EL_BAND, GAS_BAND = "band ID", "band I3"
 TAXES = "Excluding VAT and other recoverable taxes and levies"
 
 
-def eurostat_ratio_range(path: Path = PRICE_FILE) -> tuple[float, float]:
-    """Lowest and highest half-yearly electricity-to-gas price ratio in the Eurostat series (EUR/kWh)."""
-    d = pd.read_csv(path)
-    d = d[(d["taxes"] == TAXES) & (d["currency"] == "Euro") & (d["unit"] == "Kilowatt-hour")]
+def eurostat_ratio_range(path: Path = PRICE_FILE, geo: str = "PT") -> tuple[float, float]:
+    """Lowest and highest half-yearly electricity-to-gas price ratio in the Eurostat series of one country (EUR/kWh)."""
+    d = pd.read_csv(path, comment="#")
+    d = d[(d["geo"] == geo) & (d["taxes"] == TAXES) & (d["currency"] == "Euro") & (d["unit"] == "Kilowatt-hour")]
     el = d[(d["carrier"] == "electricity") & d["band"].str.endswith(EL_BAND)].set_index("period")["value"]
     gas = d[(d["carrier"] == "gas") & d["band"].str.endswith(GAS_BAND)].set_index("period")["value"]
     ratio = (el / gas).dropna()
@@ -81,8 +80,8 @@ def check(case_file: Path) -> pd.DataFrame:
     if site.units:
         pairs.append(("Full design over today's site", options[-1], site.baseline))
 
-    lo, hi = inv.capex_factors(ESTIMATE_CLASS, "widest")
-    lo_n, hi_n = inv.capex_factors(ESTIMATE_CLASS, "narrowest")
+    lo, hi = inv.capex_factors(params.estimate_class, "widest")
+    lo_n, hi_n = inv.capex_factors(params.estimate_class, "narrowest")
     r_lo, r_hi = eurostat_ratio_range()
     r_now = params.price_ratio
     ratio = inv.Range(min(r_lo, r_now), r_now, max(r_hi, r_now))
@@ -124,7 +123,8 @@ def check(case_file: Path) -> pd.DataFrame:
                 "MC_prob_payback_within_threshold": round(mc["prob_payback_within_threshold"], 3),
             })
     df = pd.DataFrame(rows)
-    df.attrs.update(ratio=ratio, gas=gas, capex=(lo, hi), horizon=N, rate=i, threshold=params.payback_threshold_years)
+    df.attrs.update(ratio=ratio, gas=gas, capex=(lo, hi), horizon=N, rate=i, threshold=params.payback_threshold_years,
+                    estimate_class=params.estimate_class)
     return df
 
 
@@ -133,12 +133,12 @@ def markdown(df: pd.DataFrame) -> str:
     num = lambda x, f: "never" if not math.isfinite(x) else format(x, f)  # noqa: E731
     lines = [f"Horizon {a['horizon']} y, discount rate {100 * a['rate']:g} %, payback threshold {a['threshold']:g} y. "
              f"Monte Carlo ({N_SAMPLES} samples, seed {SEED}), triangular: investment x {a['capex'][0]:g}-{a['capex'][1]:g} "
-             f"(AACE Class {ESTIMATE_CLASS}, widest band); gas {a['gas'].low:.4f}-{a['gas'].high:.4f} EUR/kWh "
+             f"(AACE Class {a['estimate_class']}, widest band); gas {a['gas'].low:.4f}-{a['gas'].high:.4f} EUR/kWh "
              f"(most likely {a['gas'].most_likely:.4f}); electricity/gas ratio {a['ratio'].low:.2f}-{a['ratio'].high:.2f} "
              f"(most likely {a['ratio'].most_likely:.2f}). Grants assume a large firm and the whole investment "
              "eligible (upper bound).", "",
              "| Increment | Scenario | Investment [M€] | Payback [y] | Discounted payback [y] | IRR | NPV [M€] | "
-             "NPV, Class 5 investment range [M€] | Monte Carlo NPV P5 / P50 / P95 [M€] | P(NPV > 0) | P(payback ≤ threshold) |",
+             f"NPV, Class {a['estimate_class']} investment range [M€] | Monte Carlo NPV P5 / P50 / P95 [M€] | P(NPV > 0) | P(payback ≤ threshold) |",
              "|---|---|---|---|---|---|---|---|---|---|---|"]
     for _, r in df.iterrows():
         irr = "n/a" if not math.isfinite(r["IRR"]) else f"{100 * r['IRR']:.1f} %"

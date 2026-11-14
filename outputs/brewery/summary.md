@@ -58,6 +58,11 @@ Same rows and labels as rq_consolidated.md, which gives RQ1-RQ3 against today's 
 | Prices 2025-S1 (0.1230 / 0.0546; ratio 2.25) | 2.253 | 7.3 | 102,523 | 1,835 | 72.5 % | 2.332 |
 | Prices 2025-S2 (0.1216 / 0.0481; ratio 2.53) | 2.528 | 10.39 | -460,886 | 1,835 | 0.0 % | 2.123 |
 | Electricity band IE (0.0897; ratio 1.75) | 1.752 | 5.84 | 577,502 | 1,835 | 72.5 % | 2.229 |
+| Hourly market prices 2025 + ERSE 2026 MT network tariff, continuous operation | 2.112 | 7.16 | 141,872 | 1,835 | 72.5 % | 2.229 |
+| Spain: prices 2026-S1 (0.1177 / 0.0493; ratio 2.39) | 2.387 | 9.02 | -258,593 | 1,835 | 72.5 % | 2.165 |
+| Spain: prices 2026-S1 + hourly 2025 + CNMC 6.1TD tolls, continuous operation | 2.223 | 8.02 | -67,577 | 1,835 | 72.5 % | 2.165 |
+| Germany: prices 2026-S1 (0.1742 / 0.0682; ratio 2.55) | 2.554 | 7.16 | 140,545 | 1,835 | 72.5 % | 2.641 |
+| Germany: prices 2026-S1 + hourly 2025 + SWM 2026 MS network charges, continuous operation | 2.085 | 5.15 | 896,767 | 1,835 | 93.0 % | 2.641 |
 | Previous price inputs (2025-S1: 0.132 / 0.055; ratio 2.40) | 2.4 | 8.05 | -73,470 | 1,835 | 72.5 % | 2.343 |
 | Boiler efficiency 0.817 | 2.217 | 7.03 | 176,055 | 1,910 | 72.5 % | 2.362 |
 | Boiler efficiency 0.929 | 2.217 | 10.01 | -409,815 | 1,640 | 0.0 % | 1.878 |
@@ -71,6 +76,8 @@ Same rows and labels as rq_consolidated.md, which gives RQ1-RQ3 against today's 
 | Gas emission factor 0.219 (paper's value) | 2.217 | 7.66 | 15,027 | 2,275 | 72.5 % | 2.229 |
 | Grid emission factor 0.092 (mainland 2023) | 2.217 | 7.66 | 15,027 | 1,881 | 72.5 % | 2.229 |
 | Horizon 20 years | 2.217 | 7.66 | 1,125,107 | 1,835 | 72.5 % | 2.793 |
+| Heat pump cost basis: DEA catalogue 2025 by sink temperature | 2.217 | 7.53 | 44,557 | 1,835 | 72.5 % | 2.254 |
+| Heat pump cost basis: supplier prices x 2 for integration | 2.217 | 6.0 | 402,274 | 1,835 | 85.5 % | 2.549 |
 | Grid emission factor 0.167 (5-year average) | 2.217 | 7.66 | 15,027 | 1,652 | 72.5 % | 2.229 |
 | Grid emission factor 0.1172 (2025 estimate) | 2.217 | 7.66 | 15,027 | 1,804 | 72.5 % | 2.229 |
 | Grid emission factor 0.367 (marginal gas CCGT, 55 %) | 2.217 | 7.66 | 15,027 | 1,040 | 72.5 % | 2.229 |
@@ -116,6 +123,7 @@ COP of each heat pump on four bases: the case's Lorenz efficiency; manufacturer-
 | manufacturer-data fit | 1.652 | inf | -1,996,560 | 1.274 |
 | manufacturer-data fit + 1 sigma | 1.908 | 27.07 | -1,281,667 | 1.503 |
 | manufacturer-data fit, glide-matched blend | 1.838 | 41.17 | -1,456,887 | 1.439 |
+| market products, supplier operating points (median) | 2.487 | 8.73 | -207,134 | 2.059 |
 
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 

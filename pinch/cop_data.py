@@ -42,11 +42,13 @@ sizing, source allocation and economics are unchanged code paths.
 
 from __future__ import annotations
 
+import functools
 import math
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from pinch.heat_pump import lorenz_cop
@@ -84,6 +86,9 @@ class CopFit:
         if lift_K <= 0:
             raise ValueError(f"{self.key}: lift must be positive, got {lift_K} K")
         return float(self.formula(lift_K, T_sink_out_C))
+
+    def cop_at(self, p: UnitPoint) -> float:
+        return self.cop(p.lift_K, p.T_sink_out_C)
 
     def in_range(self, lift_K: float, T_sink_out_C: float, T_source_in_C: float) -> bool:
         """True if the operating point lies inside the data range of the fit."""
@@ -154,14 +159,118 @@ def level_points(case, streams) -> list[UnitPoint]:
     return out
 
 
-def vendor_cop(p: UnitPoint, sigma: float = 0.0, fit: CopFit | None = None, glide_gain: float = 0.0) -> float:
-    """COP of one unit from a correlation, shifted by ``sigma`` standard deviations and, for a sink glide of
-    ``GLIDE_MIN_K`` or more, raised by ``glide_gain`` (e.g. ``GLIDE_BLEND_GAIN``). Raises if the result
-    breaks the second law or drops to 1 or below."""
+#: Operating points from the supplier sheets of IEA HPT Annex 58 / Project 68 (transcription notes in the file)
+SUPPLIER_FILE = Path(__file__).resolve().parent.parent / "data" / "sources" / "annex58_supplier_operating_points.csv"
+
+
+@functools.lru_cache(maxsize=4)
+def supplier_points(path: Path = SUPPLIER_FILE) -> pd.DataFrame:
+    """Closed-cycle operating points of the supplier sheets, with their Lorenz efficiency and mean-temperature
+    lift. Rows whose source warms up (published inconsistently) are dropped. COP = middle of a published range.
+    Cached: do not modify the returned frame."""
+    from pinch.heat_pump import thermodynamic_mean_temperature_K as tm
+    d = pd.read_csv(path, comment="#").query("cycle == 'closed' and T_source_out_C <= T_source_in_C").copy()
+    d["COP"] = (d["COP_min"] + d["COP_max"]) / 2
+    d["lift_K"] = d["T_sink_out_C"] - d["T_source_in_C"]
+    T_sink = [steam_mean_temperature_K(r.T_sink_in_C, r.T_sink_out_C) if r.sink == "steam"
+              else tm(r.T_sink_in_C, r.T_sink_out_C) for r in d.itertuples()]
+    T_source = [tm(r.T_source_in_C, r.T_source_out_C) for r in d.itertuples()]
+    d["mean_lift_K"] = [a - b for a, b in zip(T_sink, T_source)]
+    d["eta_lorenz"] = [r.COP / (a / (a - b)) for r, a, b in zip(d.itertuples(), T_sink, T_source)]
+    return d.reset_index(drop=True)
+
+
+def steam_mean_temperature_K(T_feed_C: float, T_sat_C: float) -> float:
+    """Entropic mean temperature [K] of water heated from ``T_feed_C`` and evaporated to saturated steam at
+    ``T_sat_C``: Δh / Δs at the saturation pressure (CoolProp, IAPWS-95)."""
+    from CoolProp.CoolProp import PropsSI
+    T = T_sat_C + KELVIN
+    p = PropsSI("P", "T", T, "Q", 1, "Water")
+    h1, s1 = PropsSI("H", "T", T, "Q", 1, "Water"), PropsSI("S", "T", T, "Q", 1, "Water")
+    if T_feed_C >= T_sat_C - 1e-9:      # latent only
+        h0, s0 = PropsSI("H", "T", T, "Q", 0, "Water"), PropsSI("S", "T", T, "Q", 0, "Water")
+    else:
+        h0, s0 = PropsSI("H", "T", T_feed_C + KELVIN, "P", p, "Water"), PropsSI("S", "T", T_feed_C + KELVIN, "P", p, "Water")
+    return (h1 - h0) / (s1 - s0)
+
+
+def mean_lift_K(T_sink_in_C: float, T_sink_out_C: float, T_source_in_C: float, T_source_out_C: float) -> float:
+    """Lift between the entropic mean temperatures of a liquid sink and the source [K] (Annex 58 Task 1, Sec. 1.1)."""
+    from pinch.heat_pump import thermodynamic_mean_temperature_K as tm
+    return tm(T_sink_in_C, T_sink_out_C) - tm(T_source_in_C, T_source_out_C)
+
+
+@dataclass(frozen=True)
+class SupplierMap:
+    """COP of a unit from the published operating points of market products (Annex 58 / Project 68 sheets).
+
+    Per product, its points' Lorenz efficiencies are interpolated linearly in the mean-temperature lift; a
+    product counts for a unit only inside the lift and sink-outlet range of its own points (no extrapolation).
+    The COP is the median over the products that count. Products with fewer than two distinct lifts never
+    count (one point gives no trend)."""
+
+    points: pd.DataFrame
+    key: str = "annex58_suppliers"
+    label: str = "Market products, supplier operating points (IEA HPT Annex 58 / Project 68)"
+    source: str = "IEA HPT Annex 58 / Project 68 supplier technology sheets (data/sources/annex58_supplier_operating_points.csv)"
+    sigma: float | None = None
+
+    def product_cops(self, p: UnitPoint) -> dict[str, float]:
+        """COP of the unit for every product whose published points cover it."""
+        x = mean_lift_K(p.T_sink_in_C, p.T_sink_out_C, p.T_source_in_C, p.T_source_out_C)
+        out = {}
+        for name, g in self.points.groupby(["supplier", "product"]):
+            by_x = g.groupby("mean_lift_K")["eta_lorenz"].mean().sort_index()
+            if len(by_x) < 2:
+                continue
+            if not (by_x.index[0] - 1e-9 <= x <= by_x.index[-1] + 1e-9
+                    and g["T_sink_out_C"].min() - 1e-9 <= p.T_sink_out_C <= g["T_sink_out_C"].max() + 1e-9):
+                continue
+            out[" ".join(name)] = float(np.interp(x, by_x.index, by_x.values)) * p.cop_lorenz(1.0)
+        return out
+
+    def cop_at(self, p: UnitPoint) -> float:
+        cops = self.product_cops(p)
+        if not cops:
+            raise ValueError(f"{p.name}: no supplier product has published points covering this unit")
+        return float(np.median(list(cops.values())))
+
+    def covered(self, p: UnitPoint) -> list[str]:
+        """Products with a published point at least as hot (sink outlet) and at least as large a lift as the unit."""
+        hit = self.points[(self.points["T_sink_out_C"] >= p.T_sink_out_C - 1e-9) & (self.points["lift_K"] >= p.lift_K - 1e-9)]
+        return sorted({f"{s} {q}" for s, q in zip(hit["supplier"], hit["product"])})
+
+
+def unit_point(u) -> UnitPoint | None:
+    """Design point of a ``HeatPump`` on the basis of ``level_points`` (None for a unit without a source)."""
+    if u.T_source_in_C is None or u.T_source_out_C is None:
+        return None
+    d = u.dT_cont_K
+    return UnitPoint(u.name, u.T_sink_in_C + d, u.T_sink_out_C + d, u.T_source_in_C - d, u.T_source_out_C - d)
+
+
+def market_products(u) -> list[str] | None:
+    """Supplier products with a published point reaching the unit's sink outlet at its lift (None: no source)."""
+    p = unit_point(u)
+    return None if p is None else SupplierMap(supplier_points()).covered(p)
+
+
+#: Keys accepted by ``fit_by_key`` (and the ``fit`` of the vendor_cop sensitivity)
+FIT_KEYS = (*FITS, "annex58_suppliers")
+
+
+def fit_by_key(key: str) -> CopFit | SupplierMap:
+    return SupplierMap(supplier_points()) if key == "annex58_suppliers" else FITS[key]
+
+
+def vendor_cop(p: UnitPoint, sigma: float = 0.0, fit: CopFit | SupplierMap | None = None, glide_gain: float = 0.0) -> float:
+    """COP of one unit from a correlation or the supplier map, shifted by ``sigma`` standard deviations and, for
+    a sink glide of ``GLIDE_MIN_K`` or more, raised by ``glide_gain`` (e.g. ``GLIDE_BLEND_GAIN``). Raises if
+    the result breaks the second law or drops to 1 or below."""
     fit = fit or default_fit(p.T_sink_out_C)
     if sigma and fit.sigma is None:
         raise ValueError(f"{fit.key}: no published standard deviation")
-    cop = fit.cop(p.lift_K, p.T_sink_out_C) + sigma * (fit.sigma or 0.0)
+    cop = fit.cop_at(p) + sigma * (fit.sigma or 0.0)
     if glide_gain and p.sink_glide_K >= GLIDE_MIN_K:
         cop *= 1 + glide_gain
     if cop <= 1.0:
@@ -179,7 +288,7 @@ def equivalent_eta(p: UnitPoint, cop: float) -> float:
 
 def apply_vendor(case, streams, sigma: float = 0.0, glide_gain: float = 0.0, fit: str | None = None):
     """Copy of ``case`` whose sink levels use the correlation's COP (through η_eq), shifted by ``sigma``."""
-    eta = {p.name: equivalent_eta(p, vendor_cop(p, sigma, FITS[fit] if fit else None, glide_gain))
+    eta = {p.name: equivalent_eta(p, vendor_cop(p, sigma, fit_by_key(fit) if fit else None, glide_gain))
            for p in level_points(case, streams)}
     return replace(case, sink_levels=tuple(replace(lv, eta_lorenz=eta[lv.name]) for lv in case.sink_levels))
 
@@ -189,7 +298,9 @@ def cop_ranges(case, streams, demo_eta: tuple[float, float, float] | None = None
     flag), of a glide-matched blend, of the steam-generating fit (sink above 100 °C) and, if
     ``demo_eta`` = (min, median, max) is given, of the Lorenz model with the demonstration efficiencies."""
     rows = []
+    smap = SupplierMap(supplier_points())
     for spec, p in zip(case.sink_levels, level_points(case, streams)):
+        sup = smap.product_cops(p)
         fit = default_fit(p.T_sink_out_C)
         eta_basis = case.eta_lorenz if spec.eta_lorenz is None else spec.eta_lorenz
         cop_fit = fit.cop(p.lift_K, p.T_sink_out_C)
@@ -205,7 +316,12 @@ def cop_ranges(case, streams, demo_eta: tuple[float, float, float] | None = None
                "COP_glide_blend": round(cop_fit * (1 + GLIDE_BLEND_GAIN), 3) if p.sink_glide_K >= GLIDE_MIN_K
                else math.nan,
                "COP_sghp_fit": round(FITS["arpagaus2026_sghp"].cop(p.lift_K, p.T_sink_out_C), 3)
-               if p.T_sink_out_C > 100 else math.nan}
+               if p.T_sink_out_C > 100 else math.nan,
+               "suppliers_interpolated": len(sup),
+               "COP_suppliers_median": round(float(np.median(list(sup.values()))), 3) if sup else math.nan,
+               "COP_suppliers_min": round(min(sup.values()), 3) if sup else math.nan,
+               "COP_suppliers_max": round(max(sup.values()), 3) if sup else math.nan,
+               "suppliers_reaching_point": len(smap.covered(p))}
         if demo_eta:
             lo, med, hi = demo_eta
             row |= {"COP_demo_eta_min": round(p.cop_lorenz(lo), 3), "COP_demo_eta_median": round(p.cop_lorenz(med), 3),

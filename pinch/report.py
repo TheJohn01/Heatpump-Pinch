@@ -620,16 +620,20 @@ def build_report(case: Case, streams: StreamSet, summary: dict, tables: dict[str
             f"{_count(rep, Table) + 1} sets each unit's COP against manufacturer-data fits (lift = sink outlet − "
             "source inlet; ± one standard deviation), a glide-matched blend (+16 % for sink glides of 25 K or more, "
             "Brendel et al. 2024) and the Lorenz model with the efficiencies achieved by IEA HPT Annex 58 "
-            "demonstration plants. The fits come from small-glide machines, so they bound a large-glide unit from "
-            "below; 'no' in the range column means the fit is extrapolated.")
+            "demonstration plants, and the median over market products whose published operating points cover the "
+            "unit (IEA HPT Annex 58 / Project 68 supplier sheets, interpolated, never extrapolated; n = number of "
+            "products). The fits come from small-glide machines, so they bound a large-glide unit from below; 'no' in "
+            "the range column means the fit is extrapolated.")
         b.table("COP of each heat pump on each basis: case basis, manufacturer-data fit (−σ / fit / +σ), glide-matched "
-                "blend and demonstration-plant Lorenz efficiencies (min / median / max).",
-                ("Unit", "Lift [K]", "Case basis", "Fit −σ / fit / +σ", "In range", "Glide blend", "Demonstrations"),
+                "blend, demonstration-plant Lorenz efficiencies (min / median / max) and market products (median, n).",
+                ("Unit", "Lift [K]", "Case basis", "Fit −σ / fit / +σ", "In range", "Glide blend", "Demonstrations",
+                 "Market products"),
                 [(u["unit"], f"{u['lift_K']:g}", num(u["COP_basis"], 2),
                   f"{num(u['COP_fit_minus_sigma'], 2)} / {num(u['COP_fit'], 2)} / {num(u['COP_fit_plus_sigma'], 2)}",
                   "yes" if u["fit_in_range"] else "no", num(u["COP_glide_blend"], 2),
-                  " / ".join(num(u.get(k), 2) for k in ("COP_demo_eta_min", "COP_demo_eta_median", "COP_demo_eta_max")))
-                 for u in cr["units"]], (0.2, 0.09, 0.11, 0.2, 0.09, 0.11, 0.2))
+                  " / ".join(num(u.get(k), 2) for k in ("COP_demo_eta_min", "COP_demo_eta_median", "COP_demo_eta_max")),
+                  f"{num(u.get('COP_suppliers_median'), 2)} (n = {u.get('suppliers_interpolated', 0)})")
+                 for u in cr["units"]], (0.17, 0.07, 0.09, 0.18, 0.08, 0.1, 0.17, 0.14))
     at = s.get("area_targeting") or {}
     if at.get("RQ2"):
         b.h("2.4 Minimum approach temperature (supertargeting)", 2)

@@ -52,8 +52,9 @@
   "run": {
     "tool_version": "0.10.0",
     "inputs_sha256": {
-      "cases/milk_evaporator.json": "3c7dfff060ec4fb71607c3d5e0a5c3c662032cf92d2ddeb6be2481d5fc61f4d4",
-      "data/milk_evaporator_streams.csv": "401ee249e813da36fe9aeaaad48a6415623b4d08b4083d71279cc65c40712b41"
+      "cases/milk_evaporator.json": "9b583f7f8a4da2be3baa16cce4a05cf90714ee8743865f6414a1be5826196ba4",
+      "data/milk_evaporator_streams.csv": "401ee249e813da36fe9aeaaad48a6415623b4d08b4083d71279cc65c40712b41",
+      "data/sources/cost_bases.json": "d1134459f35e4653ccc17c0e8ca20f05a6e164db75fd43bd8409906c80108087"
     }
   },
   "economics": {
@@ -81,6 +82,11 @@
         "eta_equivalent_fit": 0.2532,
         "COP_glide_blend": 4.619,
         "COP_sghp_fit": NaN,
+        "suppliers_interpolated": 0,
+        "COP_suppliers_median": NaN,
+        "COP_suppliers_min": NaN,
+        "COP_suppliers_max": NaN,
+        "suppliers_reaching_point": 36,
         "COP_demo_eta_min": 5.441,
         "COP_demo_eta_median": 5.827,
         "COP_demo_eta_max": 8.571
@@ -102,6 +108,11 @@
         "eta_equivalent_fit": 0.4642,
         "COP_glide_blend": NaN,
         "COP_sghp_fit": 2.111,
+        "suppliers_interpolated": 2,
+        "COP_suppliers_median": 1.851,
+        "COP_suppliers_min": 1.689,
+        "COP_suppliers_max": 2.014,
+        "suppliers_reaching_point": 16,
         "COP_demo_eta_min": 1.454,
         "COP_demo_eta_median": 1.557,
         "COP_demo_eta_max": 2.29
@@ -142,6 +153,9 @@
         "COP HTHP 105 °C": 1.95,
         "COP_system": 2.179,
         "fraction_of_Qh_min_electrified": 1.0
+      },
+      {
+        "basis": "market products, supplier operating points (median) (not computed: HP warm (milk preheat): no supplier product has published points covering this unit)"
       }
     ]
   },

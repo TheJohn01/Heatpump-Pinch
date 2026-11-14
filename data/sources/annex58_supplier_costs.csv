@@ -1,0 +1,36 @@
+# Supplier technology sheets of IEA HPT Annex 58 / Project 68 (see annex58_supplier_operating_points.csv for the URL and file names), "FACTS ABOUT THE TECHNOLOGY": "Specific investment cost for installed system without integration", transcribed 2026-11-14. Supplier data without third-party validation.
+# Per kW of heat supply capacity. A single value is entered as min = max. Left out: sheets without a value or with "n/a", "dependent on project", "contact"; costs in GBP (Futraheat 250-400 £/kW) and CHF (CTA approx. 650 CHF/kW), not converted; Synchrostor (per kWh of storage); Olvondo (3.0 M€ for four units, capacity per unit not stated); Q-Pinch (thermochemical, no compressor); Karman (working fluid and cycle type not stated clearly).
+# Rank: 350,000-500,000 € per 0.5 MW unit (sheet: "0,5 MWth per unit"), entered as 700-1000 €/kW. Turboden: "1000 – 300 €/kW ... depending on the heat pump and MVR unit size", entered as 300-1000 (closed and open units). WSE-Turbo gives open- and closed-cycle ranges separately.
+# cycle: closed = closed working-fluid cycle; open = direct compression of process steam or vapour (MVR), as in annex58_supplier_operating_points.csv.
+sheet,supplier,product,cycle,cost_EUR_per_kW_min,cost_EUR_per_kW_max
+a58supplier23ochsner20251028,Ochsner,ultra-high temperature heat pump,closed,350,700
+a58supplier30combitherm20251028,Combitherm,HWW,closed,200,400
+a58supplier3turboden20251028,Turboden,large heat pump,closed,300,1000
+a58supplier4fenagyco220251028,Fenagy,H-series CO2,closed,250,425
+a58supplier51mayekawahs20251028,Mayekawa,HS hydrocarbon heat pump,closed,450,450
+a58supplier52mayekawafc20251028,Mayekawa,FC hydrocarbon heat pump,closed,720,720
+a58supplier8siemens20251028,Siemens Energy,large heat pump,closed,250,800
+supplier101dutekht20251020,Dutek,HT,closed,400,600
+supplier22ecop20251022,ecop,Rotation Heat Pump,closed,700,700
+supplier33heaten20251003,Heaten,HeatBooster,closed,400,700
+supplier44enerin20251205,Enerin,HoegTemp,closed,800,1400
+supplier47rank20251013,Rank,HTHP,closed,700,1000
+supplier48heatlift20250925,Heatlift,HTHP,closed,300,1000
+supplier49geaco2hp20251015,GEA,CO2 heat pump,closed,450,500
+supplier50aneoindustry20251016,Aneo Industry,steam-producing heat pump,closed,800,1500
+supplier56atmoszero20260130,AtmosZero,air-source steam heat pump,closed,600,1000
+supplier62solidenergy20251107,Solid Energy,HTHP,closed,220,220
+supplier64parsmakina20250924,Pars Makina,HTHP,closed,570,570
+supplier67upheat20250924,Upheat,HTHP,closed,1000,1500
+supplier6wseturbo20250926,WSE-Turbo,steam turbo compressor (closed cycle),closed,230,650
+supplier7sph20250926,SPH,ThermBooster,closed,400,1000
+supplier81dutekxt20251020,Dutek,XT,closed,400,800
+supplier84heckkaeltetechnik20250926,Heck Kaeltetechnik,HTHP,closed,200,500
+supplier85thermodraft20250926,ThermoDraft,HTHP,closed,200,400
+a58supplier31piller20251028,Piller,MVR blower (> 5 MW),open,850,850
+a58supplier46spilling20251028,Spilling,steam piston compressor,open,100,400
+supplier11etnir20260710,Etnir,MVR,open,400,400
+supplier32epcon20251016,Epcon,MVR heat pump (1-3 MW),open,1000,2000
+supplier45srm20250926,SRM,STC300 steam screw compressor,open,1000,1000
+supplier6wseturbo20250926,WSE-Turbo,steam turbo compressor (open cycle),open,150,550
+supplier98standardfasel20251009,Standard Fasel,steam compression heat pump,open,600,1200
