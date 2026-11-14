@@ -1,0 +1,59 @@
+{
+  "name": "dairy_noncontinuous",
+  "plant": "Non-continuous dairy (cream, butter oil and cleaning)",
+  "description": "Dairy site whose streams run in batches within a daily cycle (cream treatment, butter oil, cleaning in place), loads in kW with start and end times. Analysed on its time-averaged streams (storage at any temperature) and, for operation, slice by slice with a heat pump between hot and cold storage loops.",
+  "stream_file": "../data/stampfli2019_dairy_streams.csv",
+  "extra_shift_K": 0,
+  "ambient_T_C": 15,
+  "heat_pumps": {
+    "eta_lorenz": 0.35,
+    "source_T_C": 7.93,
+    "dT_cont_K": 12.5,
+    "sink_levels": [
+      {
+        "name": "HP with storage loops",
+        "T_sink_C": 33.8
+      }
+    ]
+  },
+  "basis": null,
+  "schedule": {
+    "file": "../data/stampfli2019_dairy_streams.csv",
+    "cycle_h": 24,
+    "heat_pump": {
+      "T_co_star_C": 33.8,
+      "dTmin_K": 10.0
+    },
+    "dispatch": {
+      "tariff": {
+        "prices": "data/prices/portugal_2025_day_ahead.csv",
+        "network_tariff": "pt_erse_2026_mt",
+        "band": "band ID"
+      },
+      "capacity_factors": [
+        1.0,
+        1.5,
+        2.0
+      ]
+    }
+  },
+  "economics": {
+    "_note": "Prices only, for the hourly operation (schedule.dispatch); no annual basis, so no investment economics.",
+    "electricity_price_EUR_per_kWh": 0.1135,
+    "gas_price_EUR_per_kWh": 0.0512,
+    "sources": {
+      "prices": "Eurostat nrg_pc_205 / nrg_pc_203, Portugal, 2026-S1, bands ID / I3, excl. VAT (data/sources/eurostat_prices.csv). The plant is not in Portugal: these prices place it in the tool's Portuguese price context, like the other secondary cases. Boiler efficiency: the default (pinch.economics.DEFAULTS)."
+    }
+  },
+  "provenance": {
+    "data source": "Stampfli, Atkins, Olsen, Walmsley, Wellig (2019), Energy 182, 236-253, Table 1 (CC BY); companion paper Stampfli et al. (2018), CET 70, 1789-1794.",
+    "stream data": "published (Table 1, with start and end times); wash water heating uses CP x dT (242.9 kW) instead of the printed 260.25 kW (scripts/validation/reproduce_stampfli2019.py)",
+    "eta_lorenz": "published: zeta = 0.35, the Carnot fraction of Sec. 2.3 (isothermal condenser and evaporator, so Lorenz = Carnot)",
+    "source_T_C": "reproduced: T*ev = 7.93 °C from Eq. 9 (pinch.time_slices.storage_heat_pump) at the paper's T*co,sel = 33.8 °C",
+    "dT_cont_K": "published: real temperatures = shifted +/- 1.25 dTmin = 12.5 K (Eqs 5-6, two loop exchangers and the refrigerant)",
+    "sink levels": "published: T*co,sel = 33.8 °C (Sec. 3.2)",
+    "basis": "none: operating days per year are not published; the hourly operation is reported per year of prices, every day running the published daily schedule",
+    "ambient_T_C": "assumed: 15 °C, as the other secondary cases",
+    "economics": "prices only (see economics.sources); capacity factors of the dispatch are illustrative (1, 1.5, 2 x the design rate) and their extra investment is not counted"
+  }
+}

@@ -20,6 +20,8 @@ from pinch.time_slices import (
 )
 from scripts.validation import reproduce_stampfli2019 as rs
 
+DATA, ROOT = rs.DATA, rs.ROOT
+
 
 def _schedule_csv(tmp_path, rows, unit_col="CP_kW_per_K"):
     cols = ["stream", "type", "T_in_C", "T_out_C", unit_col, "dT_shift_K", "t_start_h", "t_end_h"]
@@ -113,3 +115,64 @@ def test_schedule_input_checks(tmp_path):
         load_schedule(_schedule_csv(tmp_path, [("H", "hot", 100, 40, 1.0, 5, 0, 12)], "CP_kWh_per_hl_per_K"))
     with pytest.raises(ValueError, match="t_start_h < t_end_h"):
         load_schedule(_schedule_csv(tmp_path, [("H", "hot", 100, 40, 1.0, 5, 12, 6)]))
+
+
+# ---------------------------------------------------------------- hourly dispatch with storage
+
+def _two_hours(**kw):
+    import numpy as np
+
+    from pinch.time_slices import dispatch_day
+    args = dict(heat_cost_EUR_per_kWh=1.0, cop=2.0, eta_drive=0.9, capacity_kW=20.0, hot_storage_kWh=10.0,
+                cold_storage_kWh=1e6)
+    return dispatch_day(np.array([10.0, 10.0]), np.array([50.0, 50.0]), np.array([0.1, 0.3]), **(args | kw))
+
+
+def test_dispatch_shifts_heat_to_the_cheap_hour():
+    """Hand solution: 20 kWh in the cheap hour, 10 kWh stored, cost 20 x 0.1 / 2 = 1.0 EUR."""
+    r = _two_hours()
+    assert r["cost_EUR"] == pytest.approx(1.0) and r["condenser_kW"].tolist() == pytest.approx([20.0, 0.0])
+    fixed = _two_hours(fixed_kW=10.0)                       # constant operation: 10 x (0.1 + 0.3) / 2
+    assert fixed["cost_EUR"] == pytest.approx(2.0)
+    small = _two_hours(hot_storage_kWh=5.0)                 # storage limits the shift: 15 + 5 kWh
+    assert small["cost_EUR"] == pytest.approx(15 * 0.1 / 2 + 5 * 0.3 / 2)
+    dear = _two_hours(heat_cost_EUR_per_kWh=0.12, hot_storage_kWh=0.0)   # no storage; boiler < 0.3 / 2 in hour 2
+    assert dear["backup_kWh"] == pytest.approx(10.0) and dear["cost_EUR"] == pytest.approx(10 * 0.05 + 10 * 0.12)
+
+
+def test_dispatch_on_the_dairy_conserves_energy_and_beats_constant_operation():
+    import numpy as np
+
+    from pinch.time_slices import dispatch_day, hourly_profile
+    s = load_schedule(DATA)
+    sl = time_slices(s)
+    hp = storage_heat_pump(s, 33.8, 10.0)
+    demand, source = hourly_profile(hp.condenser_demand_kW, sl), hourly_profile(hp.evaporator_supply_kW, sl)
+    assert demand.sum() == pytest.approx(hp.heat_per_cycle_kWh)
+    rng = np.random.default_rng(0)
+    prices = rng.uniform(0.05, 0.25, 24)
+    kw = dict(heat_cost_EUR_per_kWh=0.06, cop=hp.COP, eta_drive=0.9, hot_storage_kWh=hp.hot_storage_kWh,
+              cold_storage_kWh=hp.cold_storage_kWh, capacity_kW=2 * hp.Q_condenser_kW)
+    opt, const = dispatch_day(demand, source, prices, **kw), dispatch_day(demand, source, prices, fixed_kW=hp.Q_condenser_kW, **kw)
+    assert opt["heat_pump_kWh"] + opt["backup_kWh"] == pytest.approx(demand.sum())
+    assert const["heat_pump_kWh"] == pytest.approx(24 * hp.Q_condenser_kW) and const["backup_kWh"] == pytest.approx(0, abs=1e-6)
+    assert opt["cost_EUR"] <= const["cost_EUR"] + 1e-9
+    flat = np.full(24, 0.1135)                              # flat price, boiler dearer: the same cost both ways
+    assert dispatch_day(demand, source, flat, **kw)["cost_EUR"] == pytest.approx(
+        dispatch_day(demand, source, flat, fixed_kW=hp.Q_condenser_kW, **kw)["cost_EUR"])
+
+
+def test_dairy_case_runs_the_steady_analysis_on_time_averaged_streams():
+    from pinch.case import load_case
+    from pinch.time_slices import time_averaged
+    from scripts.analysis.analyse import compute
+    case = load_case(ROOT / "cases" / "dairy_noncontinuous.json")
+    out = compute(case)
+    assert out.summary["targets"]["Qh_min"] * 24 == pytest.approx(tam_targets(load_schedule(DATA))["Qh_kWh"])
+    assert len(time_averaged(load_schedule(DATA)).streams) == 22
+    ts = out.summary["time_slices"]
+    assert ts["heat_pump"]["COP"] == pytest.approx(2.198, abs=1e-3)               # CET 2018: 2.2
+    assert ts["heat_pump"]["T_co_C"] == pytest.approx(46.26, abs=0.05)            # CET 2018 Table 2
+    assert out.summary["heat_pump_design"]["COP_system"] == pytest.approx(ts["heat_pump"]["COP"], abs=1e-3)
+    modes = out.tables["operation"].set_index("mode")
+    assert modes["saving_vs_constant"].iloc[1:].is_monotonic_increasing             # more capacity, more shift

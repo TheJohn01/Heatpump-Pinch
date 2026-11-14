@@ -315,3 +315,14 @@ def delivered_price(flat_EUR_per_kWh: float, spec: dict) -> tuple[float, dict]:
     t = _tariff_terms(json.dumps(spec, sort_keys=True))
     price = flat_EUR_per_kWh * (t["share_energy_supply"] * t["shape"] + t["share_other"]) + t["network_EUR_per_kWh"]
     return price, {"flat_EUR_per_kWh": flat_EUR_per_kWh, "delivered_EUR_per_kWh": price, **t}
+
+
+def hourly_energy_price(flat_EUR_per_kWh: float, spec: dict) -> pd.Series:
+    """Delivered energy price of every hour [EUR/kWh]: p_flat (s_supply x p_t / mean p + s_other) + the tariff's
+    energy charge of the hour's period; capacity charges are not included (they depend on the load profile:
+    ``PeriodTariff.capacity_EUR``). ``spec`` as in ``delivered_price`` (the pattern is not used)."""
+    prices = load_hourly_prices(ROOT / spec["prices"])
+    tariff = PeriodTariff.load(spec["network_tariff"])
+    s = eurostat_shares(tariff.data["country"], spec["band"])
+    adders = tariff.adders_EUR_per_MWh(prices.index, pd.Series(1.0, index=prices.index)) / 1000.0
+    return flat_EUR_per_kWh * (s["energy_supply"] * prices / prices.mean() + s["other"]) + adders
