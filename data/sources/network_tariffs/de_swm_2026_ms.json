@@ -1,0 +1,51 @@
+{
+  "_source": "SWM Infrastruktur GmbH & Co. KG (Munich), 'Netzentgelte Strom 2026 - Netznutzung', Stand 12/2025 (https://www.swm-infrastruktur.de/dam/swm-infrastruktur/dokumente/strom/netzzugang-netznutzungsentgelte/preisblaetter-2026/strom-preisblatt-2026.pdf), p. 1, Jahresleistungspreissystem Mittelspannung (StromNEV § 17): < 2500 h/a 15,88 EUR/(kW a) + 4,95 ct/kWh; >= 2500 h/a 132,13 EUR/(kW a) + 0,30 ct/kWh, on the annual peak load. One distribution system operator as an example; German network charges differ by operator. No time-of-use periods. Transcribed 2026-11-14.",
+  "country": "DE",
+  "voltage": "MS",
+  "year": 2026,
+  "timezone": "Europe/Berlin",
+  "variants": [
+    {
+      "utilization_h": [
+        0,
+        2500
+      ],
+      "energy_EUR_per_kWh": {
+        "all": 0.0495
+      },
+      "capacity": [
+        {
+          "basis": "max",
+          "EUR_per_kW_year": 15.88
+        }
+      ]
+    },
+    {
+      "utilization_h": [
+        2500,
+        8784
+      ],
+      "energy_EUR_per_kWh": {
+        "all": 0.003
+      },
+      "capacity": [
+        {
+          "basis": "max",
+          "EUR_per_kW_year": 132.13
+        }
+      ]
+    }
+  ],
+  "calendar": [
+    {
+      "days": "all",
+      "periods": [
+        [
+          "00:00",
+          "24:00",
+          "all"
+        ]
+      ]
+    }
+  ]
+}

@@ -173,8 +173,9 @@ def apply(case, kind: str, value: Any, selected: dict | None = None, streams=Non
         return apply_vendor(case, streams, value["sigma"], value["glide_gain"], value.get("fit"))
     if kind == "econ":
         eco = _merge(case.economics or {}, value)
-        if "electricity_to_gas_ratio" in value:            # the ratio replaces the electricity price
+        if "electricity_to_gas_ratio" in value:            # the ratio replaces the electricity price (and its tariff)
             eco.pop("electricity_price_EUR_per_kWh", None)
+            eco.pop("tariff", None)
         return replace(case, economics=eco)
     if kind == "eta":
         return replace(case, eta_lorenz=float(value),

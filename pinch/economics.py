@@ -194,7 +194,8 @@ class EconomicParameters:
 
 #: Keys of an "economics" block that are not scalar defaults: read explicitly by ``load_economics``.
 STRUCTURED_KEYS = ("electricity_price_EUR_per_kWh", "cost_functions", "heat_pump_cost_classes",
-                   "heat_pump_cost_adders", "heat_pump_capacity_factors", "cost_basis", "estimate_class")
+                   "heat_pump_cost_adders", "heat_pump_capacity_factors", "cost_basis", "estimate_class",
+                   "tariff")
 #: Cost bases selectable with ``economics.cost_basis`` (sources in the file)
 COST_BASES_FILE = Path(__file__).resolve().parent.parent / "data" / "sources" / "cost_bases.json"
 
@@ -239,6 +240,9 @@ def load_economics(block: dict | None) -> EconomicParameters:
         p_el = float(block["electricity_price_EUR_per_kWh"])
     else:
         p_el = float(values["electricity_to_gas_ratio"]) * float(values["gas_price_EUR_per_kWh"])
+    if block.get("tariff"):           # hourly prices and a published network tariff reshape the band price
+        from pinch.tariffs import delivered_price
+        p_el = delivered_price(p_el, block["tariff"])[0]
     given = block.get("cost_functions", {})
     costs = {k: CostFunction(**{**DEFAULT_COST_FUNCTIONS.get(k, {}), **{x: y for x, y in given.get(k, {}).items()
                                                                      if not x.startswith("_") and x != "source"}})

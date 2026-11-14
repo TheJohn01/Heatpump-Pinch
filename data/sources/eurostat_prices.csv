@@ -1,0 +1,1277 @@
+# Eurostat, nrg_pc_205 (electricity) and nrg_pc_203 (gas), non-household consumers, half-yearly, EUR/kWh (gas on gross calorific value). Fetched 2026-11-14 with scripts/data/fetch_eurostat_prices.py (dissemination API, SDMX 3.0 CSV). Source: Eurostat; reuse authorised with acknowledgement (Commission Decision 2011/833/EU).
+geo,carrier,band,unit,taxes,currency,period,value
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1758
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2262
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2662
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.2088
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.2014
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.164
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1851
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1752
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1714
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.163
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1311
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1734
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.207
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1589
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1527
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1212
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.139
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1338
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1307
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1267
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0981
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1499
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1937
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.144
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1379
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1145
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1323
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1205
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.119
+DE,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1113
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.2077
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2415
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2439
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.2564
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.2518
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.2482
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.2552
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.2378
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.2369
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.215
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1642
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1928
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1949
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.2055
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.2017
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.2017
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.2076
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1932
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1922
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1742
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0897
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.144
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.173
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1814
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1781
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1748
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.181
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1598
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1613
+DE,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1382
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1759
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2256
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.246
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.2418
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.2263
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.2125
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.2156
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.2002
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.2014
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.185
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1349
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1768
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1939
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1905
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1776
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1685
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1712
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1584
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1595
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1464
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0786
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1391
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1744
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1702
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1573
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1482
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1509
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1346
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1363
+DE,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1195
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.2485
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2774
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2685
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.2997
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.3
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.3244
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.3233
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.3141
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.312
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.2821
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.2073
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.2316
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2242
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.2476
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.248
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.2723
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.2714
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.2636
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.2618
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.2366
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1074
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.158
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1876
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.2124
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.2126
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.2313
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.2302
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.2118
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.2101
+DE,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1818
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.2298
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2616
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2524
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.2691
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.2671
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.2798
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.2834
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.2745
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.2722
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.2477
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.186
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.2132
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2056
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.2192
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.2175
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.2328
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.2359
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.2281
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.2264
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.2058
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0967
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1512
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1782
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1904
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.189
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1976
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.201
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1828
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1828
+DE,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1572
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1776
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2117
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2416
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.2173
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.2214
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.1831
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1874
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1878
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1869
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1794
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1347
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1634
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1886
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1686
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.172
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1394
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.143
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1447
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.144
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1379
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0732
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1215
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1728
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1508
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1535
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1276
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1313
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1286
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1283
+DE,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1159
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.3028
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.3142
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.3215
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.3864
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.3903
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.3919
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.3958
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.3906
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.3877
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.3519
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.2544
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.264
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2702
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.3247
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.3279
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.3293
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.3326
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.3282
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.3258
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.2957
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1444
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1809
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.2231
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.2767
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.2798
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.2794
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.282
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.2665
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.2642
+DE,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.2308
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.2097
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2468
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.258
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.2599
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.254
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.2469
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.2527
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.2415
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.2372
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.2179
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1665
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1978
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2074
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.2085
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.2035
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1998
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.2045
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1959
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1921
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1767
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0955
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1482
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1831
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1831
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1784
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1742
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1792
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1632
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1614
+DE,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1418
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0683
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.1021
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1286
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0612
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0526
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.046
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0554
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0646
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0552
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0572
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0568
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0851
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1133
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0565
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0485
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0393
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0451
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.053
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0452
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0461
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0517
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.08
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1078
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0469
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0404
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0332
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0383
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0457
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0379
+DE,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0424
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0563
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0799
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1053
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0682
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0599
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.05
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0608
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0628
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0542
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0582
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0461
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0654
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.0919
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0622
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0546
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0408
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0477
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.05
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.043
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0458
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0414
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.061
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.0865
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0526
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0468
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.036
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0419
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0422
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0353
+DE,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0413
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0533
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0663
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.0726
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1046
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0952
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0906
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1031
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1024
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1025
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0968
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0445
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0554
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.0655
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0974
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0886
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0816
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0863
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0859
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.086
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0811
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0348
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0448
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.055
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0811
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0752
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0671
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0706
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.068
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.068
+DE,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0642
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0465
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0647
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.0694
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0876
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0805
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0771
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0868
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0869
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0857
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0824
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0379
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0533
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.0613
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0808
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0742
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0678
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0713
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0723
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0713
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0682
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0297
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0445
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.052
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0668
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0622
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0556
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.058
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0563
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0552
+DE,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0529
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0474
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0676
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.0802
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0811
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0746
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0648
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0728
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.072
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.067
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0668
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0385
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0554
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.0703
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0745
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0684
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0554
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0586
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0586
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0546
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0544
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.032
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0487
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.0628
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0626
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0584
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0466
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0488
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0469
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0428
+DE,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0441
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0649
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0746
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.0806
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1161
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1038
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.1053
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1126
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1147
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1131
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1089
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0545
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0627
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.0736
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1084
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.097
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0954
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0946
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0964
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.095
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0915
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0442
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0514
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.0625
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0909
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.083
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0797
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0781
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0777
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0764
+DE,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0739
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0561
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.0919
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0827
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.074
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0677
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0463
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.0812
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0764
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0682
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.059
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0395
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.0734
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0638
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0579
+DE,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0494
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1491
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2541
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2475
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1386
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1291
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0911
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1174
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1062
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1125
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.094
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1234
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.2104
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2051
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1147
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1068
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0756
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0974
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0883
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0932
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0777
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1095
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.2066
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1935
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1128
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1054
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0731
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0944
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0854
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0896
+ES,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0752
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1778
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2279
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2811
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.173
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1615
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.138
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1549
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.15
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1431
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1413
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1528
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1902
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2395
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1442
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1344
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1157
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1294
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.125
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1191
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1177
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1171
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1801
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.2218
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1382
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1292
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1039
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1178
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1115
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1061
+ES,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1047
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1598
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2397
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2683
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1577
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1412
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.1201
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1374
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1335
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1308
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1263
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.134
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1993
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2249
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.131
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1173
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1004
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1143
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1111
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1085
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1048
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.106
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1905
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.2075
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.126
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1134
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0905
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1064
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1016
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0991
+ES,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0959
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1774
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2525
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2957
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.2501
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.2291
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.2118
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.2074
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.2084
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1938
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1955
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1495
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.2111
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2494
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.2088
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1931
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1784
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1744
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1739
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1618
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1631
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1136
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1987
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.2339
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1976
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1828
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.156
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1533
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1476
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1373
+ES,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.137
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1705
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2255
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2598
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1912
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1837
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.1629
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1703
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1688
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1589
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1604
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1459
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1879
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2202
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1597
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1536
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1371
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1426
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1411
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1324
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1336
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1115
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1769
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.2064
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1522
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.147
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1217
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.128
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1234
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1156
+ES,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.116
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1519
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2423
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2501
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1382
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1243
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0971
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1053
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1211
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1176
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1105
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1262
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.2008
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2082
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1155
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1033
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0812
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.088
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.101
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0971
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0917
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1096
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1946
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1943
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1116
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1013
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0741
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0831
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0959
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0914
+ES,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.087
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.2609
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.3509
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.3729
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.318
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.2978
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.2843
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.2746
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.3004
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.2893
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.285
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.2269
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.3072
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.3327
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.2814
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.2587
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.2433
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.2399
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.2511
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.2419
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.2417
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1666
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.277
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.3052
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.2586
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.2365
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.2099
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.2054
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.2048
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1987
+ES,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1978
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.173
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2479
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2772
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1894
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1789
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.156
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1693
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1693
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1577
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1542
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1466
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.2074
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.2346
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1588
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1501
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1312
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1424
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1412
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1313
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1286
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1158
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.197
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.2186
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1515
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1434
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1169
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1281
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1238
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1157
+ES,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1127
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0343
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0892
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1077
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0395
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0382
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0366
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0448
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0459
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0371
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0451
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0284
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0737
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.0953
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0376
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0364
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0302
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.037
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0379
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0307
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0386
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.027
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0713
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.0929
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0361
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0349
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0281
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0349
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0353
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.028
+ES,gas,Consumption 4 000 000 GJ or over - band I6,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0371
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0686
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0921
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1193
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0574
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0506
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.046
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0593
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0582
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0472
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0554
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0567
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0761
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1056
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0547
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0482
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.038
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.049
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0481
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.039
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0475
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0551
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0736
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1031
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0529
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0465
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0357
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0467
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0453
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0362
+ES,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0457
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0489
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.089
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1231
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0797
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0709
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0657
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0737
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0762
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.066
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0655
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0404
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0736
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1089
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0759
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0676
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0543
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0609
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0629
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0546
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0562
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0385
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0634
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.0987
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0738
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0655
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0517
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0584
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.06
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0516
+ES,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0541
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0408
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0882
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1183
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0704
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0595
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0536
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0614
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0621
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0615
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0575
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0338
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0729
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1047
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.067
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0566
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0443
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0507
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0513
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0508
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0493
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0322
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0684
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1002
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0651
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0547
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.042
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0484
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0484
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0479
+ES,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0474
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0457
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0933
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1236
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0668
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0544
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0471
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0557
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0571
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0475
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.055
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0377
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0771
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1094
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0637
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0518
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0389
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0461
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0472
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0393
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0472
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0362
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0744
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1066
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0618
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.05
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0366
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0438
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0444
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0365
+ES,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0453
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0685
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.1081
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1368
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0681
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0522
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0538
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0635
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0615
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0486
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0547
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0566
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0894
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1211
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0649
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0497
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0444
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0525
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0508
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0401
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0469
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0542
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0779
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1096
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.063
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0479
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0421
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0501
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.048
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0374
+ES,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.045
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0482
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.092
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1171
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0555
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0469
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0433
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0398
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.076
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1036
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0529
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0447
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0358
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0382
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0722
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1001
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0511
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.043
+ES,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0336
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1693
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2154
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1894
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0566
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0941
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0745
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1156
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1147
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1039
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0775
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1477
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1874
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1655
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0484
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0774
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0646
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0982
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0896
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0666
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1251
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1941
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1906
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0927
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0939
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0621
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0921
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0902
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0861
+PT,electricity,Consumption 150 000 MWh or over - band IG,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0643
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1449
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.1613
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1656
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1065
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1357
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.1288
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1525
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.15
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1482
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1383
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1193
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1326
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1355
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0874
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1104
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1055
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1248
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.123
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1216
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1135
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0918
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1517
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1713
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1442
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1156
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0994
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1072
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1064
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1066
+PT,electricity,Consumption from 2 000 MWh to 19 999 MWh - band ID,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0992
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1527
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.1872
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1649
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0911
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1183
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0983
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1437
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.13
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1287
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1092
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1255
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1533
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1349
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0745
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0988
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0815
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1178
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1062
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1054
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0897
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1016
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1795
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1613
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1282
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1154
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.078
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1059
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0945
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0972
+PT,electricity,Consumption from 20 000 MWh to 69 999 MWh - band IE,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0843
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1844
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.1725
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1956
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1684
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1887
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.1921
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.2018
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.2094
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.2093
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.2034
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1518
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1415
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1599
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1378
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1544
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1569
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1647
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1711
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.171
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1662
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1071
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1446
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1755
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.2178
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1656
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1376
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1281
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1359
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1337
+PT,electricity,Consumption from 20 MWh to 499 MWh - band IB,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1291
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1433
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.1459
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1661
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1162
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1416
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.1403
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1626
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1607
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1622
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1554
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1186
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1202
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1359
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0954
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1161
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1149
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1332
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1322
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1329
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1273
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0892
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1351
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1721
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1505
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1381
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1068
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1118
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1136
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1133
+PT,electricity,Consumption from 500 MWh to 1 999 MWh - band IC,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1086
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1519
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.1864
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1538
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0719
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0968
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0995
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1378
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1243
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1168
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0971
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1235
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1515
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1251
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0586
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0822
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0812
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.114
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1011
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.095
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0789
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1032
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1672
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1491
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1093
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0996
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0783
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1037
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0917
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0888
+PT,electricity,Consumption from 70 000 MWh to 149 999 MWh - band IF,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0756
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.2489
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.2296
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.2327
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.2294
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.2604
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.2716
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.2802
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.2786
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.2797
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.277
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.2046
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1882
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1905
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1885
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.2151
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.2242
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.2315
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.2309
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.232
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.2298
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.132
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1797
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.2303
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.372
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.2265
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1924
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1711
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.175
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.1722
+PT,electricity,Consumption less than 20 MWh - band IA,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1697
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.1686
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.1796
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1812
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1269
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1539
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.1504
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1737
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1725
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1708
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1597
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.1396
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.1486
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1492
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1042
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1265
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.1237
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1429
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1419
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.1406
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.1314
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.1049
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.1595
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1773
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1766
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.1394
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.1122
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.1176
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.1181
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.117
+PT,electricity,Consumption of kWh - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.1087
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0464
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0846
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1363
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0826
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0422
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0557
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0542
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0463
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0517
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0377
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0688
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1109
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0669
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0343
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0456
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0441
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0377
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.042
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0376
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0686
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1108
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.07
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0359
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0453
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.044
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0375
+PT,gas,Consumption from 1 000 000 GJ to 3 999 999 GJ - band I5,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0419
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0559
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0931
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1375
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1162
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0994
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.09
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0941
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1055
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0868
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0909
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0456
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0759
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.112
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0943
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0812
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0733
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0769
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0861
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0709
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0741
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0396
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0694
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1057
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0934
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0712
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.062
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.063
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0714
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0582
+PT,gas,Consumption from 1 000 GJ to 9 999 GJ -band I2,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0601
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0414
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0852
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1237
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0834
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0737
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0609
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0636
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.067
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.059
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0628
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0337
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0692
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1006
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0672
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0599
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0494
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0521
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0546
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0481
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0512
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0321
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0672
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.099
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0706
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0571
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0469
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0487
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.051
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.045
+PT,gas,Consumption from 10 000 GJ to 99 999 GJ - band I3,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0474
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.041
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0808
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1134
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.0763
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.062
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.0518
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.0553
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.0587
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.0513
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.0546
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0334
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0656
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.0923
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.0617
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0504
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0421
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.0453
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.0478
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0418
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0445
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0326
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0646
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.0917
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.0653
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.05
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0412
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0444
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0466
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0408
+PT,gas,Consumption from 100 000 GJ to 999 999 GJ - band I4,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0441
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0735
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0962
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1408
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2023-S1,0.1449
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.1303
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.1214
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2024-S2,0.1234
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2025-S1,0.1227
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2025-S2,0.1132
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,All taxes and levies included,Euro,2026-S1,0.1192
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0605
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0791
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.1155
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S1,0.1181
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.1066
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0993
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S2,0.1009
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S1,0.1
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2025-S2,0.0923
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2026-S1,0.0973
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0519
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0699
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.1061
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S1,0.1102
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0915
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.083
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S2,0.0815
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S1,0.0817
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2025-S2,0.0757
+PT,gas,Consumption less than 1 000 GJ - band I1,Kilowatt-hour,Excluding taxes and levies,Euro,2026-S1,0.0788
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2021-S2,0.0436
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S1,0.0748
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2022-S2,0.1079
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2023-S2,0.0642
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,All taxes and levies included,Euro,2024-S1,0.054
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2021-S2,0.0355
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S1,0.0609
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2022-S2,0.0878
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2023-S2,0.0523
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding VAT and other recoverable taxes and levies,Euro,2024-S1,0.0439
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2021-S2,0.0344
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S1,0.0596
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2022-S2,0.0869
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2023-S2,0.0504
+PT,gas,Consumption of GJ - all bands,Kilowatt-hour,Excluding taxes and levies,Euro,2024-S1,0.0424

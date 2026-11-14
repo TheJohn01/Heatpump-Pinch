@@ -6,11 +6,13 @@ hours. This module computes that effective price from an hourly price series and
 plus optional per-period network adders and a demand (capacity) charge, so RQ3 (break-even
 electricity-to-gas price ratio) can be compared with the ratio the plant would actually see.
 
-Data: hourly day-ahead prices from the ENTSO-E Transparency Platform, fetched with entsoe-py
-(EnergieID, MIT licence, github.com/EnergieID/entsoe-py) by ``scripts/data/fetch_entsoe_prices.py``
-(needs a free ENTSO-E API key). No price data are committed: the series depends on the year and bidding
-zone the user chooses. Network access tariffs (in Portugal set by ERSE per time-of-use period) are an
-input, not a default: their values are not in the project sources.
+Data: hourly day-ahead prices in data/prices/ (Portugal, Spain, Germany 2025, Ember's CC BY 4.0 copy of the
+ENTSO-E series, ``scripts/data/fetch_ember_prices.py``; other zones and years with an ENTSO-E key through
+``scripts/data/fetch_entsoe_prices.py``). Published network tariffs with their time-of-use calendars in
+data/sources/network_tariffs/ (``PeriodTariff``: ERSE 2026 MT, CNMC 2026 6.1TD, one German operator's 2026
+medium-voltage charges); a simple per-hour adder and demand charge (``NetworkTariff``) for user inputs.
+``delivered_price`` turns a case's flat band price into the price for a given operating pattern, with Eurostat's
+shares of energy and supply, network and other components (``scripts/data/fetch_eurostat_prices.py``).
 
 Operating patterns:
 * ``fixed``: the heat pump runs in the given hours of the day (and days of the week), at constant load;
@@ -23,10 +25,13 @@ effective price [€/kWh] = Σ_t (p_t + adder_t) / N_hours / 1000  (prices in �
 
 from __future__ import annotations
 
+import functools
+import json
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 
@@ -100,6 +105,103 @@ class NetworkTariff:
     def adder(self, hours: Iterable[int]) -> pd.Series:
         return pd.Series([self.adder_EUR_per_MWh_by_hour.get(h, 0.0) for h in hours], dtype=float)
 
+    def adders_EUR_per_MWh(self, index: pd.DatetimeIndex, timezone: str) -> np.ndarray:
+        return self.adder(index.tz_convert(timezone).hour).to_numpy()
+
+    def capacity_EUR(self, load_kW: pd.Series) -> float:
+        return self.demand_charge_EUR_per_kW_year * float(load_kW.max()) * len(load_kW) / 8760.0
+
+
+#: Published network tariffs (pinch.tariffs.PeriodTariff), one JSON file each, sources inside
+TARIFF_DIR = Path(__file__).resolve().parents[1] / "data" / "sources" / "network_tariffs"
+
+
+@dataclass(frozen=True)
+class PeriodTariff:
+    """A published network tariff with time-of-use periods and capacity charges (``TARIFF_DIR/<key>.json``).
+
+    ``calendar``: rules {"days": weekday|saturday|sunday|all, optional "months", optional "dst" (legal summer
+    time)}, each with [start, end, period] clock-time intervals (quarter-hour boundaries allowed); holidays count
+    as Sundays. ``capacity`` items, per kW of load and year (or day):
+    * "max": the year's peak load (contracted power, Jahreshöchstleistung);
+    * "period_mean": the mean load over the hours of one period (ERSE: power in peak hours);
+    * "period_max_nondecreasing": the peak load within each period, made non-decreasing from P1 to P6
+      (CNMC: contracted power P(n+1) >= P(n)).
+    ``variants`` (instead of top-level prices): price sets chosen by the annual utilisation hours
+    (energy / peak load), as German network charges below and above 2,500 h/a.
+    """
+
+    key: str
+    data: dict
+
+    @classmethod
+    def load(cls, key: str) -> PeriodTariff:
+        path = TARIFF_DIR / f"{key}.json"
+        if not path.exists():
+            raise ValueError(f"no network tariff '{key}' in {TARIFF_DIR.name}: "
+                             + ", ".join(p.stem for p in sorted(TARIFF_DIR.glob('*.json'))))
+        return cls(key, json.loads(path.read_text(encoding="utf-8")))
+
+    @property
+    def timezone(self) -> str:
+        return self.data["timezone"]
+
+    def period_fractions(self, index: pd.DatetimeIndex) -> pd.DataFrame:
+        """Share of each hour of ``index`` (UTC, hourly) in each period, from the quarter hours."""
+        quarters = pd.DatetimeIndex([t + pd.Timedelta(minutes=15 * q) for t in index for q in range(4)])
+        local = quarters.tz_convert(self.timezone)
+        holidays = {d for ds in self.data.get("holidays", {}).values() for d in ds}
+        day = np.where(local.strftime("%Y-%m-%d").isin(holidays) | (local.weekday == 6), "sunday",
+                       np.where(local.weekday == 5, "saturday", "weekday"))
+        dst = np.array([bool(t.dst()) for t in local])
+        minute = local.hour * 60 + local.minute
+        period = np.full(len(local), "", dtype=object)
+        for rule in self.data["calendar"]:
+            sel = (day == rule["days"]) | (rule["days"] == "all")
+            if "months" in rule:
+                sel &= np.isin(local.month, rule["months"])
+            if "dst" in rule:
+                sel &= dst == rule["dst"]
+            for start, end, name in rule["periods"]:
+                a, b = (int(x[:2]) * 60 + int(x[3:]) for x in (start, end))
+                period[sel & (minute >= a) & (minute < b) & (period == "")] = name
+        if (period == "").any():
+            raise ValueError(f"{self.key}: calendar leaves {int((period == '').sum())} quarter hours without a period")
+        q = pd.get_dummies(pd.Series(period)).astype(float)
+        return q.groupby(np.repeat(np.arange(len(index)), 4)).mean().set_axis(index)
+
+    def _prices(self, load_kW: pd.Series) -> dict:
+        if "variants" not in self.data:
+            return self.data
+        hours = float(load_kW.sum()) / float(load_kW.max()) * 8760.0 / len(load_kW)
+        return next(v for v in self.data["variants"] if v["utilization_h"][0] <= hours < v["utilization_h"][1])
+
+    def adders_EUR_per_MWh(self, index: pd.DatetimeIndex, load_kW: pd.Series) -> np.ndarray:
+        f = self.period_fractions(index)
+        prices = self._prices(load_kW)["energy_EUR_per_kWh"]
+        return (f * pd.Series({p: prices[p] for p in f.columns})).sum(axis=1).to_numpy() * 1000.0
+
+    def capacity_EUR(self, load_kW: pd.Series) -> float:
+        """Capacity charges of the load profile over the length of the series [EUR]."""
+        years = len(load_kW) / 8760.0
+        f = self.period_fractions(load_kW.index)
+        total, running_max = 0.0, 0.0
+        for c in self._prices(load_kW)["capacity"]:
+            rate = c["EUR_per_kW_year"] if "EUR_per_kW_year" in c else c["EUR_per_kW_day"] * 365.0
+            if c["basis"] == "max":
+                kw = float(load_kW.max())
+            elif c["basis"] == "period_mean":
+                w = f[c["period"]] if c["period"] in f else pd.Series(0.0, index=f.index)
+                kw = float((load_kW * w).sum() / w.sum()) if w.sum() else 0.0
+            elif c["basis"] == "period_max_nondecreasing":
+                in_p = f[c["period"]] > 0 if c["period"] in f else pd.Series(False, index=f.index)
+                running_max = max(running_max, float(load_kW[in_p].max()) if in_p.any() else 0.0)
+                kw = running_max
+            else:
+                raise ValueError(f"{self.key}: unknown capacity basis {c['basis']!r}")
+            total += rate * kw * years
+        return total
+
 
 @dataclass(frozen=True)
 class EffectivePrice:
@@ -114,11 +216,11 @@ class EffectivePrice:
 
 
 def effective_price(prices: pd.Series, pattern: OperatingPattern,
-                    tariff: NetworkTariff | None = None) -> EffectivePrice:
+                    tariff: NetworkTariff | PeriodTariff | None = None) -> EffectivePrice:
     """Price a constant-load heat pump pays over its operating hours (prices in €/MWh, hourly).
 
-    The demand charge is spread over the operating hours at constant load (peak = running load), and
-    annualised to 8760 h from the length of the series, so a partial year gives the same per-kWh share.
+    Capacity (demand) charges are those of the heat pump's own load profile (1 kW when running), spread over
+    its energy, so a partial year gives the same per-kWh share.
     """
     if (pd.Series(prices.index).diff().dropna() != pd.Timedelta(hours=1)).any():
         raise ValueError("prices must be hourly and gap-free (use to_hourly first)")
@@ -128,13 +230,13 @@ def effective_price(prices: pd.Series, pattern: OperatingPattern,
     mask = operating_mask(prices, pattern)
     if not mask.any():
         raise ValueError("the operating pattern selects no hours")
-    local_hours = prices.index.tz_convert(pattern.timezone).hour
-    adders = tariff.adder(local_hours).to_numpy()
+    load = mask.astype(float).set_axis(prices.index)
+    adders = (tariff.adders_EUR_per_MWh(prices.index, pattern.timezone) if isinstance(tariff, NetworkTariff)
+              else tariff.adders_EUR_per_MWh(prices.index, load))
     on = mask.to_numpy()
     energy = float((prices.to_numpy()[on] + adders[on]).mean()) / 1000.0
-    years = len(prices) / 8760.0
-    hours_per_year = float(on.sum()) / years
-    demand = tariff.demand_charge_EUR_per_kW_year / hours_per_year
+    hours_per_year = float(on.sum()) / (len(prices) / 8760.0)
+    demand = tariff.capacity_EUR(load) / float(on.sum())
     return EffectivePrice(energy, demand, hours_per_year, float(prices.mean()) / 1000.0)
 
 
@@ -155,3 +257,61 @@ def with_network_change(price_EUR_per_kWh: float, network_share: float, change: 
     if not 0 <= network_share <= 1:
         raise ValueError("network_share must be between 0 and 1")
     return price_EUR_per_kWh * (1 + network_share * change)
+
+
+# ----------------------------------------------------------------------------- delivered price for the economics
+
+ROOT = Path(__file__).resolve().parents[1]
+EUROSTAT_PRICES = ROOT / "data" / "sources" / "eurostat_prices.csv"
+EUROSTAT_COMPONENTS = ROOT / "data" / "sources" / "eurostat_electricity_components.csv"
+X_VAT = "Excluding VAT and other recoverable taxes and levies"
+
+
+def eurostat_shares(geo: str, band: str, year: str | None = None) -> dict:
+    """Shares of the price excluding VAT in one band: energy and supply, network, other (taxes and levies that
+    are not recoverable), from nrg_pc_205_c (components, on the all-taxes basis) and nrg_pc_205 (prices, the
+    year's mean of both half-years). ``band`` e.g. "band ID"; ``year`` defaults to the latest with components."""
+    c = pd.read_csv(EUROSTAT_COMPONENTS, comment="#")
+    c = c[(c["geo"] == geo) & c["band"].str.endswith(band)]
+    year = year or str(c["year"].max())
+    comp = c[c["year"].astype(str) == year].set_index("component")["value_EUR_per_kWh"]
+    p = pd.read_csv(EUROSTAT_PRICES, comment="#")
+    p = p[(p["geo"] == geo) & (p["carrier"] == "electricity") & p["band"].str.endswith(band) & (p["taxes"] == X_VAT)
+          & p["period"].str.startswith(year)]
+    if comp.empty or len(p) != 2:
+        raise ValueError(f"Eurostat: no components and two half-year prices for {geo} {band} {year}")
+    total = float(p["value"].mean())
+    sup, net = float(comp["NRG_SUP"]), float(comp["NETC"])
+    return {"year": year, "price_excl_VAT": total, "energy_supply": sup / total, "network": net / total,
+            "other": (total - sup - net) / total}
+
+
+@functools.lru_cache(maxsize=32)
+def _tariff_terms(spec: str) -> dict:
+    b = json.loads(spec)
+    prices = load_hourly_prices(ROOT / b["prices"])
+    tariff = PeriodTariff.load(b["network_tariff"])
+    pat = b.get("pattern", {})
+    pattern = OperatingPattern(kind=pat.get("kind", "fixed"), hours=frozenset(pat.get("hours", range(24))),
+                               weekdays=frozenset(pat.get("weekdays", range(7))),
+                               hours_per_day=int(pat.get("hours_per_day", 24)), timezone=tariff.timezone)
+    with_tariff = effective_price(prices, pattern, tariff)
+    market = effective_price(prices, pattern)
+    shares = eurostat_shares(tariff.data["country"], b["band"])
+    return {"shape": market.energy_EUR_per_kWh / market.flat_average_EUR_per_kWh,
+            "network_EUR_per_kWh": with_tariff.total_EUR_per_kWh - market.energy_EUR_per_kWh,
+            "hours_per_year": with_tariff.hours_per_year, **{f"share_{k}": v for k, v in shares.items()}}
+
+
+def delivered_price(flat_EUR_per_kWh: float, spec: dict) -> tuple[float, dict]:
+    """Electricity price a heat pump with the given operating pattern pays, from the case's flat band price.
+
+    p = p_flat (s_supply x shape + s_other) + network, where s_* are Eurostat's shares of the band price
+    (``eurostat_shares``), shape = market price weighted over the operating hours / the year's mean, and network =
+    the published tariff's energy and capacity charges for the heat pump's own load (``PeriodTariff``), replacing
+    Eurostat's average network share. ``spec``: {"prices": hourly CSV (repository-relative), "network_tariff":
+    key in TARIFF_DIR, "band": e.g. "band ID", "pattern": {"kind", "hours", "weekdays", "hours_per_day"}}.
+    """
+    t = _tariff_terms(json.dumps(spec, sort_keys=True))
+    price = flat_EUR_per_kWh * (t["share_energy_supply"] * t["shape"] + t["share_other"]) + t["network_EUR_per_kWh"]
+    return price, {"flat_EUR_per_kWh": flat_EUR_per_kWh, "delivered_EUR_per_kWh": price, **t}

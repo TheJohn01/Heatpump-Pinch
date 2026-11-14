@@ -16,8 +16,9 @@ to hourly.
 
 ERSE access tariffs (``--erse 2027 --voltage MT --network-share S``): applies the published change of the
 network access tariffs (data/sources/erse_access_tariff_changes.csv) to the network-cost share S of the case's
-flat electricity price and compares the new ratio with the break-even ratios. S is the user's input from
-Eurostat nrg_pc_205_c (component NETC over the total, for the case's band); the repository does not hold it.
+flat electricity price and compares the new ratio with the break-even ratios. S defaults to Eurostat's share
+for Portugal, band ID, latest year (component NETC over the price excluding VAT; pinch.tariffs.eurostat_shares,
+data/sources/eurostat_electricity_components.csv).
 """
 
 from __future__ import annotations
@@ -95,9 +96,10 @@ def main() -> None:
     p.add_argument("case_file", type=Path)
     p.add_argument("prices_file", type=Path, nargs="?", help="hourly prices (not needed with --erse)")
     p.add_argument("--erse", type=int, help="apply the ERSE access-tariff change of this year to the case's flat "
-                                            "price instead (needs --network-share)")
+                                            "price instead")
     p.add_argument("--voltage", default="MT", help="voltage code for --erse: MAT, AT, MT, BTE, BTN")
-    p.add_argument("--network-share", type=float, help="network-cost share of the delivered price (Eurostat "
+    p.add_argument("--network-share", type=float, help="default: Eurostat nrg_pc_205_c, band ID, latest year (pinch."
+                   "tariffs.eurostat_shares); network-cost share of the delivered price (Eurostat "
                                                        "nrg_pc_205_c, NETC / total, for the case's band)")
     p.add_argument("--hours", default="0-23", help="local clock hours, e.g. 6-22 or 0-5,22-23")
     p.add_argument("--weekdays", default="0-6", help="0 = Monday")
@@ -107,7 +109,8 @@ def main() -> None:
     a = p.parse_args()
     if a.erse:
         if a.network_share is None:
-            p.error("--erse needs --network-share (Eurostat nrg_pc_205_c, not in the repository)")
+            from pinch.tariffs import eurostat_shares
+            a.network_share = eurostat_shares("PT", "band ID")["network"]
         print(access_tariff_scenario(a.case_file, a.network_share, a.erse, a.voltage).to_string(index=False))
         return
     if a.prices_file is None:

@@ -47,15 +47,15 @@ GRANTS = (("no grant", 0.0),
           ("grant 30 % (energy efficiency, large firm)", inv.prr_aid_intensity("energy_efficiency", "large", "none")),
           ("grant 45 % (same, 'a' region)", inv.prr_aid_intensity("energy_efficiency", "large", "a")))
 N_SAMPLES, SEED = 5000, 0
-PRICE_FILE = ROOT / "data" / "sources" / "eurostat_portugal_prices.csv"
+PRICE_FILE = ROOT / "data" / "sources" / "eurostat_prices.csv"
 EL_BAND, GAS_BAND = "band ID", "band I3"
 TAXES = "Excluding VAT and other recoverable taxes and levies"
 
 
-def eurostat_ratio_range(path: Path = PRICE_FILE) -> tuple[float, float]:
-    """Lowest and highest half-yearly electricity-to-gas price ratio in the Eurostat series (EUR/kWh)."""
-    d = pd.read_csv(path)
-    d = d[(d["taxes"] == TAXES) & (d["currency"] == "Euro") & (d["unit"] == "Kilowatt-hour")]
+def eurostat_ratio_range(path: Path = PRICE_FILE, geo: str = "PT") -> tuple[float, float]:
+    """Lowest and highest half-yearly electricity-to-gas price ratio in the Eurostat series of one country (EUR/kWh)."""
+    d = pd.read_csv(path, comment="#")
+    d = d[(d["geo"] == geo) & (d["taxes"] == TAXES) & (d["currency"] == "Euro") & (d["unit"] == "Kilowatt-hour")]
     el = d[(d["carrier"] == "electricity") & d["band"].str.endswith(EL_BAND)].set_index("period")["value"]
     gas = d[(d["carrier"] == "gas") & d["band"].str.endswith(GAS_BAND)].set_index("period")["value"]
     ratio = (el / gas).dropna()

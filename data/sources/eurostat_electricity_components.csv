@@ -1,0 +1,1220 @@
+# Eurostat, nrg_pc_205_c, electricity price components, non-household consumers, annual, EUR/kWh. Fetched 2026-11-14 with scripts/data/fetch_eurostat_prices.py (dissemination API, SDMX 3.0 CSV). Source: Eurostat; reuse authorised with acknowledgement (Commission Decision 2011/833/EU).
+geo,band,component,component_label,year,value_EUR_per_kWh
+DE,Consumption 150 000 MWh or over - band IG,ALLOW_OTH,Other allowance,2024,0.0
+DE,Consumption 150 000 MWh or over - band IG,ALLOW_OTH,Other allowance,2025,0.0
+DE,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2021,0.0099
+DE,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2022,0.0129
+DE,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2023,0.018
+DE,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2024,0.0297
+DE,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2025,0.03
+DE,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2021,0.0633
+DE,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2022,0.1576
+DE,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2023,0.1229
+DE,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2024,0.0935
+DE,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2025,0.0899
+DE,Consumption 150 000 MWh or over - band IG,OTH,Other,2021,0.0004
+DE,Consumption 150 000 MWh or over - band IG,OTH,Other,2022,0.0007
+DE,Consumption 150 000 MWh or over - band IG,OTH,Other,2023,0.0007
+DE,Consumption 150 000 MWh or over - band IG,OTH,Other,2024,0.0008
+DE,Consumption 150 000 MWh or over - band IG,OTH,Other,2025,0.0013
+DE,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2021,0.0025
+DE,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2022,0.0037
+DE,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2023,0.0067
+DE,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2024,0.0017
+DE,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2025,0.0038
+DE,Consumption 150 000 MWh or over - band IG,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2021,0.0205
+DE,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2022,0.0205
+DE,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2023,0.0205
+DE,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2024,0.0205
+DE,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2025,0.0205
+DE,Consumption 150 000 MWh or over - band IG,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0753
+DE,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0745
+DE,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0642
+DE,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0511
+DE,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0535
+DE,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2021,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2024,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2025,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2021,0.0282
+DE,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2022,0.0105
+DE,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2023,0.0036
+DE,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2024,0.0003
+DE,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2025,0.0003
+DE,Consumption 150 000 MWh or over - band IG,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+DE,Consumption 150 000 MWh or over - band IG,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+DE,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2021,0.0237
+DE,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2022,0.0391
+DE,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2023,0.0327
+DE,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2024,0.0278
+DE,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2025,0.0277
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,ALLOW_OTH,Other allowance,2024,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,ALLOW_OTH,Other allowance,2025,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2021,0.031
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2022,0.0319
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2023,0.0411
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2024,0.0543
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2025,0.0554
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2021,0.0502
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2022,0.1262
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2023,0.1387
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2024,0.1235
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2025,0.1052
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2021,0.0014
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2022,0.0015
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2023,0.0016
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2024,0.0018
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2025,0.0014
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2021,0.0056
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2022,0.0058
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2023,0.0081
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2024,0.009
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2025,0.0146
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2021,0.0205
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2022,0.0205
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2023,0.0205
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2024,0.0205
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2025,0.0205
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.1178
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0845
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0743
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0739
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0768
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2021,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2024,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2025,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2021,0.0585
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2022,0.018
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2023,0.0036
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2024,0.0024
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2025,0.0023
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2021,0.0318
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2022,0.0387
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2023,0.0405
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2024,0.0402
+DE,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2025,0.0379
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,ALLOW_OTH,Other allowance,2024,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,ALLOW_OTH,Other allowance,2025,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2021,0.0212
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2022,0.0238
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2023,0.0267
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2024,0.0397
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2025,0.0375
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2021,0.0502
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2022,0.1318
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2023,0.1369
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2024,0.1098
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2025,0.0979
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2021,0.0011
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2022,0.0016
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2023,0.0015
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2024,0.0014
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2025,0.0014
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2021,0.0047
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2022,0.0057
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2023,0.0074
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2024,0.0066
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2025,0.0097
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2021,0.0205
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2022,0.0205
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2023,0.0205
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2024,0.0205
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2025,0.0205
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0995
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0795
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0703
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0645
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0654
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2021,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2024,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2025,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2021,0.0459
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2022,0.0142
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2023,0.0036
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2024,0.0018
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2025,0.0017
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2021,0.0273
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2022,0.0375
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2023,0.0373
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2024,0.0342
+DE,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2025,0.0321
+DE,Consumption from 20 MWh to 499 MWh - band IB,ALLOW_OTH,Other allowance,2024,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,ALLOW_OTH,Other allowance,2025,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2021,0.0542
+DE,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2022,0.0577
+DE,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2023,0.0679
+DE,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2024,0.0867
+DE,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2025,0.0864
+DE,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2021,0.0517
+DE,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2022,0.1146
+DE,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2023,0.1446
+DE,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2024,0.144
+DE,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2025,0.1245
+DE,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2021,0.0053
+DE,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2022,0.0052
+DE,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2023,0.0053
+DE,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2024,0.0055
+DE,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2025,0.0055
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2021,0.0083
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2022,0.0085
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2023,0.01
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2024,0.0127
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2025,0.0233
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2021,0.0205
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2022,0.0205
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2023,0.0205
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2024,0.0205
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2025,0.0205
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.141
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.1008
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0873
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0931
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.1021
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2021,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2024,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2025,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2021,0.0675
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2022,0.023
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2023,0.0036
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2024,0.0027
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2025,0.0028
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+DE,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2021,0.0394
+DE,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2022,0.0436
+DE,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2023,0.0479
+DE,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2024,0.0517
+DE,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2025,0.05
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,ALLOW_OTH,Other allowance,2024,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,ALLOW_OTH,Other allowance,2025,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2021,0.0439
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2022,0.0454
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2023,0.0548
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2024,0.0704
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2025,0.0713
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2021,0.0498
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2022,0.1187
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2023,0.1349
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2024,0.129
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2025,0.1116
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2021,0.0017
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2022,0.0016
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2023,0.0017
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2024,0.0018
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2025,0.0017
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2021,0.0079
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2022,0.008
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2023,0.0098
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2024,0.0123
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2025,0.0219
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2021,0.0205
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2022,0.0205
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2023,0.0205
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2024,0.0205
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2025,0.0205
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.1331
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0932
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0784
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0823
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0905
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2021,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2024,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2025,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2021,0.0668
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2022,0.022
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2023,0.0036
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2024,0.0027
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2025,0.0028
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2021,0.0362
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2022,0.0411
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2023,0.0428
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2024,0.045
+DE,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2025,0.0436
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,ALLOW_OTH,Other allowance,2024,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,ALLOW_OTH,Other allowance,2025,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2021,0.0131
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2022,0.0137
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2023,0.0208
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2024,0.0288
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2025,0.0294
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2021,0.049
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2022,0.1306
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2023,0.1312
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2024,0.1006
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2025,0.099
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2021,0.0006
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2022,0.0009
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2023,0.001
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2024,0.0013
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2025,0.001
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2021,0.0041
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2022,0.0046
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2023,0.0071
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2024,0.0036
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2025,0.0065
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2021,0.0205
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2022,0.0205
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2023,0.0205
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2024,0.0205
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2025,0.0205
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.1032
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0807
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0672
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0559
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0589
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2021,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2024,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2025,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2021,0.0516
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2022,0.0188
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2023,0.0036
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2024,0.0009
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2025,0.001
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2021,0.0264
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2022,0.0359
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2023,0.035
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2024,0.0296
+DE,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2025,0.0299
+DE,Consumption less than 20 MWh - band IA,ALLOW_OTH,Other allowance,2024,0.0
+DE,Consumption less than 20 MWh - band IA,ALLOW_OTH,Other allowance,2025,0.0
+DE,Consumption less than 20 MWh - band IA,NETC,Network costs,2021,0.0715
+DE,Consumption less than 20 MWh - band IA,NETC,Network costs,2022,0.0775
+DE,Consumption less than 20 MWh - band IA,NETC,Network costs,2023,0.0911
+DE,Consumption less than 20 MWh - band IA,NETC,Network costs,2024,0.1104
+DE,Consumption less than 20 MWh - band IA,NETC,Network costs,2025,0.1095
+DE,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2021,0.0707
+DE,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2022,0.1226
+DE,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2023,0.1871
+DE,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2024,0.1703
+DE,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2025,0.1559
+DE,Consumption less than 20 MWh - band IA,OTH,Other,2021,0.0132
+DE,Consumption less than 20 MWh - band IA,OTH,Other,2022,0.0136
+DE,Consumption less than 20 MWh - band IA,OTH,Other,2023,0.0139
+DE,Consumption less than 20 MWh - band IA,OTH,Other,2024,0.0143
+DE,Consumption less than 20 MWh - band IA,OTH,Other,2025,0.0148
+DE,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2021,0.0083
+DE,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2022,0.0085
+DE,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2023,0.01
+DE,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2024,0.0127
+DE,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2025,0.0236
+DE,Consumption less than 20 MWh - band IA,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2021,0.0205
+DE,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2022,0.0205
+DE,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2023,0.0205
+DE,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2024,0.0205
+DE,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2025,0.0205
+DE,Consumption less than 20 MWh - band IA,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.1573
+DE,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.1174
+DE,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.1101
+DE,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.1132
+DE,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.1238
+DE,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2021,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2024,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2025,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2021,0.0675
+DE,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2022,0.0241
+DE,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2023,0.0036
+DE,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2024,0.0028
+DE,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2025,0.0028
+DE,Consumption less than 20 MWh - band IA,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+DE,Consumption less than 20 MWh - band IA,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+DE,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2021,0.0478
+DE,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2022,0.0507
+DE,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2023,0.0621
+DE,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2024,0.0629
+DE,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2025,0.0621
+ES,Consumption 150 000 MWh or over - band IG,ALLOW_OTH,Other allowance,2023,0.0
+ES,Consumption 150 000 MWh or over - band IG,ALLOW_OTH,Other allowance,2024,0.0
+ES,Consumption 150 000 MWh or over - band IG,ALLOW_OTH,Other allowance,2025,0.0
+ES,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2021,0.0036
+ES,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2022,0.0062
+ES,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2023,0.0045
+ES,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2024,0.0051
+ES,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2025,0.0046
+ES,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2021,0.0839
+ES,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2022,0.2018
+ES,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2023,0.1044
+ES,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2024,0.0813
+ES,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2025,0.0832
+ES,Consumption 150 000 MWh or over - band IG,OTH,Other,2021,0.0091
+ES,Consumption 150 000 MWh or over - band IG,OTH,Other,2022,0.0011
+ES,Consumption 150 000 MWh or over - band IG,OTH,Other,2023,0.0007
+ES,Consumption 150 000 MWh or over - band IG,OTH,Other,2024,0.0013
+ES,Consumption 150 000 MWh or over - band IG,OTH,Other,2025,0.0013
+ES,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2021,0.0004
+ES,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2022,0.0004
+ES,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2023,0.0003
+ES,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2024,0.0002
+ES,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2025,0.0002
+ES,Consumption 150 000 MWh or over - band IG,TAX_CAP_ALLOW,Capacity taxes allowances,2023,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2021,0.0008
+ES,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2022,0.0014
+ES,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2023,0.0002
+ES,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2024,0.0008
+ES,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2025,0.0011
+ES,Consumption 150 000 MWh or over - band IG,TAX_ENV_ALLOW,Environmental taxes allowance,2023,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0303
+ES,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0471
+ES,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0243
+ES,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0211
+ES,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0218
+ES,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2021,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2022,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2023,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2024,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2025,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_NUC_ALLOW,Nuclear taxes allowance,2023,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2021,0.0009
+ES,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2022,0.0006
+ES,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2023,0.0005
+ES,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2024,0.0003
+ES,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2025,0.0002
+ES,Consumption 150 000 MWh or over - band IG,TAX_RNW_ALLOW,Renewable taxes allowance,2023,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+ES,Consumption 150 000 MWh or over - band IG,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+ES,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2021,0.0191
+ES,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2022,0.0437
+ES,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2023,0.0227
+ES,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2024,0.0185
+ES,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2025,0.019
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,ALLOW_OTH,Other allowance,2023,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,ALLOW_OTH,Other allowance,2024,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,ALLOW_OTH,Other allowance,2025,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2021,0.0154
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2022,0.0217
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2023,0.0222
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2024,0.0187
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2025,0.0184
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2021,0.0678
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2022,0.1645
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2023,0.1124
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2024,0.0935
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2025,0.0909
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2021,0.0246
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2022,0.0059
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2023,0.0027
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2024,0.0061
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2025,0.0073
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2021,0.0005
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2022,0.0004
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2023,0.0003
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2024,0.0002
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2025,0.0002
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP_ALLOW,Capacity taxes allowances,2023,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2021,0.0032
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2022,0.0036
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2023,0.0006
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2024,0.0042
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2025,0.005
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV_ALLOW,Environmental taxes allowance,2023,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0527
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0533
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0337
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0364
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0381
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2021,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2022,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2023,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2024,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2025,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC_ALLOW,Nuclear taxes allowance,2023,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2021,0.0052
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2022,0.004
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2023,0.0021
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2024,0.0012
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2025,0.001
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW_ALLOW,Renewable taxes allowance,2023,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2021,0.0193
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2022,0.0395
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2023,0.028
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2024,0.0247
+ES,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2025,0.0246
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,ALLOW_OTH,Other allowance,2023,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,ALLOW_OTH,Other allowance,2024,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,ALLOW_OTH,Other allowance,2025,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2021,0.0091
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2022,0.012
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2023,0.0115
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2024,0.01
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2025,0.01
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2021,0.0772
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2022,0.1793
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2023,0.1086
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2024,0.0901
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2025,0.0896
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2021,0.0199
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2022,0.0035
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2023,0.0021
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2024,0.0048
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2025,0.005
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2021,0.0004
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2022,0.0004
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2023,0.0003
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2024,0.0002
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2025,0.0002
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP_ALLOW,Capacity taxes allowances,2023,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2021,0.0025
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2022,0.0034
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2023,0.0005
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2024,0.0029
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2025,0.0035
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV_ALLOW,Environmental taxes allowance,2023,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0451
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0503
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.03
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0311
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0316
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2021,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2022,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2023,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2024,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2025,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC_ALLOW,Nuclear taxes allowance,2023,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2021,0.0032
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2022,0.0023
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2023,0.0016
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2024,0.001
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2025,0.0007
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW_ALLOW,Renewable taxes allowance,2023,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2021,0.0191
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2022,0.0407
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2023,0.0256
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2024,0.0222
+ES,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2025,0.0222
+ES,Consumption from 20 MWh to 499 MWh - band IB,ALLOW_OTH,Other allowance,2023,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,ALLOW_OTH,Other allowance,2024,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,ALLOW_OTH,Other allowance,2025,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2021,0.0396
+ES,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2022,0.0524
+ES,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2023,0.0621
+ES,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2024,0.0514
+ES,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2025,0.0468
+ES,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2021,0.0714
+ES,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2022,0.14
+ES,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2023,0.1306
+ES,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2024,0.102
+ES,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2025,0.0949
+ES,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2021,0.022
+ES,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2022,0.011
+ES,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2023,0.0052
+ES,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2024,0.0121
+ES,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2025,0.0149
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2021,0.0011
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2022,0.0009
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2023,0.0007
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2024,0.0006
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2025,0.0005
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP_ALLOW,Capacity taxes allowances,2023,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2021,0.0054
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2022,0.005
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2023,0.0011
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2024,0.0067
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2025,0.0078
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV_ALLOW,Environmental taxes allowance,2023,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0671
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0664
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0499
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0554
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0587
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2021,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2022,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2023,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2024,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2025,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC_ALLOW,Nuclear taxes allowance,2023,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2021,0.0115
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2022,0.0075
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2023,0.004
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2024,0.0024
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2025,0.0021
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW_ALLOW,Renewable taxes allowance,2023,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+ES,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2021,0.0271
+ES,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2022,0.0419
+ES,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2023,0.0389
+ES,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2024,0.0336
+ES,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2025,0.0334
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,ALLOW_OTH,Other allowance,2023,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,ALLOW_OTH,Other allowance,2024,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,ALLOW_OTH,Other allowance,2025,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2021,0.0233
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2022,0.0294
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2023,0.0362
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2024,0.03
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2025,0.0288
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2021,0.0665
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2022,0.1373
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2023,0.1126
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2024,0.0946
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2025,0.09
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2021,0.0214
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2022,0.0087
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2023,0.0034
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2024,0.0079
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2025,0.0097
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2021,0.0005
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2022,0.0004
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2023,0.0003
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2024,0.0002
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2025,0.0002
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP_ALLOW,Capacity taxes allowances,2023,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2021,0.004
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2022,0.0039
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2023,0.0007
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2024,0.0052
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2025,0.0061
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV_ALLOW,Environmental taxes allowance,2023,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0557
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.055
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0376
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0422
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0445
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2021,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2022,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2023,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2024,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2025,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC_ALLOW,Nuclear taxes allowance,2023,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2021,0.0081
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2022,0.0059
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2023,0.0026
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2024,0.0016
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2025,0.0014
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW_ALLOW,Renewable taxes allowance,2023,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2021,0.0217
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2022,0.0362
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2023,0.0306
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2024,0.0273
+ES,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2025,0.0271
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,ALLOW_OTH,Other allowance,2023,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,ALLOW_OTH,Other allowance,2024,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,ALLOW_OTH,Other allowance,2025,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2021,0.0056
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2022,0.0076
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2023,0.0051
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2024,0.0056
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2025,0.0062
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2021,0.0864
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2022,0.1848
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2023,0.1009
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2024,0.0842
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2025,0.0888
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2021,0.011
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2022,0.002
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2023,0.0012
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2024,0.0039
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2025,0.0025
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2021,0.0004
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2022,0.0004
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2023,0.0003
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2024,0.0002
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2025,0.0002
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP_ALLOW,Capacity taxes allowances,2023,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2021,0.0018
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2022,0.0023
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2023,0.0003
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2024,0.0015
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2025,0.0021
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV_ALLOW,Environmental taxes allowance,2023,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0355
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0464
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0252
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0256
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0258
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2021,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2022,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2023,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2024,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2025,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC_ALLOW,Nuclear taxes allowance,2023,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2021,0.0017
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2022,0.0012
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2023,0.001
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2024,0.0008
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2025,0.0004
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW_ALLOW,Renewable taxes allowance,2023,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2021,0.0205
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2022,0.0406
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2023,0.0224
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2024,0.0192
+ES,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2025,0.0206
+ES,Consumption less than 20 MWh - band IA,ALLOW_OTH,Other allowance,2023,0.0
+ES,Consumption less than 20 MWh - band IA,ALLOW_OTH,Other allowance,2024,0.0
+ES,Consumption less than 20 MWh - band IA,ALLOW_OTH,Other allowance,2025,0.0
+ES,Consumption less than 20 MWh - band IA,NETC,Network costs,2021,0.069
+ES,Consumption less than 20 MWh - band IA,NETC,Network costs,2022,0.0861
+ES,Consumption less than 20 MWh - band IA,NETC,Network costs,2023,0.0918
+ES,Consumption less than 20 MWh - band IA,NETC,Network costs,2024,0.0818
+ES,Consumption less than 20 MWh - band IA,NETC,Network costs,2025,0.083
+ES,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2021,0.0901
+ES,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2022,0.1526
+ES,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2023,0.1501
+ES,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2024,0.1229
+ES,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2025,0.1177
+ES,Consumption less than 20 MWh - band IA,OTH,Other,2021,0.0401
+ES,Consumption less than 20 MWh - band IA,OTH,Other,2022,0.0255
+ES,Consumption less than 20 MWh - band IA,OTH,Other,2023,0.0113
+ES,Consumption less than 20 MWh - band IA,OTH,Other,2024,0.02
+ES,Consumption less than 20 MWh - band IA,OTH,Other,2025,0.0281
+ES,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2021,0.0011
+ES,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2022,0.0009
+ES,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2023,0.0007
+ES,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2024,0.0006
+ES,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2025,0.0005
+ES,Consumption less than 20 MWh - band IA,TAX_CAP_ALLOW,Capacity taxes allowances,2023,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2021,0.0075
+ES,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2022,0.0035
+ES,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2023,0.0016
+ES,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2024,0.0091
+ES,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2025,0.0114
+ES,Consumption less than 20 MWh - band IA,TAX_ENV_ALLOW,Environmental taxes allowance,2023,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.1084
+ES,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.085
+ES,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,0.0595
+ES,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0715
+ES,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0923
+ES,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2021,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2022,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2023,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2024,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2025,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_NUC_ALLOW,Nuclear taxes allowance,2023,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2021,0.023
+ES,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2022,0.0177
+ES,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2023,0.0088
+ES,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2024,0.004
+ES,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2025,0.004
+ES,Consumption less than 20 MWh - band IA,TAX_RNW_ALLOW,Renewable taxes allowance,2023,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+ES,Consumption less than 20 MWh - band IA,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+ES,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2021,0.0367
+ES,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2022,0.0374
+ES,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2023,0.0371
+ES,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2024,0.0378
+ES,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2025,0.0483
+PT,Consumption 150 000 MWh or over - band IG,ALLOW_OTH,Other allowance,2024,0.0
+PT,Consumption 150 000 MWh or over - band IG,ALLOW_OTH,Other allowance,2025,0.0
+PT,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2021,0.0129
+PT,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2022,0.0132
+PT,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2023,0.0113
+PT,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2024,0.008
+PT,Consumption 150 000 MWh or over - band IG,NETC,Network costs,2025,0.0095
+PT,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2021,0.0844
+PT,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2022,0.1793
+PT,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2023,0.0842
+PT,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2024,0.0671
+PT,Consumption 150 000 MWh or over - band IG,NRG_SUP,Energy and supply,2025,0.0789
+PT,Consumption 150 000 MWh or over - band IG,OTH,Other,2021,0.0086
+PT,Consumption 150 000 MWh or over - band IG,OTH,Other,2022,0.0057
+PT,Consumption 150 000 MWh or over - band IG,OTH,Other,2023,0.0048
+PT,Consumption 150 000 MWh or over - band IG,OTH,Other,2024,0.0007
+PT,Consumption 150 000 MWh or over - band IG,OTH,Other,2025,0.0006
+PT,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2021,0.0064
+PT,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2022,-0.0014
+PT,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2023,-0.0133
+PT,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2024,0.0007
+PT,Consumption 150 000 MWh or over - band IG,TAX_CAP,Capacity taxes,2025,0.0003
+PT,Consumption 150 000 MWh or over - band IG,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2021,0.0002
+PT,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2022,0.0002
+PT,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2023,0.0002
+PT,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2024,0.0002
+PT,Consumption 150 000 MWh or over - band IG,TAX_ENV,Environmental taxes,2025,0.0004
+PT,Consumption 150 000 MWh or over - band IG,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0384
+PT,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0095
+PT,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,-0.0242
+PT,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.017
+PT,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0213
+PT,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2021,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2022,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2023,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2024,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_NUC,Nuclear taxes,2025,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2021,0.0054
+PT,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2022,-0.0208
+PT,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2023,-0.0274
+PT,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2024,0.0031
+PT,Consumption 150 000 MWh or over - band IG,TAX_RNW,Renewable taxes,2025,0.0045
+PT,Consumption 150 000 MWh or over - band IG,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+PT,Consumption 150 000 MWh or over - band IG,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+PT,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2021,0.0178
+PT,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2022,0.0259
+PT,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2023,0.0114
+PT,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2024,0.0123
+PT,Consumption 150 000 MWh or over - band IG,VAT,Value added tax (VAT),2025,0.0154
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,ALLOW_OTH,Other allowance,2024,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,ALLOW_OTH,Other allowance,2025,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2021,0.0214
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2022,0.0297
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2023,0.0247
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2024,0.0203
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NETC,Network costs,2025,0.0221
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2021,0.0601
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2022,0.1309
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2023,0.1086
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2024,0.0829
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,NRG_SUP,Energy and supply,2025,0.0845
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2021,0.0111
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2022,0.0059
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2023,0.0033
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2024,0.0017
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,OTH,Other,2025,0.0018
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2021,0.0098
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2022,-0.0009
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2023,-0.0139
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2024,0.0016
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP,Capacity taxes,2025,0.0007
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2021,0.0006
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2022,0.0006
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2023,0.0008
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2024,0.0008
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV,Environmental taxes,2025,0.0007
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0508
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0029
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,-0.011
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.037
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0425
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2021,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2022,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2023,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2024,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC,Nuclear taxes,2025,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2021,0.0059
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2022,-0.0322
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2023,-0.0236
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2024,0.0074
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW,Renewable taxes,2025,0.0125
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2021,0.0234
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2022,0.0294
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2023,0.0223
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2024,0.0254
+PT,Consumption from 2 000 MWh to 19 999 MWh - band ID,VAT,Value added tax (VAT),2025,0.0268
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,ALLOW_OTH,Other allowance,2024,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,ALLOW_OTH,Other allowance,2025,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2021,0.0149
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2022,0.0142
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2023,0.0166
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2024,0.0125
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NETC,Network costs,2025,0.0146
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2021,0.0693
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2022,0.1437
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2023,0.1072
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2024,0.0876
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,NRG_SUP,Energy and supply,2025,0.0814
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2021,0.0096
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2022,0.004
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2023,0.0061
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2024,0.0011
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,OTH,Other,2025,0.0011
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2021,0.0075
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2022,-0.0009
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2023,-0.0127
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2024,0.0011
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP,Capacity taxes,2025,0.0005
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2021,0.0004
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2022,0.0003
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2023,0.0005
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2024,0.0007
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV,Environmental taxes,2025,0.0005
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0466
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0188
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,-0.0181
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0315
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0334
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2021,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2022,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2023,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2024,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC,Nuclear taxes,2025,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2021,0.0057
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2022,-0.0167
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2023,-0.0303
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2024,0.0053
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW,Renewable taxes,2025,0.0079
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2021,0.0234
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2022,0.032
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2023,0.0183
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2024,0.0232
+PT,Consumption from 20 000 MWh to 69 999 MWh - band IE,VAT,Value added tax (VAT),2025,0.0235
+PT,Consumption from 20 MWh to 499 MWh - band IB,ALLOW_OTH,Other allowance,2024,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,ALLOW_OTH,Other allowance,2025,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2021,0.0346
+PT,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2022,0.0453
+PT,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2023,0.0543
+PT,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2024,0.0365
+PT,Consumption from 20 MWh to 499 MWh - band IB,NETC,Network costs,2025,0.0369
+PT,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2021,0.067
+PT,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2022,0.1178
+PT,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2023,0.1385
+PT,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2024,0.0973
+PT,Consumption from 20 MWh to 499 MWh - band IB,NRG_SUP,Energy and supply,2025,0.0979
+PT,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2021,0.0138
+PT,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2022,0.02
+PT,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2023,0.012
+PT,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2024,0.007
+PT,Consumption from 20 MWh to 499 MWh - band IB,OTH,Other,2025,0.0091
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2021,0.0081
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2022,-0.0227
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2023,-0.0193
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2024,0.004
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP,Capacity taxes,2025,0.0014
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2021,0.001
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2022,0.001
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2023,0.001
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2024,0.001
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV,Environmental taxes,2025,0.001
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0763
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0209
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,-0.014
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0651
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0746
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2021,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2022,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2023,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2024,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC,Nuclear taxes,2025,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2021,0.0217
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2022,-0.0106
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2023,-0.0403
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2024,0.0167
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW,Renewable taxes,2025,0.0248
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+PT,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2021,0.0317
+PT,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2022,0.0334
+PT,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2023,0.0325
+PT,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2024,0.0365
+PT,Consumption from 20 MWh to 499 MWh - band IB,VAT,Value added tax (VAT),2025,0.0383
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,ALLOW_OTH,Other allowance,2024,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,ALLOW_OTH,Other allowance,2025,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2021,0.023
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2022,0.0339
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2023,0.0352
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2024,0.0244
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NETC,Network costs,2025,0.0252
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2021,0.0601
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2022,0.1224
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2023,0.1108
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2024,0.085
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,NRG_SUP,Energy and supply,2025,0.0882
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2021,0.0123
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2022,0.0074
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2023,0.0079
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2024,0.0022
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,OTH,Other,2025,0.0025
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2021,0.0107
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2022,-0.0027
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2023,-0.0134
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2024,0.0021
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP,Capacity taxes,2025,0.0009
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2021,0.0009
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2022,0.001
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2023,0.001
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2024,0.001
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV,Environmental taxes,2025,0.0009
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0539
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0002
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,-0.0164
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0418
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.048
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2021,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2022,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2023,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2024,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC,Nuclear taxes,2025,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2021,0.0062
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2022,-0.0335
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2023,-0.0352
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2024,0.0092
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW,Renewable taxes,2025,0.0148
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2021,0.0238
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2022,0.0281
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2023,0.0232
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2024,0.0274
+PT,Consumption from 500 MWh to 1 999 MWh - band IC,VAT,Value added tax (VAT),2025,0.0289
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,ALLOW_OTH,Other allowance,2024,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,ALLOW_OTH,Other allowance,2025,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2021,0.012
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2022,0.0109
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2023,0.0136
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2024,0.0098
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NETC,Network costs,2025,0.0119
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2021,0.0705
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2022,0.1405
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2023,0.0992
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2024,0.0808
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,NRG_SUP,Energy and supply,2025,0.0785
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2021,0.0084
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2022,0.0042
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2023,0.006
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2024,0.0009
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,OTH,Other,2025,0.0008
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2021,0.0062
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2022,-0.001
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2023,-0.0142
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2024,0.0009
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP,Capacity taxes,2025,0.0003
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2021,0.0002
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2022,0.0002
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2023,0.0003
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2024,0.0002
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV,Environmental taxes,2025,0.0005
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.0436
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0199
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,-0.0246
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0272
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.0301
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2021,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2022,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2023,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2024,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC,Nuclear taxes,2025,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2021,0.0052
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2022,-0.0155
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2023,-0.0315
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2024,0.0042
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW,Renewable taxes,2025,0.0059
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2021,0.0236
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2022,0.032
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2023,0.0148
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2024,0.0209
+PT,Consumption from 70 000 MWh to 149 999 MWh - band IF,VAT,Value added tax (VAT),2025,0.0225
+PT,Consumption less than 20 MWh - band IA,ALLOW_OTH,Other allowance,2024,0.0
+PT,Consumption less than 20 MWh - band IA,ALLOW_OTH,Other allowance,2025,0.0
+PT,Consumption less than 20 MWh - band IA,NETC,Network costs,2021,0.0537
+PT,Consumption less than 20 MWh - band IA,NETC,Network costs,2022,0.0737
+PT,Consumption less than 20 MWh - band IA,NETC,Network costs,2023,0.106
+PT,Consumption less than 20 MWh - band IA,NETC,Network costs,2024,0.0508
+PT,Consumption less than 20 MWh - band IA,NETC,Network costs,2025,0.0515
+PT,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2021,0.0744
+PT,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2022,0.1268
+PT,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2023,0.1987
+PT,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2024,0.1312
+PT,Consumption less than 20 MWh - band IA,NRG_SUP,Energy and supply,2025,0.1221
+PT,Consumption less than 20 MWh - band IA,OTH,Other,2021,0.0105
+PT,Consumption less than 20 MWh - band IA,OTH,Other,2022,0.0461
+PT,Consumption less than 20 MWh - band IA,OTH,Other,2023,0.0327
+PT,Consumption less than 20 MWh - band IA,OTH,Other,2024,0.013
+PT,Consumption less than 20 MWh - band IA,OTH,Other,2025,0.0163
+PT,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2021,-0.0001
+PT,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2022,-0.0522
+PT,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2023,-0.0439
+PT,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2024,0.0064
+PT,Consumption less than 20 MWh - band IA,TAX_CAP,Capacity taxes,2025,0.0024
+PT,Consumption less than 20 MWh - band IA,TAX_CAP_ALLOW,Capacity taxes allowances,2024,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_CAP_ALLOW,Capacity taxes allowances,2025,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2021,0.0013
+PT,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2022,0.0009
+PT,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2023,0.001
+PT,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2024,0.001
+PT,Consumption less than 20 MWh - band IA,TAX_ENV,Environmental taxes,2025,0.001
+PT,Consumption less than 20 MWh - band IA,TAX_ENV_ALLOW,Environmental taxes allowance,2024,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_ENV_ALLOW,Environmental taxes allowance,2025,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2021,0.1147
+PT,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2022,0.0306
+PT,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2023,-0.06
+PT,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2024,0.0945
+PT,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG,"Taxes, fees, levies and charges",2025,0.1055
+PT,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2024,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_FEE_LEV_CHRG_ALLOW,"Taxes, fees, levies and charges allowance",2025,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2021,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2022,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2023,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2024,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_NUC,Nuclear taxes,2025,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_NUC_ALLOW,Nuclear taxes allowance,2024,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_NUC_ALLOW,Nuclear taxes allowance,2025,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2021,0.0599
+PT,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2022,-0.006
+PT,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2023,-0.0929
+PT,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2024,0.0258
+PT,Consumption less than 20 MWh - band IA,TAX_RNW,Renewable taxes,2025,0.0381
+PT,Consumption less than 20 MWh - band IA,TAX_RNW_ALLOW,Renewable taxes allowance,2024,0.0
+PT,Consumption less than 20 MWh - band IA,TAX_RNW_ALLOW,Renewable taxes allowance,2025,0.0
+PT,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2021,0.0432
+PT,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2022,0.0418
+PT,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2023,0.0431
+PT,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2024,0.0481
+PT,Consumption less than 20 MWh - band IA,VAT,Value added tax (VAT),2025,0.0477

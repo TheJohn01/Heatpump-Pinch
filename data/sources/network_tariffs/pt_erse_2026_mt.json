@@ -1,0 +1,246 @@
+{
+  "_source": "ERSE, Diretiva n.º 10/2025, Tarifas e Preços para a Energia Elétrica e Outros Serviços em 2026 (https://www.erse.pt/media/lamnmp31/diretiva-erse-10-2025-tep-se-2026.pdf): Tarifa de Acesso às Redes em MT (p. 21: power 0,2435 EUR/(kW.dia) in peak hours, 0,0458 contracted; energy 0,0203 / 0,0182 / 0,0146 / 0,0129 EUR/kWh) minus parcela II of the Uso Global do Sistema tariff converted to MT (p. 11: power 0,0164 / 0,0252 EUR/(kW.dia); energy 0,0143 / 0,0129 / 0,0103 / 0,0091 EUR/kWh), which recovers the CIEG (policy costs, p. 10). What remains is the network part in the sense of Eurostat (Regulation (EU) 2016/1952, Annex II: transmission, distribution and system services): URT, URD in AT and MT, and UGS parcela I (system management, 0,0009 EUR/kWh, p. 10); the CIEG stay in Eurostat's other components. Weekly cycle for all supplies in mainland Portugal (Artigo 45.º, p. 62); national holidays count as Sundays (n.º 12). Transcribed 2026-11-14.",
+  "country": "PT",
+  "voltage": "MT",
+  "year": 2026,
+  "timezone": "Europe/Lisbon",
+  "energy_EUR_per_kWh": {
+    "ponta": 0.006,
+    "cheias": 0.0053,
+    "vazio_normal": 0.0043,
+    "super_vazio": 0.0038
+  },
+  "capacity": [
+    {
+      "basis": "period_mean",
+      "period": "ponta",
+      "EUR_per_kW_day": 0.2271,
+      "_note": "potência média em horas de ponta"
+    },
+    {
+      "basis": "max",
+      "EUR_per_kW_day": 0.0206,
+      "_note": "potência contratada (taken as the peak load)"
+    }
+  ],
+  "holidays_as": "sunday",
+  "holidays": {
+    "2025": [
+      "2025-01-01",
+      "2025-04-18",
+      "2025-04-20",
+      "2025-04-25",
+      "2025-05-01",
+      "2025-06-10",
+      "2025-06-19",
+      "2025-08-15",
+      "2025-10-05",
+      "2025-11-01",
+      "2025-12-01",
+      "2025-12-08",
+      "2025-12-25"
+    ],
+    "2026": [
+      "2026-01-01",
+      "2026-04-03",
+      "2026-04-05",
+      "2026-04-25",
+      "2026-05-01",
+      "2026-06-04",
+      "2026-06-10",
+      "2026-08-15",
+      "2026-10-05",
+      "2026-11-01",
+      "2026-12-01",
+      "2026-12-08",
+      "2026-12-25"
+    ]
+  },
+  "_holidays": "national holidays, Código do Trabalho art. 234.º (Lei 7/2009): 1 Jan, Good Friday, Easter Sunday, 25 Apr, 1 May, Corpus Christi, 10 Jun, 15 Aug, 5 Oct, 1 Nov, 1 Dec, 8 Dec, 25 Dec",
+  "calendar": [
+    {
+      "days": "weekday",
+      "dst": false,
+      "periods": [
+        [
+          "00:00",
+          "02:00",
+          "vazio_normal"
+        ],
+        [
+          "02:00",
+          "06:00",
+          "super_vazio"
+        ],
+        [
+          "06:00",
+          "07:00",
+          "vazio_normal"
+        ],
+        [
+          "07:00",
+          "09:30",
+          "cheias"
+        ],
+        [
+          "09:30",
+          "12:00",
+          "ponta"
+        ],
+        [
+          "12:00",
+          "18:30",
+          "cheias"
+        ],
+        [
+          "18:30",
+          "21:00",
+          "ponta"
+        ],
+        [
+          "21:00",
+          "24:00",
+          "cheias"
+        ]
+      ]
+    },
+    {
+      "days": "weekday",
+      "dst": true,
+      "periods": [
+        [
+          "00:00",
+          "02:00",
+          "vazio_normal"
+        ],
+        [
+          "02:00",
+          "06:00",
+          "super_vazio"
+        ],
+        [
+          "06:00",
+          "07:00",
+          "vazio_normal"
+        ],
+        [
+          "07:00",
+          "09:15",
+          "cheias"
+        ],
+        [
+          "09:15",
+          "12:15",
+          "ponta"
+        ],
+        [
+          "12:15",
+          "24:00",
+          "cheias"
+        ]
+      ]
+    },
+    {
+      "days": "saturday",
+      "dst": false,
+      "periods": [
+        [
+          "00:00",
+          "02:00",
+          "vazio_normal"
+        ],
+        [
+          "02:00",
+          "06:00",
+          "super_vazio"
+        ],
+        [
+          "06:00",
+          "09:30",
+          "vazio_normal"
+        ],
+        [
+          "09:30",
+          "13:00",
+          "cheias"
+        ],
+        [
+          "13:00",
+          "18:30",
+          "vazio_normal"
+        ],
+        [
+          "18:30",
+          "22:00",
+          "cheias"
+        ],
+        [
+          "22:00",
+          "24:00",
+          "vazio_normal"
+        ]
+      ]
+    },
+    {
+      "days": "saturday",
+      "dst": true,
+      "periods": [
+        [
+          "00:00",
+          "02:00",
+          "vazio_normal"
+        ],
+        [
+          "02:00",
+          "06:00",
+          "super_vazio"
+        ],
+        [
+          "06:00",
+          "09:00",
+          "vazio_normal"
+        ],
+        [
+          "09:00",
+          "14:00",
+          "cheias"
+        ],
+        [
+          "14:00",
+          "20:00",
+          "vazio_normal"
+        ],
+        [
+          "20:00",
+          "22:00",
+          "cheias"
+        ],
+        [
+          "22:00",
+          "24:00",
+          "vazio_normal"
+        ]
+      ]
+    },
+    {
+      "days": "sunday",
+      "periods": [
+        [
+          "00:00",
+          "02:00",
+          "vazio_normal"
+        ],
+        [
+          "02:00",
+          "06:00",
+          "super_vazio"
+        ],
+        [
+          "06:00",
+          "24:00",
+          "vazio_normal"
+        ]
+      ]
+    }
+  ]
+}
