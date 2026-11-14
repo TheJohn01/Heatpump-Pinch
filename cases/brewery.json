@@ -385,6 +385,18 @@
       "basis": "Kosmadakis et al. (2020), Energy Convers. Manag. 226, 113488, component cost as implemented in heatpumps: 0.98 MEUR vs 1.07 MEUR from the case cost function for the warm-water unit (outputs/brewery/heat_pump_cost_check.csv, design_consistency.md)"
     },
     {
+      "label": "Heat pump cost basis: DEA catalogue 2025 by sink temperature",
+      "kind": "econ",
+      "value": {"cost_basis": "dea2025"},
+      "basis": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), sheets 1.1 / 2.a / 2.b with the add-ons for lift above 75 K and steam generation (data/sources/cost_bases.json)"
+    },
+    {
+      "label": "Heat pump cost basis: supplier prices x 2 for integration",
+      "kind": "econ",
+      "value": {"cost_basis": "annex58_suppliers"},
+      "basis": "IEA HPT Annex 58 / Project 68 supplier sheets: median 560 EUR/kW over 24 closed-cycle products, installed without integration (data/sources/annex58_supplier_costs.csv); x 2 for integration, 'in the same order as the heat pump investment' (Annex 58 Task 1 report, 2023, p. 124)"
+    },
+    {
       "label": "Retrofit exchanger CAPEX x3",
       "kind": "hx_capex",
       "value": 3.0,

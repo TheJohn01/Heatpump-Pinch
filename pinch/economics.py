@@ -26,8 +26,10 @@ override any of them in its "economics" block.
 from __future__ import annotations
 
 import difflib
+import json
 import math
 from dataclasses import dataclass, field, replace
+from pathlib import Path
 from typing import Any
 
 #: Cost functions C = beta + alpha * X**gamma [EUR]. Source: Padullés et al. (2026),
@@ -82,11 +84,16 @@ class CostFunction:
     #: (only for sizes in kW, delivered over the operating hours)
     fixed_om_EUR_per_unit_year: float = 0.0
     variable_om_EUR_per_MWh: float = 0.0
+    #: multiplier for installation or integration that the cost law does not include (e.g. a Hand factor
+    #: on a purchased-equipment cost); 1 = the law is already the installed cost
+    install_factor: float = 1.0
 
     def cost(self, size: float) -> float:
         if size < 0:
             raise ValueError("equipment size must be >= 0")
-        return 0.0 if size == 0 else self.beta + self.alpha * size ** self.gamma
+        if self.install_factor < 1:
+            raise ValueError("install_factor must be >= 1")
+        return 0.0 if size == 0 else (self.beta + self.alpha * size ** self.gamma) * self.install_factor
 
 
 @dataclass(frozen=True)
@@ -120,6 +127,8 @@ class EconomicParameters:
     #:   min sink temperature [°C] or None), ...):
     #: add-ons such as the DEA catalogue's "lift above 75 K" and "steam generation" equipment costs
     heat_pump_cost_adders: tuple = ()
+    #: AACE RP 18R-97 estimate class of the investment (pinch.investment.capex_factors); 5 = concept screening
+    estimate_class: int = 5
 
     def heat_pump_cost_items(self, unit) -> tuple[tuple[str, ...], bool]:
         """Cost-function kinds for one heat pump unit (base class plus add-ons), and the extrapolation flag.
@@ -165,6 +174,8 @@ class EconomicParameters:
             raise ValueError("refrigeration_credit_fraction must be in [0, 1]")
         if self.chiller_cop is not None and self.chiller_cop <= 0:
             raise ValueError("chiller_cop must be positive (or None)")
+        if self.estimate_class not in (1, 2, 3, 4, 5):
+            raise ValueError("estimate_class must be 1 to 5 (AACE RP 18R-97)")
 
     @property
     def price_ratio(self) -> float:
@@ -183,7 +194,18 @@ class EconomicParameters:
 
 #: Keys of an "economics" block that are not scalar defaults: read explicitly by ``load_economics``.
 STRUCTURED_KEYS = ("electricity_price_EUR_per_kWh", "cost_functions", "heat_pump_cost_classes",
-                   "heat_pump_cost_adders", "heat_pump_capacity_factors")
+                   "heat_pump_cost_adders", "heat_pump_capacity_factors", "cost_basis", "estimate_class")
+#: Cost bases selectable with ``economics.cost_basis`` (sources in the file)
+COST_BASES_FILE = Path(__file__).resolve().parent.parent / "data" / "sources" / "cost_bases.json"
+
+
+def cost_basis(name: str) -> dict:
+    """Entries of one cost basis of ``COST_BASES_FILE`` (keys starting with "_" are notes)."""
+    bases = json.loads(COST_BASES_FILE.read_text(encoding="utf-8"))
+    if name not in bases or name.startswith("_"):
+        raise ValueError(f"economics.cost_basis: unknown basis '{name}'; known: "
+                         + ", ".join(k for k in bases if not k.startswith("_")))
+    return {k: v for k, v in bases[name].items() if not k.startswith("_")}
 #: Keys that carry provenance or data for other modules and are not parameters. Keys starting with "_" are notes.
 ANNOTATION_KEYS = ("sources", "heat_recovery_equipment", "co2_price_sensitivity_EUR_per_t")
 
@@ -198,6 +220,10 @@ def load_economics(block: dict | None) -> EconomicParameters:
     falling back to the default would give a result for inputs the user did not intend.
     """
     block = dict(block or {})
+    if block.get("cost_basis"):          # the basis first, the case's own entries over it
+        basis = cost_basis(block["cost_basis"])
+        fb, fc = basis.get("cost_functions", {}), block.get("cost_functions", {})
+        block = {**basis, **block, "cost_functions": {k: {**fb.get(k, {}), **fc.get(k, {})} for k in {**fb, **fc}}}
     unknown = [k for k in block if k not in DEFAULTS and k not in STRUCTURED_KEYS and k not in ANNOTATION_KEYS
                and not k.startswith("_")]
     if unknown:
@@ -247,6 +273,7 @@ def load_economics(block: dict | None) -> EconomicParameters:
         gas_ncv_over_gcv=float(values["gas_ncv_over_gcv"]),
         capacity_factors={str(k): float(v) for k, v in (block.get("heat_pump_capacity_factors") or {}).items()},
         heat_pump_cost_adders=adders,
+        estimate_class=int(block.get("estimate_class", 5)),
     )
 
 

@@ -42,98 +42,11 @@
     "_note": "No economic data in the source. Prices: Eurostat Portugal 2026-S1 for the site's consumption band at 8000 h/year; heat pump investment: Danish Energy Agency catalogue by sink temperature with its lift and steam add-ons; other parameters: tool defaults (Sources page). All are assumptions for this case.",
     "gas_price_EUR_per_kWh": 0.0445,
     "electricity_price_EUR_per_kWh": 0.1135,
-    "cost_functions": {
-      "hp_dea_1_1": {
-        "alpha": 950.0,
-        "beta": 0.0,
-        "gamma": 1.0,
-        "size_unit": "kW",
-        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 1.1 'Heat pump, up to 60 °C, temp. lift 40 K': 0.95 M€/MW (0.91-0.95), unit size 0.5-5 MW. O&M (DEA 2025) sheet 1.1: fixed 2,127 EUR/MW/y, variable 3.07 EUR/MWh",
-        "fixed_om_EUR_per_unit_year": 2.127,
-        "variable_om_EUR_per_MWh": 3.07
-      },
-      "hp_dea_2a": {
-        "alpha": 1200.0,
-        "beta": 0.0,
-        "gamma": 1.0,
-        "size_unit": "kW",
-        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.a 'High-temperature heat pumps up to 125 °C': 1.2 M€/MW (0.9-1.5), unit size 0.3-25 MW. O&M (DEA 2025) sheet 2.a: fixed 2,494 EUR/MW/y, variable 3.6 EUR/MWh",
-        "fixed_om_EUR_per_unit_year": 2.494,
-        "variable_om_EUR_per_MWh": 3.6
-      },
-      "hp_dea_2b": {
-        "alpha": 1550.0,
-        "beta": 0.0,
-        "gamma": 1.0,
-        "size_unit": "kW",
-        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 'Nominal investment (*total)' 2025, equipment + installation, per MW of heat output, sheet 2.b 'High-temperature heat pumps up to 150 °C': 1.55 M€/MW (1.25-1.8), unit size 0.5-80 MW. No catalogue sheet above 150 °C: units with hotter sinks are costed with this sheet as an extrapolation (flagged). O&M (DEA 2025) sheet 2.b: fixed 2,494 EUR/MW/y, variable 3.6 EUR/MWh",
-        "fixed_om_EUR_per_unit_year": 2.494,
-        "variable_om_EUR_per_MWh": 3.6
-      },
-      "dea_lift_2a": {
-        "alpha": 150.0,
-        "beta": 0.0,
-        "gamma": 1.0,
-        "size_unit": "kW",
-        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheet 2.a: 'Additional equipment cost for temperature lift above 75 K' 0.15 M€/MW (0.05-0.25)"
-      },
-      "dea_lift_2b": {
-        "alpha": 200.0,
-        "beta": 0.0,
-        "gamma": 1.0,
-        "size_unit": "kW",
-        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheet 2.b: 'Additional equipment cost for temperature lift above 75 K' 0.2 M€/MW (0.1-0.3)"
-      },
-      "dea_steam": {
-        "alpha": 200.0,
-        "beta": 0.0,
-        "gamma": 1.0,
-        "size_unit": "kW",
-        "source": "Danish Energy Agency, Technology Data - Industrial Process Heat (2025), 2025 values, sheets 2.a and 2.b: 'Steam generation increases equipment cost by' 0.2 M€/MW (0.05-0.3); applied to isothermal sinks (steam). The sheets' COP penalty for steam (-0.15) is not applied: COP comes from the Lorenz model"
-      }
-    },
-    "heat_pump_cost_classes": [
-      {
-        "max_sink_T_C": 60,
-        "cost_function": "hp_dea_1_1"
-      },
-      {
-        "max_sink_T_C": 125,
-        "cost_function": "hp_dea_2a"
-      },
-      {
-        "max_sink_T_C": 150,
-        "cost_function": "hp_dea_2b"
-      }
-    ],
+    "cost_basis": "dea2025",
     "sources": {
       "prices": "Eurostat nrg_pc_203 (gas) and nrg_pc_205 (electricity), Portugal, 2026-S1, excluding VAT and other recoverable taxes and levies, EUR/kWh, gas on GCV (data/sources/eurostat_portugal_prices.csv). The plant is not in Portugal: these prices place it in the tool's Portuguese price context, like the main case. Bands: gas I3 0.0512, I4 0.0445, I5 0.0420; electricity ID 0.1135, IE 0.0897, IF 0.0789. Band check at 8000 h/year, process only (the source describes no site): gas 255,600 GJ/year (I4); heat pump electricity 6.4 GWh/year (ID). A larger site would pay less for electricity (IE 0.0897), which favours the heat pumps: ID is the conservative choice",
       "heat_pump_cost": "Danish Energy Agency catalogue (2025) by sink temperature, linear in capacity, plus the catalogue's add-ons for lift above 75 K (sink outlet minus source outlet) and steam generation (isothermal sinks). Replaces Padullés et al. (2026, Table 3), which is fitted to brewery heat pumps and gives 0.75-0.88 M€/MW for 2-3 MW units, below the catalogue range 0.9-1.5 M€/MW for sinks up to 125 °C. Indirect cost of new hot-water piping (0.23 M€/MW, 'relevant when needing to install new hot water piping instead of existing steam piping') is a scenario, not in the base"
-    },
-    "heat_pump_cost_adders": [
-      {
-        "cost_function": "dea_lift_2a",
-        "applies_to": [
-          "hp_dea_2a"
-        ],
-        "min_lift_K": 75
-      },
-      {
-        "cost_function": "dea_lift_2b",
-        "applies_to": [
-          "hp_dea_2b"
-        ],
-        "min_lift_K": 75
-      },
-      {
-        "cost_function": "dea_steam",
-        "applies_to": [
-          "hp_dea_2a",
-          "hp_dea_2b"
-        ],
-        "isothermal_sink": true
-      }
-    ]
+    }
   },
   "sensitivities": [
     {

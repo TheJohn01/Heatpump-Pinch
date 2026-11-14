@@ -190,10 +190,13 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
 
 
 def input_files(case: Case) -> list[Path]:
-    """Every input file a case reads: case file, stream file, network file (provenance hashes)."""
+    """Every input file a case reads: case file, stream file, network file, cost-basis file (provenance hashes)."""
+    from pinch.economics import COST_BASES_FILE
     files = [case.case_file, case.stream_file]
     if case.retrofit:
         files.append(Path(case.retrofit["network_file_resolved"]))
+    if (case.economics or {}).get("cost_basis"):
+        files.append(COST_BASES_FILE)
     return [Path(f) for f in files if f is not None]
 
 
