@@ -587,6 +587,18 @@ no heat recovery, a new network at the targets, and heat pumps on either.
 3. **Sizing and cost:** counter-current area from 1/U = 1/h_h + 1/h_c + R_f,h + R_f,c, cost per unit
    a + b A^c.
 
+It also designs them by the **Pinch Design Method** (Linnhoff and Hindmarsh 1983): `pinch_design` starts
+at the pinch on each side, matches every stream that must reach the pinch with a partner whose CP obeys
+the CP rule (CP_hot ≤ CP_cold above, ≥ below), splits streams when the number of streams or the CPs do
+not allow it, ticks off loads, and leaves heaters above and coolers below the pinch. The result is a
+maximum-energy-recovery network in the network-file format (split branches carry a `fraction` of the
+stream's CP). `break_loops` then removes loops one at a time (smallest unit first, its load shifted
+around the loop) and, when an approach falls below the one asked for, relaxes the cheapest path from a
+hot to a cold utility. Checked on the four-stream problem of Sagli et al. (Q̇h 1075 kW, 7 units with
+one split; 5 units at constant energy, the unit count of Polley and Panjeh Shahi's Network 5.1), the
+Aromatics Plant (21.68 MW, 15 units) and Kemp's four-stream process
+(`outputs/benchmark_pinch_design.md`).
+
 ### 7.4 Shell-and-tube rating
 
 `exchanger_rating.py` (with ht and fluids) adds what counter-current sizing leaves out. A unit with
@@ -863,6 +875,7 @@ flowchart TB
 | Sagli four-stream networks (Polley and Panjeh Shahi 1991) | 11 exchanger sizes / capital cost | Tables 4-5 / Fig. 1 | within 0.15 % / 715,971 and 717,294 $ vs 716.0 and 717.3 k$ | ≤ 0.15 % |
 | Minimum matches (Letsios et al. 2018, Furman and Sahinidis set) | Units, 20 instances | published optima | 20 of 20 equal | 0 |
 | Shell-and-tube designs (Polley and Panjeh Shahi 1991, Tables 4-5) | Shells / tube-side h_io / ΔP_t / area from their U and our F | 11 exchangers / 6 / 6 / 6 | 11 of 11 / ≤ 0.3 % / ≤ 3.7 % / ≤ 1.2 % | see `outputs/benchmark_exchanger_rating.md` |
+| Pinch Design Method (Sagli four-stream, Aromatics Plant, Kemp four-stream) | MER Q̇h / Q̇c, units; loops broken at constant energy | 3 networks; Network 5.1 | targets exact, (N − 1) per side units; 5 units at 1075 kW like 5.1 | see `outputs/benchmark_pinch_design.md` |
 | Brewery warm-water heat pump, TESPy rebuild | Design COP (same assumptions) | 3.3546 (`pinch.cycle`) | 3.3546 (TESPy) | < 0.02 % |
 
 **Area-targeting validation.** The University of Oklahoma "Units and Area Targeting" notes give a
@@ -952,7 +965,7 @@ pinch/
   tespy_heat_pump.py         TESPy rebuild of single-stage cycles: design-COP check, part load, component cost
   network.py                 Existing heat-exchanger networks: utilities, pinch diagnostics, constrained stream set
   retrofit.py                Retrofit options (new recovery, storage, heat pumps) against the existing network
-  hen_design.py              Network synthesis (minimum units), series placement, sizing and cost; validated on Sagli et al. (1990)
+  hen_design.py              Network synthesis (minimum units, Pinch Design Method, loop breaking), series placement, sizing and cost
   exchanger_rating.py        Shell-and-tube rating with ht: shells in series, F, tube-side h and ΔP (Polley 1991 designs)
   refrigeration.py           Refrigeration duty and the part heat pump sources take over (steps 5 and 6)
   economics.py               Cost functions, evaluation, break-even ratio (defaults with sources)
@@ -1015,6 +1028,7 @@ outputs/                     Committed results, one folder per case (rebuilt by 
 | `scripts/validation/reproduce_stampfli2019.py`, `reproduce_secondary_economics.py` | Non-continuous dairy; secondary cases at an assumed 8000 h/year |
 | `scripts/benchmarks/benchmark_openpinch.py`, `benchmark_hen.py` | Targets against OpenPinch 0.8.3; network sizes, costs, synthesis and pressure-drop basis against Polley and Panjeh Shahi (1991) |
 | `scripts/benchmarks/benchmark_min_matches.py`, `benchmark_exchanger_rating.py` | Minimum units on 20 Letsios et al. instances; shells, tube-side h and ΔP against Polley and Panjeh Shahi's detailed designs |
+| `scripts/benchmarks/benchmark_pinch_design.py` | Pinch Design Method: MER networks of the Sagli four-stream problem, the Aromatics Plant and Kemp's four-stream process against their published targets; loop breaking against Network 5.1 |
 | `scripts/data/fetch_entsoe_prices.py` | Hourly day-ahead prices from ENTSO-E → data/prices/ (needs `ENTSOE_API_KEY`) |
 
 ### 11.3 Verification (automated tests)
@@ -1027,7 +1041,7 @@ follows from the code and the inputs. Highlights:
 | File | What it verifies |
 |---|---|
 | `test_problem_table.py`, `test_general_tool.py`, `test_gcc_sizing.py`, `test_heat_pump.py` | Textbook and published targets; energy balance; module lists and case-file conventions |
-| `test_area.py`, `test_hen_design.py` | Area target (corrected OU example), supertargeting, Sagli networks, minimum matches, Letsios et al. benchmark |
+| `test_area.py`, `test_hen_design.py` | Area target (corrected OU example), supertargeting, Sagli networks, minimum matches, Letsios et al. benchmark, Pinch Design Method and loop breaking |
 | `test_cycle.py`, `test_tespy_heat_pump.py` | Cycle COPs against Andersen et al. (2024); TESPy design COP equal to the cycle model; component cost hand calculation |
 | `test_economics.py`, `test_consolidate.py`, `test_investment.py`, `test_tariffs.py` | Paper's economic statements and Appendix B; RQ answers; IRR, AACE and Monte Carlo; effective price on hand-calculated cases |
 | `test_network.py`, `test_checks.py`, `test_reproductions.py` | Existing network and retrofit; MVR COP below Carnot; reproductions of the papers |

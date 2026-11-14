@@ -48,8 +48,19 @@ committed outputs change only where an entry says so.
   Infrastruktur (MS) with their time-of-use calendars and capacity charges (`pinch.tariffs.PeriodTariff`).
   `pinch.tariffs.delivered_price` and `economics.tariff`: the band price reshaped for an operating pattern. The
   access-tariff check takes its network share from Eurostat by default.
+- Pinch Design Method (`pinch.hen_design.pinch_design`): MER networks with the CP and number-of-streams rules,
+  stream splits and tick-off; `break_loops` (loops broken smallest unit first, energy relaxation along utility
+  paths), `find_loop`, `units_target_mer`, `series_to_network`. Network files: split branches
+  (`[stream, T_from, T_to, fraction]`), `network_to_json` writes them. Benchmark
+  `scripts/benchmarks/benchmark_pinch_design.py` (Sagli four-stream, Aromatics Plant, Kemp four-stream; Network
+  5.1 for loop breaking).
+- Optional `length_m` per match in network files for the retrofit piping cost; the case-wide length stays the
+  fallback.
+- Not added: shell-side Bell-Delaware rating (no published worked example obtainable; register item 86).
 
 ### Changed outputs
+- New: `outputs/benchmark_pinch_design.csv`, `.md` and `benchmark_pinch_design_networks.json`. No earlier output
+  changes.
 - `outputs/brewery/rq_consolidated.*` and `rq_tornado.png`: four new rows (COP from manufacturer data). With the
   fits, RQ1 is 0 % (HP1 incremental payback 120.7 y at the fit, 15.2 y at +1σ); every earlier row is unchanged.
 - `summary.json` / `summary.md` of every case: new section "COP ranges"; `vendor_data_check.md`: new section.

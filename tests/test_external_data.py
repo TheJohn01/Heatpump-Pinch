@@ -66,3 +66,29 @@ def test_access_tariff_changes_as_published():
         access_tariff_change(2025, "MT")
     with pytest.raises(ValueError):
         with_network_change(0.1, 1.2, -0.1)
+
+
+def test_per_match_pipe_length_overrides_the_case_length():
+    """A ``length_m`` on a match in the network file replaces the case-wide 50 m for that match only."""
+    from dataclasses import replace
+
+    from pinch import load_streams, with_extra_shift
+    from pinch.case import annual_converter
+    from pinch.economic_analysis import _params_and_converter
+    from pinch.network import load_networks
+    from pinch.retrofit import _new_hot_segments, new_recovery_equipment
+    case = load_case(BREWERY)
+    st = with_extra_shift(load_streams(case.stream_file), case.extra_shift_K)
+    params, to_MWh = _params_and_converter(case, st.energy_unit)[1], annual_converter(st.energy_unit, case.basis)
+    nets = load_networks(case.retrofit["network_file_resolved"])
+    base, opt = nets[case.retrofit["baseline"]], nets[case.retrofit["options"][0]["network"]]
+
+    def pipes(net):
+        rows = new_recovery_equipment(case, st, base, net, params, to_MWh)[1]
+        return [r for r in rows if r["segment"].startswith("piping")]
+    default = pipes(opt)
+    assert default and all(r["segment"].startswith("piping 50 m") for r in default)
+    m = _new_hot_segments(base, opt)[0][0]
+    longer = pipes(replace(opt, lengths_m={m.name: 120.0}))
+    assert longer[0]["segment"].startswith("piping 120 m")
+    assert longer[0]["cost_EUR"] == pytest.approx(default[0]["cost_EUR"] * 120 / 50, rel=1e-3)
