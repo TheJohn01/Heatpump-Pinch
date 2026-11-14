@@ -43,6 +43,7 @@ STEPS: tuple[tuple[str, ...], ...] = (
     ("-m", "scripts.benchmarks.benchmark_hen"),
     ("-m", "scripts.benchmarks.benchmark_min_matches"),
     ("-m", "scripts.benchmarks.benchmark_exchanger_rating"),
+    ("-m", "scripts.benchmarks.benchmark_pinch_design"),
     ("-m", "scripts.analysis.screen_cycles", BREWERY),
     ("-m", "scripts.analysis.heat_pump_partload", BREWERY),
     ("-m", "scripts.analysis.analyse", "--all"),

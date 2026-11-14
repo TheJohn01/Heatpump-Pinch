@@ -46,11 +46,16 @@ TOL = 1e-6
 
 @dataclass(frozen=True)
 class Segment:
-    """Part of a stream between two temperatures, in the stream's own direction [°C]."""
+    """Part of a stream between two temperatures, in the stream's own direction [°C].
+
+    ``fraction`` < 1 is a branch of a split stream carrying that share of its CP; the branches of one split
+    cover the same temperature range and their fractions add up to 1.
+    """
 
     stream: str
     T_from_C: float
     T_to_C: float
+    fraction: float = 1.0
 
 
 @dataclass(frozen=True)
@@ -71,6 +76,7 @@ class Network:
     matches: tuple[Match, ...]
     description: str = ""
     provenance: dict = field(default_factory=dict)
+    lengths_m: dict[str, float] = field(default_factory=dict)   # optional pipe length per match name
 
 
 def load_networks(path: str | Path) -> dict[str, Network]:
@@ -84,7 +90,25 @@ def load_networks(path: str | Path) -> dict[str, Network]:
                   tuple(Segment(*s) for s in m["cold"]),
                   bool(m.get("indirect", False)), float(m.get("extra_dT_K", 0.0)), m.get("note", ""))
             for m in n["matches"])
-        out[name] = Network(name, matches, n.get("description", ""), n.get("provenance", {}))
+        lengths = {m["name"]: float(m["length_m"]) for m in n["matches"] if "length_m" in m}
+        out[name] = Network(name, matches, n.get("description", ""), n.get("provenance", {}), lengths)
+    return out
+
+
+def network_to_json(network: Network) -> dict:
+    """One network as written in a network file (inverse of ``load_networks``; numbers to 6 decimals)."""
+    def seg(s: Segment) -> list:
+        return [s.stream, round(s.T_from_C, 6), round(s.T_to_C, 6)] + ([round(s.fraction, 6)] if s.fraction != 1.0 else [])
+    out: dict = {"description": network.description, "provenance": network.provenance, "matches": []}
+    for m in network.matches:
+        d: dict = {"name": m.name, "indirect": m.indirect, "hot": [seg(s) for s in m.hot], "cold": [seg(s) for s in m.cold]}
+        if m.indirect:
+            d["extra_dT_K"] = m.extra_dT_K
+        if m.note:
+            d["note"] = m.note
+        if m.name in network.lengths_m:
+            d["length_m"] = network.lengths_m[m.name]
+        out["matches"].append(d)
     return out
 
 
@@ -104,7 +128,9 @@ def _check_segment(s: Stream, seg: Segment) -> float:
     going_down = seg.T_to_C < seg.T_from_C
     if (s.kind == "hot") != going_down:
         raise ValueError(f"segment {seg} runs against the direction of '{s.name}'")
-    return s.CP * abs(seg.T_to_C - seg.T_from_C)
+    if not 0.0 < seg.fraction <= 1.0 + TOL:
+        raise ValueError(f"segment {seg}: split fraction must be in (0, 1]")
+    return s.CP * seg.fraction * abs(seg.T_to_C - seg.T_from_C)
 
 
 def _profile(streams: StreamSet, segs: tuple[Segment, ...], extra_K: float, sign: int):
@@ -117,7 +143,7 @@ def _profile(streams: StreamSet, segs: tuple[Segment, ...], extra_K: float, sign
         s = _stream(streams, seg.stream)
         lo, hi = sorted((seg.T_from_C, seg.T_to_C))
         shift = s.dT_shift_K + (extra_K if sign < 0 else 0.0)
-        pieces.append((lo + sign * shift, hi + sign * shift, s.CP))
+        pieces.append((lo + sign * shift, hi + sign * shift, s.CP * seg.fraction))
     T, H = piecewise_composite(pieces, descending=True)
     return H, T
 
@@ -165,26 +191,34 @@ class NetworkResult:
 
 
 def _residual(streams: StreamSet, network: Network) -> dict[str, list[tuple[float, float]]]:
-    """Uncovered temperature intervals per stream (ascending (lo, hi) pairs)."""
-    used: dict[str, list[tuple[float, float]]] = {}
+    """Uncovered temperature intervals per stream (ascending (lo, hi) pairs).
+
+    Split branches (fraction < 1) must together cover their range exactly: a partly covered range is an error.
+    """
+    used: dict[str, list[tuple[float, float, float]]] = {}
     for m in network.matches:
         for seg in m.hot + m.cold:
             lo, hi = sorted((seg.T_from_C, seg.T_to_C))
-            used.setdefault(seg.stream, []).append((lo, hi))
+            used.setdefault(seg.stream, []).append((lo, hi, seg.fraction))
     out = {}
     for s in streams.streams:
         lo, hi = sorted((s.T_in_C, s.T_out_C))
-        ivs = sorted(used.get(s.name, []))
-        for (a1, b1), (a2, b2) in zip(ivs[:-1], ivs[1:]):
-            if a2 < b1 - TOL:
-                raise ValueError(f"stream '{s.name}': segments overlap ({a1}-{b1} and {a2}-{b2} °C)")
-        free, cur = [], lo
-        for a, b in ivs:
-            if a > cur + TOL:
-                free.append((cur, a))
-            cur = max(cur, b)
-        if hi > cur + TOL:
-            free.append((cur, hi))
+        ivs = used.get(s.name, [])
+        cuts = sorted({lo, hi, *(t for a, b, _ in ivs for t in (a, b))})
+        free: list[tuple[float, float]] = []
+        for a, b in zip(cuts[:-1], cuts[1:]):
+            if b - a <= TOL:
+                continue
+            cover = sum(f for x, y, f in ivs if x <= a + TOL and y >= b - TOL)
+            if cover > 1 + 1e-6:
+                raise ValueError(f"stream '{s.name}': segments overlap between {a:g} and {b:g} °C")
+            if cover > 1e-6 and cover < 1 - 1e-6:
+                raise ValueError(f"stream '{s.name}': split branches cover {cover:.3f} of {a:g}-{b:g} °C")
+            if cover <= 1e-6:
+                if free and abs(free[-1][1] - a) <= TOL:
+                    free[-1] = (free[-1][0], b)
+                else:
+                    free.append((a, b))
         out[s.name] = free
     return out
 
@@ -267,7 +301,7 @@ def constrained_streams(streams: StreamSet, network: Network) -> StreamSet:
         for g in m.hot:
             s = _stream(streams, g.stream)
             out.append(replace(s, name=f"{s.name} [{g.T_from_C:g}->{g.T_to_C:g}] via {m.name}", T_in_C=g.T_from_C,
-                               T_out_C=g.T_to_C, Q=s.CP * abs(g.T_from_C - g.T_to_C),
+                               T_out_C=g.T_to_C, Q=s.CP * g.fraction * abs(g.T_from_C - g.T_to_C),
                                dT_shift_K=s.dT_shift_K + m.extra_dT_K))
     for name in tank_cold:
         out.append(_stream(streams, name))

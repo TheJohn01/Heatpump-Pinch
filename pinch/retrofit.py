@@ -97,7 +97,8 @@ def new_recovery_equipment(case: Case, streams: StreamSet, base_net, net, params
     indirect match gets an exchanger to the storage medium (U from the film coefficients and the medium's h,
     approach = stream shift + half the indirect extra approach); the storage grows in proportion to the heat
     it receives. With ``retrofit.piping.length_m`` in the case file, each new segment also gets installed
-    piping (``piping_cost_EUR``). Used by ``run_retrofit`` and by ``pinch.research_questions``.
+    piping (``piping_cost_EUR``); a ``length_m`` on the match in the network file overrides it for that
+    match. Used by ``run_retrofit`` and by ``pinch.research_questions``.
     """
     if not case.retrofit:
         raise ValueError("new_recovery_equipment needs the case's retrofit block")
@@ -108,7 +109,7 @@ def new_recovery_equipment(case: Case, streams: StreamSet, base_net, net, params
     storage = block.get("storage")
     base_indirect = _indirect_duty(streams, base_net)
     equipment, hx_rows = [], []
-    for _m, g, extra in _new_hot_segments(base_net, net):
+    for m, g, extra in _new_hot_segments(base_net, net):
         s = next(x for x in streams.streams if x.name == g.stream)
         Q_kW = to_MWh(s.CP * abs(g.T_from_C - g.T_to_C)) * 1000 / params.operating_hours_per_year
         U = 1 / (1 / h[g.stream] + 1 / medium_h)
@@ -117,7 +118,7 @@ def new_recovery_equipment(case: Case, streams: StreamSet, base_net, net, params
         equipment.append((hx_kind, A))
         hx_rows.append({"option": option_name, "segment": f"{g.stream} {g.T_from_C:g}->{g.T_to_C:g} °C",
                         "Q_kW": round(Q_kW, 1), "U_kW_per_m2K": round(U, 3), "approach_K": dT, "area_m2": round(A, 1)})
-        L = float((block.get("piping") or {}).get("length_m", 0.0))
+        L = net.lengths_m.get(m.name, float((block.get("piping") or {}).get("length_m", 0.0)))
         if L > 0:
             pc, d_mm = piping_cost_EUR(Q_kW, abs(g.T_from_C - g.T_to_C), L)
             equipment.append(("lump_sum_EUR", pc))

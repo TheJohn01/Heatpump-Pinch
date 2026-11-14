@@ -1,0 +1,506 @@
+{
+ "networks": {
+  "four-stream (Sagli et al. 1990): MER (Pinch Design Method)": {
+   "description": "pinch_design on sagli1990_four_stream.csv; heaters and coolers are the unmatched stream ends",
+   "provenance": {},
+   "matches": [
+    {
+     "name": "E1 H1-C1",
+     "indirect": false,
+     "hot": [
+      [
+       "H1",
+       150.0,
+       90.0
+      ]
+     ],
+     "cold": [
+      [
+       "C1",
+       70.0,
+       118.0
+      ]
+     ]
+    },
+    {
+     "name": "E2 H2-C1",
+     "indirect": false,
+     "hot": [
+      [
+       "H2",
+       90.0,
+       60.0,
+       0.4375
+      ]
+     ],
+     "cold": [
+      [
+       "C1",
+       28.0,
+       70.0
+      ]
+     ]
+    },
+    {
+     "name": "E3 H2-C2",
+     "indirect": false,
+     "hot": [
+      [
+       "H2",
+       90.0,
+       60.0,
+       0.5625
+      ]
+     ],
+     "cold": [
+      [
+       "C2",
+       25.0,
+       70.0
+      ]
+     ]
+    },
+    {
+     "name": "E4 H1-C1",
+     "indirect": false,
+     "hot": [
+      [
+       "H1",
+       90.0,
+       80.0
+      ]
+     ],
+     "cold": [
+      [
+       "C1",
+       20.0,
+       28.0
+      ]
+     ]
+    }
+   ]
+  },
+  "Aromatics Plant: MER (Pinch Design Method)": {
+   "description": "pinch_design on aromatics_plant_streams.csv; heaters and coolers are the unmatched stream ends",
+   "provenance": {},
+   "matches": [
+    {
+     "name": "E1 H1-C1",
+     "indirect": false,
+     "hot": [
+      [
+       "H1",
+       320.0,
+       120.0
+      ]
+     ],
+     "cold": [
+      [
+       "C1",
+       100.0,
+       300.0
+      ]
+     ]
+    },
+    {
+     "name": "E2 H3-C4",
+     "indirect": false,
+     "hot": [
+      [
+       "H3",
+       190.0,
+       120.0
+      ]
+     ],
+     "cold": [
+      [
+       "C4",
+       100.0,
+       170.0
+      ]
+     ]
+    },
+    {
+     "name": "E3 H4-C2",
+     "indirect": false,
+     "hot": [
+      [
+       "H4",
+       160.0,
+       120.0,
+       0.16875
+      ]
+     ],
+     "cold": [
+      [
+       "C2",
+       100.0,
+       138.571429
+      ]
+     ]
+    },
+    {
+     "name": "E4 H4-C3",
+     "indirect": false,
+     "hot": [
+      [
+       "H4",
+       160.0,
+       120.0,
+       0.83125
+      ]
+     ],
+     "cold": [
+      [
+       "C3",
+       100.0,
+       138.0
+      ]
+     ]
+    },
+    {
+     "name": "E5 H2-C5",
+     "indirect": false,
+     "hot": [
+      [
+       "H2",
+       220.0,
+       160.0
+      ]
+     ],
+     "cold": [
+      [
+       "C5",
+       140.0,
+       188.0
+      ]
+     ]
+    },
+    {
+     "name": "E6 H3-C2",
+     "indirect": false,
+     "hot": [
+      [
+       "H3",
+       219.666667,
+       190.0
+      ]
+     ],
+     "cold": [
+      [
+       "C2",
+       138.571429,
+       164.0
+      ]
+     ]
+    },
+    {
+     "name": "E7 H1-C5",
+     "indirect": false,
+     "hot": [
+      [
+       "H1",
+       327.0,
+       320.0
+      ]
+     ],
+     "cold": [
+      [
+       "C5",
+       188.0,
+       191.5
+      ]
+     ]
+    },
+    {
+     "name": "E8 H3-C5",
+     "indirect": false,
+     "hot": [
+      [
+       "H3",
+       220.0,
+       219.666667
+      ]
+     ],
+     "cold": [
+      [
+       "C5",
+       191.5,
+       191.6
+      ]
+     ]
+    },
+    {
+     "name": "E9 H1-C2",
+     "indirect": false,
+     "hot": [
+      [
+       "H1",
+       120.0,
+       74.5
+      ]
+     ],
+     "cold": [
+      [
+       "C2",
+       35.0,
+       100.0
+      ]
+     ]
+    },
+    {
+     "name": "E10 H4-C3",
+     "indirect": false,
+     "hot": [
+      [
+       "H4",
+       120.0,
+       106.875
+      ]
+     ],
+     "cold": [
+      [
+       "C3",
+       85.0,
+       100.0
+      ]
+     ]
+    },
+    {
+     "name": "E11 H3-C4",
+     "indirect": false,
+     "hot": [
+      [
+       "H3",
+       120.0,
+       80.0
+      ]
+     ],
+     "cold": [
+      [
+       "C4",
+       60.0,
+       100.0
+      ]
+     ]
+    }
+   ]
+  },
+  "four-stream (Kemp 2007): MER (Pinch Design Method)": {
+   "description": "pinch_design on four_stream_process_streams.csv; heaters and coolers are the unmatched stream ends",
+   "provenance": {},
+   "matches": [
+    {
+     "name": "E1 Reactor 1 product-Reactor 1 feed",
+     "indirect": false,
+     "hot": [
+      [
+       "Reactor 1 product",
+       203.333333,
+       150.0
+      ]
+     ],
+     "cold": [
+      [
+       "Reactor 1 feed",
+       140.0,
+       180.0
+      ]
+     ]
+    },
+    {
+     "name": "E2 Reactor 2 product-Reactor 2 feed",
+     "indirect": false,
+     "hot": [
+      [
+       "Reactor 2 product",
+       200.0,
+       150.0
+      ]
+     ],
+     "cold": [
+      [
+       "Reactor 2 feed",
+       140.0,
+       181.666667
+      ]
+     ]
+    },
+    {
+     "name": "E3 Reactor 1 product-Reactor 2 feed",
+     "indirect": false,
+     "hot": [
+      [
+       "Reactor 1 product",
+       250.0,
+       203.333333
+      ]
+     ],
+     "cold": [
+      [
+       "Reactor 2 feed",
+       181.666667,
+       205.0
+      ]
+     ]
+    },
+    {
+     "name": "E4 Reactor 2 product-Reactor 1 feed",
+     "indirect": false,
+     "hot": [
+      [
+       "Reactor 2 product",
+       150.0,
+       80.0
+      ]
+     ],
+     "cold": [
+      [
+       "Reactor 1 feed",
+       52.5,
+       140.0
+      ]
+     ]
+    },
+    {
+     "name": "E5 Reactor 1 product-Reactor 1 feed",
+     "indirect": false,
+     "hot": [
+      [
+       "Reactor 1 product",
+       150.0,
+       106.666667
+      ]
+     ],
+     "cold": [
+      [
+       "Reactor 1 feed",
+       20.0,
+       52.5
+      ]
+     ]
+    }
+   ]
+  },
+  "four-stream (Sagli et al. 1990): loops broken at constant energy": {
+   "description": "",
+   "provenance": {},
+   "matches": [
+    {
+     "name": "E1 H1-C1",
+     "indirect": false,
+     "hot": [
+      [
+       "H1",
+       150.0,
+       80.0
+      ]
+     ],
+     "cold": [
+      [
+       "C1",
+       69.0,
+       125.0
+      ]
+     ]
+    },
+    {
+     "name": "E2 H2-C1",
+     "indirect": false,
+     "hot": [
+      [
+       "H2",
+       90.0,
+       74.6875
+      ]
+     ],
+     "cold": [
+      [
+       "C1",
+       20.0,
+       69.0
+      ]
+     ]
+    },
+    {
+     "name": "E3 H2-C2",
+     "indirect": false,
+     "hot": [
+      [
+       "H2",
+       74.6875,
+       60.0
+      ]
+     ],
+     "cold": [
+      [
+       "C2",
+       25.0,
+       64.166667
+      ]
+     ]
+    }
+   ]
+  },
+  "four-stream (Sagli et al. 1990): loops broken, 12 K approach": {
+   "description": "",
+   "provenance": {},
+   "matches": [
+    {
+     "name": "E1 H1-C1",
+     "indirect": false,
+     "hot": [
+      [
+       "H1",
+       150.0,
+       84.999995
+      ]
+     ],
+     "cold": [
+      [
+       "C1",
+       72.999996,
+       125.0
+      ]
+     ]
+    },
+    {
+     "name": "E2 H2-C1",
+     "indirect": false,
+     "hot": [
+      [
+       "H2",
+       90.0,
+       73.437501
+      ]
+     ],
+     "cold": [
+      [
+       "C1",
+       20.0,
+       72.999996
+      ]
+     ]
+    },
+    {
+     "name": "E3 H2-C2",
+     "indirect": false,
+     "hot": [
+      [
+       "H2",
+       73.437501,
+       60.0
+      ]
+     ],
+     "cold": [
+      [
+       "C2",
+       25.0,
+       60.833337
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}
