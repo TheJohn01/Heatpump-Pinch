@@ -20,9 +20,12 @@ from pinch.hen_design import (
     Exchanger,
     MatchLoad,
     UtilityStream,
+    break_loops,
     evaluate_exchangers,
+    find_loop,
     min_units_matches,
     overall_U,
+    pinch_design,
     series_network,
 )
 from pinch.pressure_drop import (
@@ -213,3 +216,87 @@ def test_letsios2018_benchmark_subset():
 def test_letsios2018_committed_benchmark_agrees():
     df = pd.read_csv("outputs/benchmark_min_matches.csv")
     assert len(df) == 20 and df["agrees"].all()
+
+
+# ---------------------------------------------------------------- Pinch Design Method
+@pytest.mark.parametrize("path, Qh, Qc", [(SAGLI, 1075.0, 400.0),                     # Polley 1991, Table 1
+                                          ("data/aromatics_plant_streams.csv", 21680.0, 29400.0),   # Table 12
+                                          ("data/four_stream_process_streams.csv", 7.5, 10.0)])     # Oklahoma Ex. 1.1
+def test_pinch_design_meets_the_published_targets_with_fewest_units(path, Qh, Qc):
+    """The MER network keeps the published energy targets, nothing crosses the pinch, every match keeps the
+    stream shifts, and the unit count is (N - 1) above plus (N - 1) below the pinch."""
+    from pinch.network import evaluate_network
+    s = load_streams(path)
+    d = pinch_design(s, "ST", "CW")
+    r = evaluate_network(s, d.to_network("MER"))
+    assert (r.Qh, r.Qc) == pytest.approx((Qh, Qc))
+    assert r.cross_pinch_matches + r.heaters_below_pinch + r.coolers_above_pinch == pytest.approx(0.0, abs=1e-6)
+    assert r.matches["feasible"].all()
+    assert d.units == d.units_target
+
+
+def test_four_stream_mer_design_splits_H2_below_the_pinch():
+    """Below the pinch (T* 80 °C) both cold streams need a pinch partner with CP >= theirs; only H2 (80 kW/K)
+    has one, so H2 is split (CP rule); above it H1 (20) goes to C1 (25). 3 + 4 = 7 units."""
+    d = pinch_design(load_streams(SAGLI), "ST", "CW")
+    assert d.pinch_T_star_C == 80.0 and d.units_target == 7 and d.splits == 1
+    branches = [m for m in d.matches if m.hot == "H2"]
+    assert {m.cold for m in branches} == {"C1", "C2"} and sum(m.hot_seg[2] for m in branches) == pytest.approx(1.0)
+    for m in branches:                                  # each branch obeys the CP rule
+        assert 80.0 * m.hot_seg[2] >= {"C1": 25.0, "C2": 30.0}[m.cold] - 1e-9
+
+
+def test_designed_network_round_trips_through_the_network_file(tmp_path):
+    from pinch.network import evaluate_network, load_networks, network_to_json
+    s = load_streams(SAGLI)
+    net = pinch_design(s).to_network("MER")
+    f = tmp_path / "n.json"
+    f.write_text(json.dumps({"networks": {"MER": network_to_json(net)}}), encoding="utf-8")
+    back = load_networks(f)["MER"]
+    assert [m.name for m in back.matches] == [m.name for m in net.matches]
+    assert evaluate_network(s, back).Qh == pytest.approx(1075.0)
+
+
+def test_split_branches_must_cover_their_range():
+    from pinch.network import Match, Network, Segment, evaluate_network
+    s = load_streams(SAGLI)
+    half = Network("x", (Match("a", (Segment("H2", 90, 60, 0.5),), (Segment("C2", 25, 65),)),))
+    with pytest.raises(ValueError, match="split branches cover"):
+        evaluate_network(s, half)
+
+
+def test_find_loop_and_euler_count():
+    """Two units on one pair form a loop; a tree (N - 1 units) has none."""
+    assert find_loop((MatchLoad("H", "C", 5.0), MatchLoad("H", "C", 2.0))) == [1, 0]
+    assert find_loop((MatchLoad("H", "C", 5.0), MatchLoad("H", "CW", 2.0), MatchLoad("ST", "C", 1.0))) is None
+
+
+def test_loop_breaking_reaches_the_euler_minimum_of_network_5_1():
+    """Breaking the two loops of the MER network at constant energy leaves 5 units (= N - 1 with the two
+    utilities) at Q̇h 1075 kW, like Network 5.1 (Polley and Panjeh Shahi 1991, Fig. 3); every stream keeps
+    its duty. Restoring a 12 K approach costs extra hot utility along a utility path."""
+    s = load_streams(SAGLI)
+    d = pinch_design(s, "ST", "CW")
+    ends = _ends(s)
+    req = {(a, b): 12.0 for a in "H1 H2".split() for b in "C1 C2".split()}
+    lb = break_loops(d.unit_loads(), ends, req, {"ST"}, {"CW"}, relax=False)
+    assert len(lb.units) == len(DATA["networks"]["5.1"]["matches"]) == 5
+    assert lb.hot_utility == pytest.approx(1075.0)
+    for x in s.streams:
+        assert sum(u.Q for u in lb.units if x.name in (u.hot, u.cold)) == pytest.approx(x.Q)
+    relaxed = break_loops(d.unit_loads(), ends, req, {"ST"}, {"CW"})
+    assert relaxed.hot_utility > 1075.0 + 1.0 and not relaxed.network.violations
+    assert relaxed.network.min_approach_K >= 12.0 - 1e-4
+    assert any(st["relaxed_by"] > 0 for st in relaxed.steps)
+
+
+def test_benchmark_pinch_design_reproduces_the_published_values():
+    from scripts.benchmarks import benchmark_pinch_design
+    df, nets = benchmark_pinch_design.run()
+    pub = df[df["source"].str.startswith(("Table 1", "Oklahoma", "Network 5.1 (Fig. 3)"))
+             & ~df["source"].str.contains("comparison") & df["published"].notna()]
+    assert len(pub) == 8 and (pub["deviation_pct"].abs() < 1e-6).all()   # 6 targets, 5.1 units and Q̇h
+    assert (df.loc[df["check"].str.contains("across the pinch"), "reproduced"].abs() < 1e-6).all()
+    units = df[df["check"] == "MER network units"]
+    assert (units["reproduced"] == units["source"].str.extract(r": (\d+)$")[0].astype(float)).all()
+    assert len(nets) == 5
