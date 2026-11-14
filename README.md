@@ -447,8 +447,13 @@ at 7.28 kWh/hl by the GCC pocket at 98-102 °C T*.
 `time_slices.py` follows Stampfli et al. (2018, 2019): Time Average and Time Slice targets, storage
 sizing, and a heat pump that works between storage loops. It reproduces the graphical-method results
 of Stampfli et al. (2018, *CET* 70, 1789-1794), Table 2 (condensing 46.26 °C, evaporating −4.56 °C,
-COP 2.2), and uses the 22-stream dairy of Stampfli et al. (2019), Table 1, as its validation case. The brewery stays on time-average targets because its schedule is not
-published (`scripts/checks/batch_check.py` brackets the boil window instead).
+COP 2.2), and uses the 22-stream dairy of Stampfli et al. (2019), Table 1, as its validation case. That
+dairy is also a case (`cases/dairy_noncontinuous.json`, key `schedule`): the steady analysis runs on its
+time-averaged streams, and a least-cost hourly dispatch (`dispatch_day`, a linear program per day with hot and
+cold storage and a back-up boiler) runs it against a year of hourly prices and the ERSE tariff, against constant
+design operation. With the 2025 Portuguese prices, dispatch at the design capacity costs 10.9 % less per year,
+and 25.6 % less with twice the capacity (whose investment is not counted). The brewery stays on time-average
+targets because its schedule is not published (`scripts/checks/batch_check.py` brackets the boil window instead).
 
 ---
 
@@ -936,6 +941,7 @@ cases/                       One file per type of plant (names, titles and descr
   milk_evaporator.json       Dairy milk evaporator (MVR), kW
   spray_dryer.json           Dairy milk powder spray dryer, kW
   four_stream_process.json   Four-stream chemical process (non-food demonstration), MW
+  dairy_noncontinuous.json   Non-continuous dairy with a daily schedule (Stampfli et al. 2019), kW
 data/
   <plant>_streams.csv        Stream table of each case (brewery, milk_evaporator, spray_dryer, four_stream_process)
   brewery_networks.json      Existing brewery network and the condensate retrofit (step 5)
@@ -1125,6 +1131,7 @@ case file's `provenance` (shown on the app's Sources page and at the end of ever
 | `milk_evaporator` | Milk evaporator | Walmsley, Lincoln, Padullés, Cleland (2024), *Energies* 17, 2838, Table 2 |
 | `spray_dryer` | Milk powder spray dryer | Walmsley et al. (2024), Table 1 (case first presented by Liang et al., 2022) |
 | `four_stream_process` | Four-stream chemical process | University of Oklahoma ChE design notes, 'Minimum Utility', Example 1.1 |
+| `dairy_noncontinuous` | Non-continuous dairy | Stampfli, Atkins, Olsen, Walmsley, Wellig (2019), *Energy* 182, 236-253, Table 1 (CC BY) |
 
 A test checks that this table and the case files agree.
 

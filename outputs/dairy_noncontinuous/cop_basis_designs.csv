@@ -1,0 +1,7 @@
+basis,COP HP with storage loops,COP_system,fraction_of_Qh_min_electrified
+case basis (η_L 0.35),2.198,2.198,0.4111
+manufacturer-data fit - 1 sigma,2.848,2.848,0.4111
+manufacturer-data fit,3.128,3.128,0.4111
+manufacturer-data fit + 1 sigma,3.408,3.408,0.4111
+"manufacturer-data fit, glide-matched blend",3.128,3.128,0.4111
+"market products, supplier operating points (median) (not computed: HP with storage loops: no supplier product has published points covering this unit)",,,

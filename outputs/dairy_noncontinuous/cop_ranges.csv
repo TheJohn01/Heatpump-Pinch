@@ -1,0 +1,2 @@
+unit,T_sink_in_C,T_sink_out_C,T_source_in_C,lift_K,sink_glide_K,COP_basis,eta_lorenz_basis,fit,COP_fit,COP_fit_minus_sigma,COP_fit_plus_sigma,fit_in_range,eta_equivalent_fit,COP_glide_blend,COP_sghp_fit,suppliers_interpolated,COP_suppliers_median,COP_suppliers_min,COP_suppliers_max,suppliers_reaching_point,COP_demo_eta_min,COP_demo_eta_median,COP_demo_eta_max
+HP with storage loops,46.3,46.3,-4.57,50.87,0.0,2.198,0.35,jesper2021_hthp,3.128,2.848,3.408,True,0.4982,,,0,,,,32,2.173,2.327,3.422

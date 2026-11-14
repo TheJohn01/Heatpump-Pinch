@@ -63,7 +63,11 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
         keyed by the file stem used when written to disk.
     """
     if streams is None:
-        streams = load_streams(case.stream_file)
+        if case.schedule:          # non-continuous: the steady analysis runs on the time-averaged loads
+            from pinch.time_slices import load_schedule, time_averaged
+            streams = time_averaged(load_schedule(case.schedule["file_resolved"], float(case.schedule.get("cycle_h", 24))))
+        else:
+            streams = load_streams(case.stream_file)
     streams = with_extra_shift(streams, case.extra_shift_K)
     unit = streams.energy_unit
     table = problem_table(streams)
@@ -186,6 +190,11 @@ def compute(case: Case, streams: StreamSet | None = None, cycle_selected: dict |
         figures.update(block.figures)
     if eta_rows:
         tables["eta_lorenz_sensitivity"] = pd.DataFrame(eta_rows)
+    if case.schedule:
+        from pinch.time_slices import operation_outputs
+        summary["time_slices"], t_tables, t_figures = operation_outputs(case)
+        tables.update(t_tables)
+        figures.update(t_figures)
     return Outputs(summary, tables, figures)
 
 
@@ -197,6 +206,8 @@ def input_files(case: Case) -> list[Path]:
         files.append(Path(case.retrofit["network_file_resolved"]))
     if (case.economics or {}).get("cost_basis"):
         files.append(COST_BASES_FILE)
+    if case.schedule:
+        files.append(Path(case.schedule["file_resolved"]))
     return [Path(f) for f in files if f is not None]
 
 
@@ -347,6 +358,25 @@ def markdown(s: dict) -> str:
                   "| Cost law | ΔTmin,opt [K] | Area [m²] | Q̇h,min [kW] | TAC [EUR/year] |", "|---|---|---|---|---|"]
         lines += [f"| {r['cost_law']} | {r['dTmin_opt_K']:g}{' (grid edge)' if r['at_grid_edge'] else ''} | "
                   f"{r['area_m2']:,.0f} | {r['Qh_min_kW']:,.0f} | {r['TAC_min_EUR']:,.0f} |" for r in at["RQ2"]]
+    ts = s.get("time_slices")
+    if ts:
+        h = ts["heat_pump"]
+        lines += ["", "## Non-continuous operation (pinch.time_slices)", "", ts["note"], "",
+                  "| Per cycle [kWh] | Time Slice Model (no storage) | Time Average Model (ideal storage) |",
+                  "|---|---|---|"]
+        lines += [f"| {k} | {ts['TSM'][k]:,.1f} | {ts['TAM'][k]:,.1f} |" for k in ("Qh_kWh", "Qc_kWh", "recovery_kWh")]
+        lines += ["", f"Heat pump with storage loops: condensing {h['T_co_C']} °C, evaporating {h['T_ev_C']} °C, COP "
+                  f"{h['COP']}, {h['Q_condenser_kW']} kW constant, hot storage {h['hot_storage_kWh']:,.0f} kWh, cold "
+                  f"storage {h['cold_storage_kWh']:,.0f} kWh."]
+        op = ts.get("operation")
+        if op:
+            lines += ["", f"Hourly operation over the price year ({op['limits']}); back-up heat at "
+                      f"{op['heat_cost_EUR_per_kWh']:.4f} EUR/kWh.", "",
+                      "| Mode | Capacity [kW] | Heat pump [MWh] | Back-up [MWh] | Electricity [MWh] | Energy cost [EUR] "
+                      "| Capacity charges [EUR] | Total [EUR] | Saving |", "|---|---|---|---|---|---|---|---|---|"]
+            lines += [f"| {m['mode']} | {m['capacity_kW']} | {m['heat_pump_MWh']} | {m['backup_MWh']} | "
+                      f"{m['electricity_MWh']} | {m['energy_cost_EUR']:,.0f} | {m['capacity_charges_EUR']:,.0f} | "
+                      f"{m['total_EUR']:,.0f} | {100 * m['saving_vs_constant']:.1f} % |" for m in op["modes"]]
     if s["warnings"]:
         lines += ["", "## Plausibility warnings", ""] + [f"- **{k}**: {'; '.join(v)}" for k, v in s["warnings"].items()]
     if s["provenance"]:

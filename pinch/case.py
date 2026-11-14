@@ -120,6 +120,9 @@ class Case:
     #: ((hot, cold, max heat or 0 = forbidden, reason), ...): match restrictions (pinch.restricted_matches)
     restricted_matches: tuple = ()
     case_file: Path | None = None   # the file this case was read from (provenance)
+    #: non-continuous process (pinch.time_slices): {"file", "cycle_h", "heat_pump": {"T_co_star_C", "dTmin_K"},
+    #: "dispatch": {"tariff", "capacity_factors"}}; the steady analysis then runs on the time-averaged streams
+    schedule: dict | None = None
 
     @property
     def data_source(self) -> str:
@@ -197,7 +200,18 @@ def load_case(path: str | Path) -> Case:
         sensitivities=parse_sensitivities(raw.get("sensitivities"), path.name),
         restricted_matches=_parse_restrictions(raw.get("restricted_matches"), path.name),
         case_file=path.resolve(),
+        schedule=_resolve_schedule(raw.get("schedule"), path),
     )
+
+
+def _resolve_schedule(block: dict | None, case_path: Path) -> dict | None:
+    """Copy of the schedule block with its stream file resolved from the case file's folder."""
+    if not block:
+        return None
+    if "file" not in block or "heat_pump" not in block:
+        raise ValueError(f"{case_path.name}: schedule needs 'file' and 'heat_pump'")
+    f = Path(block["file"])
+    return {**block, "file_resolved": str(f if f.is_absolute() else (case_path.parent / f).resolve())}
 
 
 def _parse_restrictions(raw: list | None, file_name: str) -> tuple:

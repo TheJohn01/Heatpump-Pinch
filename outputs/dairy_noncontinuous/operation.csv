@@ -1,0 +1,5 @@
+mode,capacity_kW,days,heat_pump_MWh,backup_MWh,electricity_MWh,energy_cost_EUR,capacity_charges_EUR,total_EUR,saving_vs_constant
+constant (design),86.4,363,753.13,0.0,342.64,33601.0,3536.0,37137.0,0.0
+"dispatch, capacity x 1",86.4,363,515.4,237.73,234.48,30522.0,2566.0,33088.0,0.109
+"dispatch, capacity x 1.5",129.7,363,617.84,135.29,281.09,25978.0,3513.0,29491.0,0.2059
+"dispatch, capacity x 2",172.9,363,662.92,90.21,301.6,23225.0,4405.0,27630.0,0.256

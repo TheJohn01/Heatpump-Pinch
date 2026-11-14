@@ -56,7 +56,15 @@ committed outputs change only where an entry says so.
   5.1 for loop breaking).
 - Optional `length_m` per match in network files for the retrofit piping cost; the case-wide length stays the
   fallback.
-- Not added: shell-side Bell-Delaware rating (no published worked example obtainable; register item 86).
+- Not added: shell-side Bell-Delaware rating (no published worked example obtainable; register item 91).
+
+- Hourly operation of a non-continuous process (`pinch.time_slices`): case `dairy_noncontinuous` (Stampfli et al.
+  2019 data, key `schedule`) analysed on its time-averaged streams, with time-slice and time-average targets, the
+  heat pump with hot and cold storage loops, and a least-cost hourly dispatch (linear program per day) against the
+  2025 Portuguese hourly prices and the ERSE tariff, compared with constant design operation at 1, 1.5 and 2 x the
+  design capacity (`operation.csv`, `operation_day.png`). `pinch.tariffs.hourly_energy_price`.
+- Not added: steam header model, thermal vapour recompression and Total Site profiles (no checkable known answer;
+  register item 94).
 
 ### Changed outputs
 - New: `outputs/benchmark_pinch_design.csv`, `.md` and `benchmark_pinch_design_networks.json`. No earlier output
