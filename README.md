@@ -131,7 +131,7 @@ The three research questions are listed in the Abstract. Their supporting object
 - **Time:** continuous steady state for the main case. Non-continuous processes are handled by time
   slices and storage (Section 4.5) where a schedule is published; the brewery's is not.
 - **Data:** published, peer-reviewed case studies only (no company contact, by design of the
-  project). No measured plant data.
+  project). Measured data: one open data set of a dairy (Köster et al. 2025, CC BY 4.0).
 - **Heat pumps:** electrically driven vapour compression and mechanical vapour recompression (MVR);
   electric boilers as the reference for direct electrification.
 - **Economics:** Portugal (Eurostat prices, Portuguese grants and CO₂ addition); costs from the
@@ -899,8 +899,11 @@ composite-curve area (2757.0 m²).
 
 ### 10.3 Limitations
 
-- **No measured plant data.** Every case comes from a publication; validation rests on published
-  results, published networks and an independent tool (register item 65).
+- **Little measured plant data.** One case (`dairy_measured`) runs on metered loads of a dairy
+  (Köster et al. 2025, CC BY 4.0), and the published figures are reproduced from the raw data
+  (`outputs/koster2025_checks.csv`). The data hold no compressor power per unit, no evaporating
+  temperatures and no return temperatures, so they check how measured data are read, not the
+  targets or the COP models; the other cases come from publications (register items 65, 95).
 - **Steady state for the brewery.** Its schedule is not published; batch duty enters only through a
   capacity factor on the wort-boiling unit (`batch_check.py`).
 - **Heat pump performance from models and supplier points.** η_L or the cycle model at one design point;
@@ -942,6 +945,7 @@ cases/                       One file per type of plant (names, titles and descr
   spray_dryer.json           Dairy milk powder spray dryer, kW
   four_stream_process.json   Four-stream chemical process (non-food demonstration), MW
   dairy_noncontinuous.json   Non-continuous dairy with a daily schedule (Stampfli et al. 2019), kW
+  dairy_measured.json        Dairy with metered 2024 loads, mean production day (Köster et al. 2025), kW
 data/
   <plant>_streams.csv        Stream table of each case (brewery, milk_evaporator, spray_dryer, four_stream_process)
   brewery_networks.json      Existing brewery network and the condensate retrofit (step 5)
@@ -1094,8 +1098,9 @@ debt and the release procedure are in `docs/QUALITY.md`; changes per version in 
 
 ### 12.2 Future work
 
-- **Measured plant data.** One site with metered stream data would validate the whole chain; it is
-  outside the project's no-company-contact constraint.
+- **Measured plant data.** A site with metered stream temperatures, compressor power and heat pump
+  output would validate the targets and the COP models; the open dairy data set (`dairy_measured`)
+  lacks those.
 - **Manufacturer heat pump data.** Part-load maps of commercial high-temperature heat pumps in place of
   TESPy's generic lines (the supplier sheets give full-load points only).
 - **Brewhouse schedule.** A published schedule would let the brewery run through `time_slices.py`,
@@ -1131,6 +1136,7 @@ case file's `provenance` (shown on the app's Sources page and at the end of ever
 | `milk_evaporator` | Milk evaporator | Walmsley, Lincoln, Padullés, Cleland (2024), *Energies* 17, 2838, Table 2 |
 | `spray_dryer` | Milk powder spray dryer | Walmsley et al. (2024), Table 1 (case first presented by Liang et al., 2022) |
 | `four_stream_process` | Four-stream chemical process | University of Oklahoma ChE design notes, 'Minimum Utility', Example 1.1 |
+| `dairy_measured` | Dairy with integrated CO2 refrigeration | Köster, Bengsch, Widell (2025), *Int. J. Refrig.* 180, 564-571, and its data, Zenodo doi:10.5281/zenodo.22877098 (CC BY 4.0): metered 2024 loads, mean production day |
 | `dairy_noncontinuous` | Non-continuous dairy | Stampfli, Atkins, Olsen, Walmsley, Wellig (2019), *Energy* 182, 236-253, Table 1 (CC BY) |
 
 A test checks that this table and the case files agree.

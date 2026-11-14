@@ -66,6 +66,12 @@ committed outputs change only where an entry says so.
 - Not added: steam header model, thermal vapour recompression and Total Site profiles (no checkable known answer;
   register item 94).
 
+- Measured data: metered 2024 loads of a Norwegian dairy (Köster, Bengsch, Widell 2025, CC BY 4.0) as hourly means
+  (`data/measured/`, `scripts/data/fetch_sintef_dairy.py`); `scripts/validation/reproduce_koster2025.py` reproduces
+  the authors' published monthly and production-day figures from the raw data (`outputs/koster2025_checks.csv`) and
+  writes the mean production day as a time-sliced stream table; case `dairy_measured` (screening on that day: two
+  heat pump levels, time-slice targets, storage heat pump). `load_schedule` skips '#' comment lines.
+
 ### Changed outputs
 - New: `outputs/benchmark_pinch_design.csv`, `.md` and `benchmark_pinch_design_networks.json`. No earlier output
   changes.

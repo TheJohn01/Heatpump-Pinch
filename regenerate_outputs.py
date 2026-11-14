@@ -39,6 +39,7 @@ STEPS: tuple[tuple[str, ...], ...] = (
     ("-m", "scripts.validation.verify_padulles2026_assumptions"),
     ("-m", "scripts.validation.verify_walmsley2024"),
     ("-m", "scripts.validation.reproduce_stampfli2019"),
+    ("-m", "scripts.validation.reproduce_koster2025"),     # writes the measured dairy's stream file, before the cases
     ("-m", "scripts.benchmarks.benchmark_openpinch"),
     ("-m", "scripts.benchmarks.benchmark_hen"),
     ("-m", "scripts.benchmarks.benchmark_min_matches"),

@@ -75,7 +75,7 @@ def load_schedule(path: str | Path, cycle_h: float = 24.0) -> Schedule:
     A stream runs from t_start to t_end within the cycle (0 <= t_start < t_end <= cycle). A stream that
     runs across the cycle boundary is entered as two rows.
     """
-    df = pd.read_csv(path)
+    df = pd.read_csv(path, comment="#")
     for c in ("t_start_h", "t_end_h"):
         if c not in df.columns:
             raise ValueError(f"{Path(path).name}: missing column {c}")
@@ -372,7 +372,8 @@ def operation_outputs(case) -> tuple[dict, dict, dict]:
     tsm, tam = tsm_targets(sched), tam_targets(sched)
     summary = {"note": "Time Slice Model (direct heat recovery only) and Time Average Model (storage at any "
                        "temperature) per cycle; heat pump with hot and cold storage loops after Stampfli et al. "
-                       "(2019); hourly operation against the year's hourly prices (pinch.time_slices.annual_dispatch).",
+                       "(2019)" + ("; hourly operation against the year's hourly prices (pinch.time_slices."
+                                   "annual_dispatch)." if sc.get("dispatch") else "."),
                "cycle_h": sched.cycle_h, "TSM": {k: round(v, 1) for k, v in tsm.items()},
                "TAM": {k: round(v, 1) for k, v in tam.items()},
                "heat_pump": {"T_co_C": round(hp.T_co_C, 2), "T_ev_C": round(hp.T_ev_C, 2), "COP": round(hp.COP, 3),

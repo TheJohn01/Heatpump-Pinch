@@ -1,0 +1,92 @@
+stream,type,T_in_C,T_out_C,Q_kW,dT_shift_K,t_start_h,t_end_h
+"Glycol cooling (process, cold rooms, AC) 00h",hot,-2.5,-3.5,29.928,2.5,0,1
+"Glycol cooling (process, cold rooms, AC) 01h",hot,-2.5,-3.5,29.21,2.5,1,2
+"Glycol cooling (process, cold rooms, AC) 02h",hot,-2.5,-3.5,28.977,2.5,2,3
+"Glycol cooling (process, cold rooms, AC) 03h",hot,-2.5,-3.5,30.062,2.5,3,4
+"Glycol cooling (process, cold rooms, AC) 04h",hot,-2.5,-3.5,54.154,2.5,4,5
+"Glycol cooling (process, cold rooms, AC) 05h",hot,-2.5,-3.5,96.253,2.5,5,6
+"Glycol cooling (process, cold rooms, AC) 06h",hot,-2.5,-3.5,119.574,2.5,6,7
+"Glycol cooling (process, cold rooms, AC) 07h",hot,-2.5,-3.5,131.245,2.5,7,8
+"Glycol cooling (process, cold rooms, AC) 08h",hot,-2.5,-3.5,131.616,2.5,8,9
+"Glycol cooling (process, cold rooms, AC) 09h",hot,-2.5,-3.5,131.559,2.5,9,10
+"Glycol cooling (process, cold rooms, AC) 10h",hot,-2.5,-3.5,131.66,2.5,10,11
+"Glycol cooling (process, cold rooms, AC) 11h",hot,-2.5,-3.5,127.331,2.5,11,12
+"Glycol cooling (process, cold rooms, AC) 12h",hot,-2.5,-3.5,121.165,2.5,12,13
+"Glycol cooling (process, cold rooms, AC) 13h",hot,-2.5,-3.5,110.548,2.5,13,14
+"Glycol cooling (process, cold rooms, AC) 14h",hot,-2.5,-3.5,94.297,2.5,14,15
+"Glycol cooling (process, cold rooms, AC) 15h",hot,-2.5,-3.5,76.519,2.5,15,16
+"Glycol cooling (process, cold rooms, AC) 16h",hot,-2.5,-3.5,67.739,2.5,16,17
+"Glycol cooling (process, cold rooms, AC) 17h",hot,-2.5,-3.5,66.291,2.5,17,18
+"Glycol cooling (process, cold rooms, AC) 18h",hot,-2.5,-3.5,58.99,2.5,18,19
+"Glycol cooling (process, cold rooms, AC) 19h",hot,-2.5,-3.5,62.192,2.5,19,20
+"Glycol cooling (process, cold rooms, AC) 20h",hot,-2.5,-3.5,67.041,2.5,20,21
+"Glycol cooling (process, cold rooms, AC) 21h",hot,-2.5,-3.5,54.947,2.5,21,22
+"Glycol cooling (process, cold rooms, AC) 22h",hot,-2.5,-3.5,38.891,2.5,22,23
+"Glycol cooling (process, cold rooms, AC) 23h",hot,-2.5,-3.5,33.878,2.5,23,24
+Process water cooling (CO2 units 1 and 4) 04h,hot,2.0,1.0,0.356,2.5,4,5
+Process water cooling (CO2 units 1 and 4) 05h,hot,2.0,1.0,3.179,2.5,5,6
+Process water cooling (CO2 units 1 and 4) 06h,hot,2.0,1.0,10.244,2.5,6,7
+Process water cooling (CO2 units 1 and 4) 07h,hot,2.0,1.0,52.188,2.5,7,8
+Process water cooling (CO2 units 1 and 4) 08h,hot,2.0,1.0,52.005,2.5,8,9
+Process water cooling (CO2 units 1 and 4) 09h,hot,2.0,1.0,49.81,2.5,9,10
+Process water cooling (CO2 units 1 and 4) 10h,hot,2.0,1.0,48.473,2.5,10,11
+Process water cooling (CO2 units 1 and 4) 11h,hot,2.0,1.0,47.536,2.5,11,12
+Process water cooling (CO2 units 1 and 4) 12h,hot,2.0,1.0,46.203,2.5,12,13
+Process water cooling (CO2 units 1 and 4) 13h,hot,2.0,1.0,43.915,2.5,13,14
+Process water cooling (CO2 units 1 and 4) 14h,hot,2.0,1.0,41.746,2.5,14,15
+Process water cooling (CO2 units 1 and 4) 15h,hot,2.0,1.0,2.403,2.5,15,16
+Process water cooling (CO2 units 1 and 4) 16h,hot,2.0,1.0,0.761,2.5,16,17
+Process water cooling (CO2 units 1 and 4) 17h,hot,2.0,1.0,0.617,2.5,17,18
+Process water cooling (CO2 units 1 and 4) 18h,hot,2.0,1.0,0.466,2.5,18,19
+Process water cooling (CO2 units 1 and 4) 19h,hot,2.0,1.0,0.349,2.5,19,20
+Process water cooling (CO2 units 1 and 4) 20h,hot,2.0,1.0,0.503,2.5,20,21
+Process water cooling (CO2 units 1 and 4) 21h,hot,2.0,1.0,0.416,2.5,21,22
+Process water cooling (CO2 units 1 and 4) 22h,hot,2.0,1.0,0.17,2.5,22,23
+"Hot water (CIP, truck hall, production) 00h",cold,6.5,65.0,11.261,2.5,0,1
+"Hot water (CIP, truck hall, production) 01h",cold,6.5,65.0,7.469,2.5,1,2
+"Hot water (CIP, truck hall, production) 02h",cold,6.5,65.0,6.283,2.5,2,3
+"Hot water (CIP, truck hall, production) 03h",cold,6.5,65.0,17.893,2.5,3,4
+"Hot water (CIP, truck hall, production) 04h",cold,6.5,65.0,135.641,2.5,4,5
+"Hot water (CIP, truck hall, production) 05h",cold,6.5,65.0,122.112,2.5,5,6
+"Hot water (CIP, truck hall, production) 06h",cold,6.5,65.0,101.671,2.5,6,7
+"Hot water (CIP, truck hall, production) 07h",cold,6.5,65.0,105.485,2.5,7,8
+"Hot water (CIP, truck hall, production) 08h",cold,6.5,65.0,94.934,2.5,8,9
+"Hot water (CIP, truck hall, production) 09h",cold,6.5,65.0,124.739,2.5,9,10
+"Hot water (CIP, truck hall, production) 10h",cold,6.5,65.0,135.829,2.5,10,11
+"Hot water (CIP, truck hall, production) 11h",cold,6.5,65.0,142.253,2.5,11,12
+"Hot water (CIP, truck hall, production) 12h",cold,6.5,65.0,159.479,2.5,12,13
+"Hot water (CIP, truck hall, production) 13h",cold,6.5,65.0,184.982,2.5,13,14
+"Hot water (CIP, truck hall, production) 14h",cold,6.5,65.0,197.171,2.5,14,15
+"Hot water (CIP, truck hall, production) 15h",cold,6.5,65.0,201.135,2.5,15,16
+"Hot water (CIP, truck hall, production) 16h",cold,6.5,65.0,193.525,2.5,16,17
+"Hot water (CIP, truck hall, production) 17h",cold,6.5,65.0,164.893,2.5,17,18
+"Hot water (CIP, truck hall, production) 18h",cold,6.5,65.0,117.521,2.5,18,19
+"Hot water (CIP, truck hall, production) 19h",cold,6.5,65.0,84.822,2.5,19,20
+"Hot water (CIP, truck hall, production) 20h",cold,6.5,65.0,74.602,2.5,20,21
+"Hot water (CIP, truck hall, production) 21h",cold,6.5,65.0,52.126,2.5,21,22
+"Hot water (CIP, truck hall, production) 22h",cold,6.5,65.0,30.757,2.5,22,23
+"Hot water (CIP, truck hall, production) 23h",cold,6.5,65.0,16.84,2.5,23,24
+"Steam demand (pasteurisation, sterilisation, CIP) 00h",cold,65.0,100.0,36.738,2.5,0,1
+"Steam demand (pasteurisation, sterilisation, CIP) 01h",cold,65.0,100.0,33.147,2.5,1,2
+"Steam demand (pasteurisation, sterilisation, CIP) 02h",cold,65.0,100.0,33.022,2.5,2,3
+"Steam demand (pasteurisation, sterilisation, CIP) 03h",cold,65.0,100.0,48.047,2.5,3,4
+"Steam demand (pasteurisation, sterilisation, CIP) 04h",cold,65.0,100.0,95.619,2.5,4,5
+"Steam demand (pasteurisation, sterilisation, CIP) 05h",cold,65.0,100.0,256.591,2.5,5,6
+"Steam demand (pasteurisation, sterilisation, CIP) 06h",cold,65.0,100.0,218.692,2.5,6,7
+"Steam demand (pasteurisation, sterilisation, CIP) 07h",cold,65.0,100.0,215.996,2.5,7,8
+"Steam demand (pasteurisation, sterilisation, CIP) 08h",cold,65.0,100.0,217.591,2.5,8,9
+"Steam demand (pasteurisation, sterilisation, CIP) 09h",cold,65.0,100.0,207.223,2.5,9,10
+"Steam demand (pasteurisation, sterilisation, CIP) 10h",cold,65.0,100.0,209.395,2.5,10,11
+"Steam demand (pasteurisation, sterilisation, CIP) 11h",cold,65.0,100.0,196.696,2.5,11,12
+"Steam demand (pasteurisation, sterilisation, CIP) 12h",cold,65.0,100.0,188.472,2.5,12,13
+"Steam demand (pasteurisation, sterilisation, CIP) 13h",cold,65.0,100.0,183.075,2.5,13,14
+"Steam demand (pasteurisation, sterilisation, CIP) 14h",cold,65.0,100.0,167.429,2.5,14,15
+"Steam demand (pasteurisation, sterilisation, CIP) 15h",cold,65.0,100.0,148.486,2.5,15,16
+"Steam demand (pasteurisation, sterilisation, CIP) 16h",cold,65.0,100.0,122.215,2.5,16,17
+"Steam demand (pasteurisation, sterilisation, CIP) 17h",cold,65.0,100.0,108.34,2.5,17,18
+"Steam demand (pasteurisation, sterilisation, CIP) 18h",cold,65.0,100.0,100.231,2.5,18,19
+"Steam demand (pasteurisation, sterilisation, CIP) 19h",cold,65.0,100.0,75.397,2.5,19,20
+"Steam demand (pasteurisation, sterilisation, CIP) 20h",cold,65.0,100.0,63.042,2.5,20,21
+"Steam demand (pasteurisation, sterilisation, CIP) 21h",cold,65.0,100.0,63.868,2.5,21,22
+"Steam demand (pasteurisation, sterilisation, CIP) 22h",cold,65.0,100.0,56.609,2.5,22,23
+"Steam demand (pasteurisation, sterilisation, CIP) 23h",cold,65.0,100.0,43.538,2.5,23,24

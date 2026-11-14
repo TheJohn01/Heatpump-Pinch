@@ -176,3 +176,29 @@ def test_dairy_case_runs_the_steady_analysis_on_time_averaged_streams():
     assert out.summary["heat_pump_design"]["COP_system"] == pytest.approx(ts["heat_pump"]["COP"], abs=1e-3)
     modes = out.tables["operation"].set_index("mode")
     assert modes["saving_vs_constant"].iloc[1:].is_monotonic_increasing             # more capacity, more shift
+
+
+# ---------------------------------------------------------------- measured dairy (Köster et al. 2025)
+
+def test_measured_dairy_reproduces_the_published_figures():
+    """Metered consumers equal the authors' Figure 2 data within rounding; production-day averages and the boiler
+    baseload equal Sec. 4.1-4.4 (scripts/validation/reproduce_koster2025.py)."""
+    from scripts.validation import reproduce_koster2025 as rk
+    c = rk.checks(rk.load()).set_index("check")
+    metered = c[c.index.str.contains("cold storage|Hot Water|glycol process")]
+    assert len(metered) == 12 * 6 and metered["deviation"].abs().max() <= 0.1   # published to 0.1 Wh/l
+    aug = c[c.index.str.startswith("August") & ~c.index.str.contains("largest")]
+    assert aug["deviation"].abs().max() < 0.5
+    assert c.filter(like="baseload", axis=0)["deviation"].abs().max() < 0.05
+    dec = c[c.index.str.startswith("December")]
+    assert (dec["deviation"].abs() / dec["published"]).max() < 0.01
+
+
+def test_measured_dairy_case():
+    from pinch.case import load_case
+    from scripts.analysis.analyse import compute
+    out = compute(load_case(ROOT / "cases" / "dairy_measured.json"))
+    ts = out.summary["time_slices"]
+    assert ts["TSM"]["Qh_kWh"] == pytest.approx(ts["TAM"]["Qh_kWh"])   # no recovery between the slices' levels
+    assert ts["TAM"]["Qh_kWh"] / ts["TAM"]["Qc_kWh"] > 2               # heating to cooling ratio (paper: 1.9-2.9)
+    assert out.summary["heat_pump_design"]["fraction_of_Qh_min_electrified"] == pytest.approx(1.0)
