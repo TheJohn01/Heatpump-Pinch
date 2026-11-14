@@ -885,14 +885,19 @@ composite-curve area (2757.0 m²).
   results, published networks and an independent tool (register item 65).
 - **Steady state for the brewery.** Its schedule is not published; batch duty enters only through a
   capacity factor on the wort-boiling unit (`batch_check.py`).
-- **Heat pump performance from models, not vendors.** η_L or the cycle model at one design point;
-  part load from TESPy's generic lines; no manufacturer maps.
+- **Heat pump performance from models and supplier points.** η_L or the cycle model at one design point;
+  manufacturer correlations and the operating points of 38 products from the IEA HPT Annex 58 / Project 68
+  supplier sheets (supplier data, not independently tested) as sensitivity bases; part load from TESPy's
+  generic lines.
 - **Network design stops early.** No stream splitting or loop breaking (Pinch Design Method not
   available), no shell-side Bell-Delaware rating, no piping or layout.
-- **Costs from one publication.** Padullés et al.'s Table 3 for the brewery, cross-checked once
-  (Kosmadakis et al. 2020); estimates of AACE Class 5 accuracy.
-- **Flat energy prices in the base case.** Time-of-use tariffs and demand charges are supported
-  (`tariffs.py`) but no Portuguese tariff data are committed.
+- **Costs at concept level.** Padullés et al.'s Table 3 for the brewery, with the DEA 2025 catalogue and
+  the Annex 58 / Project 68 supplier prices (× 2 for integration) as alternative bases
+  (`data/sources/cost_bases.json`); estimates of AACE Class 5 accuracy, since no case has the project
+  definition a Class 4 estimate needs.
+- **Flat energy prices in the base case.** Hourly 2025 prices for Portugal, Spain and Germany and the
+  2026 network tariffs of ERSE (MT), CNMC (6.1TD) and one German operator (MS) are committed and enter as
+  sensitivity rows (`tariffs.delivered_price`); the tariff year (2026) and the price year (2025) differ.
 - **Refrigeration credit.** The value of HP1 depends on crediting the chiller electricity its source
   replaces; Padullés et al. do not credit it (Section 9.3).
 
@@ -1071,16 +1076,15 @@ debt and the release procedure are in `docs/QUALITY.md`; changes per version in 
 
 - **Measured plant data.** One site with metered stream data would validate the whole chain; it is
   outside the project's no-company-contact constraint.
-- **Manufacturer heat pump data.** Performance maps of commercial high-temperature heat pumps (Jesper
-  et al. 2021 collect 33 units; not provided) in place of η_L and the generic part-load lines.
+- **Manufacturer heat pump data.** Part-load maps of commercial high-temperature heat pumps in place of
+  TESPy's generic lines (the supplier sheets give full-load points only).
 - **Brewhouse schedule.** A published schedule would let the brewery run through `time_slices.py`,
   with storage sized for the boil window.
 - **Network design.** Stream splitting and loop breaking (Pinch Design Method), shell-side
   Bell-Delaware rating, and retrofit optimisation of the existing network.
-- **Tariffs.** Portuguese network access tariffs (ERSE) and a year of day-ahead prices, to replace
-  the flat electricity price of the base case.
-- **Costs.** A second cost basis for the brewery beyond Padullés et al.'s Table 3, and an estimate of
-  AACE Class 4 accuracy.
+- **Tariffs.** Tariff and market prices of the same year, and a site's own contracted power instead of
+  the heat pump's load alone.
+- **Costs.** An AACE Class 4 estimate for a site with a layout and vendor quotes.
 
 ---
 

@@ -73,6 +73,7 @@ COP of each heat pump on four bases: the case's Lorenz efficiency; manufacturer-
 | manufacturer-data fit | 2.149 | 33.4 | -3,924,472 | 1.218 |
 | manufacturer-data fit + 1 sigma | 2.353 | 20.01 | -3,134,431 | 1.333 |
 | manufacturer-data fit, glide-matched blend | 2.179 | 30.24 | -3,801,040 | 1.235 |
+| market products, supplier operating points (median) (not computed: HP warm (milk preheat): no supplier product has published points covering this unit) | – | – | – | – |
 
 ### Lorenz-efficiency sensitivity (heat pumps re-sized)
 

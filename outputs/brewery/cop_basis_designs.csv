@@ -4,3 +4,4 @@ manufacturer-data fit - 1 sigma,1.351,1.519,1.393,1.0,1793176.0,-164117.0,inf,-3
 manufacturer-data fit,1.631,1.709,1.652,1.0,1793176.0,-26339.0,inf,-1996560.0,1590.0,1.274
 manufacturer-data fit + 1 sigma,1.911,1.899,1.908,1.0,1793176.0,66243.0,27.07,-1281667.0,1677.0,1.503
 "manufacturer-data fit, glide-matched blend",1.892,1.709,1.838,1.0,1793176.0,43551.0,41.17,-1456887.0,1656.0,1.439
+"market products, supplier operating points (median)",2.798,1.923,2.487,1.0,1793176.0,205400.0,8.73,-207134.0,1808.0,2.059
