@@ -1,7 +1,7 @@
 {
   "name": "dairy_noncontinuous",
-  "plant": "Non-continuous dairy (cream, butter oil and cleaning)",
-  "description": "Dairy site whose streams run in batches within a daily cycle (cream treatment, butter oil, cleaning in place), loads in kW with start and end times. Analysed on its time-averaged streams (storage at any temperature) and, for operation, slice by slice with a heat pump between hot and cold storage loops.",
+  "plant": "Non-continuous dairy",
+  "description": "Dairy site (cream treatment, butter oil, cleaning in place) whose streams run in batches within a daily cycle, loads in kW with start and end times. Analysed on its time-averaged streams (storage at any temperature) and, for operation, slice by slice with a heat pump between hot and cold storage loops.",
   "stream_file": "../data/stampfli2019_dairy_streams.csv",
   "extra_shift_K": 0,
   "ambient_T_C": 15,

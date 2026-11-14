@@ -1,0 +1,2 @@
+unit,T_sink_in_C,T_sink_out_C,T_source_C,Q_sink_kW,COP,W_kW,Q_source_kW,source_from_process_kW,source_external_kW,placement,eta_lorenz_Andersen2024_check,eta_lorenz_Andersen2024_extrapolated,Andersen2024_validity,warnings
+HP with storage loops,33.8,33.8,7.93,86.0889,2.198,39.1686,46.9203,46.9203,0.0,across pinch,,0.495,"source_glide_K = 0 outside fitted range (-50.0, -10.0)",

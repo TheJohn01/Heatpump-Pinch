@@ -1,0 +1,211 @@
+{
+  "case": "dairy_noncontinuous",
+  "plant": "Non-continuous dairy",
+  "description": "Dairy site (cream treatment, butter oil, cleaning in place) whose streams run in batches within a daily cycle, loads in kW with start and end times. Analysed on its time-averaged streams (storage at any temperature) and, for operation, slice by slice with a heat pump between hot and cold storage loops.",
+  "energy_unit": "kW",
+  "targets": {
+    "Q_hot_total": 1148.6206,
+    "Q_cold_total": 1259.0726,
+    "Qh_min": 209.4194,
+    "Qc_min": 98.9675,
+    "heat_recovery": 1049.6531,
+    "pinch_T_star_C": [
+      13.0
+    ],
+    "T_star_range_C": [
+      183.67,
+      3.0
+    ]
+  },
+  "heat_pump_design": {
+    "eta_lorenz": 0.35,
+    "units": [
+      "HP with storage loops"
+    ],
+    "levels_skipped_no_useful_duty": [],
+    "Q_sink_total": 86.0889,
+    "W_total": 39.1686,
+    "COP_system": 2.198,
+    "Qh_residual": 123.3305,
+    "fraction_of_Qh_min_electrified": 0.4111,
+    "cold_utility_replaced": 46.9203,
+    "source_external_total": 0.0
+  },
+  "annual_MWh_per_year": null,
+  "warnings": {},
+  "provenance": {
+    "data source": "Stampfli, Atkins, Olsen, Walmsley, Wellig (2019), Energy 182, 236-253, Table 1 (CC BY); companion paper Stampfli et al. (2018), CET 70, 1789-1794.",
+    "stream data": "published (Table 1, with start and end times); wash water heating uses CP x dT (242.9 kW) instead of the printed 260.25 kW (scripts/validation/reproduce_stampfli2019.py)",
+    "eta_lorenz": "published: zeta = 0.35, the Carnot fraction of Sec. 2.3 (isothermal condenser and evaporator, so Lorenz = Carnot)",
+    "source_T_C": "reproduced: T*ev = 7.93 °C from Eq. 9 (pinch.time_slices.storage_heat_pump) at the paper's T*co,sel = 33.8 °C",
+    "dT_cont_K": "published: real temperatures = shifted +/- 1.25 dTmin = 12.5 K (Eqs 5-6, two loop exchangers and the refrigerant)",
+    "sink levels": "published: T*co,sel = 33.8 °C (Sec. 3.2)",
+    "basis": "none: operating days per year are not published; the hourly operation is reported per year of prices, every day running the published daily schedule",
+    "ambient_T_C": "assumed: 15 °C, as the other secondary cases",
+    "economics": "prices only (see economics.sources); capacity factors of the dispatch are illustrative (1, 1.5, 2 x the design rate) and their extra investment is not counted"
+  },
+  "run": {
+    "tool_version": "0.10.0",
+    "inputs_sha256": {
+      "cases/dairy_noncontinuous.json": "1720661c248ef1277c3323e04ad51a23b69ea96af57eed713a8c92a25812110b",
+      "data/stampfli2019_dairy_streams.csv": "47e40920ac7f140572cebf23e9a04cd439604208605e964c4dd2531d17fe8460"
+    }
+  },
+  "economics": {
+    "skipped": "no annual basis in the case file"
+  },
+  "eta_lorenz_sensitivity": [],
+  "cycle_based_design": {},
+  "cop_ranges": {
+    "note": "COP of each heat pump on four bases: the case's Lorenz efficiency; manufacturer-data fits (Jesper et al. 2021) at lift = sink outlet - source inlet, with their standard deviation; a glide-matched blend (+16 %, Brendel et al. 2024) for sink glides of 25 K or more; the Lorenz model with the efficiencies achieved by IEA HPT Annex 58 closed-cycle demonstration plants (min, median, max). The fits come from small-glide machines, so for a large sink glide they are a pessimistic bound. fit_in_range = False: the point is outside the data behind the fit.",
+    "units": [
+      {
+        "unit": "HP with storage loops",
+        "T_sink_in_C": 46.3,
+        "T_sink_out_C": 46.3,
+        "T_source_in_C": -4.57,
+        "lift_K": 50.87,
+        "sink_glide_K": 0.0,
+        "COP_basis": 2.198,
+        "eta_lorenz_basis": 0.35,
+        "fit": "jesper2021_hthp",
+        "COP_fit": 3.128,
+        "COP_fit_minus_sigma": 2.848,
+        "COP_fit_plus_sigma": 3.408,
+        "fit_in_range": true,
+        "eta_equivalent_fit": 0.4982,
+        "COP_glide_blend": NaN,
+        "COP_sghp_fit": NaN,
+        "suppliers_interpolated": 0,
+        "COP_suppliers_median": NaN,
+        "COP_suppliers_min": NaN,
+        "COP_suppliers_max": NaN,
+        "suppliers_reaching_point": 32,
+        "COP_demo_eta_min": 2.173,
+        "COP_demo_eta_median": 2.327,
+        "COP_demo_eta_max": 3.422
+      }
+    ],
+    "designs": [
+      {
+        "basis": "case basis (η_L 0.35)",
+        "COP HP with storage loops": 2.198,
+        "COP_system": 2.198,
+        "fraction_of_Qh_min_electrified": 0.4111
+      },
+      {
+        "basis": "manufacturer-data fit - 1 sigma",
+        "COP HP with storage loops": 2.848,
+        "COP_system": 2.848,
+        "fraction_of_Qh_min_electrified": 0.4111
+      },
+      {
+        "basis": "manufacturer-data fit",
+        "COP HP with storage loops": 3.128,
+        "COP_system": 3.128,
+        "fraction_of_Qh_min_electrified": 0.4111
+      },
+      {
+        "basis": "manufacturer-data fit + 1 sigma",
+        "COP HP with storage loops": 3.408,
+        "COP_system": 3.408,
+        "fraction_of_Qh_min_electrified": 0.4111
+      },
+      {
+        "basis": "manufacturer-data fit, glide-matched blend",
+        "COP HP with storage loops": 3.128,
+        "COP_system": 3.128,
+        "fraction_of_Qh_min_electrified": 0.4111
+      },
+      {
+        "basis": "market products, supplier operating points (median) (not computed: HP with storage loops: no supplier product has published points covering this unit)"
+      }
+    ]
+  },
+  "area_targeting": {
+    "skipped": "no area_targeting block"
+  },
+  "time_slices": {
+    "note": "Time Slice Model (direct heat recovery only) and Time Average Model (storage at any temperature) per cycle; heat pump with hot and cold storage loops after Stampfli et al. (2019); hourly operation against the year's hourly prices (pinch.time_slices.annual_dispatch).",
+    "cycle_h": 24.0,
+    "TSM": {
+      "Qh_kWh": 5034.7,
+      "Qc_kWh": 2383.8,
+      "recovery_kWh": 25183.1
+    },
+    "TAM": {
+      "Qh_kWh": 5026.1,
+      "Qc_kWh": 2375.2,
+      "recovery_kWh": 25191.7
+    },
+    "heat_pump": {
+      "T_co_C": 46.3,
+      "T_ev_C": -4.57,
+      "COP": 2.198,
+      "Q_condenser_kW": 86.45,
+      "P_el_kW": 39.33,
+      "hot_storage_kWh": 1359.4,
+      "cold_storage_kWh": 740.2,
+      "heat_per_cycle_kWh": 2074.7
+    },
+    "operation": {
+      "prices": {
+        "prices": "data/prices/portugal_2025_day_ahead.csv",
+        "network_tariff": "pt_erse_2026_mt",
+        "band": "band ID"
+      },
+      "heat_cost_EUR_per_kWh": 0.06059,
+      "modes": [
+        {
+          "mode": "constant (design)",
+          "capacity_kW": 86.4,
+          "days": 363,
+          "heat_pump_MWh": 753.13,
+          "backup_MWh": 0.0,
+          "electricity_MWh": 342.64,
+          "energy_cost_EUR": 33601.0,
+          "capacity_charges_EUR": 3536.0,
+          "total_EUR": 37137.0,
+          "saving_vs_constant": 0.0
+        },
+        {
+          "mode": "dispatch, capacity x 1",
+          "capacity_kW": 86.4,
+          "days": 363,
+          "heat_pump_MWh": 515.4,
+          "backup_MWh": 237.73,
+          "electricity_MWh": 234.48,
+          "energy_cost_EUR": 30522.0,
+          "capacity_charges_EUR": 2566.0,
+          "total_EUR": 33088.0,
+          "saving_vs_constant": 0.109
+        },
+        {
+          "mode": "dispatch, capacity x 1.5",
+          "capacity_kW": 129.7,
+          "days": 363,
+          "heat_pump_MWh": 617.84,
+          "backup_MWh": 135.29,
+          "electricity_MWh": 281.09,
+          "energy_cost_EUR": 25978.0,
+          "capacity_charges_EUR": 3513.0,
+          "total_EUR": 29491.0,
+          "saving_vs_constant": 0.2059
+        },
+        {
+          "mode": "dispatch, capacity x 2",
+          "capacity_kW": 172.9,
+          "days": 363,
+          "heat_pump_MWh": 662.92,
+          "backup_MWh": 90.21,
+          "electricity_MWh": 301.6,
+          "energy_cost_EUR": 23225.0,
+          "capacity_charges_EUR": 4405.0,
+          "total_EUR": 27630.0,
+          "saving_vs_constant": 0.256
+        }
+      ],
+      "limits": "COP constant at part load; extra capacity's investment not counted; days with a clock change left out"
+    }
+  }
+}
