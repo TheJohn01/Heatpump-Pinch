@@ -191,6 +191,10 @@ def plausibility_warnings(unit: HeatPump, screening: dict | None = None) -> list
             warnings.append(f"lift {lift:.0f} K above {s['lift_max_K']:.0f} K: beyond reported COP data")
     if unit.COP < 1:
         warnings.append(f"COP {unit.COP:.2f} < 1: direct electric heating would use less electricity")
+    from pinch.cop_data import market_products
+    if market_products(unit) == []:
+        warnings.append("no supplier product (IEA HPT Annex 58 / Project 68 sheets) publishes a point at this sink "
+                        "outlet and lift: left out of RQ1")
     return warnings
 
 

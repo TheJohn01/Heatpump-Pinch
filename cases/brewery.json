@@ -313,6 +313,12 @@
       "basis": "Brendel et al. (2024), Int. J. Refrig. 165, 84-96: best high-glide blend 2.96 vs best pure fluid 2.55 at 35 K glides (+16 %); applied to HP1 (18-82 °C sink) only"
     },
     {
+      "label": "COP from market products (supplier operating points, median)",
+      "kind": "vendor_cop",
+      "value": {"fit": "annex58_suppliers"},
+      "basis": "IEA HPT Annex 58 / Project 68 supplier technology sheets, Table 1 of each (data/sources/annex58_supplier_operating_points.csv; supplier data without third-party validation): per product, Lorenz efficiency interpolated in the mean-temperature lift inside its own published points; median over the products that cover the unit (pinch.cop_data.SupplierMap)"
+    },
+    {
       "label": "Lorenz efficiency 0.45",
       "kind": "eta",
       "value": 0.45,

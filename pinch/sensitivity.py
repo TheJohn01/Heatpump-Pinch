@@ -36,7 +36,9 @@ frost         {"penalty": p, "ambient_share": {unit: share}}: COP of each named 
 hp_dT_cont    temperature contribution [K] of every heat pump level (intermediate loops; pinch.heat_pump)
 vendor_cop    COP of every level from manufacturer data (pinch.cop_data): a number = standard deviations added to
               the fit (0 = the fit), or {"sigma": s, "glide_gain": g} (g: gain for sink glides >= 25 K, e.g. 0.16
-              for a glide-matched blend); applied through an equivalent Lorenz efficiency; needs the streams
+              for a glide-matched blend; "fit": a key of pinch.cop_data.FIT_KEYS, default the fit by sink
+              temperature, "annex58_suppliers" = supplier operating points); applied through an equivalent
+              Lorenz efficiency; needs the streams
 area          dict of area_targeting overrides
 film          film coefficients scaled by the value
 scale         production [per year]; the retrofit storage is scaled with it
@@ -110,11 +112,15 @@ def _check(kind: str, value: Any, where: str) -> Any:
     if kind == "vendor_cop":
         if isinstance(value, (int, float)) and not isinstance(value, bool):
             return {"sigma": float(value), "glide_gain": 0.0}
-        if isinstance(value, dict) and set(value) <= {"sigma", "glide_gain"} \
-                and all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in value.values()):
-            return {"sigma": float(value.get("sigma", 0.0)), "glide_gain": float(value.get("glide_gain", 0.0))}
+        from pinch.cop_data import FIT_KEYS
+        nums = {k: v for k, v in value.items() if k != "fit"} if isinstance(value, dict) else {}
+        if isinstance(value, dict) and set(nums) <= {"sigma", "glide_gain"} \
+                and all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in nums.values()) \
+                and value.get("fit", FIT_KEYS[0]) in FIT_KEYS:
+            return {"sigma": float(value.get("sigma", 0.0)), "glide_gain": float(value.get("glide_gain", 0.0)),
+                    "fit": value.get("fit")}
         raise ValueError(f"{where}: kind 'vendor_cop' needs a number (standard deviations) or "
-                         "{'sigma': s, 'glide_gain': g}")
+                         f"{{'sigma': s, 'glide_gain': g, 'fit': one of {FIT_KEYS}}}")
     if kind in _NULL_KINDS:
         if value is not None:
             raise ValueError(f"{where}: kind '{kind}' takes no value (null)")
@@ -164,7 +170,7 @@ def apply(case, kind: str, value: Any, selected: dict | None = None, streams=Non
         if streams is None:
             raise ValueError("vendor_cop needs the stream set (design temperatures)")
         from pinch.cop_data import apply_vendor
-        return apply_vendor(case, streams, value["sigma"], value["glide_gain"])
+        return apply_vendor(case, streams, value["sigma"], value["glide_gain"], value.get("fit"))
     if kind == "econ":
         eco = _merge(case.economics or {}, value)
         if "electricity_to_gas_ratio" in value:            # the ratio replaces the electricity price

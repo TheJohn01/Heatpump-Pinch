@@ -34,6 +34,7 @@ from dataclasses import dataclass
 
 from pinch.area_analysis import area_targeting_outputs
 from pinch.case import Case, annual_converter
+from pinch.cop_data import market_products
 from pinch.design import design_from_gcc, partial_designs
 from pinch.economics import EconomicParameters, Option, break_even_ratio, capacity_kW, evaluate, heat_pump_equipment
 from pinch.heat_pump import HeatPump
@@ -61,6 +62,7 @@ class Site:
     cooling: CoolingCascade | None          # cooling side after the heat-recovery step
     reference_equipment: tuple
     units: tuple[HeatPump, ...]             # HP1, HP2, ... (decreasing COP)
+    no_market_product: tuple[str, ...] = ()  # units left out: no supplier product reaches their sink and lift
 
 
 def _chiller_MWh(refrigeration: float, to_MWh, params: EconomicParameters) -> float:
@@ -112,8 +114,9 @@ def build_site(case: Case, streams: StreamSet, params: EconomicParameters) -> Si
     reference = Option("heat recovery step", to_MWh(Qh_ref), _chiller_MWh(refr, to_MWh, params), equipment) \
         if has_step else baseline
     design = design_from_gcc(sizing, case.sink_levels, case.eta_lorenz, case.source_T_C)
-    units = tuple(sorted(design.units, key=lambda u: -u.COP))
-    return Site(label, baseline, reference, has_step, Qh_ref, refr, cooling, equipment, units)
+    no_product = tuple(u.name for u in design.units if market_products(u) == [])
+    units = tuple(sorted((u for u in design.units if u.name not in no_product), key=lambda u: -u.COP))
+    return Site(label, baseline, reference, has_step, Qh_ref, refr, cooling, equipment, units, no_product)
 
 
 def _option(site: Site, units, params: EconomicParameters, to_MWh, name: str = "") -> Option:
@@ -214,6 +217,8 @@ def answers(case: Case, streams: StreamSet, params: EconomicParameters, source_l
         "price_ratio": round(params.price_ratio, 3),
         "todays_site": site.label,
     })
+    if site.no_market_product:
+        out["units_without_market_product"] = ", ".join(site.no_market_product)
     return out
 
 

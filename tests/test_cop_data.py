@@ -118,3 +118,62 @@ def test_fits_against_demonstration_plants():
 def test_demonstration_eta_range():
     lo, med, hi = cd.demonstration_eta_range()
     assert (round(lo, 3), round(med, 3), round(hi, 3)) == (0.346, 0.37, 0.545)
+
+
+# ---------------------------------------------------------------- supplier operating points (Annex 58 / Project 68)
+
+def test_supplier_points_reproduce_published_cops():
+    """At a published point, a product's interpolated COP is the published COP (Dutek XT, Table 1 row 2)."""
+    m = cd.SupplierMap(cd.supplier_points())
+    assert m.product_cops(cd.UnitPoint("p", 110, 120, 50, 40))["Dutek XT"] == pytest.approx(2.75, rel=1e-9)
+    halfway = m.product_cops(cd.UnitPoint("q", 110, 120, 55, 45))["Dutek XT"]      # between 2.75 and 3.25
+    assert 2.75 < halfway < 3.25
+
+
+def test_supplier_points_screening():
+    d = cd.supplier_points()
+    assert (d["cycle"] == "closed").all() and (d["T_source_out_C"] <= d["T_source_in_C"]).all()
+    assert "Enerin" not in set(d["supplier"])                       # source warms up as published: dropped
+    assert d.loc[d["COP_min"] != d["COP_max"], "COP"].between(1.6, 3.7).all()   # range -> middle
+
+
+def test_steam_mean_temperature():
+    assert cd.steam_mean_temperature_K(120, 120) == pytest.approx(120 + cd.KELVIN, abs=1e-6)   # latent only
+    T = cd.steam_mean_temperature_K(20, 120)            # feed water 20 °C: mostly latent heat at 120 °C
+    assert 100 + cd.KELVIN < T < 120 + cd.KELVIN
+
+
+def test_no_extrapolation_outside_a_products_points():
+    m = cd.SupplierMap(cd.supplier_points())
+    assert "Dutek XT" not in m.product_cops(cd.UnitPoint("hot", 110, 140, 50, 40))        # sink beyond 120 °C
+    with pytest.raises(ValueError, match="no supplier product"):
+        m.cop_at(cd.UnitPoint("none", 290, 400, 10, 5))
+
+
+def test_market_coverage_leaves_units_out_of_rq1(brewery, monkeypatch):
+    from pinch import research_questions as rq
+    from pinch.design import plausibility_warnings
+    from pinch.economic_analysis import _params_and_converter
+    from pinch.heat_pump import HeatPump
+    assert cd.market_products(HeatPump("x", 1.0, 290, 400, 10, 5, eta_lorenz=0.5)) == []
+    assert "left out of RQ1" in plausibility_warnings(HeatPump("x", 1.0, 290, 400, 10, 5, eta_lorenz=0.5))[-1]
+    case, streams = brewery
+    params = _params_and_converter(case, streams.energy_unit)[1]
+    base = rq.answers(case, streams, params)
+    assert "units_without_market_product" not in base
+    monkeypatch.setattr(rq, "market_products", lambda u: [] if "HTHP" in u.name else ["p"])
+    out = rq.answers(case, streams, params)
+    assert out["units_without_market_product"] == "HTHP (wort boiling)" and "HP2_name" not in out
+    assert out["RQ1_HP_gas_share"] == base["RQ1_HP_gas_share"]      # HP1 alone already sets RQ1 here
+
+
+def test_sensitivity_with_supplier_basis(brewery):
+    case, streams = brewery
+    row = parse_sensitivities([{"label": "m", "kind": "vendor_cop", "value": {"fit": "annex58_suppliers"}}])[0]
+    assert row.value == {"sigma": 0.0, "glide_gain": 0.0, "fit": "annex58_suppliers"}
+    with pytest.raises(ValueError):
+        parse_sensitivities([{"label": "n", "kind": "vendor_cop", "value": {"fit": "nope"}}])
+    c = apply(case, "vendor_cop", row.value, streams=streams)
+    m = cd.SupplierMap(cd.supplier_points())
+    for lv, p in zip(c.sink_levels, cd.level_points(case, streams)):
+        assert lv.eta_lorenz * p.cop_lorenz(1.0) == pytest.approx(m.cop_at(p), rel=1e-9)

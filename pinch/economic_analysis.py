@@ -189,9 +189,11 @@ def eta_lorenz_sensitivity(case: Case, streams, energy_unit: str, out: Path | No
     return rows
 
 
-#: COP bases of ``cop_basis_designs``: label -> (sigma, glide gain); see pinch.cop_data
-COP_BASES = {"manufacturer-data fit - 1 sigma": (-1.0, 0.0), "manufacturer-data fit": (0.0, 0.0),
-             "manufacturer-data fit + 1 sigma": (1.0, 0.0), "manufacturer-data fit, glide-matched blend": (0.0, 0.16)}
+#: COP bases of ``cop_basis_designs``: label -> (sigma, glide gain, fit key; None = by sink temperature); see pinch.cop_data
+COP_BASES = {"manufacturer-data fit - 1 sigma": (-1.0, 0.0, None), "manufacturer-data fit": (0.0, 0.0, None),
+             "manufacturer-data fit + 1 sigma": (1.0, 0.0, None),
+             "manufacturer-data fit, glide-matched blend": (0.0, 0.16, None),
+             "market products, supplier operating points (median)": (0.0, 0.0, "annex58_suppliers")}
 
 
 def cop_basis_designs(case: Case, streams, energy_unit: str) -> list[dict]:
@@ -200,9 +202,9 @@ def cop_basis_designs(case: Case, streams, energy_unit: str) -> list[dict]:
     from pinch.cop_data import apply_vendor
     from pinch.design import design_from_gcc
     bases: list[tuple[str, Case]] = [(f"case basis (η_L {case.eta_lorenz:g})", case)]
-    for label, (sigma, gain) in COP_BASES.items():
+    for label, (sigma, gain, fit) in COP_BASES.items():
         try:
-            bases.append((label, apply_vendor(case, streams, sigma, gain)))
+            bases.append((label, apply_vendor(case, streams, sigma, gain, fit)))
         except ValueError as exc:      # e.g. a fit below COP 1 at a very large lift: reported, not computed
             bases.append((f"{label} (not computed: {exc})", None))      # type: ignore[arg-type]
     econ = case.basis is not None and bool(case.economics)
