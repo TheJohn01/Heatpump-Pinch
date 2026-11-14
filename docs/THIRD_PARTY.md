@@ -17,6 +17,7 @@ source code is copied into this repository except where marked.
 | [Eurostat](https://ec.europa.eu/eurostat) nrg_pc_203, nrg_pc_205, nrg_pc_205_c | European Commission, Eurostat | reuse with acknowledgement (Commission Decision 2011/833/EU) | data copied (PT, ES, DE) | `data/sources/eurostat_*.csv`, `scripts/data/fetch_eurostat_prices.py` | Band prices and price components |
 | IEA HPT Annex 58 / Project 68 supplier technology sheets | suppliers, compiled by the IEA Heat Pumping Technologies TCP | public documents, values transcribed with source | data transcribed | `data/sources/annex58_supplier_*.csv` | COP basis from supplier operating points; supplier investment costs |
 | ERSE Diretiva 10/2025; CNMC Resolución 18 Dec 2025 (BOE-A-2025-26348) and Circular 3/2020; SWM Infrastruktur price sheet 2026 | regulators and operator | official publications, values transcribed with source | data transcribed | `data/sources/network_tariffs/` | Network tariffs with time-of-use periods |
+| [Measured dairy data](https://doi.org/10.5281/zenodo.22877098) | Köster, Bengsch, Widell (SINTEF Ocean, NTNU) | CC BY 4.0 | data aggregated to hours; Figure 2 data copied | `data/measured/`, `scripts/data/fetch_sintef_dairy.py` | Measured loads of a dairy; paper Int. J. Refrig. 180 (2025) 564-571 (CC BY 4.0) |
 | [IBM Plex](https://github.com/IBM/plex) | IBM Corp. | SIL OFL 1.1 | font files copied | `static/fonts/` | Front-end typeface (`static/fonts/OFL.txt`) |
 
 Not used, and why: OSMOSE/ROSMOSE (EPFL; access through EPFL GitLab only); PyPinch and pina (Problem Table

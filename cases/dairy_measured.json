@@ -1,0 +1,45 @@
+{
+  "name": "dairy_measured",
+  "plant": "Dairy with integrated CO2 refrigeration",
+  "description": "Dairy whose cooling, hot-water and steam loads were metered for a year; analysed on its mean production day, hour by hour. Today the CO2 refrigeration units heat the hot water and an electric boiler raises the steam.",
+  "stream_file": "../data/measured/koster2025_production_day_streams.csv",
+  "extra_shift_K": 0,
+  "ambient_T_C": 7,
+  "heat_pumps": {
+    "eta_lorenz": 0.5,
+    "source_T_C": -6.0,
+    "sink_levels": [
+      {
+        "name": "CO2 units (hot water)",
+        "T_sink_in_C": 9.0,
+        "T_sink_out_C": 67.5
+      },
+      {
+        "name": "HTHP (steam demand)",
+        "T_sink_in_C": 67.5,
+        "T_sink_out_C": 102.5
+      }
+    ]
+  },
+  "basis": null,
+  "schedule": {
+    "file": "../data/measured/koster2025_production_day_streams.csv",
+    "cycle_h": 24,
+    "heat_pump": {
+      "T_co_star_C": 67.5,
+      "dTmin_K": 5.0
+    }
+  },
+  "provenance": {
+    "data source": "Köster, Bengsch, Widell (2025), Int. J. Refrig. 180, 564-571 (CC BY 4.0) and its data, Zenodo doi:10.5281/zenodo.22877098 (CC BY 4.0): metered 2024 heat loads (one-minute) and hourly electric-boiler electricity.",
+    "stream data": "measured: mean production day of 2024 (weekdays with more than 1,500 kWh of boiler electricity), hour by hour; CO2 unit 1 (not metered) at 35 kW from 07:00 to 15:00 as the authors assume (Sec. 3). Published figures reproduced in outputs/koster2025_checks.csv",
+    "temperatures": "published (Sec. 2): glycol supply -3.5 to -5 °C, process water about 1 °C, hot water from city water 6.5 °C to 65 °C, steam demands 65-100 °C. Cooling loads are taken isothermal at the supply temperature (-3.5 °C, 1 °C): return temperatures are not published, so the source is a lower bound",
+    "dT_shift_K": "assumed: 2.5 K for every stream (dTmin 5 K)",
+    "steam demand": "measured boiler electricity with a thermal efficiency of about 1 (Sec. 4.4), including its heat losses (the 35.8 kW night baseload)",
+    "eta_lorenz": "assumed: 0.5, as the brewery case; the measured CO2 COPs (Table 2) are depressed by a fouled gas cooler (about 20 K approach, Sec. 4.2) and their operating conditions are not published, so they cannot calibrate it",
+    "source_T_C": "published glycol supply -3.5 °C, shifted by -2.5 K",
+    "sink levels": "published: hot water to 65 °C (the CO2 units today) and the 65-100 °C steam demands (the paper's proposal: a high-temperature heat pump replacing the electric boiler, Sec. 4.4); shifted by +2.5 K",
+    "basis": "none: a screening on the mean production day, in kW; no prices for Norway in this repository",
+    "ambient_T_C": "published: 2024 mean of August 15.5 °C and December 0.1 °C is not an annual mean; 7 °C assumed for the ambient-source check only"
+  }
+}
